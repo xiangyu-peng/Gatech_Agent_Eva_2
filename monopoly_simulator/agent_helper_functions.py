@@ -1,4 +1,43 @@
+#####becky#####
+def identify_free_mortgage(player):
+    potentials = list()
+    for a in player.assets:
+        if a.is_mortgaged and a.mortgage<=player.current_cash:
+            potentials.append(a)
+    return potentials
 
+def identify_improvement_opportunity_all(player, current_gameboard):
+    """
+    Identify an opportunity to improve a property by building a house or hotel. This is a 'strategic' function; there
+    are many other ways/strategies to identify improvement opportunities than the one we use here.
+    :param player:
+    :param current_gameboard:
+    :return: a parameter dictionary or None. The parameter dictionary, if returned, can be directly sent into
+    action_choices.improve_property by the calling function.
+    """
+    potentials = list()
+    for c in player.full_color_sets_possessed:
+        c_assets = current_gameboard['color_assets'][c]
+        for asset in c_assets:
+            if can_asset_be_improved(asset,c_assets) and asset.price_per_house<=player.current_cash: # player must be able to afford the improvement
+                potentials.append((asset,asset_incremental_improvement_rent(asset)-asset.price_per_house))
+    if potentials:
+        sorted_potentials = sorted(potentials, key=lambda x: x[1], reverse=True) # sort in descending order
+        param = dict()
+        param['player'] = player
+        param['asset'] = [i[0] for i in sorted_potentials] #[asset1, asset2,...]
+        param['current_gameboard'] = current_gameboard
+        param['add_house'] = [True for i in range(len(param['asset']))]
+        param['add_hotel'] = [False for i in range(len(param['asset']))]
+        for i in range(len(param['asset'])):
+            if param['asset'][i].num_houses == 4:
+                param['add_hotel'][i] = True
+                param['add_house'][i] = False
+
+        return param
+    else:
+        return None
+#########################################
 
 def will_property_complete_set(player, asset, current_gameboard):
     """

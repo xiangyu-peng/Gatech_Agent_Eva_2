@@ -1,4 +1,4 @@
-from monopoly_simulator.bank import Bank
+from bank import Bank
 
 class Location(object):
 

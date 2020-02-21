@@ -484,7 +484,7 @@ def move_player_after_die_roll(player, rel_move, current_gameboard, check_for_go
 
     if check_for_go:
         if _has_player_passed_go(player.current_position, new_position, go_position):
-            print(player.player_name,' passes Go.')
+            print('-inc-', player.player_name,' passes Go, and receieve ', go_increment)
             player.receive_cash(go_increment)
             # add to game history
             current_gameboard['history']['function'].append(player.receive_cash)

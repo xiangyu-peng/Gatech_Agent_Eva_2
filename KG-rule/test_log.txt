@@ -1,0 +1,60 @@
+-die-dies have come up  [5, 3]
+-die-dies have come up  [5, 3]
+executing move_player_after_die_roll for  player_1  by  8  relative steps forward.
+-loc-Player is currently in position  Go  and is moving to position  Vermont Avenue
+player_1  is on a real estate location, namely  Vermont Avenue
+Vermont Avenue  is owned by Bank. Setting _option_to_buy to true for  player_1
+We are in the post-roll phase for  player_1
+computing allowable post-roll actions for  player_1
+player_1 : We will attempt to buy  Vermont Avenue  from the bank.
+Executing _execute_action for  player_1
+-buy-Charging  player_1  amount  100  for asset  Vermont Avenue
+player_1  is being charged amount:  100
+Before charge, player has cash  1500
+player_1  now has cash:  1400
+attempting to update asset  Vermont Avenue  to reflect new owner:  player_1
+Looking to add asset  Vermont Avenue  to portfolio of  player_1
+total no. of assets now owned by player:  1
+Asset ownership update succeeded.
+Vermont Avenue  ownership has been updated! Resetting option_to_buy for player and returning code 1
+Executing reset_option_to_buy for  player_1
+Received code  1 . Continuing iteration...
+computing allowable post-roll actions for  player_1
+Executing _force_buy_outcome for  player_1
+Executing reset_option_to_buy for  player_1
+Executing _execute_action for  player_1
+We are in the pre-roll phase for  player_4
+computing allowable pre-roll actions for  player_4
+Executing _execute_action for  player_4
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+We are in the out-of-turn phase for  player_3
+computing allowable out-of-turn actions for  player_3
+Executing _execute_action for  player_3
+We are in the out-of-turn phase for  player_1
+computing allowable out-of-turn actions for  player_1
+Executing _execute_action for  player_1
+---dies have come up  [6, 3]
+executing move_player_after_die_roll for  player_4  by  9  relative steps forward.
+---Player is currently in position  Go  and is moving to position  Connecticut Avenue
+player_4  is on a real estate location, namely  Connecticut Avenue
+Connecticut Avenue  is owned by Bank. Setting _option_to_buy to true for  player_4
+We are in the post-roll phase for  player_4
+computing allowable post-roll actions for  player_4
+player_4 : We will attempt to buy  Connecticut Avenue  from the bank.
+Executing _execute_action for  player_4
+-pay-Charging  player_4  amount  120  for asset  Connecticut Avenue
+-die-dies have come up  [6, 3]
+executing move_player_after_die_roll for  player_2  by  9  relative steps forward.
+---Player is currently in position  Community Chest  and is moving to position  Atlantic Avenue
+player_2  is on a real estate location, namely  Atlantic Avenue
+Atlantic Avenue  is owned by  player_4  and is not mortgaged. Proceeding to calculate and pay rent.
+calculating and paying rent dues for  player_2  who is in property  Atlantic Avenue  which is owned by  player_4
+calculating rent for  Atlantic Avenue
+---rent is calculated to be  22 for Atlantic Avenue with 1 house
+player_4  is receiving amount:  22
+Before receipt, player has cash  59
+player_4  now has cash:  81
+player_2  is being charged amount:  22
+Before charge, player has cash  807

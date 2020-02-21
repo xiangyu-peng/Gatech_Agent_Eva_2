@@ -3,17 +3,18 @@ The only public facing function is initialize_board. All _initialize_* functions
 want to play around, you could always implement your _initialize functions and replace accordingly in initialize_board!
 """
 
-from monopoly_simulator import location
-from monopoly_simulator.dice import Dice
-from monopoly_simulator.bank import Bank
-from monopoly_simulator.card_utility_actions import * # functions from this module will be used in reflections in initialize_board,
+import location
+from dice import Dice
+from bank import Bank
+from card_utility_actions import * # functions from this module will be used in reflections in initialize_board,
                                     # and excluding this import will lead to run-time errors
 import sys
-from monopoly_simulator.player import Player
-from monopoly_simulator import card
+# from monopoly_simulator.player import Player
+from player_becky_easy import Player
+import card
 
 
-def initialize_board(game_schema, player_decision_agents):
+def initialize_board(game_schema, player_decision_agents, num_active_players):
 
     game_elements = dict()
     print('Beginning game set up...')
@@ -36,7 +37,7 @@ def initialize_board(game_schema, player_decision_agents):
     print('Successfully instantiated and initialized cards')
 
     # Step 4: set players
-    _initialize_players(game_elements, game_schema, player_decision_agents)
+    _initialize_players(game_elements, game_schema, player_decision_agents, num_active_players)
     print('Successfully instantiated and initialized players and decision agents')
 
     # Step 5: set history data structures
@@ -297,10 +298,11 @@ def _initialize_cards(game_elements, game_schema):
     game_elements['community_chest_card_objects'] = community_chest_card_objects
 
 
-def _initialize_players(game_elements, game_schema, player_decision_agents):
+def _initialize_players(game_elements, game_schema, player_decision_agents, num_active_players):
+    player_list = ['player_' + str(i + 1) for i in range(num_active_players)]
     players = list()
     player_dict = game_schema['players']['player_states']
-    for player in player_dict['player_name']:
+    for player in player_list:
         player_args = dict()
         player_args['status'] = 'waiting_for_move'
         player_args['current_position'] = game_schema['go_position']
@@ -314,8 +316,8 @@ def _initialize_players(game_elements, game_schema, player_decision_agents):
         player_args['currently_in_jail'] = False
 
         player_args['player_name'] = player
-        player_args['agent'] = player_decision_agents[player]
-
+        for k, v in player_decision_agents[player].items():
+            player_args[k] = v
         players.append(Player(**player_args))
 
     game_elements['players'] = players
