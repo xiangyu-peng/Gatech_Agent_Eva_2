@@ -6,11 +6,13 @@ The entry point for the simulator is gameplay_simple_becky_v1.py and can be run 
 $ python3 gameplay_simple_becky_v1.py > log.txt
 
 2.The knowledge graph part is in /KG-rule.
-The entry point for the simulator is gameplay_simple_becky_v1.py and can be run on the command line:
+The entry point for the simulator is kg-build.py and can be run on the command line:
 
 $ python3 kg-build.py
 
+
 3. The env of game is in /env
+
 For registeration, please find ur gym env package installation folder first:
 
 $ pip show gym
@@ -29,6 +31,7 @@ $ python -m pip install. --user
 Then you can use this env as gym env
 
 /------------------------/
+
 MONOPOLY SIMULATOR:
 
 Full code for the simulator is in monopoly-simulator/ and is written using OOP methodology.
