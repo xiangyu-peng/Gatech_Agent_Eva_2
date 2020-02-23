@@ -908,15 +908,16 @@ class Player(object):
 
         print(self.player_name,' decides to purchase? ',str(dec))
         if dec is True:
-            asset.update_asset_owner(self, current_gameboard)
-            # add to game history
-            current_gameboard['history']['function'].append(asset.update_asset_owner)
-            params = dict()
-            params['self'] = asset
-            params['player'] = self
-            params['current_gameboard'] = current_gameboard
-            current_gameboard['history']['param'].append(params)
-            current_gameboard['history']['return'].append(None)
+            # asset.update_asset_owner(self, current_gameboard)
+            # # add to game history
+            # current_gameboard['history']['function'].append(asset.update_asset_owner)
+            # params = dict()
+            # params['self'] = asset
+            # params['player'] = self
+            # params['current_gameboard'] = current_gameboard
+            # current_gameboard['history']['param'].append(params)
+            # current_gameboard['history']['return'].append(None)
+            buy_property(self, asset, current_gameboard)
 
             return
 
@@ -937,8 +938,8 @@ class Player(object):
             # params['asset'] = asset
             # current_gameboard['history']['param'].append(params)
             # current_gameboard['history']['return'].append(None)
-
-            return
+            #
+            # return
 
     def _execute_action(self, action_to_execute, parameters, current_gameboard):
         """

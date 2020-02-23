@@ -40,8 +40,6 @@ class Monopoly_world():
         for player_name in player_list:
             self.player_decision_agents[player_name] = simple_background_agent_becky_v1.decision_agent_methods
         self.game_elements = set_up_board('/media/becky/GNOME/monopoly_game_schema_v1-2.json', self.player_decision_agents, self.num_active_players)
-        # np.random.seed(np_seed)
-        np.random.shuffle(self.game_elements['players'])
         self.game_elements['seed'] = self.seed()
         self.game_elements['card_seed'] = self.seed()
         self.game_elements['choice_function'] = np.random.choice
