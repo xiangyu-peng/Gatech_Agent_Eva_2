@@ -114,11 +114,14 @@ class Interface(object):
 
         #28 actions_allowed_morgage
         owned_space = [asset.name for asset in current_player.assets]
+        mortgaged_assets = [asset.name for asset in current_player.mortgaged_assets]
         for space in self.board_owned:
-            masked_actions.append(1) if space in owned_space else masked_actions.append(0)
+            masked_actions.append(1) if space in owned_space and space not in mortgaged_assets else masked_actions.append(0)
 
         # 28 actions: free morgage
         potentials = identify_free_mortgage(current_player)
+        potentials = [asset.name for asset in potentials]
+        print('potentials =>', potentials)
         for space in self.board_owned:
             masked_actions.append(1) if space in potentials else masked_actions.append(0)
 

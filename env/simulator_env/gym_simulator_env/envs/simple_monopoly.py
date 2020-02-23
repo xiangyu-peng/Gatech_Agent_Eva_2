@@ -46,5 +46,8 @@ class Sim_Monopoly(gym.Env):
         self.observation_space = self.MonopolyWorld.reset()
         return self.observation_space
 
+    def seed(self,seed=None):
+        self.MonopolyWorld.seed(seed)
+        return self.MonopolyWorld.seeds
     # def render(self, mode='human', close=False):
     #     pass

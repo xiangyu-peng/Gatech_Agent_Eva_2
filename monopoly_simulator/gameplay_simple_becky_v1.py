@@ -7,6 +7,14 @@ import simple_background_agent_becky_v1
 import json
 import diagnostics
 from interface import Interface
+import sys, os
+
+def blockPrint():
+    sys.stdout = open(os.devnull, 'w')
+# blockPrint()
+def enablePrint():
+    sys.stdout = sys.__stdout__
+
 
 #player_1 run the process
 def before_agent(game_elements, num_active_players, num_die_rolls, current_player_index, a):
@@ -94,9 +102,10 @@ def before_agent(game_elements, num_active_players, num_die_rolls, current_playe
         a.board_to_state(params['current_gameboard']) #get state space
         print('state_space =====>', a.state_space)
         allowable_actions,param = current_player.compute_allowable_post_roll_actions(params['current_gameboard'])
-        # print('allowed_actions=====>', allowable_actions)
+        print('allowed_actions=====>', allowable_actions)
         a.get_masked_actions(allowable_actions, param, current_player)
         # print('masked_actions =====>', a.masked_actions)
+        print('current_player\'s mortgage assets', current_player.mortgaged_assets)
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params
 
 def after_agent(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):

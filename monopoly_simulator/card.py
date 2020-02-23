@@ -12,6 +12,9 @@ class Card(object):
         self.card_type = card_type
         self.name = name
 
+        #####becky#####add this for checking passing GO
+        self.new_relative_position = 0
+
 
 class MovementCard(Card):
 

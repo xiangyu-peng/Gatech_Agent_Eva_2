@@ -112,7 +112,7 @@ class ParallelEnv:
             self.closed = True
 
 def test(step_idx, model):
-    env = gym.make('CartPole-v1')
+    env = gym.make('monopoly_simple-v1')
     score = 0.0
     done = False
     num_test = 10

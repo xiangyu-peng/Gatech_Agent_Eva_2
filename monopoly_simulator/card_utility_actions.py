@@ -122,7 +122,7 @@ def move_player(player, card, current_gameboard):
         current_gameboard['history']['param'].append(params)
         current_gameboard['history']['return'].append(None)
     else:
-        _move_player__check_for_go(player, new_position, current_gameboard)
+        _move_player__check_for_go(player, new_position, current_gameboard, rel_move)
 
 
 def set_get_out_of_jail_card_status(player, card, current_gameboard):
@@ -290,7 +290,8 @@ def move_player__check_for_go(player, card, current_gameboard):
     print('executing move_player__check_for_go for ',player.player_name)
     print('destination specified on card is ', card.destination.name)
     new_position = card.destination.start_position
-    _move_player__check_for_go(player, new_position, current_gameboard)
+    rel_move = card.new_relative_position
+    _move_player__check_for_go(player, new_position, current_gameboard, rel_move)
 
 
 def move_to_nearest_utility__pay_or_buy__check_for_go(player, card, current_gameboard):
@@ -315,7 +316,7 @@ def move_to_nearest_utility__pay_or_buy__check_for_go(player, card, current_game
             min_utility_position = u
 
     print('The utility position that player is being moved to is ',current_gameboard['location_sequence'][min_utility_position].name)
-    _move_player__check_for_go(player, min_utility_position, current_gameboard)
+    _move_player__check_for_go(player, min_utility_position, current_gameboard, card.new_relative_position)
     current_loc = current_gameboard['location_sequence'][player.current_position]
 
     if current_loc.loc_class != 'utility':  # simple check
@@ -378,7 +379,7 @@ def move_to_nearest_railroad__pay_double_or_buy__check_for_go(player, card, curr
 
     print('The railroad position that player is being moved to is ', current_gameboard['location_sequence'][
         min_railroad_position].name)
-    _move_player__check_for_go(player, min_railroad_position, current_gameboard)
+    _move_player__check_for_go(player, min_railroad_position, current_gameboard, card.new_relative_position)
     current_loc = current_gameboard['location_sequence'][player.current_position]
 
     if current_loc.loc_class != 'railroad': # simple check
@@ -483,7 +484,8 @@ def move_player_after_die_roll(player, rel_move, current_gameboard, check_for_go
     new_position = (player.current_position+rel_move) % num_locations
 
     if check_for_go:
-        if _has_player_passed_go(player.current_position, new_position, go_position):
+        print('passes GO?', _has_player_passed_go(player.current_position, new_position, go_position, rel_move))
+        if _has_player_passed_go(player.current_position, new_position, go_position, rel_move):
             print('-inc-', player.player_name,' passes Go, and receieve ', go_increment)
             player.receive_cash(go_increment)
             # add to game history
@@ -508,27 +510,32 @@ def move_player_after_die_roll(player, rel_move, current_gameboard, check_for_go
 """
 All functions below are for internal use only and should never be invoked externally.
 """
-def _has_player_passed_go(current_position, new_position, go_position):
+#####becky - increment part has error#####
+#add rel_move
+def _has_player_passed_go(current_position, new_position, go_position, rel_move):
     """
     Function to determine whether the player passes, or is on, Go if the player moves from current position to new position.
     :param current_position: An integer. Specifies the position from which the player is moving.
     :param new_position: An integer. Specifies the position to which the player is moving.
     :param go_position: An integer. Specifies the go position. In the default board, it is just set to 0.
+    :param rel_move: An integer. Specifies the relative moving steps. i.e. -3 means move backward 3 steps.
     :return: A boolean. True if the player is on, or has passed, go, and False otherwise.
     """
+    print('current_position, new_position, go_position', current_position, new_position, go_position, rel_move)
     if new_position == go_position: # we've landed on go
         return True
 
-    elif new_position == current_position:  # we've gone all round the board
+    elif new_position == current_position and rel_move != 0:  # we've gone all round the board
         return True
 
-    elif current_position < new_position:
-        if new_position <= go_position and go_position > current_position:
+    elif current_position < new_position and rel_move < 0: # go forward but before passing go
             return True
 
-    elif current_position > new_position:
-        if go_position > current_position or go_position <= new_position:
-            return True
+    elif current_position > new_position and rel_move > 0:
+        return True
+
+    elif abs(rel_move) >= 40: #go over one round
+        return True
 
     return False # we've exhausted the possibilities. If it reaches here, we haven't passed go.
 
@@ -547,7 +554,7 @@ def _calculate_board_distance(position_1, position_2):
         return position_1 - position_2
 
 
-def _move_player__check_for_go(player, new_position, current_gameboard):
+def _move_player__check_for_go(player, new_position, current_gameboard, rel_move):
     """
     A private helper function which moves the player and checks for go.
     :param player: Player instance.
@@ -558,7 +565,8 @@ def _move_player__check_for_go(player, new_position, current_gameboard):
     # the private version
     go_position = current_gameboard['go_position']
     go_increment = current_gameboard['go_increment']
-    if _has_player_passed_go(player.current_position, new_position, go_position):
+
+    if _has_player_passed_go(player.current_position, new_position, go_position, rel_move):
         player.receive_cash(go_increment)
         # add to game history
         current_gameboard['history']['function'].append(player.receive_cash)

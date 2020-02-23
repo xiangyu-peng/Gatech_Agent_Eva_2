@@ -295,6 +295,7 @@ def make_post_roll_move(player, current_gameboard, allowable_moves, code, move_a
             print(player.player_name, ': I am going to free mortgage on ', space_action[0].name)
             player._agent_memory['previous_action'] = action_choices.free_mortgage
             return (action_choices.free_mortgage, params)
+
         #mortgage
         if action_choices.mortgage_property in move_action:
             params = dict()

@@ -18,6 +18,7 @@ class Monopoly_world():
         self.reward = 0
         self.terminal = False
         self.player_decision_agents = dict()
+        self.seeds = 0
 
     def init(self):
         self.num_active_players = 2
@@ -30,9 +31,11 @@ class Monopoly_world():
         self.terminal = False
         self.player_decision_agents = dict()
 
+
     def seed(self, seed=None):
         np_random, seed1 = seeding.np_random(seed)
-        return seeding.hash_seed(seed1 + 1) % 2 ** 31;
+        self.seeds = seeding.hash_seed(seed1 + 1) % 2 ** 31
+        return self.seeds
 
     def reset(self):
         self.init()
@@ -40,9 +43,12 @@ class Monopoly_world():
         for player_name in player_list:
             self.player_decision_agents[player_name] = simple_background_agent_becky_v1.decision_agent_methods
         self.game_elements = set_up_board('/media/becky/GNOME/monopoly_game_schema_v1-2.json', self.player_decision_agents, self.num_active_players)
-        self.game_elements['seed'] = self.seed()
-        self.game_elements['card_seed'] = self.seed()
+        np.random.seed(self.seeds) #control the seed!!!!
+        self.game_elements['seed'] = self.seeds
+        self.game_elements['card_seed'] = self.seeds
         self.game_elements['choice_function'] = np.random.choice
+        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params = \
+            before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
 
         return self.a.board_to_state(self.game_elements) #use interface to get the vector state space
     def reward_cal(self):
