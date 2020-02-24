@@ -7,6 +7,16 @@ from torch.distributions import Categorical
 import torch.multiprocessing as mp
 import time
 import numpy as np
+import os, sys
+
+class HiddenPrints:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
 
 #A2C Model
 class ActorCritic(nn.Module):
@@ -22,7 +32,6 @@ class ActorCritic(nn.Module):
 
     #Actor model
     def actor(self, x, softmax_dim=1): #actions' probability
-        print('self.fc_1', self.fc_1)
         x = F.relu(self.fc_1(x))
         x = self.fc_actor(x)
         prob = F.softmax(x, dim=softmax_dim)
@@ -119,12 +128,26 @@ def test(step_idx, model):
 
     for _ in range(num_test):
         s, masked_actions = env.reset()
-        while not done:
-            prob = model.actor(torch.from_numpy(s).float(), softmax_dim=0)
-            a = Categorical(prob).sample().numpy()
-            s_prime, r, done, info = env.step(a)
-            s = s_prime
-            score += r
+        with HiddenPrints():
+            while not done:
+
+                prob = model.actor(torch.from_numpy(s).float(), softmax_dim=0)
+
+                # Choose the action with highest prob and not in masked action
+                # Becky#########################################################
+                prob = prob.cpu().detach().numpy().reshape(-1, )
+                # Check if the action is valid
+                action_Invalid = True
+                largest_num = -1
+                while action_Invalid:
+                    a = prob.argsort()[largest_num:][0]
+                    action_Invalid = True if masked_actions[a] == 0 else False
+                    largest_num -= 1
+
+                # a = Categorical(prob).sample().numpy()
+                s_prime, r, done, info = env.step(a)
+                s = s_prime
+                score += r
         done = False
     print(f"Step # :{step_idx}, avg score : {score/num_test:.1f}")
 
@@ -134,10 +157,7 @@ def compute_target(v_final, r_lst, mask_lst, gamma): #may update
 
     G = v_final.reshape(-1) #i.e. [0.13882717]
     td_target = list()
-    print('mask_lst',mask_lst)
-    print('r_lst',r_lst)
     for r, mask in zip(r_lst[::-1], mask_lst[::-1]):
-        print('r, mask ', r, mask )
         G = r + gamma * G * mask
         td_target.append(G)
 

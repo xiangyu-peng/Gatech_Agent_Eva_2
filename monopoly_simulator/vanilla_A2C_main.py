@@ -4,6 +4,16 @@ from configparser import ConfigParser
 
 class Config:
     DEVICE = torch.device('cuda:0')
+import os, sys
+
+class HiddenPrints:
+    def __enter__(self):
+        self._original_stdout = sys.stdout
+        sys.stdout = open(os.devnull, 'w')
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        sys.stdout.close()
+        sys.stdout = self._original_stdout
 
 if __name__ == '__main__':
     config_file = '/media/becky/Novelty-Generation-Space-A2C/Vanilla-A2C/config.ini'
@@ -22,13 +32,16 @@ if __name__ == '__main__':
     config.action_space = 80
     config.state_num = 56
     #######################################
-    envs = ParallelEnv(n_train_processes)
+    with HiddenPrints():
+        envs = ParallelEnv(n_train_processes)
     model = ActorCritic(config) #A2C model
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     step_idx = 0
-    s, masked_actions = envs.reset()
+    with HiddenPrints():
+        s, masked_actions = envs.reset()
     num = 0
+
     while step_idx < max_train_steps:
         s_lst, a_lst, r_lst, mask_lst = list(), list(), list(), list() #state list; action list, reward list, masked action list？？？
 
@@ -37,8 +50,8 @@ if __name__ == '__main__':
         ##loop until the action outputs stop signal#
         #while True:
         ############################################
-            print('s', s)
-            print('masked_actions', masked_actions)
+            # print('s', s)
+            # print('masked_actions', masked_actions)
             s = s.reshape(1,-1)
             prob = model.actor(torch.from_numpy(s).float()) # s => tensor #output = prob for actions
 
@@ -64,7 +77,8 @@ if __name__ == '__main__':
             #     break
             # done = np.array([0])
             ###############################################################
-            s_prime, r, done, masked_actions = envs.step(a)
+            with HiddenPrints():
+                s_prime, r, done, masked_actions = envs.step(a)
             # print('done =>', done)
             s_prime = s_prime.reshape(1,-1)
             # print('s_prime', s_prime)
