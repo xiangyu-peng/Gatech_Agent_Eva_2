@@ -43,14 +43,14 @@ def worker(worker_id, master_end, worker_end):
         if cmd == 'step':
             ob, reward, done, info = env.step(data)
             if done:
-                ob = env.reset()
+                ob, masked_actions = env.reset()
             worker_end.send((ob, reward, done, info))
         elif cmd == 'reset':
-            ob = env.reset()
-            worker_end.send(ob)
+            ob, masked_actions = env.reset()
+            worker_end.send((ob, masked_actions))
         elif cmd == 'reset_task':
-            ob = env.reset_task()
-            worker_end.send(ob)
+            ob, masked_actions = env.reset_task()
+            worker_end.send((ob, masked_actions))
         elif cmd == 'close':
             worker_end.close()
             break
@@ -94,7 +94,7 @@ class ParallelEnv:
     def reset(self):
         for master_end in self.master_ends:
             master_end.send(('reset', None))   #send to worker_end =>
-        return np.stack([master_end.recv() for master_end in self.master_ends])
+        return master_end.recv()
 
     def step(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
         self.step_async(actions)
@@ -118,7 +118,7 @@ def test(step_idx, model):
     num_test = 10
 
     for _ in range(num_test):
-        s = env.reset()
+        s, masked_actions = env.reset()
         while not done:
             prob = model.actor(torch.from_numpy(s).float(), softmax_dim=0)
             a = Categorical(prob).sample().numpy()

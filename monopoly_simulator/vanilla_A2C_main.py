@@ -19,7 +19,7 @@ if __name__ == '__main__':
     PRINT_INTERVAL = update_interval * 100
     config = Config()
     config.hidden_state = 256
-    config.action_space = 79
+    config.action_space = 80
     config.state_num = 56
     #######################################
     envs = ParallelEnv(n_train_processes)
@@ -27,8 +27,8 @@ if __name__ == '__main__':
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     step_idx = 0
-    s = envs.reset() #initilize s from envs 3*4
-    print('s=====>',s)
+    s, masked_actions = envs.reset()
+    num = 0
     while step_idx < max_train_steps:
         s_lst, a_lst, r_lst, mask_lst = list(), list(), list(), list() #state list; action list, reward list, masked action list？？？
 
@@ -37,31 +37,38 @@ if __name__ == '__main__':
         ##loop until the action outputs stop signal#
         #while True:
         ############################################
-
+            print('s', s)
+            print('masked_actions', masked_actions)
+            s = s.reshape(1,-1)
             prob = model.actor(torch.from_numpy(s).float()) # s => tensor #output = prob for actions
 
 
-            a = Categorical(prob).sample().numpy() #substitute
+            # a = Categorical(prob).sample().numpy() #substitute
+            # print('a!!! ====>' , a)
 
             #Choose the action with highest prob and not in masked action
-            ##Becky#########################################################
-            # prob = prob.cpu().detach().numpy()
-            # masked_actions = ActionValid(s)
-            # #Check if the action is valid
-            # action_Invalid = True
-            # largest_num = -1
-            # while action_Invalid:
-            #     a = prob.argsort()[largest_num:][::-1][0][0]
-            #     action_Invalid = True if masked_actions[a] == 0 else False
-            #     a = [a]
-            #     largest_num -= 1
-            # #Check the action is a stop sign or not a = [0] means stop
-            # if a == [0]:
+            #Becky#########################################################
+            prob = prob.cpu().detach().numpy().reshape(-1,)
+            #Check if the action is valid
+            action_Invalid = True
+            largest_num = -1
+            while action_Invalid:
+                a = prob.argsort()[largest_num:][0]
+                action_Invalid = True if masked_actions[a] == 0 else False
+                a = [a]
+                largest_num -= 1
+            # print('masked_actions', masked_actions)
+            # print('a', a)
+            #Check the action is a stop sign or not a = [0] means stop
+            # if a == 0:
             #     break
-            #done = np.array([0])
-            ################################################################
+            # done = np.array([0])
+            ###############################################################
             s_prime, r, done, masked_actions = envs.step(a)
-            print('s=====>',s_prime)
+            # print('done =>', done)
+            s_prime = s_prime.reshape(1,-1)
+            # print('s_prime', s_prime)
+            masked_actions = masked_actions[0]
 
             s_lst.append(s)
             a_lst.append(a)
@@ -70,6 +77,8 @@ if __name__ == '__main__':
 
             s = s_prime
             step_idx += 1
+
+            num += 1
 
         s_final = torch.from_numpy(s_prime).float() #numpy => tensor
         v_final = model.critic(s_final).detach().clone().numpy() #V(s') numpy  i.e. [[0.09471023]]

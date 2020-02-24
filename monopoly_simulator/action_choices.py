@@ -1,3 +1,4 @@
+from location import *
 def free_mortgage(player, asset):
     """
     Action for freeing player's mortgage on asset.
@@ -496,77 +497,83 @@ def buy_property(player, asset, current_gameboard):
     :return: 1 if player has succeeded in buying the property, -1 if either the player has failed OR if the property ended
     up going to auction (in the latter case, the player may still succeed in obtaining the asset!)
     """
-    if asset.owned_by != current_gameboard['bank']:
-        print(asset.name,' is not owned by Bank! Resetting option_to_buy for player and returning code -1')
-        player.reset_option_to_buy()
-        # add to game history
-        current_gameboard['history']['function'].append(player.reset_option_to_buy)
-        params = dict()
-        params['self'] = player
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(None)
+    allowed_types = [UtilityLocation, RailroadLocation, RealEstateLocation]
+    if type(asset) in allowed_types:
+        if asset.owned_by != current_gameboard['bank']:
+            print(asset.name,' is not owned by Bank! Resetting option_to_buy for player and returning code -1')
+            player.reset_option_to_buy()
+            # add to game history
+            current_gameboard['history']['function'].append(player.reset_option_to_buy)
+            params = dict()
+            params['self'] = player
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(None)
 
+            return -1
+
+        if player.current_cash < asset.price:
+            print('no enough money')
+
+            #####becky: do not consider auction now#####
+            # # property has to go up for auction.
+            # index_current_player = current_gameboard['players'].index(player)  # in players, find the index of the current player
+            # starting_player_index = (index_current_player + 1) % len(current_gameboard['players'])  # the next player's index. this player will start the auction
+            # player.reset_option_to_buy()
+            # # add to game history
+            # current_gameboard['history']['function'].append(player.reset_option_to_buy)
+            # params = dict()
+            # params['self'] = player
+            # current_gameboard['history']['param'].append(params)
+            # current_gameboard['history']['return'].append(None)
+            #
+            # print(asset.name, ' is going up for auction since ', player.player_name, ' does not have enough cash to purchase this property. Conducting auction and returning -1')
+            # current_gameboard['bank'].auction(starting_player_index, current_gameboard, asset)
+            # # add to game history
+            # current_gameboard['history']['function'].append(current_gameboard['bank'].auction)
+            # params = dict()
+            # params['self'] = current_gameboard['bank']
+            # params['starting_player_index'] = starting_player_index
+            # params['current_gameboard'] = current_gameboard
+            # params['asset'] = asset
+            # current_gameboard['history']['param'].append(params)
+            # current_gameboard['history']['return'].append(None)
+
+            return -1 # this is a -1 even though you may still succeed in buying the property at auction
+        else:
+
+            print('-buy- Charging ',player.player_name, ' amount ',str(asset.price),' for asset ',asset.name)
+            player.charge_player(asset.price)
+            # add to game history
+            current_gameboard['history']['function'].append(player.charge_player)
+            params = dict()
+            params['self'] = player
+            params['amount'] = asset.price
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(None)
+
+            asset.update_asset_owner(player, current_gameboard)
+            # add to game history
+            current_gameboard['history']['function'].append(asset.update_asset_owner)
+            params = dict()
+            params['self'] = asset
+            params['player'] = player
+            params['current_gameboard'] = current_gameboard
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(None)
+
+            print(asset.name, ' ownership has been updated! Resetting option_to_buy for player and returning code 1')
+            player.reset_option_to_buy()
+            # add to game history
+            current_gameboard['history']['function'].append(player.reset_option_to_buy)
+            params = dict()
+            params['self'] = player
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(None)
+
+            return 1
+    else:
         return -1
 
-    if player.current_cash < asset.price:
-        print('no enough money')
-
-        #####becky: do not consider auction now#####
-        # # property has to go up for auction.
-        # index_current_player = current_gameboard['players'].index(player)  # in players, find the index of the current player
-        # starting_player_index = (index_current_player + 1) % len(current_gameboard['players'])  # the next player's index. this player will start the auction
-        # player.reset_option_to_buy()
-        # # add to game history
-        # current_gameboard['history']['function'].append(player.reset_option_to_buy)
-        # params = dict()
-        # params['self'] = player
-        # current_gameboard['history']['param'].append(params)
-        # current_gameboard['history']['return'].append(None)
-        #
-        # print(asset.name, ' is going up for auction since ', player.player_name, ' does not have enough cash to purchase this property. Conducting auction and returning -1')
-        # current_gameboard['bank'].auction(starting_player_index, current_gameboard, asset)
-        # # add to game history
-        # current_gameboard['history']['function'].append(current_gameboard['bank'].auction)
-        # params = dict()
-        # params['self'] = current_gameboard['bank']
-        # params['starting_player_index'] = starting_player_index
-        # params['current_gameboard'] = current_gameboard
-        # params['asset'] = asset
-        # current_gameboard['history']['param'].append(params)
-        # current_gameboard['history']['return'].append(None)
-
-        return -1 # this is a -1 even though you may still succeed in buying the property at auction
-    else:
-        print('-buy- Charging ',player.player_name, ' amount ',str(asset.price),' for asset ',asset.name)
-        player.charge_player(asset.price)
-        # add to game history
-        current_gameboard['history']['function'].append(player.charge_player)
-        params = dict()
-        params['self'] = player
-        params['amount'] = asset.price
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(None)
-
-        asset.update_asset_owner(player, current_gameboard)
-        # add to game history
-        current_gameboard['history']['function'].append(asset.update_asset_owner)
-        params = dict()
-        params['self'] = asset
-        params['player'] = player
-        params['current_gameboard'] = current_gameboard
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(None)
-
-        print(asset.name, ' ownership has been updated! Resetting option_to_buy for player and returning code 1')
-        player.reset_option_to_buy()
-        # add to game history
-        current_gameboard['history']['function'].append(player.reset_option_to_buy)
-        params = dict()
-        params['self'] = player
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(None)
-
-        return 1
 
 
 

@@ -93,7 +93,8 @@ class Interface(object):
         state_space_card.append(num_card_others)
         state_space += state_space_card
 
-        self.state_space = state_space
+        self.state_space = np.array(state_space)
+
         return self.state_space
 
     def get_masked_actions(self, allowable_actions, param, current_player):

@@ -122,6 +122,7 @@ def move_player(player, card, current_gameboard):
         current_gameboard['history']['param'].append(params)
         current_gameboard['history']['return'].append(None)
     else:
+        rel_move = card.new_relative_position
         _move_player__check_for_go(player, new_position, current_gameboard, rel_move)
 
 

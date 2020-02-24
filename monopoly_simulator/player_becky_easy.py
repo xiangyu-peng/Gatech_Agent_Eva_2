@@ -662,7 +662,7 @@ class Player(object):
         allowable_actions = self.compute_allowable_pre_roll_actions(current_gameboard)
         allowable_actions.remove(concluded_actions)
         allowable_actions.add(skip_turn)
-        print('pre allowable_actions =====>', allowable_actions)
+        # print('pre allowable_actions =====>', allowable_actions)
         code = 0
         action_to_execute, parameters = self.make_pre_roll_move(self, current_gameboard, allowable_actions, code)
         t = (action_to_execute, parameters)
@@ -740,7 +740,7 @@ class Player(object):
         allowable_actions.add(skip_turn)
         code = 0
         action_to_execute, parameters = self.make_out_of_turn_move(self, current_gameboard, allowable_actions, code)
-        print('action_to_execute, parameters ======> ', action_to_execute, parameters)
+        # print('action_to_execute, parameters ======> ', action_to_execute, parameters)
         t = (action_to_execute, parameters)
         # add to game history
         current_gameboard['history']['function'].append(self.make_out_of_turn_move)
