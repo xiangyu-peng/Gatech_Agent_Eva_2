@@ -144,6 +144,11 @@ class Interface(object):
 
     #action_# is 80
     def action_num2vec(self, action):
+        '''
+        Action taken from A2C agent is a interger/index, need to transform to vector.
+        :param action: a integer: index of action vector.
+        :return: a vector with only one 1 otherwise 0 for the whole vector
+        '''
         actions_vec = [0 for i in range(self.action_space_num)]
         actions_vec[int(action)] = 1
         return actions_vec
@@ -181,6 +186,10 @@ class Interface(object):
                 self.site_space.append(current_board['location_objects'][space])
             for i in range(len(self.board_owned)):
                 self.action_space.append(free_mortgage)
+
+            # 1 action: do nothing
+            self.action_space.append(concluded_actions)
+            self.site_space.append(current_board['location_objects']['Go'])
 
         return self.action_space, self.site_space
 

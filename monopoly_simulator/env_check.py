@@ -15,3 +15,6 @@ print('s =====>', s)
 s = env.step(53) #free-mortgage
 print('======================step======================')
 print('s =====>', s)
+s = env.step(79) #do nothing
+print('======================step======================')
+print('s =====>', s)

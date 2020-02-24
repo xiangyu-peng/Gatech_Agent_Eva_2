@@ -305,6 +305,8 @@ def make_post_roll_move(player, current_gameboard, allowable_moves, code, move_a
             print(player.player_name, ': I am attempting to mortgage property ', space_action[0].name)
             player._agent_memory['previous_action'] = action_choices.mortgage_property
             return (action_choices.mortgage_property, params)
+        else:
+            return (action_choices.concluded_actions, dict())
     #######################################################################################
 
 

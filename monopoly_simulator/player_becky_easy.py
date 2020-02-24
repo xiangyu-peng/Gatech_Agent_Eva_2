@@ -658,7 +658,6 @@ class Player(object):
         :return: An integer. 2 if the turn is skipped or 1 for concluded actions. No other code should safely
         be returned.
         """
-        print('using eassssssssy version')
         print('We are in the pre-roll phase for ',self.player_name)
         allowable_actions = self.compute_allowable_pre_roll_actions(current_gameboard)
         allowable_actions.remove(concluded_actions)
@@ -859,7 +858,8 @@ class Player(object):
         #         current_gameboard['history']['return'].append(t)
         #         # print action_to_execute
         #
-        # self._force_buy_outcome(current_gameboard) # if we got here, we need to conclude actions
+        if self.player_name != 'player_1':
+            self._force_buy_outcome(current_gameboard) # if we got here, we need to conclude actions
         return self._execute_action(concluded_actions, dict(), current_gameboard) # now we can conclude actions
 
 

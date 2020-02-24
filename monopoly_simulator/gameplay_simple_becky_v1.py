@@ -100,23 +100,23 @@ def before_agent(game_elements, num_active_players, num_die_rolls, current_playe
         # post-roll for current player. No out-of-turn moves allowed at this point.
         #####becky######action space got#####################################
         a.board_to_state(params['current_gameboard']) #get state space
-        print('state_space =====>', a.state_space)
+        # print('state_space =====>', a.state_space)
         allowable_actions,param = current_player.compute_allowable_post_roll_actions(params['current_gameboard'])
-        print('allowed_actions=====>', allowable_actions)
+        # print('allowed_actions=====>', allowable_actions)
         a.get_masked_actions(allowable_actions, param, current_player)
         # print('masked_actions =====>', a.masked_actions)
-        print('current_player\'s mortgage assets', current_player.mortgaged_assets)
+        # print('current_player\'s mortgage assets', current_player.mortgaged_assets)
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params
 
 def after_agent(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     a.board_to_state(game_elements)
-    print('state_space', a.state_space)
+    # print('state_space', a.state_space)
     current_player = game_elements['players'][current_player_index]
     if not current_player.currently_in_jail:
         #got state and masked actions => agent => output actions and move
         #action vector => actions
         move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
-        # print('move_actions =====>', move_actions)
+        print('move_actions =====>', move_actions)
         current_player.make_post_roll_moves(game_elements, move_actions)
         #####################################################################
 
