@@ -10,12 +10,12 @@ Successfully instantiated game history data structures
 using eassssssssy version
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f31b9272b90>}
+pre allowable_actions =====> {<function skip_turn at 0x7f11b62b0b90>}
 Executing _execute_action for  player_1
 player is skipping turn
 We are in the out-of-turn phase for  player_2
 computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f31b9272b90> {}
+action_to_execute, parameters ======>  <function skip_turn at 0x7f11b62b0b90> {}
 Executing _execute_action for  player_2
 player is skipping turn
 rolling die...
@@ -29,13 +29,12 @@ player_1  is on a railroad location, namely  Reading Railroad
 Reading Railroad  is owned by Bank. Setting _option_to_buy to true for  player_1
 state_space =====> [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 300, 300, 5, 0, 0, 0]
 computing allowable post-roll actions for  player_1
-allowed_actions=====> {<function buy_property at 0x7f31b9272f80>, <function concluded_actions at 0x7f31b9272c20>}
+allowed_actions=====> {<function buy_property at 0x7f11b62b0f80>, <function concluded_actions at 0x7f11b62b0c20>}
 potentials => []
 current_player's mortgage assets set()
 s =====> [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 300, 300, 5, 0, 0, 0]
 ======================step======================
 state_space [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 300, 300, 5, 0, 0, 0]
-actions_vector =====>  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
  
 We are in the post-roll phase for  player_1
 computing allowable post-roll actions for  player_1
@@ -57,12 +56,12 @@ player has concluded actions
 using eassssssssy version
 We are in the pre-roll phase for  player_2
 computing allowable pre-roll actions for  player_2
-pre allowable_actions =====> {<function skip_turn at 0x7f31b9272b90>}
+pre allowable_actions =====> {<function skip_turn at 0x7f11b62b0b90>}
 Executing _execute_action for  player_2
 player is skipping turn
 We are in the out-of-turn phase for  player_1
 computing allowable out-of-turn actions for  player_1
-action_to_execute, parameters ======>  <function skip_turn at 0x7f31b9272b90> {}
+action_to_execute, parameters ======>  <function skip_turn at 0x7f11b62b0b90> {}
 Executing _execute_action for  player_1
 player is skipping turn
 rolling die...
@@ -82,12 +81,12 @@ player has concluded actions
 using eassssssssy version
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f31b9272b90>}
+pre allowable_actions =====> {<function skip_turn at 0x7f11b62b0b90>}
 Executing _execute_action for  player_1
 player is skipping turn
 We are in the out-of-turn phase for  player_2
 computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f31b9272b90> {}
+action_to_execute, parameters ======>  <function skip_turn at 0x7f11b62b0b90> {}
 Executing _execute_action for  player_2
 player is skipping turn
 rolling die...
@@ -101,13 +100,12 @@ player_1  is on a real estate location, namely  St. Charles Place
 St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
 state_space =====> [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 300, 11, 10, 0, 0]
 computing allowable post-roll actions for  player_1
-allowed_actions=====> {<function buy_property at 0x7f31b9272f80>, <function concluded_actions at 0x7f31b9272c20>, <function mortgage_property at 0x7f31b9272cb0>}
+allowed_actions=====> {<function buy_property at 0x7f11b62b0f80>, <function concluded_actions at 0x7f11b62b0c20>, <function mortgage_property at 0x7f11b62b0cb0>}
 potentials => []
 current_player's mortgage assets set()
 ======================step======================
-s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 300, 11, 10, 0, 0], 100, False, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 300, 11, 10, 0, 0], 100, False, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
 state_space [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 300, 11, 10, 0, 0]
-actions_vector =====>  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
  
 We are in the post-roll phase for  player_1
 computing allowable post-roll actions for  player_1
@@ -123,12 +121,12 @@ player has concluded actions
 using eassssssssy version
 We are in the pre-roll phase for  player_2
 computing allowable pre-roll actions for  player_2
-pre allowable_actions =====> {<function skip_turn at 0x7f31b9272b90>}
+pre allowable_actions =====> {<function skip_turn at 0x7f11b62b0b90>}
 Executing _execute_action for  player_2
 player is skipping turn
 We are in the out-of-turn phase for  player_1
 computing allowable out-of-turn actions for  player_1
-action_to_execute, parameters ======>  <function skip_turn at 0x7f31b9272b90> {}
+action_to_execute, parameters ======>  <function skip_turn at 0x7f11b62b0b90> {}
 Executing _execute_action for  player_1
 player is skipping turn
 rolling die...
@@ -148,12 +146,12 @@ player has concluded actions
 using eassssssssy version
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f31b9272b90>}
+pre allowable_actions =====> {<function skip_turn at 0x7f11b62b0b90>}
 Executing _execute_action for  player_1
 player is skipping turn
 We are in the out-of-turn phase for  player_2
 computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f31b9272b90> {}
+action_to_execute, parameters ======>  <function skip_turn at 0x7f11b62b0b90> {}
 Executing _execute_action for  player_2
 player is skipping turn
 rolling die...
@@ -175,13 +173,12 @@ player_1  is on a railroad location, namely  B&O Railroad
 B&O Railroad  is owned by Bank. Setting _option_to_buy to true for  player_1
 state_space =====> [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 300, 25, 20, 0, 0]
 computing allowable post-roll actions for  player_1
-allowed_actions=====> {<function buy_property at 0x7f31b9272f80>, <function concluded_actions at 0x7f31b9272c20>, <function free_mortgage at 0x7f31b926ba70>}
+allowed_actions=====> {<function buy_property at 0x7f11b62b0f80>, <function concluded_actions at 0x7f11b62b0c20>, <function free_mortgage at 0x7f11b62a9a70>}
 potentials => ['Reading Railroad']
-current_player's mortgage assets {<location.RailroadLocation object at 0x7f31b9237950>}
+current_player's mortgage assets {<location.RailroadLocation object at 0x7f11b6273910>}
 ======================step======================
-s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 300, 25, 20, 0, 0], 200, False, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 300, 25, 20, 0, 0], 200, False, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
 state_space [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 300, 25, 20, 0, 0]
-actions_vector =====>  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
  
 We are in the post-roll phase for  player_1
 computing allowable post-roll actions for  player_1
@@ -198,12 +195,12 @@ player has concluded actions
 using eassssssssy version
 We are in the pre-roll phase for  player_2
 computing allowable pre-roll actions for  player_2
-pre allowable_actions =====> {<function skip_turn at 0x7f31b9272b90>}
+pre allowable_actions =====> {<function skip_turn at 0x7f11b62b0b90>}
 Executing _execute_action for  player_2
 player is skipping turn
 We are in the out-of-turn phase for  player_1
 computing allowable out-of-turn actions for  player_1
-action_to_execute, parameters ======>  <function skip_turn at 0x7f31b9272b90> {}
+action_to_execute, parameters ======>  <function skip_turn at 0x7f11b62b0b90> {}
 Executing _execute_action for  player_1
 player is skipping turn
 rolling die...
@@ -224,12 +221,12 @@ player has concluded actions
 using eassssssssy version
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f31b9272b90>}
+pre allowable_actions =====> {<function skip_turn at 0x7f11b62b0b90>}
 Executing _execute_action for  player_1
 player is skipping turn
 We are in the out-of-turn phase for  player_2
 computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f31b9272b90> {}
+action_to_execute, parameters ======>  <function skip_turn at 0x7f11b62b0b90> {}
 Executing _execute_action for  player_2
 player is skipping turn
 rolling die...
@@ -244,8 +241,8 @@ execute go_to_jail action for  player_1
 player_1  is being sent to jail.
 state_space =====> [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 300, 10, 29, 0, 0]
 computing allowable post-roll actions for  player_1
-allowed_actions=====> {<function concluded_actions at 0x7f31b9272c20>, <function mortgage_property at 0x7f31b9272cb0>}
+allowed_actions=====> {<function concluded_actions at 0x7f11b62b0c20>, <function mortgage_property at 0x7f11b62b0cb0>}
 potentials => []
 current_player's mortgage assets set()
 ======================step======================
-s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 300, 10, 29, 0, 0], 89.99999999999999, False, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])
+s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 300, 10, 29, 0, 0], 89.99999999999999, False, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
