@@ -8,6 +8,7 @@ import torch.multiprocessing as mp
 import time
 import numpy as np
 import os, sys
+from random import randint
 
 class HiddenPrints:
     def __enter__(self):
@@ -46,13 +47,12 @@ def worker(worker_id, master_end, worker_end):
     master_end.close()  # Forbid worker to use the master end for messaging
     env = gym.make('monopoly_simple-v1')
     env.seed(worker_id)
+    # env.seed(randint(0,sys.maxsize))
 
     while True:
         cmd, data = worker_end.recv()
         if cmd == 'step':
             ob, reward, done, info = env.step(data)
-            if done:
-                ob, masked_actions = env.reset()
             worker_end.send((ob, reward, done, info))
         elif cmd == 'reset':
             ob, masked_actions = env.reset()
@@ -78,7 +78,9 @@ class ParallelEnv:
         master_ends, worker_ends = zip(*[mp.Pipe() for _ in range(self.nenvs)]) #pipe connect each other
         self.master_ends, self.worker_ends = master_ends, worker_ends
 
+
         for worker_id, (master_end, worker_end) in enumerate(zip(master_ends, worker_ends)):
+            worker_id = randint(0, sys.maxsize)
             p = mp.Process(target=worker,
                            args=(worker_id, master_end, worker_end))
             p.daemon = True
@@ -127,8 +129,9 @@ def test(step_idx, model):
     num_test = 10
 
     for _ in range(num_test):
-        s, masked_actions = env.reset()
         with HiddenPrints():
+            s, masked_actions = env.reset()
+
             while not done:
 
                 prob = model.actor(torch.from_numpy(s).float(), softmax_dim=0)

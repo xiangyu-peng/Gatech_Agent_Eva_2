@@ -11,17 +11,48 @@ class HiddenPrints:
         sys.stdout.close()
         sys.stdout = self._original_stdout
 
+
+
+done = False
 env = gym.make('monopoly_simple-v1')
-print('seeds =====>', env.seed(seed=0))
+env.seed(seed=5)
 with HiddenPrints():
-    s, masked = env.reset()
+    s,mask = env.reset()
+with HiddenPrints():
+    while done == False:
+        s, rew, done,info = env.step(-1)
 print('s =====> reset', s)
-print('masked', masked)
-print('======================step======================')
+print('done',done)
+print('env.seeds', env.seeds)
+env.close()
+
+done = False
+# env = gym.make('monopoly_simple-v1')
+# env.seed(seed=6)
 with HiddenPrints():
-    s = env.step(0) #buy
-print('======================step======================')
-print('s =====>', s)
+    s,mask = env.reset()
+with HiddenPrints():
+    while done == False:
+        s, rew, done,info = env.step(-1)
+print('s =====> reset', s)
+print('done',done)
+print('env.seeds', env.seeds)
+env.close()
+# done = False
+# with HiddenPrints():
+#     while done == False:
+#         s, rew, done,info = env.step(0)
+# print('s =====> reset', s)
+
+
+
+
+# print('masked', masked)
+# print('======================step======================')
+# with HiddenPrints():
+#     s = env.step(0) #buy
+# print('======================step======================')
+# print('s =====>', s)
 # s = env.step(25) #mortgage
 # print('======================step======================')
 # print('s =====>', s)

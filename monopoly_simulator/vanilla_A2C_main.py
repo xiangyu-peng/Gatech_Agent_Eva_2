@@ -19,7 +19,7 @@ if __name__ == '__main__':
     config_file = '/media/becky/Novelty-Generation-Space-A2C/Vanilla-A2C/config.ini'
     config_data = ConfigParser()
     config_data.read(config_file)
-    print('config_data.items', config_data.sections())
+    # print('config_data.items', config_data.sections())
     # Hyperparameters
     n_train_processes = 1
     learning_rate = 0.0002
@@ -40,7 +40,7 @@ if __name__ == '__main__':
     step_idx = 0
     with HiddenPrints():
         s, masked_actions = envs.reset()
-    num = 0
+
 
     while step_idx < max_train_steps:
         s_lst, a_lst, r_lst, mask_lst = list(), list(), list(), list() #state list; action list, reward list, masked action list？？？
@@ -79,6 +79,9 @@ if __name__ == '__main__':
             ###############################################################
             with HiddenPrints():
                 s_prime, r, done, masked_actions = envs.step(a)
+            if done:
+                print(s_prime)
+                # print('s_prime, r, done, masked_actions', s_prime, r, done, masked_actions)
             # print('done =>', done)
             s_prime = s_prime.reshape(1,-1)
             # print('s_prime', s_prime)
@@ -86,13 +89,18 @@ if __name__ == '__main__':
 
             s_lst.append(s)
             a_lst.append(a)
-            r_lst.append(r/100.0) #discount of actions, hyperparameter
+            r_lst.append(r) # r/100 discount of actions, hyperparameter
             mask_lst.append(1 - done)
 
             s = s_prime
             step_idx += 1
 
-            num += 1
+            if done:
+                # print('s_prime, r, done, masked_actions', s_prime, r, done, masked_actions)
+                with HiddenPrints():
+                    s, masked_actions = envs.reset()
+                break
+
 
         s_final = torch.from_numpy(s_prime).float() #numpy => tensor
         v_final = model.critic(s_final).detach().clone().numpy() #V(s') numpy  i.e. [[0.09471023]]

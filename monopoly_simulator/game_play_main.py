@@ -20,10 +20,10 @@ def enablePrint():
 def before_agent(game_elements, num_active_players, num_die_rolls, current_player_index, a):
     current_player = game_elements['players'][current_player_index]
 
-    # while current_player.status == 'lost':
-    #     current_player_index += 1
-    #     current_player_index = current_player_index % len(game_elements['players'])
-    #     current_player = game_elements['players'][current_player_index]
+    while current_player.status == 'lost':
+        current_player_index += 1
+        current_player_index = current_player_index % len(game_elements['players'])
+        current_player = game_elements['players'][current_player_index]
 
     #set current move to current player
     current_player.status = 'current_move'
@@ -97,48 +97,15 @@ def before_agent(game_elements, num_active_players, num_die_rolls, current_playe
         game_elements['history']['param'].append(params)
         game_elements['history']['return'].append(None)
 
-        if current_player.current_cash < 0:
-            code = current_player.handle_negative_cash_balance(current_player, game_elements)
-            # add to game history
-            game_elements['history']['function'].append(current_player.handle_negative_cash_balance)
-            params = dict()
-            params['player'] = current_player
-            params['current_gameboard'] = game_elements
-            game_elements['history']['param'].append(params)
-            game_elements['history']['return'].append(code)
-            if code == -1 or current_player.current_cash < 0:
-                current_player.begin_bankruptcy_proceedings(game_elements)
-                # add to game history
-                game_elements['history']['function'].append(current_player.begin_bankruptcy_proceedings)
-                params = dict()
-                params['self'] = current_player
-                params['current_gameboard'] = game_elements
-                game_elements['history']['param'].append(params)
-                game_elements['history']['return'].append(None)
-
-                num_active_players -= 1
-                diagnostics.print_asset_owners(game_elements)
-                diagnostics.print_player_cash_balances(game_elements)
-
-                if num_active_players == 1:
-                    for p in game_elements['players']:
-                        if p.status != 'lost':
-                            winner = p
-                            p.status = 'won'
-            a.board_to_state(params['current_gameboard'])  # get state space
-
-        else:
-
-            # post-roll for current player. No out-of-turn moves allowed at this point.
-            #####becky######action space got#####################################
-            a.board_to_state(params['current_gameboard']) #get state space
-            # print('state_space =====>', a.state_space)
-            allowable_actions,param = current_player.compute_allowable_post_roll_actions(params['current_gameboard'])
-            # print('allowed_actions=====>', allowable_actions)
-            a.get_masked_actions(allowable_actions, param, current_player)
-            # print('masked_actions =====>', a.masked_actions)
-            # print('current_player\'s mortgage assets', current_player.mortgaged_assets)
-
+        # post-roll for current player. No out-of-turn moves allowed at this point.
+        #####becky######action space got#####################################
+        a.board_to_state(params['current_gameboard']) #get state space
+        # print('state_space =====>', a.state_space)
+        allowable_actions,param = current_player.compute_allowable_post_roll_actions(params['current_gameboard'])
+        # print('allowed_actions=====>', allowable_actions)
+        a.get_masked_actions(allowable_actions, param, current_player)
+        # print('masked_actions =====>', a.masked_actions)
+        # print('current_player\'s mortgage assets', current_player.mortgaged_assets)
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params
 
 def after_agent(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
@@ -551,7 +518,7 @@ if __name__ == '__main__':
         player_decision_agents[player_name] = simple_background_agent_becky_v1.decision_agent_methods
     game_elements = set_up_board('/media/becky/GNOME/monopoly_game_schema_v1-2.json',
                                  player_decision_agents, num_active_players)
-    simulate_game_instance(game_elements, num_active_players, np_seed=1)
+    simulate_game_instance(game_elements, num_active_players, np_seed=2)
 
     #just testing history.
     # print len(game_elements['history']['function'])

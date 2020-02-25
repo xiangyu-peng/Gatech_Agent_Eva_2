@@ -1,5 +1,5 @@
+config_data.items ['hyperparameter', 'parameter']
 Remove monopoly_simple-v1 from registry
-seeds =====> 592379725
 Beginning game set up...
 Successfully instantiated and initialized bank.
 Successfully instantiated and initialized all locations on board.
@@ -9,294 +9,777 @@ Successfully instantiated and initialized players and decision agents
 Successfully instantiated game history data structures
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
 Executing _execute_action for  player_1
 player is skipping turn
 We are in the out-of-turn phase for  player_2
 computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
 Executing _execute_action for  player_2
 player is skipping turn
 rolling die...
--die- have come up [2, 3]
-executing move_player_after_die_roll for  player_1  by  5  relative steps forward.
-current_position, new_position, go_position 0 5 0 5
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
 passes GO? False
-current_position, new_position, go_position 0 5 0 5
--loc-Player is currently in position Go  and is moving to position Reading Railroad
-player_1  is on a railroad location, namely  Reading Railroad
-Reading Railroad  is owned by Bank. Setting _option_to_buy to true for  player_1
-computing allowable post-roll actions for  player_1
-potentials => []
-s =====> [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 300, 300, 5, 0, 0, 0]
-======================step======================
- 
-move_actions =====> [(<function buy_property at 0x7f07ff06ad40>, <location.RailroadLocation object at 0x7f07fce80810>)]
-We are in the post-roll phase for  player_1
-computing allowable post-roll actions for  player_1
-player_1 : I am attempting to buy property  Reading Railroad
-Executing _execute_action for  player_1
--buy- Charging  player_1  amount  200  for asset  Reading Railroad
-player_1  is being charged amount:  200
-Before charge, player has cash  300
-player_1  now has cash:  100
-attempting to update asset  Reading Railroad  to reflect new owner:  player_1
-('Looking to add asset ', 'Reading Railroad', ' to portfolio of ', 'player_1')
-('total no. of assets now owned by player: ', '1')
-('incrementing ', 'player_1', "'s railroad count by 1, total railroads owned by player now is ", '1')
-Asset ownership update succeeded.
-Reading Railroad  ownership has been updated! Resetting option_to_buy for player and returning code 1
-Executing reset_option_to_buy for  player_1
-Executing _execute_action for  player_1
-player has concluded actions
-We are in the pre-roll phase for  player_2
-computing allowable pre-roll actions for  player_2
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
-Executing _execute_action for  player_2
-player is skipping turn
-We are in the out-of-turn phase for  player_1
-computing allowable out-of-turn actions for  player_1
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
-Executing _execute_action for  player_1
-player is skipping turn
-rolling die...
--die- have come up  [6, 4]
-executing move_player_after_die_roll for  player_2  by  10  relative steps forward.
-current_position, new_position, go_position 0 10 0 10
-passes GO? False
-current_position, new_position, go_position 0 10 0 10
--loc-Player is currently in position Go  and is moving to position In Jail/Just Visiting
-player_2  is on a do_nothing location, namely  In Jail/Just Visiting . Nothing to process. Returning...
-We are in the post-roll phase for  player_2
-computing allowable post-roll actions for  player_2
-Executing _execute_action for  player_2
-player has concluded actions
-Executing _force_buy_outcome for  player_2
-Executing reset_option_to_buy for  player_2
-Executing _execute_action for  player_2
-player has concluded actions
-We are in the pre-roll phase for  player_1
-computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
-Executing _execute_action for  player_1
-player is skipping turn
-We are in the out-of-turn phase for  player_2
-computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
-Executing _execute_action for  player_2
-player is skipping turn
-rolling die...
--die- have come up [2, 4]
-executing move_player_after_die_roll for  player_1  by  6  relative steps forward.
-current_position, new_position, go_position 5 11 0 6
-passes GO? False
-current_position, new_position, go_position 5 11 0 6
--loc-Player is currently in position Reading Railroad  and is moving to position St. Charles Place
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
 player_1  is on a real estate location, namely  St. Charles Place
 St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
 computing allowable post-roll actions for  player_1
 potentials => []
-======================step======================
-s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 300, 11, 10, 0, 0], 100, False, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
- 
-move_actions =====> [(<function mortgage_property at 0x7f07ff06aa70>, <location.RailroadLocation object at 0x7f07fce80810>)]
-We are in the post-roll phase for  player_1
-computing allowable post-roll actions for  player_1
-player_1 : I am attempting to mortgage property  Reading Railroad
-Executing _execute_action for  player_1
-Setting asset to mortgage status and adding to player's mortgaged assets
-player_1  is receiving amount:  100
-Before receipt, player has cash  100
-player_1  now has cash:  200
-Property has been mortgaged and player has received cash. Returning 1
-Executing _execute_action for  player_1
-player has concluded actions
-We are in the pre-roll phase for  player_2
-computing allowable pre-roll actions for  player_2
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
-Executing _execute_action for  player_2
-player is skipping turn
-We are in the out-of-turn phase for  player_1
-computing allowable out-of-turn actions for  player_1
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
-Executing _execute_action for  player_1
-player is skipping turn
-rolling die...
--die- have come up  [5, 5]
-executing move_player_after_die_roll for  player_2  by  10  relative steps forward.
-current_position, new_position, go_position 10 20 0 10
-passes GO? False
-current_position, new_position, go_position 10 20 0 10
--loc-Player is currently in position In Jail/Just Visiting  and is moving to position Free Parking
-player_2  is on a do_nothing location, namely  Free Parking . Nothing to process. Returning...
-We are in the post-roll phase for  player_2
-computing allowable post-roll actions for  player_2
-Executing _execute_action for  player_2
-player has concluded actions
-Executing _force_buy_outcome for  player_2
-Executing reset_option_to_buy for  player_2
-Executing _execute_action for  player_2
-player has concluded actions
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
 Executing _execute_action for  player_1
 player is skipping turn
 We are in the out-of-turn phase for  player_2
 computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
 Executing _execute_action for  player_2
 player is skipping turn
 rolling die...
--die- have come up [6, 5]
+-die- have come up [5, 6]
 executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
-current_position, new_position, go_position 11 22 0 11
+current_position, new_position, go_position 0 11 0 11
 passes GO? False
-current_position, new_position, go_position 11 22 0 11
--loc-Player is currently in position St. Charles Place  and is moving to position Chance
-player_1  is on an action location, namely  Chance . Performing action...
-player_1  is picking card from chance.
-player_1  picked card  go_to_nearest_railroad_pay_double
-executing move_to_nearest_railroad__pay_double_or_buy__check_for_go for  player_1
-The railroad position that player is being moved to is  B&O Railroad
-current_position, new_position, go_position 22 25 0 0
--loc-Player is currently in position Chance  and is moving to position B&O Railroad
-railroad is owned by bank. Player will have option to purchase.
-player_1  is on a railroad location, namely  B&O Railroad
-B&O Railroad  is owned by Bank. Setting _option_to_buy to true for  player_1
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
 computing allowable post-roll actions for  player_1
-potentials => ['Reading Railroad']
-======================step======================
-s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 200, 300, 25, 20, 0, 0], 200, False, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
- 
-move_actions =====> [(<function free_mortgage at 0x7f07ff066830>, <location.RailroadLocation object at 0x7f07fce80810>)]
-We are in the post-roll phase for  player_1
-computing allowable post-roll actions for  player_1
-player_1 : I am going to free mortgage on  Reading Railroad
-Executing _execute_action for  player_1
-player_1  is attempting to free up mortgage on asset  Reading Railroad
-player_1  is being charged amount:  110.00000000000001
-Before charge, player has cash  200
-player_1  now has cash:  89.99999999999999
-player_1 Player has paid down mortgage with interest. Setting status of asset to unmortgaged, and removing asset from player's mortgaged set
-Mortgage has successfully been freed. Returning 1
-Executing _execute_action for  player_1
-player has concluded actions
-We are in the pre-roll phase for  player_2
-computing allowable pre-roll actions for  player_2
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
-Executing _execute_action for  player_2
-player is skipping turn
-We are in the out-of-turn phase for  player_1
-computing allowable out-of-turn actions for  player_1
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
-Executing _execute_action for  player_1
-player is skipping turn
-rolling die...
--die- have come up  [4, 5]
-executing move_player_after_die_roll for  player_2  by  9  relative steps forward.
-current_position, new_position, go_position 20 29 0 9
-passes GO? False
-current_position, new_position, go_position 20 29 0 9
--loc-Player is currently in position Free Parking  and is moving to position Marvin Gardens
-player_2  is on a real estate location, namely  Marvin Gardens
-Marvin Gardens  is owned by Bank. Setting _option_to_buy to true for  player_2
-We are in the post-roll phase for  player_2
-computing allowable post-roll actions for  player_2
-Executing _execute_action for  player_2
-player has concluded actions
-Executing _force_buy_outcome for  player_2
-Executing _own_or_auction for  player_2
-player_2  decides to purchase?  False
-Executing reset_option_to_buy for  player_2
-Executing _execute_action for  player_2
-player has concluded actions
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
 Executing _execute_action for  player_1
 player is skipping turn
 We are in the out-of-turn phase for  player_2
 computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
 Executing _execute_action for  player_2
 player is skipping turn
 rolling die...
--die- have come up [4, 1]
-executing move_player_after_die_roll for  player_1  by  5  relative steps forward.
-current_position, new_position, go_position 25 30 0 5
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
 passes GO? False
-current_position, new_position, go_position 25 30 0 5
--loc-Player is currently in position B&O Railroad  and is moving to position Go to Jail
-player_1  is on an action location, namely  Go to Jail . Performing action...
-execute go_to_jail action for  player_1
-player_1  is being sent to jail.
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
 computing allowable post-roll actions for  player_1
 potentials => []
-======================step======================
-s =====> ([0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 300, 10, 29, 0, 0], 89.99999999999999, False, [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
-We are in the pre-roll phase for  player_2
-computing allowable pre-roll actions for  player_2
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
-Executing _execute_action for  player_2
-player is skipping turn
-We are in the out-of-turn phase for  player_1
-computing allowable out-of-turn actions for  player_1
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
-Executing _execute_action for  player_1
-player is skipping turn
-rolling die...
--die- have come up  [6, 6]
-executing move_player_after_die_roll for  player_2  by  12  relative steps forward.
-current_position, new_position, go_position 29 1 0 12
-passes GO? True
-current_position, new_position, go_position 29 1 0 12
--inc- player_2  passes Go, and receieve  50
-player_2  is receiving amount:  50
-Before receipt, player has cash  300
-player_2  now has cash:  350
--loc-Player is currently in position Marvin Gardens  and is moving to position Mediterranean Avenue
-player_2  is on a real estate location, namely  Mediterranean Avenue
-Mediterranean Avenue  is owned by Bank. Setting _option_to_buy to true for  player_2
-We are in the post-roll phase for  player_2
-computing allowable post-roll actions for  player_2
-player_2 : I will attempt to buy  Mediterranean Avenue  from the bank.
-player_2 : I am attempting to buy property  Mediterranean Avenue
-Executing _execute_action for  player_2
--buy- Charging  player_2  amount  60  for asset  Mediterranean Avenue
-player_2  is being charged amount:  60
-Before charge, player has cash  350
-player_2  now has cash:  290
-attempting to update asset  Mediterranean Avenue  to reflect new owner:  player_2
-('Looking to add asset ', 'Mediterranean Avenue', ' to portfolio of ', 'player_2')
-('total no. of assets now owned by player: ', '1')
-Asset ownership update succeeded.
-Mediterranean Avenue  ownership has been updated! Resetting option_to_buy for player and returning code 1
-Executing reset_option_to_buy for  player_2
-Executing _force_buy_outcome for  player_2
-Executing reset_option_to_buy for  player_2
-Executing _execute_action for  player_2
-player has concluded actions
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
-pre allowable_actions =====> {<function skip_turn at 0x7f07ff06a950>}
 Executing _execute_action for  player_1
 player is skipping turn
 We are in the out-of-turn phase for  player_2
 computing allowable out-of-turn actions for  player_2
-action_to_execute, parameters ======>  <function skip_turn at 0x7f07ff06a950> {}
 Executing _execute_action for  player_2
 player is skipping turn
 rolling die...
--die- have come up [5, 3]
-executing move_player_after_die_roll for  player_1  by  8  relative steps forward.
-current_position, new_position, go_position 10 18 0 8
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
 passes GO? False
-current_position, new_position, go_position 10 18 0 8
--loc-Player is currently in position In Jail/Just Visiting  and is moving to position Tennessee Avenue
-player_1  is on a real estate location, namely  Tennessee Avenue
-Tennessee Avenue  is owned by Bank. Setting _option_to_buy to true for  player_1
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
 computing allowable post-roll actions for  player_1
 potentials => []
-======================step======================
-s =====> ([-1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 290, 18, 1, 0, 0], 89.99999999999999, False, [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1])
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Step # :500, avg score : 6555.0
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Step # :1000, avg score : 6555.0
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Beginning game set up...
+Successfully instantiated and initialized bank.
+Successfully instantiated and initialized all locations on board.
+Successfully instantiated and initialized dies
+Successfully instantiated and initialized cards
+Successfully instantiated and initialized players and decision agents
+Successfully instantiated game history data structures
+We are in the pre-roll phase for  player_1
+computing allowable pre-roll actions for  player_1
+Executing _execute_action for  player_1
+player is skipping turn
+We are in the out-of-turn phase for  player_2
+computing allowable out-of-turn actions for  player_2
+Executing _execute_action for  player_2
+player is skipping turn
+rolling die...
+-die- have come up [5, 6]
+executing move_player_after_die_roll for  player_1  by  11  relative steps forward.
+current_position, new_position, go_position 0 11 0 11
+passes GO? False
+current_position, new_position, go_position 0 11 0 11
+-loc-Player is currently in position Go  and is moving to position St. Charles Place
+player_1  is on a real estate location, namely  St. Charles Place
+St. Charles Place  is owned by Bank. Setting _option_to_buy to true for  player_1
+computing allowable post-roll actions for  player_1
+potentials => []
+Step # :1500, avg score : 6555.0
