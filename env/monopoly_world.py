@@ -4,7 +4,8 @@ from gameplay_simple_becky_v1 import *
 from interface import Interface
 import simple_background_agent_becky_v1
 from gym.utils import seeding
-
+from random import randint
+from location import *
 class Monopoly_world():
     def __init__(self):
 
@@ -21,6 +22,7 @@ class Monopoly_world():
         self.seeds = 0
 
     def init(self):
+        self.num_players = 2
         self.num_active_players = 2
         self.num_die_rolls = 0
         self.current_player_index = 0
@@ -30,12 +32,9 @@ class Monopoly_world():
         self.reward = 0
         self.terminal = False
         self.player_decision_agents = dict()
+        self.game_elements = None
+        self.seeds = self.seed(self.seeds + 1)
 
-
-    def seed(self, seed=None):
-        np_random, seed1 = seeding.np_random(seed)
-        self.seeds = seeding.hash_seed(seed1 + 1) % 2 ** 31
-        return self.seeds
 
     def reset(self):
         self.init()
@@ -49,22 +48,63 @@ class Monopoly_world():
         self.game_elements['choice_function'] = np.random.choice
         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params = \
             before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
+        self.a.board_to_state(self.game_elements)
+        return self.a.state_space, self.a.masked_actions
 
-        return self.a.board_to_state(self.game_elements) #use interface to get the vector state space
+    def cal_asset_value(self, index):
+        value = 0
+        player = self.game_elements['players'][index]
+        if player.assets:
+            for asset in player.assets:
+                if type(asset) == RealEstateLocation:
+                    num_houses = asset.num_houses
+                    num_hotels = asset.num_hotels
+                    value += asset.mortgage
+                    if num_houses == 0 and num_hotels == 0:
+                        value += 5 * asset.rent
+                    elif num_houses == 1 and num_hotels == 0:
+                        value += 5 * asset.rent_1_house
+                    elif num_houses == 2 and num_hotels == 0:
+                        value += 5 * asset.rent_2_house
+                    elif num_houses == 3 and num_hotels == 0:
+                        value += 5 * asset.rent_3_house
+                    elif num_houses == 4 and num_hotels == 0:
+                        value += 5 * asset.rent_4_house
+                    elif num_hotels == 1:
+                        value += 5 * asset.rent_hotel
+        return value
+
+
+
     def reward_cal(self):
-        reward = self.game_elements['players'][self.current_player_index].current_cash
-        return reward
+        reward = self.game_elements['players'][self.current_player_index].current_cash + self.cal_asset_value(self.current_player_index)
+        rewards_total = 0
+        for num in range(self.num_players):
+            rewards_total += self.game_elements['players'][num].current_cash
+            rewards_total += self.cal_asset_value(num)
+        return reward / (rewards_total + 0.1)
+
     def next(self, action):
-        if self.terminal:
-            self.reset()
         action = self.a.action_num2vec(action)
         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index = \
-            after_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a,
-                        self.params)
-        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index = \
-            simulate_game_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index)
-        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params = \
-            before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
+            after_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
+        if self.num_active_players > 1:
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index = \
+                simulate_game_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index)
+        if self.num_active_players > 1:
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params = \
+                before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
         self.reward = self.reward_cal()
         self.terminal = False if self.num_active_players > 1 else True
-        return self.a.state_space, self.reward, self.terminal, self.a.masked_actions #can put KG in info
+
+        state_space = self.a.state_space
+        reward = self.reward
+        terminal = self.terminal
+        masked_actions = self.a.masked_actions
+
+        return state_space, reward, terminal, masked_actions #can put KG in info
+
+    def seed(self, seed=None):
+        np_random, seed1 = seeding.np_random(seed)
+        self.seeds = seeding.hash_seed(seed1 + 1) % 2 ** 31
+        return self.seeds

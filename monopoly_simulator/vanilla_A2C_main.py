@@ -8,6 +8,7 @@ import os, sys
 
 class HiddenPrints:
     def __enter__(self):
+
         self._original_stdout = sys.stdout
         sys.stdout = open(os.devnull, 'w')
 
@@ -26,15 +27,22 @@ if __name__ == '__main__':
     update_interval = 5
     gamma = 0.98
     max_train_steps = 60000
-    PRINT_INTERVAL = update_interval * 100
+    PRINT_INTERVAL = update_interval * 1
     config = Config()
     config.hidden_state = 256
     config.action_space = 80
     config.state_num = 56
+
+    # import os
+    # os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+    # torch.cuda.set_device(1)
+    # device = torch.device("cuda", 1)
+
     #######################################
     with HiddenPrints():
         envs = ParallelEnv(n_train_processes)
     model = ActorCritic(config) #A2C model
+    # model.to(device)
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     step_idx = 0
@@ -77,10 +85,11 @@ if __name__ == '__main__':
             #     break
             # done = np.array([0])
             ###############################################################
-            with HiddenPrints():
-                s_prime, r, done, masked_actions = envs.step(a)
-            if done:
-                print(s_prime)
+            # with HiddenPrints():
+            #     s_prime, r, done, masked_actions = envs.step(a)
+            s_prime, r, done, masked_actions = envs.step(a)
+            # if done:
+            #     print(s_prime)
                 # print('s_prime, r, done, masked_actions', s_prime, r, done, masked_actions)
             # print('done =>', done)
             s_prime = s_prime.reshape(1,-1)
@@ -101,7 +110,9 @@ if __name__ == '__main__':
                     s, masked_actions = envs.reset()
                 break
 
-
+        print('weight before test = > ', model.fc_actor.weight)
+        # if step_idx % PRINT_INTERVAL == 0:
+            # print('weight before test = > ', model.fc_actor.weight)
         s_final = torch.from_numpy(s_prime).float() #numpy => tensor
         v_final = model.critic(s_final).detach().clone().numpy() #V(s') numpy  i.e. [[0.09471023]]
         td_target = compute_target(v_final, r_lst, mask_lst, gamma=0.98) #hyperparameter gamma
@@ -119,8 +130,9 @@ if __name__ == '__main__':
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-
+        # print('weight after test = > ', model.fc_actor.weight)
         if step_idx % PRINT_INTERVAL == 0:
             test(step_idx, model)
+            # print('weight after test = > ', model.fc_actor.weight)
     # print('s_lst', s_lst)
     envs.close()

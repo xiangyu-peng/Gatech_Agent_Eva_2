@@ -198,11 +198,11 @@ def after_agent(game_elements, num_active_players, num_die_rolls, current_player
 
     current_player_index = (current_player_index+1)%len(game_elements['players'])
 
-    if diagnostics.max_cash_balance(game_elements) > 300000: # this is our limit for runaway cash for testing purposes only.
-                                                             # We print some diagnostics and return if any player exceeds this.
-        diagnostics.print_asset_owners(game_elements)
-        diagnostics.print_player_cash_balances(game_elements)
-        return
+    # if diagnostics.max_cash_balance(game_elements) > 300000: # this is our limit for runaway cash for testing purposes only.
+    #                                                          # We print some diagnostics and return if any player exceeds this.
+    #     diagnostics.print_asset_owners(game_elements)
+    #     diagnostics.print_player_cash_balances(game_elements)
+    #     return
     return game_elements, num_active_players, num_die_rolls, current_player_index
 
 # player_2 run the process
@@ -332,12 +332,12 @@ def simulate_game_step(game_elements, num_active_players, num_die_rolls, current
 
     current_player_index = (current_player_index + 1) % len(game_elements['players'])
 
-    if diagnostics.max_cash_balance(
-            game_elements) > 300000:  # this is our limit for runaway cash for testing purposes only.
-        # We print some diagnostics and return if any player exceeds this.
-        diagnostics.print_asset_owners(game_elements)
-        diagnostics.print_player_cash_balances(game_elements)
-        return
+    # if diagnostics.max_cash_balance(
+    #         game_elements) > 300000:  # this is our limit for runaway cash for testing purposes only.
+    #     # We print some diagnostics and return if any player exceeds this.
+    #     diagnostics.print_asset_owners(game_elements)
+    #     diagnostics.print_player_cash_balances(game_elements)
+    #     return
     return game_elements, num_active_players, num_die_rolls, current_player_index
 
 ######################

@@ -36,18 +36,23 @@ class Sim_Monopoly(gym.Env):
         world = Monopoly_world()
         self.MonopolyWorld = world
         self.observation_space = [0 for i in range(52 + 2 * self.MonopolyWorld.num_active_players)]
-        self.action_space = [0 for i in range(79)]
+        self.action_space = [0 for i in range(80)]
+        self.masked_actions = [0 for i in range(80)]
+        self.seeds = 0
+        self.reward = 0
+        self.terminal = False
+        self.info = None
 
     def step(self, action):
-        next_state, reward, terminal, info = self.MonopolyWorld.next(action)
-        return next_state, reward, terminal, info
+        self.observation_space, self.reward, self.terminal, self.info = self.MonopolyWorld.next(action)
+        return self.observation_space, self.reward, self.terminal, self.info
 
     def reset(self):
-        self.observation_space = self.MonopolyWorld.reset()
-        return self.observation_space
+        self.observation_space, self.masked_actions = self.MonopolyWorld.reset()
+        return self.observation_space, self.masked_actions
 
-    def seed(self,seed=None):
-        self.MonopolyWorld.seed(seed)
-        return self.MonopolyWorld.seeds
+    def seed(self, seed=None):
+        self.seeds = self.MonopolyWorld.seed(seed)
+        return self.seeds
     # def render(self, mode='human', close=False):
     #     pass

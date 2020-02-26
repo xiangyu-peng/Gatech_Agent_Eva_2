@@ -28,7 +28,7 @@ class ActorCritic(nn.Module):
         self.fc_actor = nn.Linear(config.hidden_state, config.action_space) #config.action_space= 2; hidden_size = 256
         self.fc_critic = nn.Linear(config.hidden_state, 1)
 
-        #add rnn here
+        #add rnn herenvidia-smi
 
 
     #Actor model
@@ -80,7 +80,7 @@ class ParallelEnv:
 
 
         for worker_id, (master_end, worker_end) in enumerate(zip(master_ends, worker_ends)):
-            worker_id = randint(0, sys.maxsize)
+            # worker_id = randint(0, sys.maxsize)
             p = mp.Process(target=worker,
                            args=(worker_id, master_end, worker_end))
             p.daemon = True
@@ -132,26 +132,27 @@ def test(step_idx, model):
         with HiddenPrints():
             s, masked_actions = env.reset()
 
-            while not done:
+        while not done:
+            prob = model.actor(torch.from_numpy(s).float(), softmax_dim=0)
 
-                prob = model.actor(torch.from_numpy(s).float(), softmax_dim=0)
+            # Choose the action with highest prob and not in masked action
+            # Becky#########################################################
+            prob = prob.cpu().detach().numpy().reshape(-1, )
+            # Check if the action is valid
+            action_Invalid = True
+            largest_num = -1
+            while action_Invalid:
+                a = prob.argsort()[largest_num:][0]
+                action_Invalid = True if masked_actions[a] == 0 else False
+                largest_num -= 1
 
-                # Choose the action with highest prob and not in masked action
-                # Becky#########################################################
-                prob = prob.cpu().detach().numpy().reshape(-1, )
-                # Check if the action is valid
-                action_Invalid = True
-                largest_num = -1
-                while action_Invalid:
-                    a = prob.argsort()[largest_num:][0]
-                    action_Invalid = True if masked_actions[a] == 0 else False
-                    largest_num -= 1
-
-                # a = Categorical(prob).sample().numpy()
+            # a = Categorical(prob).sample().numpy()
+            with HiddenPrints():
                 s_prime, r, done, info = env.step(a)
-                s = s_prime
-                score += r
+            s = s_prime
+            score += r
         done = False
+    print('weight = > ', model.fc_actor.weight)
     print(f"Step # :{step_idx}, avg score : {score/num_test:.1f}")
 
     env.close()
