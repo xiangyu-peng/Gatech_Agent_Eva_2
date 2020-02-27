@@ -122,7 +122,7 @@ class ParallelEnv:
             worker.join()
             self.closed = True
 
-def test(step_idx, model):
+def test(step_idx, model, device):
     env = gym.make('monopoly_simple-v1')
     score = 0.0
     done = False
@@ -133,7 +133,7 @@ def test(step_idx, model):
             s, masked_actions = env.reset()
 
         while not done:
-            prob = model.actor(torch.from_numpy(s).float(), softmax_dim=0)
+            prob = model.actor(torch.tensor(s, device=device).float(), softmax_dim=0)
 
             # Choose the action with highest prob and not in masked action
             # Becky#########################################################
@@ -152,7 +152,7 @@ def test(step_idx, model):
             s = s_prime
             score += r
         done = False
-    print('weight = > ', model.fc_actor.weight)
+    print('weight = test> ', model.fc_actor.weight)
     print(f"Step # :{step_idx}, avg score : {score/num_test:.1f}")
 
     env.close()
