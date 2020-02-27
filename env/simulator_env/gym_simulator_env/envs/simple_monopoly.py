@@ -35,7 +35,7 @@ class Sim_Monopoly(gym.Env):
     def __init__(self):
         world = Monopoly_world()
         self.MonopolyWorld = world
-        self.observation_space = [0 for i in range(52 + 2 * self.MonopolyWorld.num_active_players)]
+        self.observation_space = np.array([0 for i in range(52 + 2 * self.MonopolyWorld.num_active_players)])
         self.action_space = [0 for i in range(80)]
         self.masked_actions = [0 for i in range(80)]
         self.seeds = 0
