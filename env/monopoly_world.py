@@ -6,6 +6,8 @@ import simple_background_agent_becky_v1
 from gym.utils import seeding
 from random import randint
 from location import *
+from gym import error, spaces
+
 class Monopoly_world():
     def __init__(self):
 
@@ -86,16 +88,18 @@ class Monopoly_world():
 
     def next(self, action):
         action = self.a.action_num2vec(action)
-        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index = \
+        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, done_indicator = \
             after_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
         if self.num_active_players > 1:
-            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index = \
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, done_indicator = \
                 simulate_game_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index)
         if self.num_active_players > 1:
             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params = \
                 before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
         self.reward = self.reward_cal()
         self.terminal = False if self.num_active_players > 1 else True
+        if done_indicator == 1:
+            self.terminal = True
 
         state_space = self.a.state_space
         reward = self.reward
