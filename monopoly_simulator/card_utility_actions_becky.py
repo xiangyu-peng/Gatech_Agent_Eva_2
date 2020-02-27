@@ -6,29 +6,6 @@ card pack)
 """
 import numpy as np
 
-
-def calculate_mortgage_owed(mortgaged_property, current_gameboard=None):
-    """
-    calculate the mortgage owed on mortgaged_property
-    :param player: Player instance. not used in this function, but the signature is important because of the novelty generator
-    which could use other information from the player (like total debt) besides just the info in mortgaged_property.
-    :param mortgaged_property: a property instance that is mortgaged
-    :return:
-    """
-    if not mortgaged_property.is_mortgaged:
-        raise Exception
-    else:
-        if current_gameboard['bank'].total_mortgage_rule is False:
-            return (1.0+current_gameboard['bank'].mortgage_percentage) * mortgaged_property.mortgage
-        else:
-            # to avoid passing in a player object, I am going to use the owner of the mortgaged_property as the player whose
-            # total debt outstanding we have to compute the mortgage against.
-            player = mortgaged_property.owned_by
-            total = 0
-            for a in player.mortgaged_assets:
-                total += ((1.0+current_gameboard['bank'].mortgage_percentage)*a.mortgage)
-            return total
-
 def go_to_jail(player, current_gameboard):
     """
     The player will be moved to jail. The player will not receive go_increment, even if they pass go.
@@ -82,25 +59,37 @@ def pick_card_from_community_chest(player, current_gameboard):
     if card.name == 'get_out_of_jail_free':
         print('removing get_out_of_jail card from community chest pack')
         current_gameboard['community_chest_cards'].remove(card)
-        card.action(player, card, current_gameboard, pack='community_chest')
-        params = dict()
-        params['player'] = player
-        params['card'] = card
-        params['current_gameboard'] = current_gameboard
-        params['pack'] = 'community_chest'
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(None)
-    else:
-        card.action(player, card, current_gameboard) # all card actions except get out of jail free must take this signature
-        # add to game history
-        current_gameboard['history']['function'].append(card.action)
-        params = dict()
-        params['player'] = player
-        params['card'] = card
-        params['current_gameboard'] = current_gameboard
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(None)
+    card.action(player, card, current_gameboard) # all card actions must take this signature
+    # add to game history
+    current_gameboard['history']['function'].append(card.action)
+    params = dict()
+    params['player'] = player
+    params['card'] = card
+    params['current_gameboard'] = current_gameboard
+    current_gameboard['history']['param'].append(params)
+    current_gameboard['history']['return'].append(None)
 
+def calculate_mortgage_owed(mortgaged_property, current_gameboard=None):
+    """
+    calculate the mortgage owed on mortgaged_property
+    :param player: Player instance. not used in this function, but the signature is important because of the novelty generator
+    which could use other information from the player (like total debt) besides just the info in mortgaged_property.
+    :param mortgaged_property: a property instance that is mortgaged
+    :return:
+    """
+    if not mortgaged_property.is_mortgaged:
+        raise Exception
+    else:
+        if current_gameboard['bank'].total_mortgage_rule is False:
+            return (1.0+current_gameboard['bank'].mortgage_percentage) * mortgaged_property.mortgage
+        else:
+            # to avoid passing in a player object, I am going to use the owner of the mortgaged_property as the player whose
+            # total debt outstanding we have to compute the mortgage against.
+            player = mortgaged_property.owned_by
+            total = 0
+            for a in player.mortgaged_assets:
+                total += ((1.0+current_gameboard['bank'].mortgage_percentage)*a.mortgage)
+            return total
 
 def pick_card_from_chance(player, current_gameboard):
     """
@@ -121,24 +110,15 @@ def pick_card_from_chance(player, current_gameboard):
     if card.name == 'get_out_of_jail_free':
         print('removing get_out_of_jail card from chance pack')
         current_gameboard['chance_cards'].remove(card)
-        card.action(player, card, current_gameboard, pack='chance')
-        params = dict()
-        params['player'] = player
-        params['card'] = card
-        params['current_gameboard'] = current_gameboard
-        params['pack'] = 'chance'
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(None)
-    else:
-        card.action(player, card, current_gameboard) # all card actions except get out of jail free must take this signature
-        # add to game history
-        current_gameboard['history']['function'].append(card.action)
-        params = dict()
-        params['player'] = player
-        params['card'] = card
-        params['current_gameboard'] = current_gameboard
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(None)
+    card.action(player, card, current_gameboard) # all card actions must take this signature
+    # add to game history
+    current_gameboard['history']['function'].append(card.action)
+    params = dict()
+    params['player'] = player
+    params['card'] = card
+    params['current_gameboard'] = current_gameboard
+    current_gameboard['history']['param'].append(params)
+    current_gameboard['history']['return'].append(None)
 
 
 def move_player(player, card, current_gameboard):
@@ -167,7 +147,7 @@ def move_player(player, card, current_gameboard):
         _move_player__check_for_go(player, new_position, current_gameboard, rel_move)
 
 
-def set_get_out_of_jail_card_status(player, card, current_gameboard, pack):
+def set_get_out_of_jail_card_status(player, card, current_gameboard):
     """
     Depending on whether we took the card out of community chest or chance, we update the requisite field for the player.
 
@@ -177,10 +157,13 @@ def set_get_out_of_jail_card_status(player, card, current_gameboard, pack):
     :return: None
     """
     print('executing set_get_out_of_jail_card_status for ',player.player_name)
-    if pack == 'community_chest' and card.name == 'get_out_of_jail_free': # remember, this is an object equality test
+    print('card =>',card.name, card.action )
+    if card == current_gameboard['community_chest_card_objects'][card.name] and \
+     card.name == 'get_out_of_jail_free': # remember, this is an object equality test
         player.has_get_out_of_jail_community_chest_card = True
         print(player.player_name,' now has get_out_of_jail community_chest card')
-    elif pack == 'chance' and card.name == 'get_out_of_jail_free': # remember, this is an object equality test
+    elif card == current_gameboard['chance_card_objects'][card.name] and \
+     card.name == 'get_out_of_jail_free': # remember, this is an object equality test
         player.has_get_out_of_jail_chance_card = True
         print(player.player_name, ' now has get_out_of_jail chance card')
     else: # if we arrive here, it means that the card we have is either not get out of jail free, or something else has gone wrong.
@@ -524,8 +507,9 @@ def move_player_after_die_roll(player, rel_move, current_gameboard, check_for_go
     new_position = (player.current_position+rel_move) % num_locations
 
     if check_for_go:
+        print('passes GO?', _has_player_passed_go(player.current_position, new_position, go_position, rel_move))
         if _has_player_passed_go(player.current_position, new_position, go_position, rel_move):
-            print(player.player_name,' passes Go.')
+            print('-inc-', player.player_name,' passes Go, and receieve ', go_increment)
             player.receive_cash(go_increment)
             # add to game history
             current_gameboard['history']['function'].append(player.receive_cash)
@@ -549,30 +533,34 @@ def move_player_after_die_roll(player, rel_move, current_gameboard, check_for_go
 """
 All functions below are for internal use only and should never be invoked externally.
 """
+#####becky - increment part has error#####
+#add rel_move
 def _has_player_passed_go(current_position, new_position, go_position, rel_move):
     """
     Function to determine whether the player passes, or is on, Go if the player moves from current position to new position.
     :param current_position: An integer. Specifies the position from which the player is moving.
     :param new_position: An integer. Specifies the position to which the player is moving.
     :param go_position: An integer. Specifies the go position. In the default board, it is just set to 0.
+    :param rel_move: An integer. Specifies the relative moving steps. i.e. -3 means move backward 3 steps.
     :return: A boolean. True if the player is on, or has passed, go, and False otherwise.
     """
-    if new_position == go_position:  # we've landed on go
+    print('current_position, new_position, go_position', current_position, new_position, go_position, rel_move)
+    if new_position == go_position: # we've landed on go
         return True
 
     elif new_position == current_position and rel_move != 0:  # we've gone all round the board
         return True
 
-    elif current_position < new_position and rel_move < 0:  # go forward but before passing go
-        return True
+    elif current_position < new_position and rel_move < 0: # go forward but before passing go
+            return True
 
     elif current_position > new_position and rel_move > 0:
         return True
 
-    elif abs(rel_move) >= 40:  # go over one round
+    elif abs(rel_move) >= 40: #go over one round
         return True
 
-    return False  # we've exhausted the possibilities. If it reaches here, we haven't passed go.
+    return False # we've exhausted the possibilities. If it reaches here, we haven't passed go.
 
 
 def _calculate_board_distance(position_1, position_2):
@@ -600,6 +588,7 @@ def _move_player__check_for_go(player, new_position, current_gameboard, rel_move
     # the private version
     go_position = current_gameboard['go_position']
     go_increment = current_gameboard['go_increment']
+
     if _has_player_passed_go(player.current_position, new_position, go_position, rel_move):
         player.receive_cash(go_increment)
         # add to game history

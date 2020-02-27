@@ -147,8 +147,9 @@ def test(step_idx, model, device):
                 largest_num -= 1
 
             # a = Categorical(prob).sample().numpy()
-            with HiddenPrints():
-                s_prime, r, done, info = env.step(a)
+            # with HiddenPrints():
+            #     s_prime, r, done, info = env.step(a)
+            s_prime, r, done, info = env.step(a)
             s = s_prime
             score += r
         done = False
