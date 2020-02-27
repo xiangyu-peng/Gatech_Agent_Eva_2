@@ -1,4 +1,5 @@
 from bank import Bank
+from card_utility_actions import calculate_mortgage_owed
 
 class Location(object):
 
@@ -21,6 +22,7 @@ class Location(object):
             self.color = None
         else:
             self.color = color
+        self.calculate_mortgage_owed = calculate_mortgage_owed
 
     def transfer_property_to_bank(self, player, current_gameboard):
         """
@@ -48,7 +50,8 @@ class Location(object):
             raise Exception
         if self.is_mortgaged:
             self.is_mortgaged = False
-            cash_owed = 1.1 * self.mortgage
+            # cash_owed = 1.1 * self.mortgage
+            cash_owed = self.calculate_mortgage_owed(self, current_gameboard)
 
         if cash_due >= cash_owed:
             return cash_due - cash_owed
