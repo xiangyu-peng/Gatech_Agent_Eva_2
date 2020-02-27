@@ -331,14 +331,15 @@ def simulate_game_step(game_elements, num_active_players, num_die_rolls, current
         current_player.status = 'waiting_for_move'
 
     current_player_index = (current_player_index + 1) % len(game_elements['players'])
-
-    # if diagnostics.max_cash_balance(
-    #         game_elements) > 300000:  # this is our limit for runaway cash for testing purposes only.
-    #     # We print some diagnostics and return if any player exceeds this.
-    #     diagnostics.print_asset_owners(game_elements)
-    #     diagnostics.print_player_cash_balances(game_elements)
-    #     return
-    return game_elements, num_active_players, num_die_rolls, current_player_index
+    done_indicator = 0
+    if diagnostics.max_cash_balance(
+            game_elements) > 300000:  # this is our limit for runaway cash for testing purposes only.
+        # We print some diagnostics and return if any player exceeds this.
+        diagnostics.print_asset_owners(game_elements)
+        diagnostics.print_player_cash_balances(game_elements)
+        done_indicator = 1
+        # return
+    return game_elements, num_active_players, num_die_rolls, current_player_index, done_indicator
 
 ######################
 def simulate_game_instance(game_elements, num_active_players, np_seed=6):
