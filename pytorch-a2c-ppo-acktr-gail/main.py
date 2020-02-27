@@ -97,7 +97,8 @@ def main():
                               actor_critic.recurrent_hidden_state_size)
 
     #reset the environment: the game restarts!
-    obs = envs.reset() #learn more about envs
+    print('envs.reset() =>', envs.reset())
+    obs, masked_actions = envs.reset() #learn more about envs
     rollouts.obs[0].copy_(obs)
     rollouts.to(device)
 

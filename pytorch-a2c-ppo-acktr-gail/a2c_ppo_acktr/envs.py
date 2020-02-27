@@ -63,6 +63,7 @@ def make_env(env_id, seed, rank, log_dir, allow_early_resets):
                 "See wrap_deepmind for an example.")
 
         # If the input has shape (W,H,3), wrap for PyTorch convolutions
+
         obs_shape = env.observation_space.shape
         if len(obs_shape) == 3 and obs_shape[2] in [1, 3]:
             env = TransposeImage(env, op=[2, 0, 1])
@@ -116,7 +117,8 @@ class TimeLimitMask(gym.Wrapper):
         return obs, rew, done, info
 
     def reset(self, **kwargs):
-        return self.env.reset(**kwargs)
+        obs, mask_actions = self.env.reset(**kwargs)
+        return obs, mask_actions
 
 
 # Can be used to test recurrent policies for Reacher-v2
@@ -164,9 +166,11 @@ class VecPyTorch(VecEnvWrapper):
         # TODO: Fix data types
 
     def reset(self):
-        obs = self.venv.reset()
+        print('self.venv.reset()',self.venv.reset())
+        obs, masked_actions = self.venv.reset()
         obs = torch.from_numpy(obs).float().to(self.device)
-        return obs
+        masked_actions = torch.from_numpy(np.array(masked_actions)).to(self.device)
+        return obs, masked_actions
 
     def step_async(self, actions):
         if isinstance(actions, torch.LongTensor):
@@ -238,7 +242,7 @@ class VecPyTorchFrameStack(VecEnvWrapper):
         return self.stacked_obs, rews, news, infos
 
     def reset(self):
-        obs = self.venv.reset()
+        obs, masked_actions = self.venv.reset()
         if torch.backends.cudnn.deterministic:
             self.stacked_obs = torch.zeros(self.stacked_obs.shape)
         else:
