@@ -1,9 +1,13 @@
 03-04-20 
 
 `cd /GNOME-p3/env/simulator_env` 
+
 `python3 -m pip install . --user`
+
 `pip show gym`
+
 `cd gym/envs`
+
 `nano __init__.py`
 
 Then import sys and add /media/becky/GNOME-p3/env/simulator_env (plz change to ur path to env)
