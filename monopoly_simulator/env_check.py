@@ -19,26 +19,21 @@ env.seed(seed=6)
 with HiddenPrints():
     s,mask = env.reset()
 with HiddenPrints():
-    while done == False:
-        s, rew, done,info = env.step(-1)
+    s, rew, done,info = env.step_nochange(79)
 print('s =====> reset', s)
-print('reward =>', rew)
-print('done',done)
-print('env.seeds', env.seeds)
 
-
-done = False
-# env = gym.make('monopoly_simple-v1')
-# env.seed(seed=6)
 with HiddenPrints():
-    s,mask = env.reset()
-with HiddenPrints():
-    while done == False:
-        s, rew, done,info = env.step(-1)
+    s, rew, done,info = env.step(0)
 print('s =====> reset', s)
-print('done',done)
-print('reward =>', rew)
-print('env.seeds', env.seeds)
+
+with HiddenPrints():
+    s, rew, done,info = env.step_nochange(79)
+print('s =====> reset', s)
+
+with HiddenPrints():
+    s, rew, done,info = env.step(0)
+print('s =====> reset', s)
+
 env.close()
 # done = False
 # with HiddenPrints():

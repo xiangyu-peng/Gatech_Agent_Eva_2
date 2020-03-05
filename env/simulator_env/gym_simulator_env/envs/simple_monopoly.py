@@ -47,6 +47,10 @@ class Sim_Monopoly(gym.Env):
         self.observation_space, self.reward, self.terminal, self.info = self.MonopolyWorld.next(action)
         return self.observation_space, self.reward, self.terminal, self.info
 
+    def step_nochange(self, action):
+        observation_space, reward, terminal, info = self.MonopolyWorld.next_nochange(action)
+        return observation_space, reward, terminal, info
+
     def reset(self):
         self.observation_space, self.masked_actions = self.MonopolyWorld.reset()
         return self.observation_space, self.masked_actions

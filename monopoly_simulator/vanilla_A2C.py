@@ -65,6 +65,9 @@ def worker(worker_id, master_end, worker_end):
             break
         elif cmd == 'get_spaces':
             worker_end.send((env.observation_space, env.action_space))
+        elif cmd == 'step_nochange':
+            ob, reward, done, info = env.step_nochange(data)
+            worker_end.send((ob, reward, done, info))
         else:
             raise NotImplementedError
 
@@ -96,6 +99,11 @@ class ParallelEnv:
             master_end.send(('step', action)) #send to worker_end => 'step' & action
         self.waiting = True  #waiting???
 
+    def step_async_nochange(self, actions):
+        for master_end, action in zip(self.master_ends, actions):
+            master_end.send(('step_nochange', action)) #send to worker_end => 'step' & action
+        self.waiting = True  #waiting???
+
     def step_wait(self):
         results = [master_end.recv() for master_end in self.master_ends] #receive from worker_end #format???
         self.waiting = False
@@ -109,6 +117,10 @@ class ParallelEnv:
 
     def step(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
         self.step_async(actions)
+        return self.step_wait()
+
+    def step_nochange(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
+        self.step_async_nochange(actions)
         return self.step_wait()
 
     def close(self):  # For clean up resources
@@ -131,13 +143,19 @@ def test(step_idx, model, device):
     for _ in range(num_test):
         with HiddenPrints():
             s, masked_actions = env.reset()
-
+        num_game = 0
+        score_game = 0
+        win_num = 0
         while not done:
+            num_game += 1
+
             prob = model.actor(torch.tensor(s, device=device).float(), softmax_dim=0)
 
             # Choose the action with highest prob and not in masked action
             # Becky#########################################################
             prob = prob.cpu().detach().numpy().reshape(-1, )
+            # if num_game == 15:
+            #     print(prob)
             # Check if the action is valid
             action_Invalid = True
             largest_num = -1
@@ -145,16 +163,20 @@ def test(step_idx, model, device):
                 a = prob.argsort()[largest_num:][0]
                 action_Invalid = True if masked_actions[a] == 0 else False
                 largest_num -= 1
-
+            #
             # a = Categorical(prob).sample().numpy()
-            # with HiddenPrints():
-            #     s_prime, r, done, info = env.step(a)
-            s_prime, r, done, info = env.step(a)
+            with HiddenPrints():
+                s_prime, r, done, info = env.step(a)
+            # s_prime, r, done, info = env.step(a)
             s = s_prime
-            score += r
+            score_game += r
+            # print(r)
+        score += score_game/num_game
+        win_num += done - 1
         done = False
-    print('weight = test> ', model.fc_actor.weight)
-    print(f"Step # :{step_idx}, avg score : {score/num_test:.1f}")
+    # print('weight = test> ', model.fc_actor.weight)
+    print(f"Step # :{step_idx}, avg score : {score/num_test:.3f}")
+    print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.1f}")
 
     env.close()
 
@@ -167,6 +189,15 @@ def compute_target(v_final, r_lst, mask_lst, gamma): #may update
         td_target.append(G)
 
     return torch.tensor(td_target[::-1]).float()
+
+def compute_returns(next_value, rewards, masks, gamma=0.99):
+    R = next_value
+    returns = []
+    for step in reversed(range(len(rewards))):
+        R = rewards[step] + gamma * R * masks[step]
+        returns.insert(0, R)
+    return returns
+
 
 # if __name__ == '__main__':
     # envs = ParallelEnv(n_train_processes) #The simulator environment

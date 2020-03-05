@@ -640,7 +640,8 @@ class Player(object):
 
         allowed_types = [UtilityLocation, RailroadLocation, RealEstateLocation]
         if type(current_gameboard['location_sequence'][self.current_position]) in allowed_types \
-                and current_gameboard['location_sequence'][self.current_position].owned_by ==current_gameboard['bank']:
+                and current_gameboard['location_sequence'][self.current_position].owned_by ==current_gameboard['bank'] and\
+                 current_gameboard['location_sequence'][self.current_position].price < self.current_cash:
             allowable_actions.add(buy_property)
 
         if len(self.full_color_sets_possessed) > 0:
