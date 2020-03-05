@@ -1,4 +1,4 @@
-03-04-20 
+03-04-20 Update how to register the env
 
 `cd /GNOME-p3/env/simulator_env` 
 
@@ -18,7 +18,7 @@ Then also add
     id='monopoly_simple-v1',
     entry_point='gym_simulator_env.envs:Sim_Monopoly'
 )`
-
+----------------------------------------------------
 02-27-20 becky
 
 create feature branch
