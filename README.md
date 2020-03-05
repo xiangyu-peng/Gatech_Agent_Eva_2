@@ -18,7 +18,9 @@ Then also add
     id='monopoly_simple-v1',
     entry_point='gym_simulator_env.envs:Sim_Monopoly'
 )`
-----------------------------------------------------
+
+\----------------------------------------------------\
+
 02-27-20 becky
 
 create feature branch
