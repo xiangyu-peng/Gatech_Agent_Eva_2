@@ -14,7 +14,7 @@ def print_asset_owners(game_elements):
             if v.owned_by == game_elements['bank']:
                 print('Owner of ', k, ' is bank')
             else:
-                print('Owner of ', k, ' is ',v.owned_by.player_name)
+                print('Owner of ', k, ' is ',v.owned_by.player_name, 'and also mortgaged? ',v.is_mortgaged)
 
 
 def print_player_cash_balances(game_elements):

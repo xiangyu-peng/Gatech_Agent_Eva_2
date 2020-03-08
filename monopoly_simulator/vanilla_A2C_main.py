@@ -2,7 +2,7 @@ from vanilla_A2C import *
 from configparser import ConfigParser
 import graphviz
 from torchviz import make_dot
-
+from gameplay_simple_tf import *
 
 class Config:
     device = torch.device('cuda:0')
@@ -26,18 +26,20 @@ if __name__ == '__main__':
     # Hyperparameters
     n_train_processes = 1
     learning_rate = 0.0002
-    update_interval = 5
+    update_interval = 1
     gamma = 0.98
     max_train_steps = 60000
-    PRINT_INTERVAL = update_interval * 1
+    PRINT_INTERVAL = 1000
     config = Config()
     config.hidden_state = 256
     config.action_space = 80
     config.state_num = 56
-
+    actor_loss_coefficient = 1
+    save_dir = '/media/becky/GNOME-p3/monopoly_simulator'
     device = torch.device('cuda:0')
+    save_name = '/push_buy'
     import os
-    os.environ["CUDA_VISIBLE_DEVICES"] = '0'
+    os.environ["CUDA_VISIBLE_DEVICES"] = '1'
     # torch.cuda.set_device(1)
     # device = torch.device("cuda", 1)
 
@@ -49,6 +51,7 @@ if __name__ == '__main__':
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     step_idx = 0
+
     with HiddenPrints():
         s, masked_actions = envs.reset()
         # s = torch.tensor(s, device=device).float()
@@ -58,34 +61,40 @@ if __name__ == '__main__':
     while step_idx < max_train_steps:
         s_lst, a_lst, r_lst, mask_lst = list(), list(), list(), list() #state list; action list, reward list, masked action list？？？
 
+
         for _ in range(update_interval): #substitute
         ########Becky###############################
         ##loop until the action outputs stop signal#
         #while True:
         ############################################
-            # print('s', s)
-            # print('masked_actions', masked_actions)
-            s = s.reshape(1,-1)
+            s = s.reshape(1, -1)
             prob = model.actor(torch.tensor(s, device=device).float())  # s => tensor #output = prob for actions
             # prob = model.actor(torch.from_numpy(s,device=device).float()) # s => tensor #output = prob for actions
+            #use the action from the distribution if it is in masked
+            action_Invalid = True
+            while action_Invalid:
+                a = Categorical(prob).sample().cpu().numpy() #substitute
+                action_Invalid = True if masked_actions[a[0]] == 0 else False
 
 
-            # a = Categorical(prob).sample().numpy() #substitute
-            # print('a!!! ====>' , a)
+            #while opposite happens. Step won't change env, step_nochange changes the env
+            s_prime_cal, r, done, _ = envs.step_nochange(a)
+
+
+
 
             #Choose the action with highest prob and not in masked action
             #Becky#########################################################
-            prob = prob.cpu().detach().numpy().reshape(-1,)
-            #Check if the action is valid
-            action_Invalid = True
-            largest_num = -1
-            while action_Invalid:
-                a = prob.argsort()[largest_num:][0]
-                action_Invalid = True if masked_actions[a] == 0 else False
-                a = [a]
-                largest_num -= 1
-            # print('masked_actions', masked_actions)
-            print('a', a)
+            # prob = prob.cpu().detach().numpy().reshape(-1,)
+            # #Check if the action is valid
+            # action_Invalid = True
+            # largest_num = -1
+            # while action_Invalid:
+            #     a = prob.argsort()[largest_num:][0]
+            #     action_Invalid = True if masked_actions[a] == 0 else False
+            #     a = [a]
+            #     largest_num -= 1
+            # print('a =====>', a)
             #Check the action is a stop sign or not a = [0] means stop
             # if a == 0:
             #     break
@@ -93,33 +102,40 @@ if __name__ == '__main__':
             ###############################################################
             # with HiddenPrints():
             #     s_prime, r, done, masked_actions = envs.step(a)
-            s_prime, r, done, masked_actions = envs.step(a)
-            # print(s_prime)
+
+
+
+            # print('reward', r)
             # if done:
             #     print(s_prime)
                 # print('s_prime, r, done, masked_actions', s_prime, r, done, masked_actions)
-            # print('done =>', done)
-            s_prime = s_prime.reshape(1,-1)
-            # print('s_prime', s_prime)
-            masked_actions = masked_actions[0]
+
+
+
 
             s_lst.append(s)
             a_lst.append(a)
             r_lst.append(r) # r/100 discount of actions, hyperparameter
-            mask_lst.append(1 - done)
 
+            if done:
+                mask_lst.append(0)
+            else:
+                mask_lst.append(1)
+
+            a_tf = tf(s[0], masked_actions)
+            s_prime, _, done, masked_actions = envs.step_after_nochange(a_tf)
+            masked_actions = masked_actions[0]
+            s_prime = s_prime.reshape(1, -1)
             s = s_prime
             step_idx += 1
-
+            # print('s ===>', s)
             if done:
                 # print('s_prime, r, done, masked_actions', s_prime, r, done, masked_actions)
                 with HiddenPrints():
                     s, masked_actions = envs.reset()
                 break
 
-        # print('weight before test = > ', model.fc_actor.weight)
-        # if step_idx % PRINT_INTERVAL == 0:
-            # print('weight before test = > ', model.fc_actor.weight)
+        s_prime = s_prime_cal.reshape(1, -1)
         s_final = torch.tensor(s_prime, device = device).float() #numpy => tensor
         v_final = model.critic(s_final).detach().clone().cpu().numpy() #V(s') numpy  i.e. [[0.09471023]]
         td_target = compute_target(v_final, r_lst, mask_lst, gamma=0.98) #hyperparameter gamma
@@ -130,21 +146,25 @@ if __name__ == '__main__':
         advantage = td_target_vec - model.critic(s_vec).cpu().reshape(-1) #  advantage function to update
         advantage = advantage.to(device)
 
+
         probs_all_state = model.actor(s_vec, softmax_dim=1)
         probs_actions = probs_all_state.gather(1, a_vec).reshape(-1) #tensor i.e. tensor([...,...,...])
-        # print('probs_actions', probs_actions)
-        # print('advantage.detach()', advantage.detach())
-        loss = -(torch.log(probs_actions) * advantage.detach()).mean() +\
+        loss = -(torch.log(probs_actions) * advantage.detach()).mean() * actor_loss_coefficient +\
             F.smooth_l1_loss(model.critic(s_vec).reshape(-1), td_target_vec.to(device))
 
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        # print('loss =>', loss)
-        graphviz.Source(make_dot(loss, params=dict(model.named_parameters()))).render('full_net')
+        # graphviz.Source(make_dot(loss, params=dict(model.named_parameters()))).render('full_net')
         # print('weight after test = > ', model.fc_actor.weight)
         if step_idx % PRINT_INTERVAL == 0:
-            test(step_idx, model,device)
+            test(step_idx, model,device, num_test=100)
+            #save weights of A2C
+            save_path = '/media/becky/GNOME-p3/monopoly_simulator/weights'
+            save_name = save_path + '/push_buy.pkl'
+
+            torch.save(model, save_name)
+
             # print('weight after test = > ', model.fc_actor.weight)
     # print('s_lst', s_lst)
     envs.close()

@@ -1,5 +1,30 @@
+03-04-20 Update how to register the env
+
+`cd /GNOME-p3/env/simulator_env` 
+
+`python3 -m pip install . --user`
+
+`pip show gym`
+
+`cd gym/envs`
+
+`nano __init__.py`
+
+Then import sys and add /media/becky/GNOME-p3/env/simulator_env (plz change to ur path to env)
+
+Then also add 
+
+`register(
+    id='monopoly_simple-v1',
+    entry_point='gym_simulator_env.envs:Sim_Monopoly'
+)`
+
+\----------------------------------------------------\
+
 02-27-20 becky
+
 create feature branch
+
 02-21-20 Becky
 
 1.This is a simpler version of game, only consider mortgage, free-mortgage, buy and improve the property
