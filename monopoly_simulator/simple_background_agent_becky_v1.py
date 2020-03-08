@@ -261,7 +261,7 @@ def make_post_roll_move(player, current_gameboard, allowable_moves, code, move_a
     current_location = current_gameboard['location_sequence'][player.current_position]
 
     #for player 1: move_action = [(action,asset),...], only consider one action once
-    if move_actions:
+    if player.player_name == 'player_1':
         move_action = [i[0] for i in move_actions]
         space_action = [i[1] for i in move_actions]
         if action_choices.buy_property in move_action:
@@ -309,6 +309,7 @@ def make_post_roll_move(player, current_gameboard, allowable_moves, code, move_a
             return (action_choices.mortgage_property, params)
         else:
             return (action_choices.concluded_actions, dict())
+
     #######################################################################################
 
     #For other players
@@ -363,7 +364,7 @@ def make_post_roll_move(player, current_gameboard, allowable_moves, code, move_a
 
         else:
             raise Exception
-
+    return (action_choices.concluded_actions, dict())
 
 def make_buy_property_decision(player, current_gameboard, asset):
     """

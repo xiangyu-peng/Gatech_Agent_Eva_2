@@ -198,7 +198,7 @@ class Interface(object):
         return self.action_space, self.site_space
 
         #take into array/vector and output the actions
-    actions_vector_default = [0 for i in range(79)] + [1]
+    actions_vector_default = [1] + [0 for i in range(79)]
 
     def vector_to_actions(self, current_board, current_player, actions_vector=actions_vector_default):
         '''
