@@ -48,12 +48,12 @@ class Monopoly_world():
         player_list = ['player_' + str(i + 1) for i in range(self.num_active_players)]
         for player_name in player_list:
             self.player_decision_agents[player_name] = simple_background_agent_becky_v1.decision_agent_methods
-        self.game_elements = set_up_board('/media/becky/GNOME/monopoly_game_schema_v1-2.json', self.player_decision_agents, self.num_active_players)
+        self.game_elements = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-2.json', self.player_decision_agents, self.num_active_players)
         np.random.seed(self.seeds) #control the seed!!!!
         self.game_elements['seed'] = self.seeds
         self.game_elements['card_seed'] = self.seeds
         self.game_elements['choice_function'] = np.random.choice
-        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params = \
+        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params, self.win_indicator = \
             before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
         self.a.board_to_state(self.game_elements)
         return self.a.state_space, self.a.masked_actions
@@ -106,34 +106,34 @@ class Monopoly_world():
 
 
 
-    # def next(self, action):
-    #     action_num = action
-    #     action = self.a.action_num2vec(action)
-    #     self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-    #         after_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
-    #     if self.num_active_players > 1:
-    #         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-    #             simulate_game_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index)
-    #     if self.num_active_players > 1:
-    #         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params = \
-    #             before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
-    #
-    #     self.terminal = 0 if self.num_active_players > 1 else 1
-    #     if self.done_indicator == 1:
-    #         self.terminal = 1
-    #     self.reward = self.reward_cal(self.win_indicator, action_num)
-    #     if self.terminal:
-    #         if self.win_indicator == 1:
-    #             self.terminal = 2
-    #     state_space = self.a.state_space
-    #     reward = self.reward
-    #     terminal = self.terminal
-    #     masked_actions = self.a.masked_actions
-    #
-    #     return state_space, reward, terminal, masked_actions #can put KG in info
-
-
     def next(self, action):
+        action_num = action
+        action = self.a.action_num2vec(action)
+        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
+            after_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
+        if self.num_active_players > 1:
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
+                simulate_game_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index)
+        if self.num_active_players > 1:
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params, self.win_indicator = \
+                before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
+
+        self.terminal = 0 if self.num_active_players > 1 else 1
+        if self.done_indicator == 1:
+            self.terminal = 1
+        self.reward = self.reward_cal(self.win_indicator, action_num)
+        if self.terminal:
+            if self.win_indicator == 1:
+                self.terminal = 2
+        state_space = self.a.board_to_state(self.game_elements)
+        reward = self.reward
+        terminal = self.terminal
+        masked_actions = self.a.masked_actions
+
+        return state_space, reward, terminal, masked_actions #can put KG in info
+
+
+    def next_after_nochange(self, action):
         action_num = action
         action = self.a.action_num2vec(action)
         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
@@ -142,7 +142,7 @@ class Monopoly_world():
             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
                 simulate_game_step_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.die_roll)
         if self.num_active_players > 1:
-            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params = \
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params, self.win_indicator = \
                 before_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.die_roll)
 
         self.terminal = 0 if self.num_active_players > 1 else 1
@@ -152,7 +152,8 @@ class Monopoly_world():
         if self.terminal:
             if self.win_indicator == 1:
                 self.terminal = 2
-        state_space = self.a.state_space
+
+        state_space = self.a.board_to_state(self.game_elements)
         reward = self.reward
         terminal = self.terminal
         masked_actions = self.a.masked_actions
@@ -189,7 +190,7 @@ class Monopoly_world():
         if terminal:
             if win_indicator == 1:
                 terminal = 2
-        state_space = a.state_space
+        state_space = self.a.board_to_state(self.game_elements)
         masked_actions = a.masked_actions
 
 
@@ -205,4 +206,5 @@ class Monopoly_world():
     def seed(self, seed=None):
         np_random, seed1 = seeding.np_random(seed)
         self.seeds = seeding.hash_seed(seed1 + 1) % 2 ** 31
+        # self.seeds = seed
         return self.seeds
