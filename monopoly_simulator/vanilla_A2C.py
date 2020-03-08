@@ -68,6 +68,9 @@ def worker(worker_id, master_end, worker_end):
         elif cmd == 'step_nochange':
             ob, reward, done, info = env.step_nochange(data)
             worker_end.send((ob, reward, done, info))
+        elif cmd == 'step_after_nochange':
+            ob, reward, done, info = env.step_after_nochange(data)
+            worker_end.send((ob, reward, done, info))
         else:
             raise NotImplementedError
 
@@ -104,6 +107,11 @@ class ParallelEnv:
             master_end.send(('step_nochange', action)) #send to worker_end => 'step' & action
         self.waiting = True  #waiting???
 
+    def step_async_after_nochange(self, actions):
+        for master_end, action in zip(self.master_ends, actions):
+            master_end.send(('step_after_nochange', action)) #send to worker_end => 'step' & action
+        self.waiting = True  #waiting???
+
     def step_wait(self):
         results = [master_end.recv() for master_end in self.master_ends] #receive from worker_end #format???
         self.waiting = False
@@ -121,6 +129,9 @@ class ParallelEnv:
 
     def step_nochange(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
         self.step_async_nochange(actions)
+        return self.step_wait()
+    def step_after_nochange(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
+        self.step_async_after_nochange(actions)
         return self.step_wait()
 
     def close(self):  # For clean up resources
@@ -147,31 +158,33 @@ def test(step_idx, model, device, num_test):
 
         while not done:
             num_game += 1
-
+            s = s.reshape(1, -1)
             prob = model.actor(torch.tensor(s, device=device).float(), softmax_dim=0)
 
             # Choose the action with highest prob and not in masked action
             # Becky#########################################################
-            prob = prob.cpu().detach().numpy().reshape(-1, )
+            # prob = prob.cpu().detach().numpy().reshape(-1, )
             # if num_game == 15:
             #     print(prob)
             # Check if the action is valid
             action_Invalid = True
             largest_num = -1
             while action_Invalid:
-                a = prob.argsort()[largest_num:][0]
-                action_Invalid = True if masked_actions[a] == 0 else False
-                largest_num -= 1
+                # a = prob.argsort()[largest_num:][0]
+                # action_Invalid = True if masked_actions[a] == 0 else False
+                # largest_num -= 1
+                a = Categorical(prob).sample().cpu().numpy()  # substitute
+                action_Invalid = True if masked_actions[a[0]] == 0 else False
             #
             # a = Categorical(prob).sample().numpy()
             with HiddenPrints():
-                s_prime, r, done, info = env.step_nochange(a)
-            s_prime, r, done, info = env.step(79)
-
+                s_prime, r, done, masked_actions = env.step(a)
+            # masked_actions = masked_actions[0]
+            # print(a)
             # s_prime, r, done, info = env.step(a)
             s = s_prime
             score_game += r
-        print(s)
+        # print(s)
         score += score_game/num_game
         win_num += int(done) - 1
         done = 0

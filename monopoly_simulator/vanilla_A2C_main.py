@@ -29,7 +29,7 @@ if __name__ == '__main__':
     update_interval = 1
     gamma = 0.98
     max_train_steps = 60000
-    PRINT_INTERVAL = 30
+    PRINT_INTERVAL = 1000
     config = Config()
     config.hidden_state = 256
     config.action_space = 80
@@ -51,6 +51,7 @@ if __name__ == '__main__':
     optimizer = optim.Adam(model.parameters(), lr=learning_rate)
 
     step_idx = 0
+
     with HiddenPrints():
         s, masked_actions = envs.reset()
         # s = torch.tensor(s, device=device).float()
@@ -66,23 +67,19 @@ if __name__ == '__main__':
         ##loop until the action outputs stop signal#
         #while True:
         ############################################
-
             s = s.reshape(1, -1)
             prob = model.actor(torch.tensor(s, device=device).float())  # s => tensor #output = prob for actions
             # prob = model.actor(torch.from_numpy(s,device=device).float()) # s => tensor #output = prob for actions
-
             #use the action from the distribution if it is in masked
             action_Invalid = True
             while action_Invalid:
                 a = Categorical(prob).sample().cpu().numpy() #substitute
                 action_Invalid = True if masked_actions[a[0]] == 0 else False
-            # print('masked_actions', masked_actions)
-            # print('=============================')
+
+
             #while opposite happens. Step won't change env, step_nochange changes the env
-            s_prime, r, done, _ = envs.step_nochange(a)
-            # print('s_prime', s_prime)
-            # print('done', done)
-            # print('=============================')
+            s_prime_cal, r, done, _ = envs.step_nochange(a)
+
 
 
 
@@ -119,30 +116,26 @@ if __name__ == '__main__':
             s_lst.append(s)
             a_lst.append(a)
             r_lst.append(r) # r/100 discount of actions, hyperparameter
+
             if done:
                 mask_lst.append(0)
             else:
                 mask_lst.append(1)
 
             a_tf = tf(s[0], masked_actions)
-            # print(a_tf)
-            # print('****************************')
-            s_prime, _, done, masked_actions = envs.step(a_tf)
-            # print('s_prime', s_prime)
-            # print('done', done)
-            # print('****************************')
+            s_prime, _, done, masked_actions = envs.step_after_nochange(a_tf)
             masked_actions = masked_actions[0]
             s_prime = s_prime.reshape(1, -1)
             s = s_prime
             step_idx += 1
-
+            # print('s ===>', s)
             if done:
                 # print('s_prime, r, done, masked_actions', s_prime, r, done, masked_actions)
                 with HiddenPrints():
                     s, masked_actions = envs.reset()
                 break
 
-
+        s_prime = s_prime_cal.reshape(1, -1)
         s_final = torch.tensor(s_prime, device = device).float() #numpy => tensor
         v_final = model.critic(s_final).detach().clone().cpu().numpy() #V(s') numpy  i.e. [[0.09471023]]
         td_target = compute_target(v_final, r_lst, mask_lst, gamma=0.98) #hyperparameter gamma
@@ -162,10 +155,10 @@ if __name__ == '__main__':
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        graphviz.Source(make_dot(loss, params=dict(model.named_parameters()))).render('full_net')
+        # graphviz.Source(make_dot(loss, params=dict(model.named_parameters()))).render('full_net')
         # print('weight after test = > ', model.fc_actor.weight)
         if step_idx % PRINT_INTERVAL == 0:
-            test(step_idx, model,device, num_test=10)
+            test(step_idx, model,device, num_test=100)
             #save weights of A2C
             save_path = '/media/becky/GNOME-p3/monopoly_simulator/weights'
             save_name = save_path + '/push_buy.pkl'

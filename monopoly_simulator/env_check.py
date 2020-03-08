@@ -11,9 +11,9 @@ class HiddenPrints:
         sys.stdout.close()
         sys.stdout = self._original_stdout
 
-n = 1
+n = 2
 sum_win = 0
-while n < 2:
+while n < 3:
     done = 0
     env = gym.make('monopoly_simple-v1')
     env.seed(seed=n)
@@ -21,10 +21,10 @@ while n < 2:
     s,mask = env.reset()
 
     while done == 0:
-        s, rew, done, info = env.step_nochange(0)
-        s, rew, done, info = env.step_after_nochange(0)
+        # s, rew, done, info = env.step_nochange(0)
+        # s, rew, done, info = env.step_after_nochange(0)
         # with HiddenPrints():
-        #     s, rew, done, info = env.step(0)
+        s, rew, done, info = env.step(0)
     print(s)
     n += 1
     sum_win += done - 1

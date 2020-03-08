@@ -74,7 +74,7 @@ class Interface(object):
         state_space_cash = [int(p.current_cash) for p in sorted_player]
         state_space_cash_sum = sum(state_space_cash) + 0.1
         # state_space_cash = [int(p.current_cash)/state_space_cash_sum for p in sorted_player]
-        state_space_cash = [int(p.current_cash) for p in sorted_player]
+        state_space_cash = [int(p.current_cash)/1000 for p in sorted_player]
         state_space += state_space_cash
 
         #n positions of players n = # of players

@@ -18,6 +18,62 @@ class HiddenPrints:
         sys.stdout.close()
         sys.stdout = self._original_stdout
 
+def test_eva(step_idx, model, device, num_test):
+    env = gym.make('monopoly_simple-v1')
+    score = 0.0
+    done = False
+    win_num = 0
+    skip_num = 0
+    buy_num = 0
+    else_num = 0
+    for _ in range(num_test):
+        with HiddenPrints():
+            s, masked_actions = env.reset()
+        num_game = 0
+        score_game = 0
+        while not done:
+            s = s.reshape(1, -1)
+            num_game += 1
+
+            prob = model.actor(torch.tensor(s, device=device).float(), softmax_dim=0)
+
+            # Choose the action with highest prob and not in masked action
+            # Becky#########################################################
+            # prob = prob.cpu().detach().numpy().reshape(-1, )
+            # if num_game == 15:
+            #     print(prob)
+            # Check if the action is valid
+            action_Invalid = True
+            # largest_num = -1
+            while action_Invalid:
+                # a = prob.argsort()[largest_num:][0]
+                # action_Invalid = True if masked_actions[a] == 0 else False
+                # largest_num -= 1
+                a = Categorical(prob).sample().cpu().numpy()  # substitute
+                action_Invalid = True if masked_actions[a[0]] == 0 else False
+            #
+            # a = Categorical(prob).sample().numpy()
+            if a == 79:
+                skip_num += 1
+            elif a == 0:
+                buy_num += 1
+            else:
+                else_num += 1
+            with HiddenPrints():
+                s_prime, r, done, masked_actions = env.step(a)
+            # print(a)
+            # s_prime, r, done, info = env.step(a)
+            s = s_prime
+            score_game += r
+        # print(s)
+        score += score_game/num_game
+        win_num += int(done) - 1
+        done = 0
+        print('skip_num', skip_num, 'buy_num', buy_num, 'else_num', else_num)
+    # print('weight = test> ', model.fc_actor.weight)
+    print(f"Step # :{step_idx}, avg score : {score/num_test:.3f}")
+    print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
+
 if __name__ == '__main__':
     config_file = '/media/becky/Novelty-Generation-Space-A2C/Vanilla-A2C/config.ini'
     config_data = ConfigParser()
@@ -48,4 +104,4 @@ if __name__ == '__main__':
 
     model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy.pkl'
     model = torch.load(model_path)
-    test(1, model, device, num_test=4)
+    test_eva(1, model, device, num_test=10)
