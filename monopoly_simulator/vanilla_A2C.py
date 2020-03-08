@@ -134,18 +134,17 @@ class ParallelEnv:
             worker.join()
             self.closed = True
 
-def test(step_idx, model, device):
+def test(step_idx, model, device, num_test):
     env = gym.make('monopoly_simple-v1')
     score = 0.0
     done = False
-    num_test = 10
-
+    win_num = 0
     for _ in range(num_test):
         with HiddenPrints():
             s, masked_actions = env.reset()
         num_game = 0
         score_game = 0
-        win_num = 0
+
         while not done:
             num_game += 1
 
@@ -166,17 +165,19 @@ def test(step_idx, model, device):
             #
             # a = Categorical(prob).sample().numpy()
             with HiddenPrints():
-                s_prime, r, done, info = env.step(a)
+                s_prime, r, done, info = env.step_nochange(a)
+            s_prime, r, done, info = env.step(79)
+
             # s_prime, r, done, info = env.step(a)
             s = s_prime
             score_game += r
-            # print(r)
+        print(s)
         score += score_game/num_game
-        win_num += done - 1
-        done = False
+        win_num += int(done) - 1
+        done = 0
     # print('weight = test> ', model.fc_actor.weight)
     print(f"Step # :{step_idx}, avg score : {score/num_test:.3f}")
-    print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.1f}")
+    print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
 
     env.close()
 
@@ -190,13 +191,13 @@ def compute_target(v_final, r_lst, mask_lst, gamma): #may update
 
     return torch.tensor(td_target[::-1]).float()
 
-def compute_returns(next_value, rewards, masks, gamma=0.99):
-    R = next_value
-    returns = []
-    for step in reversed(range(len(rewards))):
-        R = rewards[step] + gamma * R * masks[step]
-        returns.insert(0, R)
-    return returns
+# def compute_returns(next_value, rewards, masks, gamma=0.99):
+#     R = next_value
+#     returns = []
+#     for step in reversed(range(len(rewards))):
+#         R = rewards[step] + gamma * R * masks[step]
+#         returns.insert(0, R)
+#     return returns
 
 
 # if __name__ == '__main__':

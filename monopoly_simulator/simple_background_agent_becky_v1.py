@@ -2,6 +2,7 @@ import action_choices
 import agent_helper_functions # helper functions are internal to the agent and will not be recorded in the function log.
 import diagnostics
 import hypothetical_simulator
+import location
 
 '''
 becky:
@@ -314,21 +315,29 @@ def make_post_roll_move(player, current_gameboard, allowable_moves, code, move_a
 
     else:
         current_location = current_gameboard['location_sequence'][player.current_position]
-        if action_choices.buy_property in allowable_moves:
-            if code == -1:
-                print(player.player_name,': I did not succeed the last time in buying this property. Concluding actions...')
-                return (action_choices.concluded_actions, dict())
+        # if action_choices.buy_property in allowable_moves:
+        #     if code == -1:
+        #         print(player.player_name,': I did not succeed the last time in buying this property. Concluding actions...')
+        #         return (action_choices.concluded_actions, dict())
+        #
+        #
+        #     params = dict()
+        #     params['player'] = player
+        #     params['asset'] = current_location
+        #     params['current_gameboard'] = current_gameboard
+        #
+        #     #####becky#####
+        #     allowed_types = [location.UtilityLocation, location.RailroadLocation, location.RealEstateLocation]
+        #     if player.current_cash > current_location.price and type(current_location) in allowed_types:
+        #         print(player.player_name, ': I am attempting to buy property ',params['asset'].name)
+        #         player._agent_memory['previous_action'] = action_choices.buy_property
+        #         return (action_choices.buy_property, params)
+            #####
 
-
-            params = dict()
-            params['player'] = player
-            params['asset'] = current_location
-            params['current_gameboard'] = current_gameboard
-
-            if make_buy_property_decision(player, current_gameboard, params['asset']):
-                print(player.player_name, ': I am attempting to buy property ',params['asset'].name)
-                player._agent_memory['previous_action'] = action_choices.buy_property
-                return (action_choices.buy_property, params)
+            # if make_buy_property_decision(player, current_gameboard, params['asset']):
+            #     print(player.player_name, ': I am attempting to buy property ',params['asset'].name)
+            #     player._agent_memory['previous_action'] = action_choices.buy_property
+            #     return (action_choices.buy_property, params)
             # else:
             #     # make_buy returned false, but is there still a chance?
             #     if agent_helper_functions.will_property_complete_set(player,current_location,current_gameboard):

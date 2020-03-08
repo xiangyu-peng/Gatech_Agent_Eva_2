@@ -73,7 +73,8 @@ class Interface(object):
         sorted_player = sorted(current_board['players'], key=lambda player: int(player.player_name[-1]))
         state_space_cash = [int(p.current_cash) for p in sorted_player]
         state_space_cash_sum = sum(state_space_cash) + 0.1
-        state_space_cash = [int(p.current_cash)/state_space_cash_sum for p in sorted_player]
+        # state_space_cash = [int(p.current_cash)/state_space_cash_sum for p in sorted_player]
+        state_space_cash = [int(p.current_cash) for p in sorted_player]
         state_space += state_space_cash
 
         #n positions of players n = # of players
@@ -197,7 +198,7 @@ class Interface(object):
         return self.action_space, self.site_space
 
         #take into array/vector and output the actions
-    actions_vector_default = [1] + [0 for i in range(79)]
+    actions_vector_default = [0 for i in range(79)] + [1]
 
     def vector_to_actions(self, current_board, current_player, actions_vector=actions_vector_default):
         '''

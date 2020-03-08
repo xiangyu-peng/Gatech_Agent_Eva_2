@@ -859,8 +859,8 @@ class Player(object):
         #         current_gameboard['history']['return'].append(t)
         #         # print action_to_execute
         #
-        if self.player_name != 'player_1':
-            self._force_buy_outcome(current_gameboard) # if we got here, we need to conclude actions
+        # if self.player_name != 'player_1':
+        #     self._force_buy_outcome(current_gameboard) # if we got here, we need to conclude actions
         return self._execute_action(concluded_actions, dict(), current_gameboard) # now we can conclude actions
 
 

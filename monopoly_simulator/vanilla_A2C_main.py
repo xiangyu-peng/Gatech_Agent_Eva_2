@@ -2,7 +2,7 @@ from vanilla_A2C import *
 from configparser import ConfigParser
 import graphviz
 from torchviz import make_dot
-
+from gameplay_simple_tf import *
 
 class Config:
     device = torch.device('cuda:0')
@@ -29,7 +29,7 @@ if __name__ == '__main__':
     update_interval = 1
     gamma = 0.98
     max_train_steps = 60000
-    PRINT_INTERVAL = 200
+    PRINT_INTERVAL = 30
     config = Config()
     config.hidden_state = 256
     config.action_space = 80
@@ -56,7 +56,7 @@ if __name__ == '__main__':
         # s = torch.tensor(s, device=device).float()
         # masked_actions = torch.tensor(masked_actions, device=device)
 
-    print('s_reset', s)
+
     while step_idx < max_train_steps:
         s_lst, a_lst, r_lst, mask_lst = list(), list(), list(), list() #state list; action list, reward list, masked action list？？？
 
@@ -68,7 +68,6 @@ if __name__ == '__main__':
         ############################################
 
             s = s.reshape(1, -1)
-            # print('masked_actions', masked_actions)
             prob = model.actor(torch.tensor(s, device=device).float())  # s => tensor #output = prob for actions
             # prob = model.actor(torch.from_numpy(s,device=device).float()) # s => tensor #output = prob for actions
 
@@ -77,15 +76,13 @@ if __name__ == '__main__':
             while action_Invalid:
                 a = Categorical(prob).sample().cpu().numpy() #substitute
                 action_Invalid = True if masked_actions[a[0]] == 0 else False
-            print('masked_actions', masked_actions)
-            a = [0]
-            print('=============================')
-            #!!!!!!!one bug here: I make step_nochange as the env step which should not affect the env
+            # print('masked_actions', masked_actions)
+            # print('=============================')
             #while opposite happens. Step won't change env, step_nochange changes the env
-            s_prime, r, done, masked_actions = envs.step_nochange(a)
-            print('s_prime', s_prime)
-            print('done', done)
-            print('=============================')
+            s_prime, r, done, _ = envs.step_nochange(a)
+            # print('s_prime', s_prime)
+            # print('done', done)
+            # print('=============================')
 
 
 
@@ -117,7 +114,7 @@ if __name__ == '__main__':
                 # print('s_prime, r, done, masked_actions', s_prime, r, done, masked_actions)
 
 
-            masked_actions = masked_actions[0]
+
 
             s_lst.append(s)
             a_lst.append(a)
@@ -127,13 +124,14 @@ if __name__ == '__main__':
             else:
                 mask_lst.append(1)
 
-            a_tf = [79]
-            print('****************************')
-            s_prime, _, _, _ = envs.step(a_tf)
-            print('s_prime', s_prime)
-            print('done', done)
-            print('****************************')
-
+            a_tf = tf(s[0], masked_actions)
+            # print(a_tf)
+            # print('****************************')
+            s_prime, _, done, masked_actions = envs.step(a_tf)
+            # print('s_prime', s_prime)
+            # print('done', done)
+            # print('****************************')
+            masked_actions = masked_actions[0]
             s_prime = s_prime.reshape(1, -1)
             s = s_prime
             step_idx += 1
@@ -167,7 +165,7 @@ if __name__ == '__main__':
         graphviz.Source(make_dot(loss, params=dict(model.named_parameters()))).render('full_net')
         # print('weight after test = > ', model.fc_actor.weight)
         if step_idx % PRINT_INTERVAL == 0:
-            test(step_idx, model,device)
+            test(step_idx, model,device, num_test=10)
             #save weights of A2C
             save_path = '/media/becky/GNOME-p3/monopoly_simulator/weights'
             save_name = save_path + '/push_buy.pkl'

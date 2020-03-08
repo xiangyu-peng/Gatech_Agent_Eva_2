@@ -11,51 +11,20 @@ class HiddenPrints:
         sys.stdout.close()
         sys.stdout = self._original_stdout
 
+n = 0
+sum_win = 0
+while n < 1:
+    done = 0
+    env = gym.make('monopoly_simple-v1')
+    env.seed(seed=n)
+    with HiddenPrints():
+        s,mask = env.reset()
 
-
-done = False
-env = gym.make('monopoly_simple-v1')
-env.seed(seed=6)
-with HiddenPrints():
-    s,mask = env.reset()
-with HiddenPrints():
-    s, rew, done,info = env.step_nochange(79)
-print('s =====> reset', s)
-
-with HiddenPrints():
-    s, rew, done,info = env.step(0)
-print('s =====> reset', s)
-
-with HiddenPrints():
-    s, rew, done,info = env.step_nochange(79)
-print('s =====> reset', s)
-
-with HiddenPrints():
-    s, rew, done,info = env.step(0)
-print('s =====> reset', s)
-
-env.close()
-# done = False
-# with HiddenPrints():
-#     while done == False:
-#         s, rew, done,info = env.step(0)
-# print('s =====> reset', s)
-
-
-
-
-# print('masked', masked)
-# print('======================step======================')
-# with HiddenPrints():
-#     s = env.step(0) #buy
-# print('======================step======================')
-# print('s =====>', s)
-# s = env.step(25) #mortgage
-# print('======================step======================')
-# print('s =====>', s)
-# s = env.step(53) #free-mortgage
-# print('======================step======================')
-# print('s =====>', s)
-# s = env.step(79) #do nothing
-# print('======================step======================')
-# print('s =====>', s)
+    while done == 0:
+        # s, rew, done,info = env.step_nochange(79)
+        with HiddenPrints():
+            s, rew, done, info = env.step(79)
+    print(s)
+    n+= 1
+    sum_win+=done - 1
+print(sum_win)

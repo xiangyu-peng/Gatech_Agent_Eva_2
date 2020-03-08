@@ -48,4 +48,4 @@ if __name__ == '__main__':
 
     model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy.pkl'
     model = torch.load(model_path)
-    test(1, model, device)
+    test(1, model, device, num_test=4)

@@ -97,7 +97,7 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
         params['current_gameboard'] = game_elements
         game_elements['history']['param'].append(params)
         game_elements['history']['return'].append(None)
-
+        win_indicator = 0
         if current_player.current_cash < 0:
             code = current_player.handle_negative_cash_balance(current_player, game_elements)
             # add to game history
@@ -109,6 +109,7 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
             game_elements['history']['return'].append(code)
             #####becky#####
             #
+
             if code == -1 or current_player.current_cash < 0:
                 current_player.begin_bankruptcy_proceedings(game_elements)
                 # add to game history
@@ -128,6 +129,8 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
                         if p.status != 'lost':
                             winner = p
                             p.status = 'won'
+                        if p.player_name == 'player_1':
+                            win_indicator = 1 if p.status == 'won' else -1
             a.board_to_state(params['current_gameboard'])  # get state space
 
         else:
@@ -143,7 +146,7 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
             # print('masked_actions =====>', a.masked_actions)
             # print('current_player\'s mortgage assets', current_player.mortgaged_assets)
 
-    return game_elements, num_active_players, num_die_rolls, current_player_index, a, params
+    return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, win_indicator
 
 def after_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     a.board_to_state(game_elements)
@@ -737,6 +740,14 @@ def simulate_game_step_tf_nochange(game_elements, num_active_players, num_die_ro
         done_indicator = 1
         # return
     return game_elements, num_active_players, num_die_rolls, current_player_index, done_indicator, win_indicator, die_roll
+
+def tf(state_space, masked_actions):
+    cash_now = state_space[50] * 2000 #2000 is the ratio num in interface, for normalization
+    if masked_actions[0] == 1:
+        if cash_now > 800:
+            return [0]
+
+    return [79]
 
 if __name__ == '__main__':
     # this is where everything begins. Assign decision agents to your players, set up the board and start simulating! You can
