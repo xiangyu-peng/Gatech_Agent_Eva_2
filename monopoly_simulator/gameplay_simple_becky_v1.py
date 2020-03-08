@@ -536,7 +536,7 @@ if __name__ == '__main__':
     # but still relatively simple agent soon.
     n = 0
     win_sum = 0
-    while n < 4:
+    while n < 1:
         # with HiddenPrints():
         player_decision_agents = dict()
         num_active_players = 2
@@ -552,6 +552,3 @@ if __name__ == '__main__':
         n += 1
     print(win_sum)
     #just testing history.
-    # print len(game_elements['history']['function'])
-    # print len(game_elements['history']['param'])
-    # print len(game_elements['history']['return'])

@@ -1,3 +1,4 @@
+Remove monopoly_simple-v1 from registry
 Beginning game set up...
 Successfully instantiated and initialized bank.
 Successfully instantiated and initialized all locations on board.
@@ -5,8 +6,6 @@ Successfully instantiated and initialized dies
 Successfully instantiated and initialized cards
 Successfully instantiated and initialized players and decision agents
 Successfully instantiated game history data structures
-players will play in the following order:  player_1->player_2
-Beginning play. Rolling first die...
 We are in the pre-roll phase for  player_1
 computing allowable pre-roll actions for  player_1
 Executing _execute_action for  player_1
@@ -2107,10 +2106,10 @@ Before charge, player has cash  20
 player_1  now has cash:  -80
 ('Beginning bankruptcy proceedings for ', 'player_1')
 Discharging assets of  player_1  to bank.
-discharging asset  New York Avenue
-discharging asset  Baltic Avenue
 discharging asset  Water Works
+discharging asset  Baltic Avenue
 discharging asset  St. Charles Place
+discharging asset  New York Avenue
 ('Warning! option to buy is set to true for ', 'player_1', ' even in bankruptcy proceedings.')
 Owner of  Mediterranean Avenue  is bank
 Owner of  Baltic Avenue  is bank
@@ -2142,38 +2141,8 @@ Owner of  Park Place  is bank
 Owner of  Boardwalk  is bank
 player_1  has cash balance  0
 player_2  has cash balance  885
-printing final asset owners: 
-Owner of  Mediterranean Avenue  is bank
-Owner of  Baltic Avenue  is bank
-Owner of  Reading Railroad  is bank
-Owner of  Oriental Avenue  is bank
-Owner of  Vermont Avenue  is bank
-Owner of  Connecticut Avenue  is bank
-Owner of  St. Charles Place  is bank
-Owner of  Electric Company  is bank
-Owner of  States Avenue  is bank
-Owner of  Virginia Avenue  is bank
-Owner of  Pennsylvania Railroad  is bank
-Owner of  St. James Place  is bank
-Owner of  Tennessee Avenue  is bank
-Owner of  New York Avenue  is bank
-Owner of  Kentucky Avenue  is bank
-Owner of  Indiana Avenue  is bank
-Owner of  Illinois Avenue  is bank
-Owner of  B&O Railroad  is bank
-Owner of  Atlantic Avenue  is bank
-Owner of  Ventnor Avenue  is bank
-Owner of  Water Works  is bank
-Owner of  Marvin Gardens  is bank
-Owner of  Pacific Avenue  is bank
-Owner of  North Carolina Avenue  is bank
-Owner of  Pennsylvania Avenue  is bank
-Owner of  Short Line  is bank
-Owner of  Park Place  is bank
-Owner of  Boardwalk  is bank
-number of dice rolls:  73
-printing final cash balances: 
-player_1  has cash balance  0
-player_2  has cash balance  885
-player_2
+[  0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0
+   0   0   0   0   0   0   0   0   0   0   0   0   0   0   0 885   0  27
+   0   0]
 0
