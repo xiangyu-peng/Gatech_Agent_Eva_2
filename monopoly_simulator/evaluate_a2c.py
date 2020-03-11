@@ -18,6 +18,18 @@ class HiddenPrints:
         sys.stdout.close()
         sys.stdout = self._original_stdout
 
+def largest_prob(prob, masked_actions):
+    prob = prob.cpu().detach().numpy().reshape(-1,)
+    #Check if the action is valid
+    action_Invalid = True
+    largest_num = -1
+    while action_Invalid:
+        a = prob.argsort()[largest_num:][0]
+        action_Invalid = True if masked_actions[a] == 0 else False
+        a = [a]
+        largest_num -= 1
+    return a
+
 def test_eva(step_idx, model, device, num_test):
     env = gym.make('monopoly_simple-v1')
     score = 0.0
@@ -34,33 +46,53 @@ def test_eva(step_idx, model, device, num_test):
         while not done:
             s = s.reshape(1, -1)
             num_game += 1
+            s = torch.tensor(s, device=device).float()
+            before_action = model.critic(s)
+            prob = model.actor(s)
 
-            prob = model.actor(torch.tensor(s, device=device).float(), softmax_dim=0)
+            #debug
+            # print('prob', prob)
+            # break
 
             # Choose the action with highest prob and not in masked action
             # Becky#########################################################
-            # prob = prob.cpu().detach().numpy().reshape(-1, )
+            prob = prob.cpu().detach().numpy().reshape(-1, )
+
+
             # if num_game == 15:
             #     print(prob)
             # Check if the action is valid
             action_Invalid = True
-            # largest_num = -1
+            largest_num = -1
+            num_loop = 0
             while action_Invalid:
-                # a = prob.argsort()[largest_num:][0]
-                # action_Invalid = True if masked_actions[a] == 0 else False
-                # largest_num -= 1
-                a = Categorical(prob).sample().cpu().numpy()  # substitute
-                action_Invalid = True if masked_actions[a[0]] == 0 else False
+                # print('prob', prob)
+                a = prob.argsort()[largest_num:][0]
+                action_Invalid = True if masked_actions[a] == 0 else False
+                largest_num -= 1
+                # a = Categorical(prob).sample().cpu().numpy()  # substitute
+                # action_Invalid = True if masked_actions[a[0]] == 0 else False
+                # num_loop += 1
+                # if num_loop > 20:
+                #     a = largest_prob(prob, masked_actions)
+                #     break
             #
             # a = Categorical(prob).sample().numpy()
-            if a == 79:
+            # a = a[0]
+            if a == 1:
                 skip_num += 1
             elif a == 0:
                 buy_num += 1
-            else:
-                else_num += 1
             with HiddenPrints():
                 s_prime, r, done, masked_actions = env.step(a)
+
+            #debug
+            # s_prime_cal = torch.tensor(s_prime, device=device).float()
+            # print('after action',model.critic(s_prime_cal) - before_action)
+            # break
+            
+            
+            
             # print(a)
             # s_prime, r, done, info = env.step(a)
             s = s_prime
@@ -69,7 +101,8 @@ def test_eva(step_idx, model, device, num_test):
         score += score_game/num_game
         win_num += int(done) - 1
         done = 0
-        print('skip_num', skip_num, 'buy_num', buy_num, 'else_num', else_num)
+        # print('s===>',s)
+        # print('skip_num', skip_num, 'buy_num', buy_num, 'else_num', else_num)
     # print('weight = test> ', model.fc_actor.weight)
     print(f"Step # :{step_idx}, avg score : {score/num_test:.3f}")
     print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
@@ -101,7 +134,12 @@ if __name__ == '__main__':
     #######################################
     with HiddenPrints():
         envs = ParallelEnv(n_train_processes)
-
-    model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy.pkl'
+    # for i in range(12):
+    #     model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_' +str(i) + '.pkl'
+    #     model = torch.load(model_path)
+    #     print('i = ', i)
+    #     test_eva(1, model, device, num_test=1)
+    i = 12
+    model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_' + str(i) + '.pkl'
     model = torch.load(model_path)
-    test_eva(1, model, device, num_test=10)
+    test_eva(1, model, device, num_test=500)

@@ -1,0 +1,24 @@
+i =  0
+Step # :1, avg score : 0.707
+Step # :1, avg winning : 0.462
+i =  1
+Step # :1, avg score : 0.605
+Step # :1, avg winning : 0.321
+i =  2
+Step # :1, avg score : 0.607
+Step # :1, avg winning : 0.326
+i =  3
+Step # :1, avg score : 0.606
+Step # :1, avg winning : 0.325
+i =  4
+Step # :1, avg score : 0.603
+Step # :1, avg winning : 0.321
+i =  5
+Step # :1, avg score : 0.603
+Step # :1, avg winning : 0.322
+Traceback (most recent call last):
+  File "evaluate_a2c.py", line 138, in <module>
+    model = torch.load(model_path)
+  File "/home/becky/.local/lib/python3.7/site-packages/torch/serialization.py", line 419, in load
+    f = open(f, 'rb')
+FileNotFoundError: [Errno 2] No such file or directory: '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_new_6.pkl'
