@@ -327,36 +327,29 @@ def make_post_roll_move(player, current_gameboard, allowable_moves, code, move_a
             params['asset'] = current_location
             params['current_gameboard'] = current_gameboard
 
-            #####becky#####
-            allowed_types = [location.UtilityLocation, location.RailroadLocation, location.RealEstateLocation]
-            if player.current_cash > current_location.price and type(current_location) in allowed_types:
+
+            if make_buy_property_decision(player, current_gameboard, params['asset']):
                 print(player.player_name, ': I am attempting to buy property ',params['asset'].name)
                 player._agent_memory['previous_action'] = action_choices.buy_property
                 return (action_choices.buy_property, params)
-            ####
+            else:
+                # make_buy returned false, but is there still a chance?
+                if agent_helper_functions.will_property_complete_set(player,current_location,current_gameboard):
+                    # if we can raise enough money, then the 'next' time around we'll succeed in buying
+                    to_mortgage = agent_helper_functions.identify_potential_mortgage(player,current_location.price,True)
+                    if to_mortgage:
+                        params['asset'] = to_mortgage
+                        print(player.player_name, ': I am attempting to mortgage property ', params['asset'].name)
+                        player._agent_memory['previous_action'] = action_choices.mortgage_property
+                        return (action_choices.mortgage_property, params)
 
-            # if make_buy_property_decision(player, current_gameboard, params['asset']):
-            #     print(player.player_name, ': I am attempting to buy property ',params['asset'].name)
-            #     player._agent_memory['previous_action'] = action_choices.buy_property
-            #     return (action_choices.buy_property, params)
-            # else:
-            #     # make_buy returned false, but is there still a chance?
-            #     if agent_helper_functions.will_property_complete_set(player,current_location,current_gameboard):
-            #         # if we can raise enough money, then the 'next' time around we'll succeed in buying
-            #         to_mortgage = agent_helper_functions.identify_potential_mortgage(player,current_location.price,True)
-            #         if to_mortgage:
-            #             params['asset'] = to_mortgage
-            #             print(player.player_name, ': I am attempting to mortgage property ', params['asset'].name)
-            #             player._agent_memory['previous_action'] = action_choices.mortgage_property
-            #             return (action_choices.mortgage_property, params)
-            #
-            #         else: # last chance.
-            #             to_sell = agent_helper_functions.identify_potential_sale(player, current_location.price,True)
-            #             if to_sell:
-            #                 params['asset'] = to_sell
-            #                 print(player.player_name, ': I am attempting to sell property ', params['asset'].name,' to the bank')
-            #                 player._agent_memory['previous_action'] = action_choices.sell_property
-            #                 return (action_choices.sell_property, params)
+                    else: # last chance.
+                        to_sell = agent_helper_functions.identify_potential_sale(player, current_location.price,True)
+                        if to_sell:
+                            params['asset'] = to_sell
+                            print(player.player_name, ': I am attempting to sell property ', params['asset'].name,' to the bank')
+                            player._agent_memory['previous_action'] = action_choices.sell_property
+                            return (action_choices.sell_property, params)
 
         if action_choices.concluded_actions in allowable_moves:
             # player._agent_memory['previous_action'] = action_choices.concluded_actions
