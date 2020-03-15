@@ -145,14 +145,15 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
     if current_player.current_cash < 0:
         game_elements, num_active_players, a, win_indicator = \
             cash_negative(game_elements, current_player, num_active_players, a, win_indicator)
+        masked_actions = [1, 1]
     else:
         # post-roll for current player. No out-of-turn moves allowed at this point.
         state = a.board_to_state(game_elements)  # get state space
         allowable_actions, param = current_player.compute_allowable_post_roll_actions(game_elements)
-        actions_here = a.get_masked_actions(allowable_actions, param, current_player)
-        print(state, actions_here)
+        masked_actions = a.get_masked_actions(allowable_actions, param, current_player)
+        # print(state, actions_here)
 
-    return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, win_indicator
+    return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, win_indicator, masked_actions
 
 def after_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     a.board_to_state(game_elements)
@@ -467,14 +468,14 @@ def before_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, c
     if current_player.current_cash < 0:
         game_elements, num_active_players, a, win_indicator = \
             cash_negative(game_elements, current_player, num_active_players, a, win_indicator)
+        masked_actions = [1,1]
     else:
         # post-roll for current player. No out-of-turn moves allowed at this point.
         state = a.board_to_state(game_elements)  # get state space
         allowable_actions, param = current_player.compute_allowable_post_roll_actions(game_elements)
-        actions_here = a.get_masked_actions(allowable_actions, param, current_player)
-        print(state, actions_here)
+        masked_actions = a.get_masked_actions(allowable_actions, param, current_player)
 
-    return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, die_roll
+    return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, die_roll, masked_actions
 
 def after_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     a.board_to_state(game_elements)

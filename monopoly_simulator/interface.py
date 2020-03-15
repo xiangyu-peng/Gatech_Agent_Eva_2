@@ -117,28 +117,28 @@ class Interface(object):
             masked_actions.append(0)
 
         #22 improve property
-        if improve_property in allowable_actions:
-            if param:
-                for space in self.board_building:
-                    masked_actions.append(1) if space in param['asset'] else masked_actions.append(0)
-            else:
-                for space in self.board_building:
-                    masked_actions.append(0)
-        else:
-            masked_actions += [0 for i in range(22)]
+        # if improve_property in allowable_actions:
+        #     if param:
+        #         for space in self.board_building:
+        #             masked_actions.append(1) if space in param['asset'] else masked_actions.append(0)
+        #     else:
+        #         for space in self.board_building:
+        #             masked_actions.append(0)
+        # else:
+        #     masked_actions += [0 for i in range(22)]
 
         #28 actions_allowed_morgage
-        owned_space = [asset.name for asset in current_player.assets]
-        mortgaged_assets = [asset.name for asset in current_player.mortgaged_assets]
-        for space in self.board_owned:
-            masked_actions.append(1) if space in owned_space and space not in mortgaged_assets else masked_actions.append(0)
+        # owned_space = [asset.name for asset in current_player.assets]
+        # mortgaged_assets = [asset.name for asset in current_player.mortgaged_assets]
+        # for space in self.board_owned:
+        #     masked_actions.append(1) if space in owned_space and space not in mortgaged_assets else masked_actions.append(0)
 
         # 28 actions: free morgage
-        potentials = identify_free_mortgage(current_player)
-        potentials = [asset.name for asset in potentials]
-        print('potentials =>', potentials)
-        for space in self.board_owned:
-            masked_actions.append(1) if space in potentials else masked_actions.append(0)
+        # potentials = identify_free_mortgage(current_player)
+        # potentials = [asset.name for asset in potentials]
+        # print('potentials =>', potentials)
+        # for space in self.board_owned:
+        #     masked_actions.append(1) if space in potentials else masked_actions.append(0)
 
         # 1 action: always allowed : conclude the actions = skip = do nothing.
         masked_actions.append(1)
@@ -174,22 +174,22 @@ class Interface(object):
             self.site_space.append(current_board['location_objects'][self.board_state[current_player.current_position]])
 
             # 22 improve property
-            for space in self.board_building:
-                self.site_space.append(current_board['location_objects'][space])
-            for i in range(len(self.board_building)):
-                self.action_space.append(improve_property)
+            # for space in self.board_building:
+            #     self.site_space.append(current_board['location_objects'][space])
+            # for i in range(len(self.board_building)):
+            #     self.action_space.append(improve_property)
 
             #28 actions_allowed_mortgage
-            for space in self.board_owned:
-                self.site_space.append(current_board['location_objects'][space])
-            for i in range(len(self.board_owned)):
-                self.action_space.append(mortgage_property)
+            # for space in self.board_owned:
+            #     self.site_space.append(current_board['location_objects'][space])
+            # for i in range(len(self.board_owned)):
+            #     self.action_space.append(mortgage_property)
 
             # 28 actions: free mortgage
-            for space in self.board_owned:
-                self.site_space.append(current_board['location_objects'][space])
-            for i in range(len(self.board_owned)):
-                self.action_space.append(free_mortgage)
+            # for space in self.board_owned:
+            #     self.site_space.append(current_board['location_objects'][space])
+            # for i in range(len(self.board_owned)):
+            #     self.action_space.append(free_mortgage)
 
             # 1 action: do nothing
             self.action_space.append(concluded_actions)
@@ -198,7 +198,7 @@ class Interface(object):
         return self.action_space, self.site_space
 
         #take into array/vector and output the actions
-    actions_vector_default = [1] + [0 for i in range(79)]
+    actions_vector_default = [1] + [0]
 
     def vector_to_actions(self, current_board, current_player, actions_vector=actions_vector_default):
         '''

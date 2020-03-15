@@ -86,7 +86,6 @@ class ParallelEnv:
 
 
         for worker_id, (master_end, worker_end) in enumerate(zip(master_ends, worker_ends)):
-            # worker_id = randint(0, sys.maxsize)
             p = mp.Process(target=worker,
                            args=(worker_id, master_end, worker_end))
             p.daemon = True
@@ -121,7 +120,7 @@ class ParallelEnv:
     def reset(self):
         for master_end in self.master_ends:
             master_end.send(('reset', None))   #send to worker_end =>
-        return master_end.recv()
+        return np.stack([master_end.recv() for master_end in self.master_ends])
 
     def step(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
         self.step_async(actions)
@@ -159,22 +158,23 @@ def test(step_idx, model, device, num_test):
         while not done:
             num_game += 1
             s = s.reshape(1, -1)
-            prob = model.actor(torch.tensor(s, device=device).float(), softmax_dim=0)
+            prob = model.actor(torch.tensor(s, device=device).float())
 
             # Choose the action with highest prob and not in masked action
             # Becky#########################################################
-            # prob = prob.cpu().detach().numpy().reshape(-1, )
+            prob = prob.cpu().detach().numpy().reshape(-1, )
             # if num_game == 15:
             #     print(prob)
             # Check if the action is valid
             action_Invalid = True
             largest_num = -1
             while action_Invalid:
-                # a = prob.argsort()[largest_num:][0]
-                # action_Invalid = True if masked_actions[a] == 0 else False
-                # largest_num -= 1
-                a = Categorical(prob).sample().cpu().numpy()  # substitute
-                action_Invalid = True if masked_actions[a[0]] == 0 else False
+                a = prob.argsort()[largest_num:][0]
+                action_Invalid = True if masked_actions[a] == 0 else False
+                largest_num -= 1
+
+                # a = Categorical(prob).sample().cpu().numpy()  # substitute
+                # action_Invalid = True if masked_actions[a[0]] == 0 else False
             #
             # a = Categorical(prob).sample().numpy()
             with HiddenPrints():
@@ -203,6 +203,17 @@ def compute_target(v_final, r_lst, mask_lst, gamma): #may update
         td_target.append(G)
 
     return torch.tensor(td_target[::-1]).float()
+
+def compute_returns(final_value, rewards, mask_lst, gamma=0.99):
+    R = final_value
+    # print('final_value',final_value)
+    returns = []
+    for step in reversed(range(len(rewards))):
+        # print(step, 'rewards[step]', rewards[step],'mask_lst[step]', mask_lst[step] )
+        R = rewards[step] + gamma * R * mask_lst[step]
+
+        returns.insert(0, R)
+    return returns
 
 # def compute_returns(next_value, rewards, masks, gamma=0.99):
 #     R = next_value
