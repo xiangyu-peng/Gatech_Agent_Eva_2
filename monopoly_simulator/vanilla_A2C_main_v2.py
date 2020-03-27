@@ -5,7 +5,7 @@ from torchviz import make_dot
 from gameplay_simple_tf import *
 
 class Config:
-    device = torch.device('cuda:0')
+    device = torch.device('cuda:3')
 import os, sys
 
 class HiddenPrints:
@@ -36,7 +36,7 @@ if __name__ == '__main__':
     config_data.read(config_file)
     # print('config_data.items', config_data.sections())
     # Hyperparameters
-    n_train_processes = 5
+    n_train_processes = 1
     learning_rate = 0.0002
     update_interval = 5
     gamma = 0.98
@@ -49,10 +49,10 @@ if __name__ == '__main__':
     actor_loss_coefficient = 1
     save_dir = '/media/becky/GNOME-p3/monopoly_simulator'
     use_cuda = torch.cuda.is_available()
-    device = torch.device("cuda" if use_cuda else "cpu")
+    device = torch.device("cuda:3" if use_cuda else "cpu")
     save_name = '/push_buy'
     import os
-    os.environ["CUDA_VISIBLE_DEVICES"] = '2'
+    os.environ["CUDA_VISIBLE_DEVICES"] = '3'
 
     #######################################
     with HiddenPrints():

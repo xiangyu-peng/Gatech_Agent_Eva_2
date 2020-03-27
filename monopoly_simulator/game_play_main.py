@@ -1,19 +1,20 @@
 import initialize_game_elements
 from action_choices import roll_die
 import numpy as np
-from card_utility_actions import move_player_after_die_roll
-import simple_background_agent_becky_v1
+from simple_background_agent_becky_p1 import P1Agent
+from simple_background_agent_becky_p2 import P2Agent
 # import simple_decision_agent_1
 import json
 import diagnostics
 from interface import Interface
 import sys, os
+from card_utility_actions import move_player_after_die_roll
 
-def blockPrint():
-    sys.stdout = open(os.devnull, 'w')
-# blockPrint()
-def enablePrint():
-    sys.stdout = sys.__stdout__
+import xlsxwriter
+import logging
+from log_setting import set_log_level, ini_log_level
+logger = ini_log_level()
+logger = set_log_level()
 
 
 #player_1 run the process
@@ -30,6 +31,7 @@ def before_agent(game_elements, num_active_players, num_die_rolls, current_playe
     # pre-roll for current player + out-of-turn moves for everybody else,
     # till we get num_active_players skip turns in a row.
 
+    logger.debug('Player_1 before move is in jail? '+ str(current_player.currently_in_jail))
     skip_turn = 0
     #make make_pre_roll_moves for current player -> player has allowable actions and then call agent.pre-roll-move
     if current_player.make_pre_roll_moves(game_elements) == 2: # 2 is the special skip-turn code #in player.py
@@ -74,7 +76,8 @@ def before_agent(game_elements, num_active_players, num_die_rolls, current_playe
     num_die_rolls += 1
     game_elements['current_die_total'] = sum(r)
     #####-die-#####
-    print('-die- have come up',str(r))
+    logger.info('-die- have come up'+ str(r))
+
     if not current_player.currently_in_jail:
         check_for_go = True
         move_player_after_die_roll(current_player, sum(r), game_elements, check_for_go)
@@ -106,36 +109,39 @@ def before_agent(game_elements, num_active_players, num_die_rolls, current_playe
         a.get_masked_actions(allowable_actions, param, current_player)
         # print('masked_actions =====>', a.masked_actions)
         # print('current_player\'s mortgage assets', current_player.mortgaged_assets)
+        logger.debug('Set player_1 to jail '+ str(current_player.currently_in_jail))
+    else:
+        logger.info(current_player.player_name+' is in jail now')
+        current_player.currently_in_jail = False
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params
 
 def after_agent(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     a.board_to_state(game_elements)
     # print('state_space', a.state_space)
     current_player = game_elements['players'][current_player_index]
-    if not current_player.currently_in_jail:
-        #got state and masked actions => agent => output actions and move
-        #action vector => actions
-        move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
-        print('move_actions =====>', move_actions)
-        current_player.make_post_roll_moves(game_elements, move_actions)
-        #####################################################################
+    # if not current_player.currently_in_jail:
+    #got state and masked actions => agent => output actions and move
+    #action vector => actions
+    move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
+    logger.debug('move_actions =====>'+ str(move_actions))
+    current_player.agent.set_move_actions(move_actions)
+    current_player.make_post_roll_moves(game_elements)
+    #####################################################################
 
-        # add to game history
-        game_elements['history']['function'].append(current_player.make_post_roll_moves)
-        params = dict()
-        params['self'] = current_player
-        params['current_gameboard'] = game_elements
-        game_elements['history']['param'].append(params)
-        game_elements['history']['return'].append(None)
+    # add to game history
+    game_elements['history']['function'].append(current_player.make_post_roll_moves)
+    params = dict()
+    params['self'] = current_player
+    params['current_gameboard'] = game_elements
+    game_elements['history']['param'].append(params)
+    game_elements['history']['return'].append(None)
 
-
-    else:
-        current_player.currently_in_jail = False # the player is only allowed to skip one turn (i.e. this one)
+    logger.debug('now Player after actions is in jail? ' + str(current_player.currently_in_jail))
 
     if current_player.current_cash < 0:
-        code = current_player.handle_negative_cash_balance(current_player, game_elements)
+        code = current_player.agent.handle_negative_cash_balance(current_player, game_elements)
         # add to game history
-        game_elements['history']['function'].append(current_player.handle_negative_cash_balance)
+        game_elements['history']['function'].append(current_player.agent.handle_negative_cash_balance)
         params = dict()
         params['player'] = current_player
         params['current_gameboard'] = game_elements
@@ -229,7 +235,8 @@ def simulate_game_step(game_elements, num_active_players, num_die_rolls, current
 
     num_die_rolls += 1
     game_elements['current_die_total'] = sum(r)
-    print('-die- have come up ', str(r))
+    logger.info('-die- have come up ' + str(r))
+
     if not current_player.currently_in_jail:
         check_for_go = True
         move_player_after_die_roll(current_player, sum(r), game_elements, check_for_go)
@@ -252,24 +259,26 @@ def simulate_game_step(game_elements, num_active_players, num_die_rolls, current
         game_elements['history']['param'].append(params)
         game_elements['history']['return'].append(None)
 
-        # post-roll for current player. No out-of-turn moves allowed at this point.
-        current_player.make_post_roll_moves(game_elements, [])
-
-        # add to game history
-        game_elements['history']['function'].append(current_player.make_post_roll_moves)
-        params = dict()
-        params['self'] = current_player
-        params['current_gameboard'] = game_elements
-        game_elements['history']['param'].append(params)
-        game_elements['history']['return'].append(None)
-
     else:
+        logger.info(current_player.player_name+' is in jail now')
         current_player.currently_in_jail = False  # the player is only allowed to skip one turn (i.e. this one)
 
+
+    # post-roll for current player. No out-of-turn moves allowed at this point.
+    current_player.make_post_roll_moves(game_elements)
+    logger.debug('player_2 is in jail? ' + str(current_player.currently_in_jail))
+    # add to game history
+    game_elements['history']['function'].append(current_player.make_post_roll_moves)
+    params = dict()
+    params['self'] = current_player
+    params['current_gameboard'] = game_elements
+    game_elements['history']['param'].append(params)
+    game_elements['history']['return'].append(None)
+
     if current_player.current_cash < 0:
-        code = current_player.handle_negative_cash_balance(current_player, game_elements)
+        code = current_player.agent.handle_negative_cash_balance(current_player, game_elements)
         # add to game history
-        game_elements['history']['function'].append(current_player.handle_negative_cash_balance)
+        game_elements['history']['function'].append(current_player.agent.handle_negative_cash_balance)
         params = dict()
         params['player'] = current_player
         params['current_gameboard'] = game_elements
@@ -316,7 +325,7 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
     :return: None
     """
     np.random.seed(np_seed)
-    np.random.shuffle(game_elements['players'])
+    # np.random.shuffle(game_elements['players'])
     game_elements['seed'] = np_seed
     game_elements['card_seed'] = np_seed
     game_elements['choice_function'] = np.random.choice
@@ -326,10 +335,11 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
     # One reason to modify go_increment is if your decision agent is not aggressively trying to monopolize. Since go_increment
     # by default is 200 it can lead to runaway cash increases for simple agents like ours.
 
-    print('players will play in the following order: ', '->'.join([p.player_name for p in game_elements['players']]))
-    print('Beginning play. Rolling first die...')
+    logger.debug('players will play in the following order: '+ '->'.join([p.player_name for p in game_elements['players']]))
+    logger.debug('Beginning play. Rolling first die...')
     current_player_index = 0
     winner = None
+
     a = Interface()
     while num_active_players > 1:
 
@@ -499,7 +509,6 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
 
     if winner:
         print('We have a winner: ', winner.player_name)
-
     return
 
 
@@ -513,12 +522,13 @@ if __name__ == '__main__':
     # but still relatively simple agent soon.
     player_decision_agents = dict()
     num_active_players = 2
-    player_list = ['player_'+ str(i + 1) for i in range(num_active_players)]
-    for player_name in player_list:
-        player_decision_agents[player_name] = simple_background_agent_becky_v1.decision_agent_methods
+
+    player_decision_agents['player_1'] = P1Agent()
+    player_decision_agents['player_2'] = P2Agent()
+
     game_elements = set_up_board('/media/becky/GNOME/monopoly_game_schema_v1-2.json',
                                  player_decision_agents, num_active_players)
-    simulate_game_instance(game_elements, num_active_players, np_seed=2)
+    simulate_game_instance(game_elements, num_active_players, np_seed=1)
 
     #just testing history.
     # print len(game_elements['history']['function'])
