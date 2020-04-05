@@ -168,15 +168,24 @@ class KG_OpenIE():
             with open(self.jsonfile, 'w') as f:
                 json.dump(self.kg_rel, f)
 
+    def read_json(self, level='sub'):
+        import json
+        with open(self.jsonfile, 'r') as f:
+            if level == 'sub':
+                self.kg_sub = json.load(f)
+            else:
+                self.kg_rel = json.load(f)
+
 file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
 log_file = open(file,'r')
 client = KG_OpenIE()
-for line in log_file:
-    kg_change = client.build_kg(line,level='rel')
-client.save_json(level='rel')
+# for line in log_file:
+#     kg_change = client.build_kg(line,level='rel')
+client.read_json(level='rel')
+
 # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
 
 # print(client.kg_rel.keys())
 # line = 'Vermont Avenue is colored as SkyBlue'
 # kg_change = client.build_kg(line,level='sub')
-# print(client.kg_sub)
+print(client.kg_rel)
