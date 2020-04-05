@@ -9,7 +9,7 @@ import wget
 
 
 class KG_OpenIE():
-    def __init__(self, core_nlp_version: str = '2018-10-05'):
+    def __init__(self, core_nlp_version: str = '2018-10-05', jsonfile='/media/becky/GNOME-p3/KG-rule/json_kg.json'):
         self.remote_url = 'https://nlp.stanford.edu/software/stanford-corenlp-full-{}.zip'.format(core_nlp_version)
         self.install_dir = Path('~/.stanfordnlp_resources/').expanduser()
         self.install_dir.mkdir(exist_ok=True)
@@ -23,6 +23,7 @@ class KG_OpenIE():
 
         os.environ['CORENLP_HOME'] = str(self.install_dir / 'stanford-corenlp-full-2018-10-05')
         from stanfordnlp.server import CoreNLPClient
+        self.jsonfile = jsonfile
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
         self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away']
         self.kg_rel = dict()
@@ -158,15 +159,24 @@ class KG_OpenIE():
     def __del__(self):
         self.client.stop()
         del os.environ['CORENLP_HOME']
+    def save_json(self, level='sub'):
+        import json
+        if level == 'sub':
+            with open(self.jsonfile, 'w') as f:
+                json.dump(self.kg_sub, f)
+        else:
+            with open(self.jsonfile, 'w') as f:
+                json.dump(self.kg_rel, f)
 
 file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
 log_file = open(file,'r')
 client = KG_OpenIE()
 for line in log_file:
     kg_change = client.build_kg(line,level='rel')
-client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
+client.save_json(level='rel')
+# client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
 
-print(client.kg_rel.keys())
+# print(client.kg_rel.keys())
 # line = 'Vermont Avenue is colored as SkyBlue'
 # kg_change = client.build_kg(line,level='sub')
 # print(client.kg_sub)
