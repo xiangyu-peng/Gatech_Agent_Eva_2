@@ -50,17 +50,20 @@ class HiddenPrints:
 n = 10
 env = gym.make('monopoly_simple-v1')
 env.seed(seed=n)
-with HiddenPrints():
-    s,mask = env.reset()
-done = 0
-while done == 0:
-    s, rew, done, info = env.step_nochange(1)
+# with HiddenPrints():
+s,mask = env.reset()
+done_after = 0
+while done_after == 0:
+    with HiddenPrints():
+        s, rew, done, info = env.step_nochange(0)
     # print('s',s, rew)
 
-    if done > 0:
-        break
-    s, rew, done_after, info = env.step_after_nochange(0)
-    # print('s',s,rew)
+    # if done > 0:
+    #     break
+    with HiddenPrints():
+        s, rew, done_after, info = env.step_after_nochange(0)
+    print('s',s,rew)
+
 s, rew, done, info = env.step_nochange(1)
 print('s',s, rew)
 s, rew, done_after, info = env.step_after_nochange(0)

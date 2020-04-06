@@ -183,6 +183,7 @@ if __name__ == '__main__':
 
     # set param_list: a list of dictionary
     all_params = {}
+    # print('config_data',config_data['hyper'])
     for key in config_data['hyper']:
         v = eval(config_data['hyper'][key])
         if not isinstance(v, tuple):

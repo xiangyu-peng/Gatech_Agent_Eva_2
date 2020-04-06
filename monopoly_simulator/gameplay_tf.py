@@ -105,8 +105,10 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
     # now we roll the dice and get into the post_roll phase,
     # but only if we're not in jail.
 
-
-    r = die_roll[1]
+    if die_roll:
+        r = die_roll[1]
+    else:
+        r = roll_die(game_elements['dies'], np.random.choice)
     # add to game history
     game_elements['history']['function'].append(roll_die)
     params = dict()
@@ -249,7 +251,10 @@ def simulate_game_step_tf_step(game_elements, num_active_players, num_die_rolls,
     # now we roll the dice and get into the post_roll phase,
     # but only if we're not in jail.
 
-    r = die_roll[0]
+    if die_roll:
+        r = die_roll[0]
+    else:
+        r = roll_die(game_elements['dies'], np.random.choice)
     # add to game history
     game_elements['history']['function'].append(roll_die)
     params = dict()

@@ -4,13 +4,18 @@ from pathlib import Path
 from subprocess import Popen
 from sys import stderr
 from zipfile import ZipFile
-
+from configparser import ConfigParser
+import sys
+curr_path = os.getcwd()
+curr_path = curr_path.replace("/KG-rule", "")
+curr_path = curr_path.replace("/env", "")
+curr_path = curr_path.replace("/monopoly_simulator", "")
+sys.path.append(curr_path + '/env')
 import wget
 
 
 class KG_OpenIE():
-    def __init__(self, core_nlp_version: str = '2018-10-05', jsonfile='/media/becky/GNOME-p3/KG-rule/json_kg.json',\
-                 setfile='/media/becky/GNOME-p3/KG-rule/kg_set.json'):
+    def __init__(self, core_nlp_version: str = '2018-10-05', config_file='/media/becky/GNOME-p3/monopoly_simulator/config.ini'):
         self.remote_url = 'https://nlp.stanford.edu/software/stanford-corenlp-full-{}.zip'.format(core_nlp_version)
         self.install_dir = Path('~/.stanfordnlp_resources/').expanduser()
         self.install_dir.mkdir(exist_ok=True)
@@ -24,8 +29,13 @@ class KG_OpenIE():
 
         os.environ['CORENLP_HOME'] = str(self.install_dir / 'stanford-corenlp-full-2018-10-05')
         from stanfordnlp.server import CoreNLPClient
-        self.jsonfile = jsonfile
-        self.setfile = setfile
+
+        config_data = ConfigParser()
+        config_data.read(config_file)
+        self.params = self.params_read(config_data)
+
+
+        self.jsonfile = self.params['jsonfile']
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
         self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away']
         self.kg_rel = dict()
@@ -34,6 +44,13 @@ class KG_OpenIE():
         self.kg_rel_diff = dict()
         self.kg_sub_diff = dict()
         self.kg_introduced = False
+
+    def params_read(self, config_data):
+        params = {}
+        for key in config_data['kg']:
+            v = eval(config_data['kg'][key])
+            params[key] = v
+        return params
 
     def annotate(self, text: str, properties_key: str = None, properties: dict = None, simple_format: bool = True):
         """
@@ -206,25 +223,21 @@ class KG_OpenIE():
             else:
                 self.kg_rel = json.load(f)
 
-import time
-start = time.time()
-file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
-log_file = open(file,'r')
-client = KG_OpenIE()
-
-# client.read_json(level='rel')
-for line in log_file:
-    kg_change = client.build_kg(line,level='rel',use_hash=True)
-for line in log_file:
-    kg_change = client.build_kg(line,level='rel',use_hash=True)
-for line in log_file:
-    kg_change = client.build_kg(line,level='rel',use_hash=True)
-# client.save_json(level='rel')
-# client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
-
-# print(client.kg_rel.keys())
-# line = 'Vermont Avenue is colored as SkyBlue'
-# kg_change = client.build_kg(line,level='sub')
-print(client.kg_rel_diff)
-end = time.time()
-print(str(end-start))
+# import time
+# start = time.time()
+# file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
+# log_file = open(file,'r')
+# client = KG_OpenIE()
+#
+# # client.read_json(level='rel')
+# for line in log_file:
+#     kg_change = client.build_kg(line,level='rel',use_hash=True)
+# # client.save_json(level='rel')
+# # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
+#
+# # print(client.kg_rel.keys())
+# # line = 'Vermont Avenue is colored as SkyBlue'
+# # kg_change = client.build_kg(line,level='sub')
+# print(client.kg_rel_diff)
+# end = time.time()
+# print(str(end-start))
