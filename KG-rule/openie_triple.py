@@ -9,7 +9,8 @@ import wget
 
 
 class KG_OpenIE():
-    def __init__(self, core_nlp_version: str = '2018-10-05', jsonfile='/media/becky/GNOME-p3/KG-rule/json_kg.json'):
+    def __init__(self, core_nlp_version: str = '2018-10-05', jsonfile='/media/becky/GNOME-p3/KG-rule/json_kg.json',\
+                 setfile='/media/becky/GNOME-p3/KG-rule/kg_set.json'):
         self.remote_url = 'https://nlp.stanford.edu/software/stanford-corenlp-full-{}.zip'.format(core_nlp_version)
         self.install_dir = Path('~/.stanfordnlp_resources/').expanduser()
         self.install_dir.mkdir(exist_ok=True)
@@ -24,20 +25,15 @@ class KG_OpenIE():
         os.environ['CORENLP_HOME'] = str(self.install_dir / 'stanford-corenlp-full-2018-10-05')
         from stanfordnlp.server import CoreNLPClient
         self.jsonfile = jsonfile
+        self.setfile = setfile
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
         self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away']
         self.kg_rel = dict()
         self.kg_sub = dict()
-        self.board_state = ['Go', 'Mediterranean Avenue', 'Community Chest',
-                            'Baltic Avenue', 'Income Tax', 'Reading Railroad', 'Oriental Avenue',
-                            'Chance-One', 'Vermont Avenue', 'Connecticut Avenue', 'In Jail/Just Visiting',
-                            'St. Charles Place', 'Electric Company', 'States Avenue', 'Virginia Avenue',
-                            'Pennsylvania Railroad', 'St. James Place', 'Community Chest', 'Tennessee Avenue',
-                            'New York Avenue', 'Free Parking', 'Kentucky Avenue', 'Chance-Two', 'Indiana Avenue',
-                            'Illinois Avenue', 'B&O Railroad', 'Atlantic Avenue', 'Ventnor Avenue',
-                            'Water Works', 'Marvin Gardens', 'Go to Jail', 'Pacific Avenue', 'North Carolina Avenue',
-                            'Community Chest', 'Pennsylvania Avenue', 'Short Line', 'Chance-Three', 'Park Place',
-                            'Luxury Tax', 'Boardwalk']
+        self.kg_set = set()
+        self.kg_rel_diff = dict()
+        self.kg_sub_diff = dict()
+        self.kg_introduced = False
 
     def annotate(self, text: str, properties_key: str = None, properties: dict = None, simple_format: bool = True):
         """
@@ -71,7 +67,28 @@ class KG_OpenIE():
         else:
             return core_nlp_output
 
-    def kg_update(self, triple, level='rel'):
+    def kg_update(self, triple, level='sub'):
+        if level == 'sub':
+            if triple['subject'] not in self.kg_sub_diff.keys():
+                self.kg_sub_diff[triple['subject']] = dict()
+                self.kg_sub_diff[triple['subject']][triple['relation']] = [self.kg_sub[triple['subject']][triple['relation']]]
+            self.kg_sub[triple['subject']][triple['relation']] = triple['object']
+            self.kg_sub_diff[triple['subject']][triple['relation']].append(triple['object'])
+            return (triple['subject'],triple['relation'],self.kg_sub_diff[triple['subject']][triple['relation']])
+        else:
+            if triple['relation'] not in self.kg_rel_diff.keys():
+                self.kg_rel_diff[triple['relation']] = dict()
+                self.kg_rel_diff[triple['relation']][triple['subject']] = [self.kg_rel[triple['relation']][triple['subject']]]
+            self.kg_rel[triple['relation']][triple['subject']] = triple['object']
+            self.kg_rel_diff[triple['relation']][triple['subject']].append(triple['object'])
+            return (triple['subject'], triple['relation'], self.kg_rel_diff[triple['relation']][triple['subject']])
+
+    def kg_add(self, triple, level='sub'):
+        '''
+        :param triple (dict): triple is a dict with three keys: subject, relation and object
+        :param level (string): level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
+        :return: bool. True indicates the rule is changed, False means not changed or no existing rule, and add a rule
+    '''
         if level == 'sub':
             if triple['subject'] in self.kg_sub.keys():
                 if triple['relation'] in self.kg_sub[triple['subject']].keys():
@@ -83,7 +100,7 @@ class KG_OpenIE():
                 self.kg_sub[triple['subject']] = dict()
                 self.kg_sub[triple['subject']][triple['relation']] = triple['object']
             return False
-        else:
+        else: #level = 'rel'
             if triple['relation'] in self.kg_rel.keys():
                 if triple['subject'] in self.kg_rel[triple['relation']].keys():
                     return True if self.kg_rel[triple['relation']][triple['subject']] != triple['object'] else False
@@ -96,14 +113,26 @@ class KG_OpenIE():
             return False
 
 
-    def build_kg(self, text, level='rel'):
-        kg_change = False
+    def build_kg(self, text, level='sub',use_hash=False):
+        '''
+        :param text (string): One sentence from logging info
+        :param level (string): level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
+        :return: bool. True indicates the rule is changed
+        '''
+        diff = []
+        if use_hash:
+            triple_hash = hash(text)
+            if triple_hash in self.kg_set:
+                return diff
+            else:
+                self.kg_set.add(triple_hash)
         entity_relations = self.annotate(text, simple_format=True)
         for er in entity_relations:
-            kg_change_once = self.kg_update(er,level=level)
+            kg_change_once = self.kg_add(er,level=level)
             if kg_change_once:
-                kg_change = True
-        return kg_change
+                diff.append(self.kg_update(er, level=level))
+
+        return diff
 
     #plot the knowledge graph
     def generate_graphviz_graph_(self, text: str = '', png_filename: str = './out/graph.png', level:str = 'acc', kg_level='rel'):
@@ -121,7 +150,7 @@ class KG_OpenIE():
             graph = list()
             graph.append('digraph {')
             for er in entity_relations:
-                kg_change = self.kg_update(er)
+                kg_change = self.kg_add(er)
                 graph.append('"{}" -> "{}" [ label="{}" ];'.format(er['subject'], er['object'], er['relation']))
             graph.append('}')
         else:
@@ -159,6 +188,7 @@ class KG_OpenIE():
     def __del__(self):
         self.client.stop()
         del os.environ['CORENLP_HOME']
+
     def save_json(self, level='sub'):
         import json
         if level == 'sub':
@@ -176,16 +206,25 @@ class KG_OpenIE():
             else:
                 self.kg_rel = json.load(f)
 
+import time
+start = time.time()
 file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
 log_file = open(file,'r')
 client = KG_OpenIE()
-# for line in log_file:
-#     kg_change = client.build_kg(line,level='rel')
-client.read_json(level='rel')
 
+# client.read_json(level='rel')
+for line in log_file:
+    kg_change = client.build_kg(line,level='rel',use_hash=True)
+for line in log_file:
+    kg_change = client.build_kg(line,level='rel',use_hash=True)
+for line in log_file:
+    kg_change = client.build_kg(line,level='rel',use_hash=True)
+# client.save_json(level='rel')
 # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
 
 # print(client.kg_rel.keys())
 # line = 'Vermont Avenue is colored as SkyBlue'
 # kg_change = client.build_kg(line,level='sub')
-print(client.kg_rel)
+print(client.kg_rel_diff)
+end = time.time()
+print(str(end-start))
