@@ -3,6 +3,7 @@ from card_utility_actions import calculate_mortgage_owed
 import logging
 from log_setting import set_log_level
 logger = set_log_level()
+# logger = logging.getLogger('monopoly_simulator.log_setting.location')
 # class Location(object):
 #
 #     def __init__(self, loc_class, name, start_position, end_position, color):
@@ -581,18 +582,26 @@ class RealEstateLocation(Location):
         situations applies.
         :return: An integer. The rent due.
         """
-        logger.debug('calculating rent for '+self.name)
+        logger.debug('Calculating rent for '+self.name)
         ans = self.rent # unimproved-non-monopolized rent (the default)
+
         if self.num_hotels == 1:
             logger.debug('property has a hotel. Updating rent.')
             ans = self.rent_hotel
+            logger.info(self.name + ' is rented-1-hotel at ' + str(ans))
         elif self.num_houses > 0: # later we can replace these with reflections
             logger.debug('property has '+str(self.num_houses)+' houses. Updating rent.')
             ans = self._house_rent_dict[self.num_houses] # if for some reason you have more than 4 houses, you'll get a key error
+            logger.info(self.name + ' is rented-' + str(self.num_houses) +'-house at ' + str(ans))
         elif self.color in self.owned_by.full_color_sets_possessed:
             ans = self.rent*2 # charge twice the rent on unimproved monopolized properties.
             logger.debug('property has color '+ self.color+ ' which is monopolized by '+self.owned_by.player_name+'. Updating rent.')
-        logger.debug('rent is calculated to be '+str(ans))
+            logger.info(self.name + ' is rented-0-house-full-color at ' + str(ans))
+        else:
+            logger.info(self.name + ' is rented-0-house at ' + str(ans))
+
+        logger.debug('Rent is calculated to be '+str(ans))
+
         return ans
 
 

@@ -36,7 +36,7 @@ if __name__ == '__main__':
     config_data.read(config_file)
     # print('config_data.items', config_data.sections())
     # Hyperparameters
-    n_train_processes = 1
+    n_train_processes = 3
     learning_rate = 0.0002
     update_interval = 5
     gamma = 0.98
@@ -89,21 +89,20 @@ if __name__ == '__main__':
 
             a = []
             for i in range(n_train_processes):
-                action_Invalid = True
-                num_loop = 0
-                while action_Invalid:
-                    a_once = Categorical(prob).sample().cpu().numpy()[i] #substitute
-                    action_Invalid = True if masked_actions[i][a_once] == 0 else False
-                    num_loop += 1
+                # action_Invalid = True
+                # num_loop = 0
+                a_once = Categorical(prob).sample().cpu().numpy()[i]  # substitute
+                # while action_Invalid:
+                #     a_once = Categorical(prob).sample().cpu().numpy()[i] #substitute
+                #     action_Invalid = True if masked_actions[i][a_once] == 0 else False
+                #     num_loop += 1
 
-                    if num_loop > 5:
-                        a_once = largest_prob(prob[i], masked_actions)
-                        break
+                    # if num_loop > 5:
+                    #     a_once = largest_prob(prob[i], masked_actions)
+                    #     break
                 a.append(a_once)
             #while opposite happens. Step won't change env, step_nochange changes the env\
             s_prime_cal, r, done, masked_actions = envs.step_nochange(a)
-
-
 
             values.append(model.critic(torch.tensor(s, device=device).float()))
 

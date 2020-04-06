@@ -1,4 +1,11 @@
 from location import *
+###new###
+import logging
+from log_setting import set_log_level
+logger = set_log_level()
+# logger = logging.getLogger('monopoly_simulator.log_setting.action_choices')
+
+
 # # def free_mortgage(player, asset):
 # #     """
 # #     Action for freeing player's mortgage on asset.
@@ -637,10 +644,6 @@ from location import *
 #     else:
 #         return -1
 #
-###new###
-import logging
-from log_setting import set_log_level
-logger = set_log_level()
 
 
 def free_mortgage(player, asset, current_gameboard):
@@ -665,6 +668,7 @@ def free_mortgage(player, asset, current_gameboard):
         paid_price = asset.calculate_mortgage_owed(asset, current_gameboard)
         player.charge_player(paid_price)
         logger.info(player.player_name+"Player has paid down mortgage "+str(paid_price)+" with interest. Setting status of asset" + asset.name +" to unmortgaged, and removing asset from player's mortgaged set")
+        logger.info(asset.name + ' is free-mortgaged at '+ str(paid_price))
         asset.is_mortgaged = False
         player.mortgaged_assets.remove(asset)
         logger.debug('Mortgage has successfully been freed. Returning 1')
@@ -942,7 +946,8 @@ def mortgage_property(player, asset, current_gameboard):
         logger.debug(asset.name+' has improvements. Remove improvements before attempting mortgage. Returning -1')
         return -1
     else:
-        logger.info('Setting '+asset.name+" to mortgage status and give player "+ str(asset.mortgage))
+        logger.debug('Setting '+asset.name+" to mortgage status and give player "+ str(asset.mortgage))
+        logger.info(asset.name + ' is mortgaged at '+ str(asset.mortgage))
         asset.is_mortgaged = True
         player.mortgaged_assets.add(asset)
         player.receive_cash(asset.mortgage)
@@ -1013,6 +1018,7 @@ def improve_property(player, asset, current_gameboard, add_house=True, add_hotel
                 current_gameboard['bank'].total_hotels -= 1
                 current_gameboard['bank'].total_houses += asset.num_houses
                 logger.debug('Bank now has ' + str(current_gameboard['bank'].total_houses) + ' houses and ' + str(current_gameboard['bank'].total_hotels) + ' hotels left.')
+                logger.info(asset.name + ' is improved at ' + str(asset.price_per_house))
                 # add to game history
                 current_gameboard['history']['function'].append(player.charge_player)
                 params = dict()
@@ -1211,7 +1217,8 @@ def buy_property(player, asset, current_gameboard):
 
             return -1 # this is a -1 even though you may still succeed in buying the property at auction
         else:
-            logger.info('Charging '+player.player_name+ ' amount '+str(asset.price)+' for asset '+asset.name)
+            logger.debug('Charging '+player.player_name+ ' amount '+str(asset.price)+' for asset '+asset.name)
+            logger.info(asset.name + ' is priced at '+ str(asset.price))
             player.charge_player(asset.price)
             # add to game history
             current_gameboard['history']['function'].append(player.charge_player)

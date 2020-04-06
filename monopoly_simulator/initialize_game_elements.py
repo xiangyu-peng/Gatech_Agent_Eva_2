@@ -14,7 +14,9 @@ from player import Player
 import card
 import copy
 import logging
-
+from log_setting import set_log_level
+logger = set_log_level()
+# logger = logging.getLogger('monopoly_simulator.log_setting.init_game_elements')
 
 def initialize_board(game_schema, player_decision_agents, num_active_players):
 
@@ -338,20 +340,20 @@ def _initialize_game_history_structs(game_elements):
     game_elements['history']['return'] = list()
 
 ###new###
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
-
-#file_handler = logging.FileHandler('gameplay_logs.log', mode='a')
-#file_handler.setLevel(logging.DEBUG)
-#file_handler.setFormatter(formatter)
-
-stream_handler = logging.StreamHandler()
-stream_handler.setFormatter(formatter)
-
-#logger.addHandler(file_handler)
-logger.addHandler(stream_handler)
+# logger = logging.getLogger(__name__)
+# logger.setLevel(logging.DEBUG)
+#
+# formatter = logging.Formatter('%(asctime)s:%(levelname)s:%(message)s')
+#
+# #file_handler = logging.FileHandler('gameplay_logs.log', mode='a')
+# #file_handler.setLevel(logging.DEBUG)
+# #file_handler.setFormatter(formatter)
+#
+# stream_handler = logging.StreamHandler()
+# stream_handler.setFormatter(formatter)
+#
+# #logger.addHandler(file_handler)
+# logger.addHandler(stream_handler)
 
 # def initialize_board(game_schema, player_decision_agents, num_active_players):
 #

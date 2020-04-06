@@ -5,6 +5,7 @@ from agent_helper_functions import identify_improvement_opportunity_all
 import logging
 from log_setting import set_log_level
 logger = set_log_level()
+# logger = logging.getLogger('monopoly_simulator.log_setting.player')
 
 class Player(object):
     def __init__(self, current_position, status, has_get_out_of_jail_community_chest_card, has_get_out_of_jail_chance_card,
@@ -247,7 +248,8 @@ class Player(object):
         if amount < 0:
             logger.error('You cannot charge player negative amount of cash.')
             logger.error("Error")
-        logger.info(self.player_name+ ' is being charged amount: '+str(amount))
+        logger.info(self.player_name + ' is being charged amount: ' + str(amount))
+        # logger.debug(self.player_name+ ' is being charged amount: '+str(amount))
         logger.info('Before charge, player has cash '+str(self.current_cash))
         self.current_cash -= amount
         logger.info(self.player_name+ ' now has cash: '+str(self.current_cash))
@@ -440,7 +442,7 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """
-        logger.info(self.player_name + ' is currently in position '+current_gameboard['location_sequence'][self.current_position].name +\
+        logger.debug(self.player_name + ' is currently in position '+current_gameboard['location_sequence'][self.current_position].name +\
                     ' and is moving to position '+current_gameboard['location_sequence'][new_position].name)
         self.current_position = new_position
 

@@ -6,6 +6,7 @@ import location
 import logging
 from log_setting import set_log_level
 logger = set_log_level()
+# logger = logging.getLogger('monopoly_simulator.log_setting.background_agent')
 
 class P2Agent(object):
     def __init__(self):

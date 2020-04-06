@@ -45,6 +45,7 @@
 import logging
 from log_setting import set_log_level
 logger = set_log_level()
+# logger = logging.getLogger('monopoly_simulator.log_setting.diagnostics')
 """
 This file is imported into gameplay and primarily used for printing diagnostics. Expand as necessary for your own
 use cases.
@@ -73,7 +74,7 @@ def print_player_cash_balances(game_elements):
     """
 
     for p in game_elements['players']:
-        logger.debug(p.player_name+ ' has cash balance '+str(p.current_cash))
+        logger.info(p.player_name+ ' has cash balance '+str(p.current_cash))
 
 
 def max_cash_balance(game_elements):

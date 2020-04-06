@@ -12,6 +12,7 @@
 #     calculate the mortgage owed on mortgaged_property
 #     :param player: Player instance. not used ifn this function, but the signature is important because of the novelty generator
 #     which could use other information from the player (like total debt) besides just the info in mortgaged_property.
+#     which could use other information from the player (like total debt) besides just the info in mortgaged_property.
 #     :param mortgaged_property: a property instance that is mortgaged
 #     :return:
 #     """
@@ -624,6 +625,7 @@
 import logging
 from log_setting import set_log_level
 logger = set_log_level()
+# logger = logging.getLogger('monopoly_simulator.log_setting.card_utility_actions')
 
 # logger = logging.getLogger(__name__)
 # logger.setLevel(logging.DEBUG)
@@ -1174,8 +1176,22 @@ def move_player_after_die_roll(player, rel_move, current_gameboard, check_for_go
             params['amount'] = go_increment
             current_gameboard['history']['param'].append(params)
             current_gameboard['history']['return'].append(None)
-
+    logger.info(current_gameboard['location_sequence'][player.current_position].name + ' is ' + str(
+        rel_move) + '-step away from ' + current_gameboard['location_sequence'][new_position].name)
     player.update_player_position(new_position, current_gameboard)  # update this only after checking for go
+    logger.info(current_gameboard['location_sequence'][new_position].name + ' is located at '+ str(new_position))
+    if current_gameboard['location_sequence'][new_position].loc_class == 'real_estate':
+        logger.info(current_gameboard['location_sequence'][new_position].name + ' is classified as real-estate')
+        logger.info(current_gameboard['location_sequence'][new_position].name + ' is colored as ' + str(current_gameboard['location_sequence'][new_position].color))
+    elif current_gameboard['location_sequence'][new_position].loc_class == 'tax':
+        logger.info(current_gameboard['location_sequence'][new_position].name + ' is classified as tax')
+        logger.info(current_gameboard['location_sequence'][new_position].name + ' is priced at ' + str(
+            current_gameboard['location_sequence'][new_position].amount_due))
+
+    else:
+        logger.info(current_gameboard['location_sequence'][new_position].name + ' is classified as ' + str(current_gameboard['location_sequence'][new_position].loc_class))
+
+
     # add to game history
     current_gameboard['history']['function'].append(player.update_player_position)
     params = dict()
@@ -1250,6 +1266,7 @@ def _move_player__check_for_go(player, new_position, current_gameboard):
         current_gameboard['history']['return'].append(None)
 
     player.update_player_position(new_position, current_gameboard) # update this only after checking for go
+    # logger.info(current_gameboard['location_sequence'][player.current_position].name + 'is ' + str(rel_move) + '-step away from' + current_gameboard['location_sequence'][new_position].name)
     # add to game history
     current_gameboard['history']['function'].append(player.update_player_position)
     params = dict()

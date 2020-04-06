@@ -2,6 +2,7 @@ import logging
 from log_setting import set_log_level
 logger = set_log_level()
 
+# logger = logging.getLogger('monopoly_simulator.log_setting.bank')
 # class Bank(object):
 #     def __init__(self):
 #         self.mortgage_percentage = 0.1
