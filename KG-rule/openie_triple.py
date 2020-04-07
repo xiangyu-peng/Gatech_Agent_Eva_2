@@ -335,13 +335,13 @@ class KG_OpenIE():
 
 
 
-# # import time
-# # start = time.time()
-# file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
-# # log_file = open(file,'r')
-# client = KG_OpenIE()
-# client.build_kg_file(file, level='rel', use_hash=True, update_interval=1)
-# client.save_matrix()
+# import time
+# start = time.time()
+file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
+# log_file = open(file,'r')
+client = KG_OpenIE()
+client.build_kg_file(file, level='rel', use_hash=True, update_interval=1)
+client.save_matrix()
 
 
 
