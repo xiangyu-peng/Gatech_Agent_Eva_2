@@ -177,7 +177,7 @@ class MonopolyTrainer:
 
 if __name__ == '__main__':
     # read the config file and set the hyper-param
-    config_file = '/media/becky/GNOME-p3/monopoly_simulator/config.ini'
+    config_file = '/media/becky/GNOME-p3/monopoly_simulator/config_env.ini'
     config_data = ConfigParser()
     config_data.read(config_file)
 

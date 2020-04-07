@@ -12,6 +12,9 @@ curr_path = curr_path.replace("/env", "")
 curr_path = curr_path.replace("/monopoly_simulator", "")
 sys.path.append(curr_path + '/env')
 import wget
+import numpy as np
+from scipy.sparse import csr_matrix, load_npz, save_npz
+from configparser import ConfigParser
 
 
 class KG_OpenIE():
@@ -26,15 +29,13 @@ class KG_OpenIE():
             zf = ZipFile(output_filename)
             zf.extractall(path=self.install_dir)
             zf.close()
-
         os.environ['CORENLP_HOME'] = str(self.install_dir / 'stanford-corenlp-full-2018-10-05')
         from stanfordnlp.server import CoreNLPClient
 
+        #for generating kg
         config_data = ConfigParser()
         config_data.read(config_file)
-        self.params = self.params_read(config_data)
-
-
+        self.params = self.params_read(config_data, keys='kg')
         self.jsonfile = self.params['jsonfile']
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
         self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away']
@@ -44,11 +45,49 @@ class KG_OpenIE():
         self.kg_rel_diff = dict()
         self.kg_sub_diff = dict()
         self.kg_introduced = False
+        self.new_kg_tuple = dict()
+        self.update_num  = 0
 
-    def params_read(self, config_data):
+        #for kg to matrix
+        self.matrix_params = self.params_read(config_data, keys='matrix')
+        self.entity_num = self.matrix_params['entity_num']
+        self.action_num = self.matrix_params['action_num']
+        self.sparse_matrix = []
+        self.action_name = ['is ' + str(i) +'-step away from' for i in range(1,41)]
+        self.board_name = ['Go','Mediterranean Avenue', 'Community Chest-One',
+                'Baltic Avenue', 'Income Tax', 'Reading Railroad', 'Oriental-Avenue',
+                'Chance-One', 'Vermont Avenue', 'Connecticut Avenue', 'In Jail/Just Visiting',
+                'St. Charles Place', 'Electric Company', 'States Avenue', 'Virginia Avenue',
+                'Pennsylvania Railroad', 'St. James Place', 'Community Chest-Two', 'Tennessee Avenue',
+                'New York Avenue', 'Free Parking', 'Kentucky Avenue', 'Chance-Two', 'Indiana Avenue',
+                'Illinois Avenue', 'B&O Railroad', 'Atlantic Avenue', 'Ventnor Avenue',
+                'Water Works', 'Marvin Gardens', 'Go-to-Jail', 'Pacific Avenue', 'North Carolina Avenue',
+                'Community Chest-Three', 'Pennsylvania Avenue', 'Short Line', 'Chance-Three', 'Park Place',
+                                        'Luxury Tax', 'Boardwalk']
+
+        self.sparse_matrix_dict = self.build_empty_matrix_dict()
+        self.matrix_folder = self.matrix_params['matrix_folder']
+
+
+    def build_empty_matrix_dict(self):
+        sparse_matrix_dict = dict()
+        for rel in self.action_name:
+            sparse_matrix_dict[rel] = dict()
+            sparse_matrix_dict[rel]['row'] = []
+            sparse_matrix_dict[rel]['col'] = []
+            sparse_matrix_dict[rel]['data'] = []
+        return sparse_matrix_dict
+
+    def params_read(self, config_data, keys):
+        '''
+        Read config.ini file
+        :param config_data:
+        :param keys (string): sections in config file
+        :return: a dict with info in config file
+        '''
         params = {}
-        for key in config_data['kg']:
-            v = eval(config_data['kg'][key])
+        for key in config_data[keys]:
+            v = eval(config_data[keys][key])
             params[key] = v
         return params
 
@@ -85,6 +124,12 @@ class KG_OpenIE():
             return core_nlp_output
 
     def kg_update(self, triple, level='sub'):
+        '''
+        After detecting rule change, update kg and also return the diff of kg
+        :param triple (dict): triple is a dict with three keys: subject, relation and object
+        :param level (string): level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
+        :return: A tuple (sub, rel, diff)
+        '''
         if level == 'sub':
             if triple['subject'] not in self.kg_sub_diff.keys():
                 self.kg_sub_diff[triple['subject']] = dict()
@@ -97,11 +142,14 @@ class KG_OpenIE():
                 self.kg_rel_diff[triple['relation']] = dict()
                 self.kg_rel_diff[triple['relation']][triple['subject']] = [self.kg_rel[triple['relation']][triple['subject']]]
             self.kg_rel[triple['relation']][triple['subject']] = triple['object']
+            self.update_new_kg_tuple(triple)
             self.kg_rel_diff[triple['relation']][triple['subject']].append(triple['object'])
             return (triple['subject'], triple['relation'], self.kg_rel_diff[triple['relation']][triple['subject']])
 
+
     def kg_add(self, triple, level='sub'):
         '''
+        Add new triple (sub, rel, obj) to knowledge graph
         :param triple (dict): triple is a dict with three keys: subject, relation and object
         :param level (string): level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
         :return: bool. True indicates the rule is changed, False means not changed or no existing rule, and add a rule
@@ -117,21 +165,38 @@ class KG_OpenIE():
                 self.kg_sub[triple['subject']] = dict()
                 self.kg_sub[triple['subject']][triple['relation']] = triple['object']
             return False
+
         else: #level = 'rel'
             if triple['relation'] in self.kg_rel.keys():
                 if triple['subject'] in self.kg_rel[triple['relation']].keys():
                     return True if self.kg_rel[triple['relation']][triple['subject']] != triple['object'] else False
                 else:
                     self.kg_rel[triple['relation']][triple['subject']] = triple['object']
+                    self.update_new_kg_tuple(triple)
+
 
             else:
                 self.kg_rel[triple['relation']] = dict()
                 self.kg_rel[triple['relation']][triple['subject']] = triple['object']
+                self.update_new_kg_tuple(triple)
             return False
 
+    def build_kg_file(self, file_name, level='sub', use_hash=False, update_interval=1):
+        file = open(file_name, 'r')
+        for line in file:
+            kg_change = self.build_kg_text(line, level=level, use_hash=use_hash)
 
-    def build_kg(self, text, level='sub',use_hash=False):
+        self.update_num += 1
+        #if there is any update or new relationships in kg, will update in the matrix
+        if self.update_num % update_interval == 0:
+            if self.new_kg_tuple:
+                self.build_matrix_dict()
+                self.dict_to_matrix()
+                self.new_kg_tuple = dict()
+
+    def build_kg_text(self, text, level='sub',use_hash=False):
         '''
+        Use a logging sentence to build or add to kg
         :param text (string): One sentence from logging info
         :param level (string): level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
         :return: bool. True indicates the rule is changed
@@ -151,9 +216,10 @@ class KG_OpenIE():
 
         return diff
 
-    #plot the knowledge graph
+
     def generate_graphviz_graph_(self, text: str = '', png_filename: str = './out/graph.png', level:str = 'acc', kg_level='rel'):
         """
+        Plot the knowledge graph with exsiting kg
        :param (str | unicode) text: raw text for the CoreNLPServer to parse
        :param (list | string) png_filename: list of annotators to use
        :param (str) level: control we plot the whole image all the local knowledge graph
@@ -207,6 +273,11 @@ class KG_OpenIE():
         del os.environ['CORENLP_HOME']
 
     def save_json(self, level='sub'):
+        '''
+        Save kg dict to json file
+        :param level:
+        :return: None
+        '''
         import json
         if level == 'sub':
             with open(self.jsonfile, 'w') as f:
@@ -216,6 +287,11 @@ class KG_OpenIE():
                 json.dump(self.kg_rel, f)
 
     def read_json(self, level='sub'):
+        '''
+        Read kg dict file from json file
+        :param level:
+        :return: None
+        '''
         import json
         with open(self.jsonfile, 'r') as f:
             if level == 'sub':
@@ -223,11 +299,53 @@ class KG_OpenIE():
             else:
                 self.kg_rel = json.load(f)
 
-# import time
-# start = time.time()
+    #only kg_rel needs sparse matrix
+    def build_matrix_dict(self):
+        '''
+        build a dict for building sparse matrix
+        '''
+        for rel in self.action_name:
+            if rel in self.new_kg_tuple.keys():
+                for sub in self.new_kg_tuple[rel].keys():
+                    index_sub = self.board_name.index(sub)
+                    index_obj = self.board_name.index(self.new_kg_tuple[rel][sub])
+                    self.sparse_matrix_dict[rel]['row'].append(index_sub)
+                    self.sparse_matrix_dict[rel]['col'].append(index_obj)
+                    self.sparse_matrix_dict[rel]['data'].append(1)
+
+    def dict_to_matrix(self):
+        self.sparse_matrix = []
+        for rel in self.action_name:
+            self.sparse_matrix.append(csr_matrix((self.sparse_matrix_dict[rel]['data'], (self.sparse_matrix_dict[rel]['row'], self.sparse_matrix_dict[rel]['col'])), shape=(self.entity_num, self.entity_num)))
+
+    def update_new_kg_tuple(self, triple):
+        if triple['relation'] in self.new_kg_tuple.keys():
+            pass
+        else:
+            self.new_kg_tuple[triple['relation']] = dict()
+        self.new_kg_tuple[triple['relation']][triple['subject']] = triple['object']
+
+    def save_matrix(self):
+        num = 0
+        for rel in self.action_name:
+            save_npz(self.matrix_folder + '/' + str(rel) + '.npz', self.sparse_matrix[num])
+            num += 1
+
+
+
+
+
+# # import time
+# # start = time.time()
 # file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
-# log_file = open(file,'r')
+# # log_file = open(file,'r')
 # client = KG_OpenIE()
+# client.build_kg_file(file, level='rel', use_hash=True, update_interval=1)
+# client.save_matrix()
+
+
+
+
 #
 # # client.read_json(level='rel')
 # for line in log_file:
@@ -241,3 +359,12 @@ class KG_OpenIE():
 # print(client.kg_rel_diff)
 # end = time.time()
 # print(str(end-start))
+
+# row = np.array([0, 0, 1, 2, 2, 1])
+# col = np.array([0, 2, 2, 0, 1, 2])
+# data = np.array([1, 2, 3, 4, 5, 6])
+# a = csr_matrix((data, (row, col)), shape=(3, 3))
+# print('a',a)
+# save_npz('/media/becky/GNOME-p3/KG-rule/matrix_rule/a.npz',a)
+# sparse_matrix = load_npz('/media/becky/GNOME-p3/KG-rule/matrix_rule/a.npz')
+# print('sparse_matrix',sparse_matrix)

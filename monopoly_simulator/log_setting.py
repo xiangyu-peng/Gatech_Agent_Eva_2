@@ -30,7 +30,7 @@ def set_log_level():
         logger.addHandler(hdlr)
 
     if not logger.handlers:
-        print('add!!!')
+        # print('add!!!')
         hdlr = logging.FileHandler('gameplay.log', mode='w')
         # formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         formatter = logging.Formatter('')

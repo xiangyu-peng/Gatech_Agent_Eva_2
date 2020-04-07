@@ -158,7 +158,14 @@ class Monopoly_world():
 
 
     def next(self, action):
-        masked_actions = [1, 1]
+        '''
+        This function is same with the one in gym env. Given an action and return the state, reward, done and info
+        :param action: The action given by actor! But we won't consider if this action is valid or not.
+        :return: state, reward, done and info/ masked_actions
+        '''
+
+        masked_actions = [1, 1] #we don't consider if action is valid or not in this function
+
         #When last state has a winner, we will reset the game
         if self.terminal == 1:
             self.reset()
@@ -320,13 +327,15 @@ class Monopoly_world():
         return self.seeds
 
     def save_kg(self):
-        file = open(self.log_path,'r')
-        for line in file:
-            kg_change = self.kg.build_kg(line, level='rel', use_hash=True)
+        self.kg.build_kg_file(self.log_path, level='rel', use_hash=True)
+        # file = open(self.log_path,'r')
+        # for line in file:
+        #     kg_change = self.kg.build_kg(line, level='rel', use_hash=True)
         self.kg_save_num += 1
         #save knowledge graph when simulating num of games is self.kg_save_interval
         if self.kg_save_num % self.kg_save_interval == 0:
             self.kg.save_json(level='rel')
+            self.kg.save_matrix()
 
 
 
