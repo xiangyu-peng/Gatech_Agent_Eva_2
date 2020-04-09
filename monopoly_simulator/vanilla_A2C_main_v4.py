@@ -101,9 +101,7 @@ class MonopolyTrainer:
 
     def add_vector_to_state(self, state, vector, device):
         new_state = np.concatenate((vector.reshape(1, -1), state), axis=1)
-        return torch.tensor(new_state, device=self.device).float()
-
-
+        return torch.tensor(new_state, device=device).float()
 
 
     def train(self):
