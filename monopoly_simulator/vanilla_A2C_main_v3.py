@@ -8,6 +8,8 @@ import os
 import sys
 from itertools import product
 import argparse
+import warnings
+warnings.filterwarnings('ignore')
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 #
@@ -49,6 +51,7 @@ class MonopolyTrainer:
         self.action_space = self.params['action_space']
         self.state_num = self.params['state_num']
         self.actor_loss_coefficient = self.params['actor_loss_coefficient']
+        self.kg_vector = []
 
         # config logger
         hyper_config_str = '_n' + str(self.n_train_processes) + '_lr' + str(self.learning_rate) + '_ui' + str(
@@ -58,47 +61,47 @@ class MonopolyTrainer:
                            + '_ac' + str(self.actor_loss_coefficient)
         self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/', log_suffix=hyper_config_str)])
 
-    def train(self):
         if not self._device_id:  # use all available devices
             use_cuda = torch.cuda.is_available()
-            device = torch.device("cuda" if use_cuda else "cpu")
+            self.device = torch.device("cuda" if use_cuda else "cpu")
         else:
             os.environ["CUDA_VISIBLE_DEVICES"] = str(self._device_id)
-            device = torch.device('cuda:0')
-        #######################################
+            self.device = torch.device('cuda:0')
+
+            #######################################
 
         with HiddenPrints():
-            envs = ParallelEnv(self.n_train_processes)
+            self.envs = ParallelEnv(self.n_train_processes)
 
-        # dan: need for the ActorCritic(config), redundant code
-        config = Config()
-        config.hidden_state = self.hidden_state
-        config.action_space = self.action_space
-        config.state_num = self.state_num
+        self.config_model = Config()
+        self.config_model.hidden_state = self.params['hidden_state']
+        self.config_model.action_space = self.params['action_space']
+        self.config_model.state_num = self.params['state_num']
 
-        model = ActorCritic(config)  # A2C model
-        model.to(device)
+        self.model = ActorCritic(self.config_model)  # A2C model
+        self.model.to(self.device)
+        self.loss = 0
+        self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
-        optimizer = optim.Adam(model.parameters(), lr=self.learning_rate)
-
+    def train(self):
         step_idx = 0
-
         with HiddenPrints():
-            reset_array = envs.reset()
+            reset_array = self.envs.reset()
 
             s, masked_actions = [reset_array[i][0] for i in range(len(reset_array))], \
                                 [reset_array[i][1] for i in range(len(reset_array))]
-        print('!!!!!')
-        loss_train = torch.tensor(0, device=device).float()
+
+
+        loss_train = torch.tensor(0, device=self.device).float()
         while step_idx < self.max_train_steps:
-            loss = torch.tensor(0, device=device).float()
+            loss = torch.tensor(0, device=self.device).float()
             for _ in range(self.update_interval):
                 # move form last layer
                 entropy = 0
                 log_probs, masks, rewards, values = [], [], [], []
 
                 # s = s.reshape(n_train_processes, -1)
-                prob = model.actor(torch.tensor(s, device=device).float())  # s => tensor #output = prob for actions
+                prob = self.model.actor(torch.tensor(s, device=self.device).float())  # s => tensor #output = prob for actions
                 # prob = model.actor(torch.from_numpy(s,device=device).float()) # s => tensor #output = prob for actions
                 # use the action from the distribution if it is in masked
 
@@ -117,27 +120,28 @@ class MonopolyTrainer:
                     #     break
                     a.append(a_once)
                 # while opposite happens. Step won't change env, step_nochange changes the env\
-                s_prime_cal, r, done, masked_actions = envs.step_nochange(a)
+                s_prime_cal, r, done, _ = self.envs.step_nochange(a)
 
-                values.append(model.critic(torch.tensor(s, device=device).float()))
+                values.append(self.model.critic(torch.tensor(s, device=self.device).float()))
 
-                log_prob = Categorical(prob).log_prob(torch.tensor(a, device=device))
+                log_prob = Categorical(prob).log_prob(torch.tensor(a, device=self.device))
                 entropy += Categorical(prob).entropy().mean()
                 log_probs.append(log_prob)
-                rewards.append(torch.FloatTensor(r).unsqueeze(1).to(device))
+                rewards.append(torch.FloatTensor(r).unsqueeze(1).to(self.device))
                 done = [[1] if i > 0 else [0] for i in done]
-                masks.append(torch.tensor(done, device=device).float())
+                masks.append(torch.tensor(done, device=self.device).float())
 
                 a_tf = [0 for i in range(self.n_train_processes)]
-                s_prime, _, done, masked_actions = envs.step_after_nochange(a_tf)
+                s_prime, _, _, _ = self.envs.step_after_nochange(a_tf)
+
                 s = s_prime
 
                 ##########
-                s_prime_cal = torch.tensor(s_prime_cal, device=device).float()
+                s_prime_cal = torch.tensor(s_prime_cal, device=self.device).float()
 
                 # loss cal
                 log_probs = torch.cat(log_probs)
-                returns = compute_returns(model.critic(s_prime_cal), rewards, masks, gamma=0.99)
+                returns = compute_returns(self.model.critic(s_prime_cal), rewards, masks, gamma=0.99)
                 returns = torch.cat(returns).detach()
                 values = torch.cat(values)
                 advantage = returns - values
@@ -148,36 +152,38 @@ class MonopolyTrainer:
                 loss += actor_loss + 0.5 * critic_loss - 0.001 * entropy
 
             loss /= self.update_interval
+            self.loss = loss
             loss_train += loss
             # print('loss', loss)
-            if loss != torch.tensor(0, device=device):
-                optimizer.zero_grad()
-                loss.backward()
-                optimizer.step()
+            if loss != torch.tensor(0, device=self.device):
+                self.optimizer.zero_grad()
+                self.loss.backward()
+                self.optimizer.step()
+
             if step_idx % self.PRINT_INTERVAL == 0:
                 print('loss_train ===>', loss_train / self.PRINT_INTERVAL)
                 self.TB.logkv('step_idx', step_idx)
                 self.TB.logkv('loss_train', round(float(loss_train) / self.PRINT_INTERVAL, 3))
-                loss_train = torch.tensor(0, device=device).float()
+                loss_train = torch.tensor(0, device=self.device).float()
                 # if step_idx % PRINT_INTERVAL == 0:
-                avg_score, avg_winnning = test(step_idx, model, device, num_test=10)
+                avg_score, avg_winnning = test(step_idx, self.model, self.device, num_test=1)
                 self.TB.logkv('avg_score', avg_score)
                 self.TB.logkv('avg_winning', avg_winnning)
                 self.TB.dumpkvs()
                 # save weights of A2C
                 if step_idx % self.PRINT_INTERVAL == 0:
-                    save_path = 'monopoly_simulator/weights'
-                    save_name = save_path + '/push_buy_tf_ne_' + str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
-
-                    torch.save(model, save_name)
+                    save_path = '/media/becky/GNOME-p3/monopoly_simulator/weights'
+                    save_name = save_path + '/push_buy_tf_ne_v3_' + str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
+                    torch.save(self.model, save_name)
 
             step_idx += 1
+            # print('step_idx',step_idx)
         envs.close()
 
 
 if __name__ == '__main__':
     # read the config file and set the hyper-param
-    config_file = '/media/becky/GNOME-p3/monopoly_simulator/config_env.ini'
+    config_file = 'config.ini'
     config_data = ConfigParser()
     config_data.read(config_file)
 

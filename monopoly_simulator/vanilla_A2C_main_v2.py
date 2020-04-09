@@ -5,8 +5,10 @@ from torchviz import make_dot
 from gameplay_simple_tf import *
 
 class Config:
-    device = torch.device('cuda:3')
+    device = torch.device('cuda:2')
 import os, sys
+import warnings
+warnings.filterwarnings('ignore')
 
 class HiddenPrints:
     def __enter__(self):
@@ -36,12 +38,12 @@ if __name__ == '__main__':
     config_data.read(config_file)
     # print('config_data.items', config_data.sections())
     # Hyperparameters
-    n_train_processes = 3
+    n_train_processes = 1
     learning_rate = 0.0002
     update_interval = 5
     gamma = 0.98
     max_train_steps = 60000
-    PRINT_INTERVAL = 100
+    PRINT_INTERVAL = 1000
     config = Config()
     config.hidden_state = 256
     config.action_space = 2
@@ -144,15 +146,15 @@ if __name__ == '__main__':
             optimizer.step()
         # graphviz.Source(make_dot(loss, params=dict(model.named_parameters()))).render('full_net')
         # print('weight after test = > ', model.fc_actor.weight)
-        if step_idx % 100 == 0:
+        if step_idx % 1000 == 0:
             print('loss_train ===>', loss_train / 100)
             loss_train = torch.tensor(0, device=device).float()
         if step_idx % PRINT_INTERVAL == 0:
-            test(step_idx, model,device, num_test=10)
+            test(step_idx, model,device, num_test=1)
             #save weights of A2C
             if step_idx % PRINT_INTERVAL == 0:
                 save_path = '/media/becky/GNOME-p3/monopoly_simulator/weights'
-                save_name = save_path + '/push_buy_tf_ne_' + str(int(step_idx / PRINT_INTERVAL)) + '.pkl'
+                save_name = save_path + '/push_buy_tf_ne_v2_' + str(int(step_idx / PRINT_INTERVAL)) + '.pkl'
 
                 torch.save(model, save_name)
 

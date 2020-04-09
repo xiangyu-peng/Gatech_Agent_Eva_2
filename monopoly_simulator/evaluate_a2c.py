@@ -51,10 +51,10 @@ def test_eva(step_idx, model, device, num_test):
             prob = model.actor(s)
 
             #debug
-            print('s',s)
-            print('prob', prob)
-            if num_game > 0:
-                break
+            # print('s',s)
+            # print('prob', prob)
+            # if num_game > 0:
+            #     break
 
             # Choose the action with highest prob and not in masked action
             # Becky#########################################################
@@ -137,12 +137,12 @@ if __name__ == '__main__':
     #######################################
     with HiddenPrints():
         envs = ParallelEnv(n_train_processes)
-    for i in range(5):
-        model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_' +str(i) + '.pkl'
+    for i in range(8):
+        model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_v3_' +str(i) + '.pkl'
         model = torch.load(model_path)
         print('i = ', i)
-        test_eva(1, model, device, num_test=1)
+        test_eva(1, model, device, num_test=50)
     # i = 0
-    # model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_' + str(i) + '.pkl'
+    # model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_v3_' + str(i) + '.pkl'
     # model = torch.load(model_path)
     # test_eva(1, model, device, num_test=1000)

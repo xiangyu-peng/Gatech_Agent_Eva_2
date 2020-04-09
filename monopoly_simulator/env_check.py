@@ -59,7 +59,7 @@ done_num_total = 3
 while done_num < done_num_total:
     with HiddenPrints():
         s, rew, done, info = env.step_nochange(1)
-    # print('s',s, rew)
+    print('s',s, rew)
 
     if done > 0:
         # print('Done')

@@ -29,6 +29,7 @@ class KG_OpenIE():
             zf = ZipFile(output_filename)
             zf.extractall(path=self.install_dir)
             zf.close()
+
         os.environ['CORENLP_HOME'] = str(self.install_dir / 'stanford-corenlp-full-2018-10-05')
         from stanfordnlp.server import CoreNLPClient
 
@@ -39,6 +40,7 @@ class KG_OpenIE():
         self.jsonfile = self.params['jsonfile']
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
         self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away']
+        self.relations_full = ['is priced at', 'is located at', 'is rented-0-house at', 'is rented-0-house-full-color at'] #, 'is colored as', 'is classified as']
         self.kg_rel = dict()
         self.kg_sub = dict()
         self.kg_set = set()
@@ -46,7 +48,7 @@ class KG_OpenIE():
         self.kg_sub_diff = dict()
         self.kg_introduced = False
         self.new_kg_tuple = dict()
-        self.update_num  = 0
+        self.update_num = 0
 
         #for kg to matrix
         self.matrix_params = self.params_read(config_data, keys='matrix')
@@ -54,19 +56,21 @@ class KG_OpenIE():
         self.action_num = self.matrix_params['action_num']
         self.sparse_matrix = []
         self.action_name = ['is ' + str(i) +'-step away from' for i in range(1,41)]
-        self.board_name = ['Go','Mediterranean Avenue', 'Community Chest-One',
-                'Baltic Avenue', 'Income Tax', 'Reading Railroad', 'Oriental-Avenue',
-                'Chance-One', 'Vermont Avenue', 'Connecticut Avenue', 'In Jail/Just Visiting',
-                'St. Charles Place', 'Electric Company', 'States Avenue', 'Virginia Avenue',
-                'Pennsylvania Railroad', 'St. James Place', 'Community Chest-Two', 'Tennessee Avenue',
-                'New York Avenue', 'Free Parking', 'Kentucky Avenue', 'Chance-Two', 'Indiana Avenue',
-                'Illinois Avenue', 'B&O Railroad', 'Atlantic Avenue', 'Ventnor Avenue',
-                'Water Works', 'Marvin Gardens', 'Go-to-Jail', 'Pacific Avenue', 'North Carolina Avenue',
-                'Community Chest-Three', 'Pennsylvania Avenue', 'Short Line', 'Chance-Three', 'Park Place',
+        self.board_name = ['Go','Mediterranean-Avenue', 'Community Chest-One',
+                'Baltic-Avenue', 'Income Tax', 'Reading Railroad', 'Oriental-Avenue',
+                'Chance-One', 'Vermont-Avenue', 'Connecticut-Avenue', 'In Jail/Just Visiting',
+                'St. Charles Place', 'Electric Company', 'States-Avenue', 'Virginia-Avenue',
+                'Pennsylvania Railroad', 'St. James Place', 'Community Chest-Two', 'Tennessee-Avenue',
+                'New-York-Avenue', 'Free Parking', 'Kentucky-Avenue', 'Chance-Two', 'Indiana-Avenue',
+                'Illinois-Avenue', 'B&O Railroad', 'Atlantic-Avenue', 'Ventnor-Avenue',
+                'Water Works', 'Marvin Gardens', 'Go-to-Jail', 'Pacific-Avenue', 'North-Carolina-Avenue',
+                'Community Chest-Three', 'Pennsylvania-Avenue', 'Short Line', 'Chance-Three', 'Park Place',
                                         'Luxury Tax', 'Boardwalk']
 
         self.sparse_matrix_dict = self.build_empty_matrix_dict()
         self.matrix_folder = self.matrix_params['matrix_folder']
+        self.kg_vector = np.zeros([len(self.relations_full), len(self.board_name)])
+        self.vector_file = self.matrix_params['vector_file']
 
 
     def build_empty_matrix_dict(self):
@@ -187,12 +191,14 @@ class KG_OpenIE():
             kg_change = self.build_kg_text(line, level=level, use_hash=use_hash)
 
         self.update_num += 1
+
         #if there is any update or new relationships in kg, will update in the matrix
         if self.update_num % update_interval == 0:
             if self.new_kg_tuple:
                 self.build_matrix_dict()
                 self.dict_to_matrix()
-                self.new_kg_tuple = dict()
+                self.build_vector()
+                self.new_kg_tuple = dict() #reset new_kg_tuple
 
     def build_kg_text(self, text, level='sub',use_hash=False):
         '''
@@ -319,6 +325,10 @@ class KG_OpenIE():
             self.sparse_matrix.append(csr_matrix((self.sparse_matrix_dict[rel]['data'], (self.sparse_matrix_dict[rel]['row'], self.sparse_matrix_dict[rel]['col'])), shape=(self.entity_num, self.entity_num)))
 
     def update_new_kg_tuple(self, triple):
+        '''
+        Update self.new_kg_tuple when there is new rule in kg
+        :param triple: new kg rule tuple
+        '''
         if triple['relation'] in self.new_kg_tuple.keys():
             pass
         else:
@@ -326,9 +336,29 @@ class KG_OpenIE():
         self.new_kg_tuple[triple['relation']][triple['subject']] = triple['object']
 
     def save_matrix(self):
+        '''
+        Save sparse matrix of kg
+        :return:
+        '''
         num = 0
         for rel in self.action_name:
             save_npz(self.matrix_folder + '/' + str(rel) + '.npz', self.sparse_matrix[num])
+            num += 1
+
+    def save_vector(self):
+        np.save(self.vector_file, self.kg_vector)
+
+    def build_vector(self):
+        '''
+        Build the representation vector using knowledge graph
+        '''
+        num = 0
+        for rel in self.relations_full:
+            if rel in self.new_kg_tuple.keys():
+                for sub in self.new_kg_tuple[rel].keys():
+                    index_sub = int(self.board_name.index(sub))
+                    obj = self.new_kg_tuple[rel][sub]
+                    self.kg_vector[num][index_sub] = int(obj)
             num += 1
 
 
@@ -337,11 +367,16 @@ class KG_OpenIE():
 
 # import time
 # start = time.time()
-file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
+# file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
 # log_file = open(file,'r')
-client = KG_OpenIE()
-client.build_kg_file(file, level='rel', use_hash=True, update_interval=1)
-client.save_matrix()
+# client = KG_OpenIE()
+# client.read_json(level='rel')
+# client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
+# client.build_kg_file(file, level='rel', use_hash=True, update_interval=1)
+# client.dict_to_matrix()
+# client.save_matrix()
+# print(client.kg_vector)
+# client.save_vector()
 
 
 
@@ -354,7 +389,7 @@ client.save_matrix()
 # # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
 #
 # # print(client.kg_rel.keys())
-# # line = 'Vermont Avenue is colored as SkyBlue'
+# # line = 'Vermont-Avenue is colored as SkyBlue'
 # # kg_change = client.build_kg(line,level='sub')
 # print(client.kg_rel_diff)
 # end = time.time()

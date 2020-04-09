@@ -1,0 +1,115 @@
+loss_train ===> tensor(0.0002, device='cuda:0', grad_fn=<DivBackward0>)
+Starting server with command: java -Xmx8G -cp /home/becky/.stanfordnlp_resources/stanford-corenlp-full-2018-10-05/* edu.stanford.nlp.pipeline.StanfordCoreNLPServer -port 9000 -timeout 60000 -threads 5 -maxCharLength 100000 -quiet True -serverProperties corenlp_server-8554ba0eacc343d7.props -preload openie
+self.new_kg_tuple {}
+self.kg_vector [[0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]
+ [0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.
+  0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0. 0.]]
+Step # :0, avg score : -4.755
+Step # :0, avg winning : 0.000
+loss_train ===> tensor(17.2429, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :1000, avg score : -3.296
+Step # :1000, avg winning : 0.000
+loss_train ===> tensor(37.1814, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :2000, avg score : -2.342
+Step # :2000, avg winning : 0.000
+loss_train ===> tensor(28.1663, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :3000, avg score : -2.342
+Step # :3000, avg winning : 0.000
+loss_train ===> tensor(13.2575, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :4000, avg score : -2.342
+Step # :4000, avg winning : 0.000
+loss_train ===> tensor(26.2942, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :5000, avg score : -2.342
+Step # :5000, avg winning : 0.000
+loss_train ===> tensor(29.4483, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :6000, avg score : -2.342
+Step # :6000, avg winning : 0.000
+loss_train ===> tensor(17.4604, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :7000, avg score : -2.342
+Step # :7000, avg winning : 0.000
+loss_train ===> tensor(25.5918, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :8000, avg score : -2.342
+Step # :8000, avg winning : 0.000
+loss_train ===> tensor(36.8203, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :9000, avg score : -2.342
+Step # :9000, avg winning : 0.000
+loss_train ===> tensor(18.4285, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :10000, avg score : -2.342
+Step # :10000, avg winning : 0.000
+loss_train ===> tensor(23.6762, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :11000, avg score : -2.342
+Step # :11000, avg winning : 0.000
+loss_train ===> tensor(30.9475, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :12000, avg score : -2.342
+Step # :12000, avg winning : 0.000
+loss_train ===> tensor(9.2888, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :13000, avg score : -2.342
+Step # :13000, avg winning : 0.000
+loss_train ===> tensor(20.6913, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :14000, avg score : -2.342
+Step # :14000, avg winning : 0.000
+loss_train ===> tensor(28.1729, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :15000, avg score : -2.342
+Step # :15000, avg winning : 0.000
+loss_train ===> tensor(23.1662, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :16000, avg score : -2.342
+Step # :16000, avg winning : 0.000
+loss_train ===> tensor(20.7932, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :17000, avg score : -2.342
+Step # :17000, avg winning : 0.000
+loss_train ===> tensor(18.7732, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :18000, avg score : -2.342
+Step # :18000, avg winning : 0.000
+loss_train ===> tensor(27.0686, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :19000, avg score : -2.342
+Step # :19000, avg winning : 0.000
+loss_train ===> tensor(21.9840, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :20000, avg score : -2.342
+Step # :20000, avg winning : 0.000
+loss_train ===> tensor(22.9338, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :21000, avg score : -2.342
+Step # :21000, avg winning : 0.000
+loss_train ===> tensor(23.8287, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :22000, avg score : -2.342
+Step # :22000, avg winning : 0.000
+loss_train ===> tensor(15.4700, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :23000, avg score : -2.342
+Step # :23000, avg winning : 0.000
+loss_train ===> tensor(13.3052, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :24000, avg score : -2.342
+Step # :24000, avg winning : 0.000
+loss_train ===> tensor(24.5561, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :25000, avg score : -2.342
+Step # :25000, avg winning : 0.000
+loss_train ===> tensor(28.6848, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :26000, avg score : -2.342
+Step # :26000, avg winning : 0.000
+loss_train ===> tensor(24.9161, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :27000, avg score : -2.342
+Step # :27000, avg winning : 0.000
+loss_train ===> tensor(17.7859, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :28000, avg score : -2.342
+Step # :28000, avg winning : 0.000
+loss_train ===> tensor(32.0966, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :29000, avg score : -2.342
+Step # :29000, avg winning : 0.000
+Traceback (most recent call last):
+  File "vanilla_A2C_main_v3.py", line 233, in <module>
+    trainer.train()
+  File "vanilla_A2C_main_v3.py", line 195, in train
+    envs.close()
+NameError: name 'envs' is not defined
+Exception ignored in: <function KG_OpenIE.__del__ at 0x7f8652d59710>
+Traceback (most recent call last):
+  File "/media/becky/GNOME-p3/KG-rule/openie_triple.py", line 279, in __del__
+  File "/home/eilab/anaconda3/lib/python3.7/os.py", line 694, in __delitem__
+KeyError: 'CORENLP_HOME'

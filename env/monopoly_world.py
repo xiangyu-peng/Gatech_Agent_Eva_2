@@ -46,6 +46,7 @@ class Monopoly_world():
         self.kg_save_num = 0
         self.kg_save_interval = self.hyperparams['kg_save_interval']
         self.log_path = self.hyperparams['log_path']
+        self.env_num = 0
 
 
     def params_read(self, config_data):
@@ -72,6 +73,7 @@ class Monopoly_world():
         self.player_decision_agents = dict()
         self.game_elements = None
         self.seeds = self.seed(self.seeds + 1)
+        self.env_num = self.env_num + 1
 
 
     def reset(self):
@@ -135,7 +137,7 @@ class Monopoly_world():
         # return 1 + win_indicator * 100
     def reward_cal(self, win_indicator, action_num, masked_actions_reward):
         if masked_actions_reward[action_num] == 0:
-            return -1
+            return -0.01
         else:
             reward = self.game_elements['players'][self.current_player_index].current_cash +\
                      self.cal_asset_value(self.current_player_index)
@@ -143,10 +145,11 @@ class Monopoly_world():
             for num in range(self.num_players):
                 rewards_total += self.game_elements['players'][num].current_cash
                 rewards_total += self.cal_asset_value(num)
+
             if action_num == 0: #buy
-                return (reward + 200) / (rewards_total + 0.1) + 100 * win_indicator
+                return (reward * 1.1) / (rewards_total + 0.1) + win_indicator
             else:
-                return reward / (rewards_total + 0.1) + 100 * win_indicator
+                return reward / (rewards_total + 0.1) + win_indicator
 
         # if action_num == 0: #buy
         #     return 100 + 1000 * win_indicator
@@ -174,40 +177,69 @@ class Monopoly_world():
             terminal = 0
             masked_actions = self.a.masked_actions
         else:
+        #     action_num = action
+        #     masked_actions_reward = self.a.masked_actions.copy()
+        #
+        #     #When the action is not valid, the state won't change and the reward will be negative
+        #     if masked_actions_reward[action_num] == 0:
+        #         state_space = self.a.board_to_state(self.game_elements)
+        #         self.reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
+        #         reward = self.reward
+        #         terminal = self.terminal
+        #         masked_actions = self.masked_actions
+        #
+        #     #When the action from agent is valid, the state will go to next step
+        #     else:
+        #         action = self.a.action_num2vec(action)
+        #         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
+        #             after_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
+        #         if self.num_active_players > 1:
+        #             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
+        #                 simulate_game_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index)
+        #         if self.num_active_players > 1:
+        #             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params, self.win_indicator, masked_actions = \
+        #                 before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
+        #
+        #         self.terminal = 0 if self.num_active_players > 1 else 1
+        #         if self.done_indicator == 1:
+        #             self.terminal = 1
+        #         self.reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
+        #         if self.terminal:
+        #             if self.win_indicator == 1:
+        #                 self.terminal = 2
+        #         state_space = self.a.board_to_state(self.game_elements)
+        #         reward = self.reward
+        #         terminal = self.terminal
+        #         self.masked_actions = masked_actions
+        #
+        # return state_space, reward, terminal, masked_actions #can put KG in info
+
+
             action_num = action
             masked_actions_reward = self.a.masked_actions.copy()
+            action = self.a.action_num2vec(action)
+            self.die_roll = []
 
-            #When the action is not valid, the state won't change and the reward will be negative
-            if masked_actions_reward[action_num] == 0:
-                state_space = self.a.board_to_state(self.game_elements)
-                self.reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
-                reward = self.reward
-                terminal = self.terminal
-                masked_actions = self.masked_actions
-
-            #When the action from agent is valid, the state will go to next step
-            else:
-                action = self.a.action_num2vec(action)
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
+                after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
+            if self.num_active_players > 1:
                 self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-                    after_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
-                if self.num_active_players > 1:
-                    self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-                        simulate_game_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index)
-                if self.num_active_players > 1:
-                    self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params, self.win_indicator, masked_actions = \
-                        before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a)
+                    simulate_game_step_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.die_roll)
+            if self.num_active_players > 1:
+                self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params, self.win_indicator, masked_actions = \
+                    before_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.die_roll)
 
-                self.terminal = 0 if self.num_active_players > 1 else 1
-                if self.done_indicator == 1:
-                    self.terminal = 1
-                self.reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
-                if self.terminal:
-                    if self.win_indicator == 1:
-                        self.terminal = 2
-                state_space = self.a.board_to_state(self.game_elements)
-                reward = self.reward
-                terminal = self.terminal
-                self.masked_actions = masked_actions
+            self.terminal = 0 if self.num_active_players > 1 else 1
+            if self.done_indicator == 1:
+                self.terminal = 1
+            self.reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
+            if self.terminal:
+                if self.win_indicator == 1:
+                    self.terminal = 2
+
+            state_space = self.a.board_to_state(self.game_elements)
+            reward = self.reward
+            terminal = self.terminal
 
         return state_space, reward, terminal, masked_actions #can put KG in info
 
@@ -264,7 +296,13 @@ class Monopoly_world():
             terminal = 0
             masked_actions = self.a.masked_actions
 
-        return state_space, reward, terminal, masked_actions #can put KG in info
+            if self.env_num >= 20:
+                info = (masked_actions, self.kg.kg_vector)
+            else:
+                info = (masked_actions,[])
+        else:
+            info = (masked_actions,[])
+        return state_space, reward, terminal, info  #can put KG in info
 
     def next_nochange(self, action):
         # if self.terminal == 1:
@@ -288,6 +326,7 @@ class Monopoly_world():
             reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
             terminal = self.terminal
             masked_actions = self.masked_actions
+            self.die_roll = []
 
         else:
             a = Interface()
@@ -327,7 +366,7 @@ class Monopoly_world():
         return self.seeds
 
     def save_kg(self):
-        self.kg.build_kg_file(self.log_path, level='rel', use_hash=True)
+        self.kg.build_kg_file(self.log_path, level='rel', use_hash=True, update_interval=self.kg_save_interval)
         # file = open(self.log_path,'r')
         # for line in file:
         #     kg_change = self.kg.build_kg(line, level='rel', use_hash=True)
@@ -335,7 +374,9 @@ class Monopoly_world():
         #save knowledge graph when simulating num of games is self.kg_save_interval
         if self.kg_save_num % self.kg_save_interval == 0:
             self.kg.save_json(level='rel')
+            self.kg.dict_to_matrix()
             self.kg.save_matrix()
+            self.kg.save_vector()
 
 
 
