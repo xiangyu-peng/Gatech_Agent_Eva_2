@@ -9,6 +9,7 @@ from gameplay_tf import *
 from interface import Interface
 from simple_background_agent_becky_p1 import P1Agent
 from simple_background_agent_becky_p2 import P2Agent
+from background_agent_v2 import P2Agent_v2
 from gym.utils import seeding
 from random import randint
 from location import *
@@ -47,6 +48,8 @@ class Monopoly_world():
         self.kg_save_interval = self.hyperparams['kg_save_interval']
         self.log_path = self.hyperparams['log_path']
         self.env_num = 0
+        self.value_past = self.hyperparams['initial_cash']
+        self.value_total = 2 * self.hyperparams['initial_cash']
 
 
     def params_read(self, config_data):
@@ -74,6 +77,8 @@ class Monopoly_world():
         self.game_elements = None
         self.seeds = self.seed(self.seeds + 1)
         self.env_num = self.env_num + 1
+        self.value_past = self.hyperparams['initial_cash']
+        self.value_total = 2 * self.hyperparams['initial_cash']
 
 
     def reset(self):
@@ -83,7 +88,7 @@ class Monopoly_world():
         logger = set_log_level()
         # logger.info('seed is ' + str(self.seeds))
         self.player_decision_agents['player_1'] = P1Agent()
-        self.player_decision_agents['player_2'] = P2Agent()
+        self.player_decision_agents['player_2'] = P2Agent_v2()
 
         self.game_elements = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-2.json', self.player_decision_agents, self.num_active_players)
         np.random.seed(self.seeds) #control the seed!!!!
@@ -109,15 +114,15 @@ class Monopoly_world():
                     num_hotels = asset.num_hotels
                     value += asset.mortgage
                     if num_houses == 0 and num_hotels == 0:
-                        value += asset.price * 2
+                        value += asset.price * 1.1
                     elif num_houses == 1 and num_hotels == 0:
                         value += 5 * asset.rent_1_house + asset.price + 100
                     elif num_houses == 2 and num_hotels == 0:
-                        value += 5 * asset.rent_2_house + asset.price + 100
+                        value += 5 * asset.rent_2_houses + asset.price + 100
                     elif num_houses == 3 and num_hotels == 0:
-                        value += 5 * asset.rent_3_house + asset.price + 100
+                        value += 5 * asset.rent_3_houses + asset.price + 100
                     elif num_houses == 4 and num_hotels == 0:
-                        value += 5 * asset.rent_4_house + asset.price + 100
+                        value += 5 * asset.rent_4_houses + asset.price + 100
                     elif num_hotels == 1:
                         value += 5 * asset.rent_hotel + asset.price + 100
                 else:
@@ -139,17 +144,29 @@ class Monopoly_world():
         if masked_actions_reward[action_num] == 0:
             return -0.01
         else:
-            reward = self.game_elements['players'][self.current_player_index].current_cash +\
+            value_now = self.game_elements['players'][self.current_player_index].current_cash +\
                      self.cal_asset_value(self.current_player_index)
             rewards_total = 0
             for num in range(self.num_players):
                 rewards_total += self.game_elements['players'][num].current_cash
                 rewards_total += self.cal_asset_value(num)
+            reward = (value_now - self.value_past) / self.value_total
+            self.value_total = rewards_total
+            self.value_past = value_now
+            if masked_actions_reward[(action_num + 1) % 2] == 0:
+                return 0.01
+            return reward
 
-            if action_num == 0: #buy
-                return (reward * 1.1) / (rewards_total + 0.1) + win_indicator
-            else:
-                return reward / (rewards_total + 0.1) + win_indicator
+
+
+            # if action_num == 0: #buy
+            #     return (reward * 1.2) / (rewards_total + 0.1) + win_indicator
+            # else:
+            #     return reward / (rewards_total + 0.1) + win_indicator
+            # if action_num == 0: #buy
+            #     return 1 + win_indicator
+            # else:
+            #     return 0 + win_indicator
 
         # if action_num == 0: #buy
         #     return 100 + 1000 * win_indicator
@@ -220,8 +237,11 @@ class Monopoly_world():
             action = self.a.action_num2vec(action)
             self.die_roll = []
 
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, params, self.masked_actions, done_hyp = \
+                after_agent_hyp(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index,
+                            action, self.a, self.params)
             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-                after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
+                after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params)
             if self.num_active_players > 1:
                 self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
                     simulate_game_step_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.die_roll)
@@ -267,7 +287,7 @@ class Monopoly_world():
         # be obstructed in one state
         action = self.a.action_num2vec(action)
         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-            after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
+            after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params)
         if self.num_active_players > 1:
             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
                 simulate_game_step_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.die_roll)
@@ -302,7 +322,31 @@ class Monopoly_world():
                 info = (masked_actions,[])
         else:
             info = (masked_actions,[])
-        return state_space, reward, terminal, info  #can put KG in info
+        return state_space, 0, terminal, info  #can put KG in info
+
+    def next_hyp(self, action):
+        # masked_actions = [1, 1]
+        action_num = action
+        masked_actions_reward = self.a.masked_actions.copy()
+        # # When the action is not valid, the state won't change and the reward will be negative
+        # if masked_actions_reward[action_num] == 0:
+        #     state_space = self.a.board_to_state(self.game_elements)
+        #     reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
+        #     terminal = self.terminal
+        #     masked_actions = self.masked_actions
+        #     self.die_roll = []
+
+        a = Interface()
+        action = a.action_num2vec(action)
+        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, params, self.masked_actions, done_hyp = \
+            after_agent_hyp(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, a,
+                            self.params)
+
+
+        reward = self.reward_cal(0, action_num, masked_actions_reward)
+        state_space = self.a.board_to_state(self.game_elements)
+
+        return state_space, reward, done_hyp, self.masked_actions  # can put KG in in
 
     def next_nochange(self, action):
         # if self.terminal == 1:

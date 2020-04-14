@@ -882,6 +882,9 @@ class Player(object):
         code = 0
         action_to_execute, parameters = self.agent.make_post_roll_move(self, current_gameboard, allowable_actions, code)
         t = (action_to_execute, parameters)
+        # if self.player_name =='player_1':
+        #     print('allowable_actions', allowable_actions)
+        #     print('action_to_execute',action_to_execute)
         # add to game history
         current_gameboard['history']['function'].append(self.agent.make_post_roll_move)
         params = dict()
@@ -893,35 +896,40 @@ class Player(object):
         current_gameboard['history']['return'].append(t)
 
         ###becky###
-        self._execute_action(action_to_execute, parameters, current_gameboard)
+        code = self._execute_action(action_to_execute, parameters, current_gameboard)
+        if self.agent.move_actions != []:
+            # self._execute_action(concluded_actions, dict(), current_gameboard)
+            return code
+        # self.agent.set_move_actions([])
         ###########
 
         # if action_to_execute == concluded_actions:
         #     self._force_buy_outcome(current_gameboard) # if option to buy is not set, this will make no difference.
         #     return self._execute_action(action_to_execute, parameters, current_gameboard) # now we can conclude actions
-        # count = 0
-        # while count < 50:  # the player is allowed up to 50 actions before we force conclude actions.
-        #     count += 1
-        #     if action_to_execute == concluded_actions:
-        #         self._force_buy_outcome(current_gameboard)
-        #         return self._execute_action(action_to_execute, parameters, current_gameboard)  # now we can conclude actions
-        #
-        #     else:
-        #         code = self._execute_action(action_to_execute, parameters, current_gameboard)
-        #         logger.debug('Received code '+ str(code)+ '. Continuing iteration...')
-        #         allowable_actions = self.compute_allowable_post_roll_actions(current_gameboard)
-        #         action_to_execute, parameters = self.agent.make_post_roll_move(self, current_gameboard, allowable_actions, code)
-        #         t = (action_to_execute, parameters)
-        #         # add to game history
-        #         current_gameboard['history']['function'].append(self.agent.make_post_roll_move)
-        #         params = dict()
-        #         params['player'] = self
-        #         params['current_gameboard'] = current_gameboard
-        #         params['allowable_moves'] = allowable_actions
-        #         params['code'] = code
-        #         current_gameboard['history']['param'].append(params)
-        #         current_gameboard['history']['return'].append(t)
-        #         # logger.debug(action_to_execute)
+        count = 0
+        while count < 50:  # the player is allowed up to 50 actions before we force conclude actions.
+            count += 1
+            if action_to_execute == concluded_actions:
+                # self._force_buy_outcome(current_gameboard)
+                return self._execute_action(action_to_execute, parameters, current_gameboard)  # now we can conclude actions
+
+            else:
+                code = self._execute_action(action_to_execute, parameters, current_gameboard)
+                logger.debug('Received code '+ str(code)+ '. Continuing iteration...')
+                allowable_actions, param = self.compute_allowable_post_roll_actions(current_gameboard)
+                # print('allowable_actions',allowable_actions,param)
+                action_to_execute, parameters = self.agent.make_post_roll_move(self, current_gameboard, allowable_actions, code)
+                t = (action_to_execute, parameters)
+                # add to game history
+                current_gameboard['history']['function'].append(self.agent.make_post_roll_move)
+                params = dict()
+                params['player'] = self
+                params['current_gameboard'] = current_gameboard
+                params['allowable_moves'] = allowable_actions
+                params['code'] = code
+                current_gameboard['history']['param'].append(params)
+                current_gameboard['history']['return'].append(t)
+                # logger.debug(action_to_execute)
         #
         # self._force_buy_outcome(current_gameboard) # if we got here, we need to conclude actions
 

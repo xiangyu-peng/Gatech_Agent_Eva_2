@@ -117,7 +117,11 @@ class MonopolyTrainer:
         loss_train = torch.tensor(0, device=self.device).float()
         while step_idx < self.max_train_steps:
             loss = torch.tensor(0, device=self.device).float()
-            for _ in range(self.update_interval):
+            # for _ in range(self.update_interval):
+            done_hyp = False
+            interval = 0
+            while done_hyp == False:
+                interval += 1
                 # move form last layer
                 entropy = 0
                 log_probs, masks, rewards, values = [], [], [], []
@@ -153,7 +157,11 @@ class MonopolyTrainer:
                 masks.append(torch.tensor(done, device=self.device).float())
 
                 a_tf = [0 for i in range(self.n_train_processes)]
-                s_prime, _, done, masked_actions = self.envs.step_after_nochange(a_tf)
+                s_prime, _, done_hyp, masked_actions = self.envs.step_hyp(a)
+
+                if done_hyp:
+                    s_prime, _, done, masked_actions = self.envs.step_hyp(a_tf)
+                    s_prime, _, done, masked_actions = self.envs.step_after_nochange(a_tf)
 
                 s = s_prime
 
@@ -171,9 +179,11 @@ class MonopolyTrainer:
                 critic_loss = advantage.pow(2).mean()
 
                 loss += actor_loss + 0.5 * critic_loss - 0.001 * entropy
+                # print('loss', loss)
 
-            loss /= self.update_interval
+            loss /= interval
             self.loss = loss
+            # print('loss', loss)
             loss_train += loss
             # print('loss', loss)
             if loss != torch.tensor(0, device=self.device):

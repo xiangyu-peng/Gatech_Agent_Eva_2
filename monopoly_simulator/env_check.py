@@ -54,22 +54,37 @@ env = gym.make('monopoly_simple-v1')
 env.seed(seed=n)
 # with HiddenPrints():
 s,mask = env.reset()
+print(s,mask)
 done_num = 0
-done_num_total = 3
+done_num_total = 2
 while done_num < done_num_total:
     with HiddenPrints():
-        s, rew, done, info = env.step_nochange(1)
-    print('s',s, rew)
+        s, rew, done, info = env.step_nochange(0)
+    print('s',s, rew, info)
 
     if done > 0:
         # print('Done')
         done_num += 1
         print('s', s, rew)
 
-    if done_num == done_num_total:
-        break
+    # if done_num == done_num_total:
+    #     break
+    done_after = False
+    while done_after == False:
+        with HiddenPrints():
+            s, rew, done_after, info = env.step_hyp(0)
+        print('s', s, rew, info, done_after)
+
+        with HiddenPrints():
+            s, rew, done_after, info = env.step_hyp(1)
+        print('s', s, rew, info, done_after)
+
     with HiddenPrints():
         s, rew, done_after, info = env.step_after_nochange(0)
+    print('s', s, rew, info)
+    print('===========')
+
+    done_num += 1
     # print('s',s,rew)
 end = time.time()
 print('Run %d environments need %f' % (done_num_total, float(str(end-start))))

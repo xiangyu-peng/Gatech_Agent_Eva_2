@@ -73,6 +73,9 @@ def worker(worker_id, master_end, worker_end):
         elif cmd == 'step_after_nochange':
             ob, reward, done, info = env.step_after_nochange(data)
             worker_end.send((ob, reward, done, info))
+        elif cmd == 'step_hyp':
+            ob, reward, done, info = env.step_hyp(data)
+            worker_end.send((ob, reward, done, info))
         else:
             raise NotImplementedError
 
@@ -113,6 +116,11 @@ class ParallelEnv:
             master_end.send(('step_after_nochange', action)) #send to worker_end => 'step' & action
         self.waiting = True  #waiting???
 
+    def step_async_hyp(self, actions):
+        for master_end, action in zip(self.master_ends, actions):
+            master_end.send(('step_hyp', action)) #send to worker_end => 'step' & action
+        self.waiting = True  #waiting???
+
     def step_wait(self):
         results = [master_end.recv() for master_end in self.master_ends] #receive from worker_end #format???
         self.waiting = False
@@ -133,6 +141,10 @@ class ParallelEnv:
         return self.step_wait()
     def step_after_nochange(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
         self.step_async_after_nochange(actions)
+        return self.step_wait()
+
+    def step_hyp(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
+        self.step_async_hyp(actions)
         return self.step_wait()
 
     def close(self):  # For clean up resources

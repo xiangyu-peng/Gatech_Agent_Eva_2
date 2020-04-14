@@ -1,8 +1,9 @@
 import initialize_game_elements
-from action_choices import roll_die
+from action_choices import roll_die, concluded_actions
 import numpy as np
 from simple_background_agent_becky_p1 import P1Agent
 from simple_background_agent_becky_p2 import P2Agent
+from background_agent_v2 import P2Agent_v2
 # import simple_decision_agent_1
 import json
 import diagnostics
@@ -163,27 +164,27 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
 
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, win_indicator, masked_actions
 
-def after_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
+def after_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, a, params):
     # def after_agent(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     a.board_to_state(game_elements)
     # print('state_space', a.state_space)
     current_player = game_elements['players'][current_player_index]
-    # if not current_player.currently_in_jail:
-    #got state and masked actions => agent => output actions and move
-    #action vector => actions
-    move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
-    logger.debug('move_actions =====>'+ str(move_actions))
-    current_player.agent.set_move_actions(move_actions)
-    current_player.make_post_roll_moves(game_elements)
-    #####################################################################
-
-    # add to game history
-    game_elements['history']['function'].append(current_player.make_post_roll_moves)
-    params = dict()
-    params['self'] = current_player
-    params['current_gameboard'] = game_elements
-    game_elements['history']['param'].append(params)
-    game_elements['history']['return'].append(None)
+    # # if not current_player.currently_in_jail:
+    # #got state and masked actions => agent => output actions and move
+    # #action vector => actions
+    # move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
+    # logger.debug('move_actions =====>'+ str(move_actions))
+    # current_player.agent.set_move_actions(move_actions)
+    # current_player.make_post_roll_moves(game_elements)
+    # #####################################################################
+    #
+    # # add to game history
+    # game_elements['history']['function'].append(current_player.make_post_roll_moves)
+    # params = dict()
+    # params['self'] = current_player
+    # params['current_gameboard'] = game_elements
+    # game_elements['history']['param'].append(params)
+    # game_elements['history']['return'].append(None)
 
     logger.debug('now Player after actions is in jail? ' + str(current_player.currently_in_jail))
 
@@ -350,15 +351,28 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
 
     a = Interface()
     die_roll = [0]
+    markder = []
     while num_active_players > 1:
+
         # game_elements, num_active_players, num_die_rolls, current_player_index, a = game_elements_, num_active_players_, num_die_rolls_, current_player_index_,a_
         game_elements, num_active_players, num_die_rolls, current_player_index, a, params, die_roll, win_indicator, masked_actions = \
             before_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, current_player_index, a, die_roll)
+        if markder == [1, 1]:
+            break
+
         actions_vector = [1, 0]
         if num_active_players > 1:
+            done_hyp = False
+            num_here = 0
+            while done_hyp == False:
+                num_here += 1
+                game_elements, num_active_players, num_die_rolls, current_player_index, a, params, masked_actions, done_hyp = \
+                    after_agent_hyp(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params)
+                if num_here > 3:
+                    break
+
             game_elements, num_active_players, num_die_rolls, current_player_index, done_indicator, win_indicator = \
-                after_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, current_player_index,
-                                        actions_vector, a, params)
+                after_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, current_player_index, a, params)
         if num_active_players > 1:
             game_elements, num_active_players, num_die_rolls, current_player_index, done_indicator, win_indicator, die_roll = \
                 simulate_game_step_tf_nochange(game_elements, num_active_players, num_die_rolls, current_player_index)
@@ -488,6 +502,36 @@ def before_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, c
 
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, die_roll, win_indicator, masked_actions
 
+def after_agent_hyp(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
+    done_hyp = False
+    a.board_to_state(game_elements)
+    current_player = game_elements['players'][current_player_index]
+    move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
+    logger.debug('move_actions =====>'+ str(move_actions))
+    # print('move_actions =====>' + str(move_actions))
+    current_player.agent.set_move_actions(move_actions)
+    code = current_player.make_post_roll_moves(game_elements) #-1 means doesnot work and 1 means successful
+    #####################################################################
+
+    # add to game history
+    if code == 1:
+
+        game_elements['history']['function'].append(current_player.make_post_roll_moves)
+        params = dict()
+        params['self'] = current_player
+        params['current_gameboard'] = game_elements
+        game_elements['history']['param'].append(params)
+        game_elements['history']['return'].append(None)
+
+        if move_actions[0][0]== concluded_actions:
+            done_hyp = True
+
+    a.board_to_state(game_elements)  # get state space
+    allowable_actions, param = current_player.compute_allowable_post_roll_actions(game_elements)
+    masked_actions = a.get_masked_actions(allowable_actions, param, current_player)
+
+    return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, masked_actions, done_hyp
+
 def after_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     a.board_to_state(game_elements)
     # print('state_space', a.state_space)
@@ -496,7 +540,7 @@ def after_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, cu
     #got state and masked actions => agent => output actions and move
     #action vector => actions
     move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
-    logger.debug('move_actions =====>'+ str(move_actions))
+    logger.debug('move_actions =====>'+ str(move_actions[0][0]))
     current_player.agent.set_move_actions(move_actions)
     current_player.make_post_roll_moves(game_elements)
     #####################################################################
@@ -656,16 +700,16 @@ if __name__ == '__main__':
     #     os.remove(file_path)
     ini_log_level()
     set_log_level()
-    logger.debug('tf_file')
+    # logger.debug('tf_file')
     player_decision_agents = dict()
     num_active_players = 2
 
     player_decision_agents['player_1'] = P1Agent()
-    player_decision_agents['player_2'] = P2Agent()
+    player_decision_agents['player_2'] = P2Agent_v2()
 
-    game_elements = set_up_board('/media/becky/GNOME/monopoly_game_schema_v1-2.json',
+    game_elements = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-2.json',
                                  player_decision_agents, num_active_players)
-    simulate_game_instance(game_elements, num_active_players, np_seed=6)
+    simulate_game_instance(game_elements, num_active_players, np_seed=8)
 
 
     #just testing history.

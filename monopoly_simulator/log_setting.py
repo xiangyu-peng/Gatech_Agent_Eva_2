@@ -19,7 +19,7 @@ def set_log_level():
     #     logger.setLevel(logging.DEBUG)
     # if level == 'info':
     #     logger.setLevel(logging.INFO)
-    logger.setLevel(logging.INFO)
+    logger.setLevel(logging.DEBUG)
     if os.path.exists('/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'):
         pass
     else:
