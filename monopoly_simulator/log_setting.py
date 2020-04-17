@@ -1,11 +1,12 @@
 import logging
 import os
+filename = 'gameplay_2'
 def ini_log_level():
 
 
-    logger = logging.getLogger('gameplay')
+    logger = logging.getLogger(filename)
     if logger.handlers:
-        logger.removeHandler('gameplay.log')
+        logger.removeHandler(filename+'.log')
         # logging.Logger.manager.loggerDict.pop(__name__)
         # logger.handlers = []
         # logger.removeHandler(logger.handlers)
@@ -19,11 +20,11 @@ def set_log_level():
     #     logger.setLevel(logging.DEBUG)
     # if level == 'info':
     #     logger.setLevel(logging.INFO)
-    logger.setLevel(logging.DEBUG)
-    if os.path.exists('/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'):
+    logger.setLevel(logging.INFO)
+    if os.path.exists('/media/becky/GNOME-p3/monopoly_simulator/'+ filename+'.log'):
         pass
     else:
-        hdlr = logging.FileHandler('gameplay.log', mode='w')
+        hdlr = logging.FileHandler(filename+'.log', mode='w')
         # formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         formatter = logging.Formatter('')
         hdlr.setFormatter(formatter)
@@ -31,7 +32,7 @@ def set_log_level():
 
     if not logger.handlers:
         # print('add!!!')
-        hdlr = logging.FileHandler('gameplay.log', mode='w')
+        hdlr = logging.FileHandler(filename+'.log', mode='w')
         # formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
         formatter = logging.Formatter('')
         hdlr.setFormatter(formatter)

@@ -10,6 +10,8 @@ from interface import Interface
 import sys, os
 from card_utility_actions import move_player_after_die_roll
 
+import novelty_generator
+
 import xlsxwriter
 import logging
 from log_setting import set_log_level, ini_log_level
@@ -522,6 +524,7 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
 def set_up_board(game_schema_file_path, player_decision_agents, num_active_players):
     game_schema = json.load(open(game_schema_file_path, 'r'))
     return initialize_game_elements.initialize_board(game_schema, player_decision_agents, num_active_players)
+
 
 if __name__ == '__main__':
     # this is where everything begins. Assign decision agents to your players, set up the board and start simulating! You can
