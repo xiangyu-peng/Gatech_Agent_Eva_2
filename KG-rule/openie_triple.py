@@ -15,6 +15,8 @@ import wget
 import numpy as np
 from scipy.sparse import csr_matrix, load_npz, save_npz
 from configparser import ConfigParser
+from collections import Counter
+import random
 
 
 class KG_OpenIE():
@@ -71,6 +73,8 @@ class KG_OpenIE():
         self.matrix_folder = self.matrix_params['matrix_folder']
         self.kg_vector = np.zeros([len(self.relations_full), len(self.board_name)])
         self.vector_file = self.matrix_params['vector_file']
+
+
 
 
     def build_empty_matrix_dict(self):
@@ -364,7 +368,121 @@ class KG_OpenIE():
 
 
 
+class Novelty_Detection():
+    def __init__(self, config_file='/media/becky/GNOME-p3/monopoly_simulator/config.ini'):
+        #Novelty Detection
+        config_data = ConfigParser()
+        config_data.read(config_file)
+        self.novelty_params = self.params_read(config_data, keys='novelty')
+        self.new_dice = dict()
+        self.dice = dict()
+        self.percentage_var = self.novelty_params['percentage_var']
+        self.num_dice = 0
+        self.state_dice = []
+        self.type_dice = []
 
+    def params_read(self, config_data, keys):
+        '''
+        Read config.ini file
+        :param config_data:
+        :param keys (string): sections in config file
+        :return: a dict with info in config file
+        '''
+        params = {}
+        for key in config_data[keys]:
+            v = eval(config_data[keys][key])
+            params[key] = v
+        return params
+
+
+    def record_history_new_dice(self, dice_list):
+        '''
+        Record the history of dice to new_dice dict
+        :param dice_list (list):  a list indicating the dice from logging i.e. [2,3]
+        :return: None
+        '''
+        for i, num in enumerate(dice_list):
+            if i in self.new_dice.keys():
+                if num in self.new_dice[i].keys():
+                    self.new_dice[i][num] += 1
+                else:
+                    self.new_dice[i][num] = 1
+            else:
+                self.new_dice[i] = dict()
+                self.new_dice[i][num] = 1
+
+    def add_new_to_total_dice(self):
+        for key in self.dice.keys():
+            if key in self.new_dice.keys():
+                self.dice[key] = dict(Counter(self.dice[key]) + Counter(self.new_dice[key]))
+        for key in self.new_dice.keys():
+            if key not in self.dice.keys():
+                self.dice[key] = self.new_dice[key]
+        self.new_dice.clear()
+
+    def dice_evaluate(self, evaluated_dice_dict):
+        '''
+        Evaluate dice type, state, number
+        :param evaluated_dice_dict (dict): put a dice history in dict
+        :return: num_dice: # of dice used
+                state_dice: state of each dice
+                type_dice: dice are biased or uniform
+        '''
+        num_dice = len(evaluated_dice_dict.keys()) #int : 2
+        state_dice = [] # [[1,2,3],[1,2]]
+        type_dice = []
+        for key in evaluated_dice_dict.keys():
+            state_dice.append(list(map(lambda x: x[0], sorted(list(evaluated_dice_dict[key].items()), key=lambda x: x[0]))))
+            nums = list(map(lambda x: x[1], sorted(list(evaluated_dice_dict[key].items()), key=lambda x: x[0])))
+            percentage = [num / sum(nums) for num in nums]
+            if max(percentage) - min(percentage) >= 2 * self.percentage_var:
+                type_dice.append('Bias')
+            else:
+                type_dice.append('Uniform')
+
+        return num_dice, state_dice, type_dice, percentage
+
+    def compare_dice_novelty(self):
+        '''
+        Dice Novelty Detection Type
+        1. state
+        2. type
+        :return: bool. True means detecting novelty
+        '''
+        dice_novelty_list = []
+        #Detect new state of dice. i.e. [1,2,3,4] => [1,2,3,4,5], we have a 5 now
+        num_dice_new, state_dice_new, type_dice_new, percentage_new = self.dice_evaluate(self.new_dice)
+        num_dice, state_dice, type_dice, percentage = self.dice_evaluate(self.dice)
+        if num_dice_new != num_dice:
+            dice_novelty_list.append(('Num', num_dice_new, num_dice))
+        if state_dice_new != state_dice:
+            dice_novelty_list.append(('State',state_dice_new, state_dice))
+        if type_dice_new != type_dice:
+            dice_novelty_list.append(('Type', type_dice_new, percentage_new, type_dice, percentage))
+        return dice_novelty_list
+
+
+
+
+
+
+dice = Novelty_Detection()
+for i in range(10000):
+    l = []
+    l.append(random.randint(1,3))
+    l.append(random.randint(1,2)+random.randint(1,2))
+    dice.record_history_new_dice(l)
+print(dice.dice_evaluate(dice.new_dice))
+print(dice.new_dice)
+dice.add_new_to_total_dice()
+for i in range(1000):
+    l = []
+    l.append(random.randint(1,3))
+    l.append(random.randint(2,4))
+    dice.record_history_new_dice(l)
+print(dice.new_dice)
+print(dice.dice_evaluate(dice.new_dice))
+print(dice.compare_dice_novelty())
 # import time
 # start = time.time()
 # file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
