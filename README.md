@@ -1,3 +1,13 @@
+04-05-20 Update for knowledge graph
+
+Class KG_OPENIE is in GNOME-p3/KG-rule/openie_triple.py, which is able to turn logging info to game rule.
+
+Feature:
+
+1. logging info from env is extracted as a triple (sub, rel, obj), then put in a dict() to record it.
+
+2. KG_OPENIE can quickly detect if the rule exists or not, or changed
+
 03-04-20 Update how to register the env
 
 `cd /GNOME-p3/env/simulator_env` 

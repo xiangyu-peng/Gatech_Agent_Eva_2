@@ -2,6 +2,7 @@ from vanilla_A2C import *
 from configparser import ConfigParser
 import graphviz
 from torchviz import make_dot
+import numpy as np
 
 
 class Config:
@@ -18,6 +19,10 @@ class HiddenPrints:
         sys.stdout.close()
         sys.stdout = self._original_stdout
 
+def add_vector_to_state(state, vector, device):
+    new_state = np.concatenate((vector.reshape(1, -1), state), axis=1)
+    return torch.tensor(new_state, device=device).float()
+
 def largest_prob(prob, masked_actions):
     prob = prob.cpu().detach().numpy().reshape(-1,)
     #Check if the action is valid
@@ -30,7 +35,7 @@ def largest_prob(prob, masked_actions):
         largest_num -= 1
     return a
 
-def test_eva(step_idx, model, device, num_test):
+def test_eva(step_idx, model, device, num_test, vector):
     env = gym.make('monopoly_simple-v1')
     score = 0.0
     done = False
@@ -45,8 +50,9 @@ def test_eva(step_idx, model, device, num_test):
         score_game = 0
         while not done:
             s = s.reshape(1, -1)
+            s = add_vector_to_state(s, vector, device)
             num_game += 1
-            s = torch.tensor(s, device=device).float()
+            # s = torch.tensor(s, device=device).float()
             before_action = model.critic(s)
             prob = model.actor(s)
 
@@ -124,8 +130,8 @@ if __name__ == '__main__':
     PRINT_INTERVAL = update_interval * 10
     config = Config()
     config.hidden_state = 256
-    config.action_space = 80
-    config.state_num = 56
+    config.action_space = 2
+    config.state_num = 216
     save_dir = '/media/becky/GNOME-p3/monopoly_simulator'
     device = torch.device('cuda:0')
     save_name = '/push_buy'
@@ -137,12 +143,14 @@ if __name__ == '__main__':
     #######################################
     with HiddenPrints():
         envs = ParallelEnv(n_train_processes)
-    for i in range(5):
-        model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_' +str(i) + '.pkl'
+    vector = np.load('/media/becky/GNOME-p3/KG-rule/vector.npy')
+    # print(vector)
+    for i in range(8):
+        model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_v4_' +str(i) + '.pkl'
         model = torch.load(model_path)
         print('i = ', i)
-        test_eva(1, model, device, num_test=1)
+        test_eva(1, model, device, 1, vector)
     # i = 0
-    # model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_' + str(i) + '.pkl'
+    # model_path = '/media/becky/GNOME-p3/monopoly_simulator/weights/push_buy_tf_ne_v4_' + str(i) + '.pkl'
     # model = torch.load(model_path)
     # test_eva(1, model, device, num_test=1000)

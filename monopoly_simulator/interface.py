@@ -9,27 +9,27 @@ import location
 from agent_helper_functions import identify_free_mortgage
 class Interface(object):
     def __init__(self):
-        self.board_owned = ['Mediterranean Avenue', 'Baltic Avenue', 'Reading Railroad', 'Oriental Avenue',
-             'Vermont Avenue', 'Connecticut Avenue','St. Charles Place', 'Electric Company', 'States Avenue',
-             'Virginia Avenue','Pennsylvania Railroad', 'St. James Place', 'Tennessee Avenue',
-             'New York Avenue', 'Kentucky Avenue', 'Indiana Avenue','Illinois Avenue', 'B&O Railroad',
-             'Atlantic Avenue', 'Ventnor Avenue', 'Water Works', 'Marvin Gardens', 'Pacific Avenue',
-             'North Carolina Avenue', 'Pennsylvania Avenue', 'Short Line', 'Park Place', 'Boardwalk']
-        self.board_building = ['Mediterranean Avenue', 'Baltic Avenue', 'Oriental Avenue',
-                   'Vermont Avenue', 'Connecticut Avenue', 'St. Charles Place', 'States Avenue',
-                   'Virginia Avenue', 'St. James Place', 'Tennessee Avenue',
-                   'New York Avenue', 'Kentucky Avenue', 'Indiana Avenue', 'Illinois Avenue',
-                   'Atlantic Avenue', 'Ventnor Avenue', 'Marvin Gardens', 'Pacific Avenue',
-                   'North Carolina Avenue', 'Pennsylvania Avenue', 'Park Place', 'Boardwalk']
-        self.board_state = ['Go','Mediterranean Avenue', 'Community Chest',
-                'Baltic Avenue', 'Income Tax', 'Reading Railroad', 'Oriental Avenue',
-                'Chance', 'Vermont Avenue', 'Connecticut Avenue', 'In Jail/Just Visiting',
-                'St. Charles Place', 'Electric Company', 'States Avenue', 'Virginia Avenue',
-                'Pennsylvania Railroad', 'St. James Place', 'Community Chest', 'Tennessee Avenue',
-                'New York Avenue', 'Free Parking', 'Kentucky Avenue', 'Chance', 'Indiana Avenue',
-                'Illinois Avenue', 'B&O Railroad', 'Atlantic Avenue', 'Ventnor Avenue',
-                'Water Works', 'Marvin Gardens', 'Go to Jail', 'Pacific Avenue', 'North Carolina Avenue',
-                'Community Chest', 'Pennsylvania Avenue', 'Short Line', 'Chance', 'Park Place',
+        self.board_owned = ['Mediterranean-Avenue', 'Baltic-Avenue', 'Reading Railroad', 'Oriental-Avenue',
+             'Vermont-Avenue', 'Connecticut-Avenue','St. Charles Place', 'Electric Company', 'States-Avenue',
+             'Virginia-Avenue','Pennsylvania Railroad', 'St. James Place', 'Tennessee-Avenue',
+             'New-York-Avenue', 'Kentucky-Avenue', 'Indiana-Avenue','Illinois-Avenue', 'B&O Railroad',
+             'Atlantic-Avenue', 'Ventnor-Avenue', 'Water Works', 'Marvin Gardens', 'Pacific-Avenue',
+             'North-Carolina-Avenue', 'Pennsylvania-Avenue', 'Short Line', 'Park Place', 'Boardwalk']
+        self.board_building = ['Mediterranean-Avenue', 'Baltic-Avenue', 'Oriental-Avenue',
+                   'Vermont-Avenue', 'Connecticut-Avenue', 'St. Charles Place', 'States-Avenue',
+                   'Virginia-Avenue', 'St. James Place', 'Tennessee-Avenue',
+                   'New-York-Avenue', 'Kentucky-Avenue', 'Indiana-Avenue', 'Illinois-Avenue',
+                   'Atlantic-Avenue', 'Ventnor-Avenue', 'Marvin Gardens', 'Pacific-Avenue',
+                   'North-Carolina-Avenue', 'Pennsylvania-Avenue', 'Park Place', 'Boardwalk']
+        self.board_state = ['Go','Mediterranean-Avenue', 'Community Chest-One',
+                'Baltic-Avenue', 'Income Tax', 'Reading Railroad', 'Oriental-Avenue',
+                'Chance-One', 'Vermont-Avenue', 'Connecticut-Avenue', 'In Jail/Just Visiting',
+                'St. Charles Place', 'Electric Company', 'States-Avenue', 'Virginia-Avenue',
+                'Pennsylvania Railroad', 'St. James Place', 'Community Chest-Two', 'Tennessee-Avenue',
+                'New-York-Avenue', 'Free Parking', 'Kentucky-Avenue', 'Chance-Two', 'Indiana-Avenue',
+                'Illinois-Avenue', 'B&O Railroad', 'Atlantic-Avenue', 'Ventnor-Avenue',
+                'Water Works', 'Marvin Gardens', 'Go-to-Jail', 'Pacific-Avenue', 'North-Carolina-Avenue',
+                'Community Chest-Three', 'Pennsylvania-Avenue', 'Short Line', 'Chance-Three', 'Park Place',
                                         'Luxury Tax', 'Boardwalk']
         self.state_space = []
         self.masked_actions = []
@@ -68,16 +68,8 @@ class Interface(object):
                 state_space_building.append(5) # 5 denotes hotel
         state_space += state_space_building
 
-        #n cash ratio for all the players n = # of players
-
-        sorted_player = sorted(current_board['players'], key=lambda player: int(player.player_name[-1]))
-        state_space_cash = [int(p.current_cash) for p in sorted_player]
-        state_space_cash_sum = sum(state_space_cash) + 0.1
-        # state_space_cash = [int(p.current_cash)/state_space_cash_sum for p in sorted_player]
-        state_space_cash = [int(p.current_cash)/1000 for p in sorted_player]
-        state_space += state_space_cash
-
         #n positions of players n = # of players
+        sorted_player = sorted(current_board['players'], key=lambda player: int(player.player_name[-1]))
         state_space_position = [p.current_position for p in sorted_player]
         for i, pos in enumerate(state_space_position):
             state_space_position[i] = int(pos) if pos else 0
@@ -96,6 +88,15 @@ class Interface(object):
         state_space_card.append(num_card_others)
         state_space += state_space_card
 
+        # n cash ratio for all the players n = # of players
+
+        state_space_cash = [int(p.current_cash) for p in sorted_player]
+        state_space_cash_sum = sum(state_space_cash) + 0.1
+        # state_space_cash = [int(p.current_cash)/state_space_cash_sum for p in sorted_player]
+        state_space_cash = [int(p.current_cash) / 1000 for p in sorted_player]
+        state_space += state_space_cash
+
+        np.set_printoptions(suppress=True)
         self.state_space = np.array(state_space)
 
         return self.state_space

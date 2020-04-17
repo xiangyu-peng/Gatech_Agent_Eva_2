@@ -5,8 +5,10 @@ from torchviz import make_dot
 from gameplay_simple_tf import *
 
 class Config:
-    device = torch.device('cuda:0')
+    device = torch.device('cuda:2')
 import os, sys
+import warnings
+warnings.filterwarnings('ignore')
 
 class HiddenPrints:
     def __enter__(self):
@@ -36,12 +38,12 @@ if __name__ == '__main__':
     config_data.read(config_file)
     # print('config_data.items', config_data.sections())
     # Hyperparameters
-    n_train_processes = 5
+    n_train_processes = 1
     learning_rate = 0.0002
     update_interval = 5
     gamma = 0.98
     max_train_steps = 60000
-    PRINT_INTERVAL = 100
+    PRINT_INTERVAL = 1000
     config = Config()
     config.hidden_state = 256
     config.action_space = 2
@@ -49,10 +51,10 @@ if __name__ == '__main__':
     actor_loss_coefficient = 1
     save_dir = '/media/becky/GNOME-p3/monopoly_simulator'
     use_cuda = torch.cuda.is_available()
-    device = torch.device("cuda" if use_cuda else "cpu")
+    device = torch.device("cuda:3" if use_cuda else "cpu")
     save_name = '/push_buy'
     import os
-    os.environ["CUDA_VISIBLE_DEVICES"] = '2'
+    os.environ["CUDA_VISIBLE_DEVICES"] = '3'
 
     #######################################
     with HiddenPrints():
@@ -89,21 +91,20 @@ if __name__ == '__main__':
 
             a = []
             for i in range(n_train_processes):
-                action_Invalid = True
-                num_loop = 0
-                while action_Invalid:
-                    a_once = Categorical(prob).sample().cpu().numpy()[i] #substitute
-                    action_Invalid = True if masked_actions[i][a_once] == 0 else False
-                    num_loop += 1
+                # action_Invalid = True
+                # num_loop = 0
+                a_once = Categorical(prob).sample().cpu().numpy()[i]  # substitute
+                # while action_Invalid:
+                #     a_once = Categorical(prob).sample().cpu().numpy()[i] #substitute
+                #     action_Invalid = True if masked_actions[i][a_once] == 0 else False
+                #     num_loop += 1
 
-                    if num_loop > 5:
-                        a_once = largest_prob(prob[i], masked_actions)
-                        break
+                    # if num_loop > 5:
+                    #     a_once = largest_prob(prob[i], masked_actions)
+                    #     break
                 a.append(a_once)
             #while opposite happens. Step won't change env, step_nochange changes the env\
             s_prime_cal, r, done, masked_actions = envs.step_nochange(a)
-
-
 
             values.append(model.critic(torch.tensor(s, device=device).float()))
 
@@ -145,15 +146,15 @@ if __name__ == '__main__':
             optimizer.step()
         # graphviz.Source(make_dot(loss, params=dict(model.named_parameters()))).render('full_net')
         # print('weight after test = > ', model.fc_actor.weight)
-        if step_idx % 100 == 0:
+        if step_idx % 1000 == 0:
             print('loss_train ===>', loss_train / 100)
             loss_train = torch.tensor(0, device=device).float()
         if step_idx % PRINT_INTERVAL == 0:
-            test(step_idx, model,device, num_test=10)
+            test(step_idx, model,device, num_test=1)
             #save weights of A2C
             if step_idx % PRINT_INTERVAL == 0:
                 save_path = '/media/becky/GNOME-p3/monopoly_simulator/weights'
-                save_name = save_path + '/push_buy_tf_ne_' + str(int(step_idx / PRINT_INTERVAL)) + '.pkl'
+                save_name = save_path + '/push_buy_tf_ne_v2_' + str(int(step_idx / PRINT_INTERVAL)) + '.pkl'
 
                 torch.save(model, save_name)
 

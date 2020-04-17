@@ -43,10 +43,10 @@ def cash_negative(game_elements, current_player, num_active_players, a, win_indi
         diagnostics.print_player_cash_balances(game_elements)
 
         if num_active_players == 1:
-            for p in game_elements['players']:
-                if p.status != 'lost':
-                    winner = p
-                    p.status = 'won'
+            # for p in game_elements['players']:
+            #     if p.status != 'lost':
+            #         winner = p
+            #         p.status = 'won'
             for p in game_elements['players']:
                 if p.player_name == 'player_1':
                     if p.status == 'won':
@@ -675,5 +675,5 @@ if __name__ == '__main__':
         player_decision_agents[player_name] = simple_background_agent_becky_v1.decision_agent_methods
     game_elements = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-2.json',
                                  player_decision_agents, num_active_players)
-    simulate_game_instance(game_elements, num_active_players, np_seed=2)
+    simulate_game_instance(game_elements, num_active_players, np_seed=3)
 
