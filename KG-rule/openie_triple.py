@@ -1,4 +1,3 @@
-import os
 import tempfile
 from pathlib import Path
 from subprocess import Popen
@@ -6,6 +5,7 @@ from sys import stderr
 from zipfile import ZipFile
 from configparser import ConfigParser
 import sys
+import os
 curr_path = os.getcwd()
 curr_path = curr_path.replace("/KG-rule", "")
 curr_path = curr_path.replace("/env", "")
@@ -17,6 +17,7 @@ from scipy.sparse import csr_matrix, load_npz, save_npz
 from configparser import ConfigParser
 from collections import Counter
 import random
+
 
 
 class KG_OpenIE():
@@ -51,6 +52,9 @@ class KG_OpenIE():
         self.kg_introduced = False
         self.new_kg_tuple = dict()
         self.update_num = 0
+        self.update_interval = self.params['update_interval']
+        self.detection_num = self.params['detection_num']
+        self.kg_change = []
 
         #for kg to matrix
         self.matrix_params = self.params_read(config_data, keys='matrix')
@@ -74,8 +78,8 @@ class KG_OpenIE():
         self.kg_vector = np.zeros([len(self.relations_full), len(self.board_name)])
         self.vector_file = self.matrix_params['vector_file']
 
-
-
+        #Dice Novelty
+        self.dice = Novelty_Detection()
 
     def build_empty_matrix_dict(self):
         sparse_matrix_dict = dict()
@@ -189,20 +193,29 @@ class KG_OpenIE():
                 self.update_new_kg_tuple(triple)
             return False
 
-    def build_kg_file(self, file_name, level='sub', use_hash=False, update_interval=1):
+    def build_kg_file(self, file_name, level='sub', use_hash=False):
+
         file = open(file_name, 'r')
         for line in file:
             kg_change = self.build_kg_text(line, level=level, use_hash=use_hash)
+            if kg_change:
+                self.kg_change.append(kg_change)
 
         self.update_num += 1
 
         #if there is any update or new relationships in kg, will update in the matrix
-        if self.update_num % update_interval == 0:
+        if self.update_num % self.update_interval == 0:
             if self.new_kg_tuple:
                 self.build_matrix_dict()
                 self.dict_to_matrix()
                 self.build_vector()
                 self.new_kg_tuple = dict() #reset new_kg_tuple
+                 #update history while only detect rule change after simulating 100 games
+            if self.update_num > self.detection_num:
+                self.dice.run()
+            else:
+                self.dice.add_new_to_total_dice()
+
 
     def build_kg_text(self, text, level='sub',use_hash=False):
         '''
@@ -212,12 +225,21 @@ class KG_OpenIE():
         :return: bool. True indicates the rule is changed
         '''
         diff = []
+
+        #Add history of dice
+        if 'die' in text and '[' in text:
+            dice_list = list(map(lambda x: int(x), text[text.index('[') + 1 : text.index(']')].split(',')))
+            self.dice.record_history_new_dice(dice_list)
+            return diff
+
+        #Not dice, then record and check game rule
         if use_hash:
             triple_hash = hash(text)
             if triple_hash in self.kg_set:
                 return diff
             else:
                 self.kg_set.add(triple_hash)
+
         entity_relations = self.annotate(text, simple_format=True)
         for er in entity_relations:
             kg_change_once = self.kg_add(er,level=level)
@@ -380,6 +402,8 @@ class Novelty_Detection():
         self.num_dice = 0
         self.state_dice = []
         self.type_dice = []
+        self.novelty = []
+        self.type_record = [dict(), dict()]
 
     def params_read(self, config_data, keys):
         '''
@@ -394,6 +418,17 @@ class Novelty_Detection():
             params[key] = v
         return params
 
+    def run(self):
+        '''
+         = main function in this class
+        :return: A list with tuples, including the dice novelty
+        '''
+        novelty = self.compare_dice_novelty()
+        # When detect novelty, we will clear the history
+        if novelty:
+            self.dice = dict()
+        self.add_new_to_total_dice()
+        return novelty
 
     def record_history_new_dice(self, dice_list):
         '''
@@ -435,7 +470,7 @@ class Novelty_Detection():
             state_dice.append(list(map(lambda x: x[0], sorted(list(evaluated_dice_dict[key].items()), key=lambda x: x[0]))))
             nums = list(map(lambda x: x[1], sorted(list(evaluated_dice_dict[key].items()), key=lambda x: x[0])))
             percentage = [num / sum(nums) for num in nums]
-            if max(percentage) - min(percentage) >= 2 * self.percentage_var:
+            if max(percentage) - min(percentage) >= self.percentage_var / num_dice:
                 type_dice.append('Bias')
             else:
                 type_dice.append('Uniform')
@@ -452,72 +487,109 @@ class Novelty_Detection():
         dice_novelty_list = []
         #Detect new state of dice. i.e. [1,2,3,4] => [1,2,3,4,5], we have a 5 now
         num_dice_new, state_dice_new, type_dice_new, percentage_new = self.dice_evaluate(self.new_dice)
+
         num_dice, state_dice, type_dice, percentage = self.dice_evaluate(self.dice)
+
         if num_dice_new != num_dice:
             dice_novelty_list.append(('Num', num_dice_new, num_dice))
         if state_dice_new != state_dice:
             dice_novelty_list.append(('State',state_dice_new, state_dice))
         if type_dice_new != type_dice:
             dice_novelty_list.append(('Type', type_dice_new, percentage_new, type_dice, percentage))
+        if dice_novelty_list:
+            self.novelty.append(dice_novelty_list)
+            self.type_record[1] = {'num': num_dice_new, 'state': state_dice_new, 'type': type_dice_new,
+                                   'percentage': percentage_new}
+            self.type_record[0] = {'num': num_dice, 'state': state_dice, 'type': type_dice, 'percentage': percentage}
         return dice_novelty_list
 
 
 
+if __name__ == '__main__':
+    client = KG_OpenIE()
+    file_name='/media/becky/GNOME-p3/KG-rule/test.txt'
+
+    for i in range(150):
+        file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "w")
+        for j in range(500):
+            l = []
+            l.append(random.randint(1,3))
+            l.append(random.randint(1,2) + random.randint(1,3))
+            file.write('die come to' + str(l) +' \n')
+        file.close()
+        client.build_kg_file(file_name, level='rel', use_hash=True)
+
+    for i in range(100):
+        file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "w")
+        for j in range(50*10):
+
+            l = []
+            l.append(random.randint(1,3))
+            l.append(random.randint(2,4))
+            file.write('die come to' + str(l) + ' \n')
+        # file.close()
+        client.build_kg_file(file_name, level='rel', use_hash=True)
+    # print(client.kg_change)
+    print(client.dice.type_record)
 
 
 
-dice = Novelty_Detection()
-for i in range(10000):
-    l = []
-    l.append(random.randint(1,3))
-    l.append(random.randint(1,2)+random.randint(1,2))
-    dice.record_history_new_dice(l)
-print(dice.dice_evaluate(dice.new_dice))
-print(dice.new_dice)
-dice.add_new_to_total_dice()
-for i in range(1000):
-    l = []
-    l.append(random.randint(1,3))
-    l.append(random.randint(2,4))
-    dice.record_history_new_dice(l)
-print(dice.new_dice)
-print(dice.dice_evaluate(dice.new_dice))
-print(dice.compare_dice_novelty())
-# import time
-# start = time.time()
-# file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
-# log_file = open(file,'r')
-# client = KG_OpenIE()
-# client.read_json(level='rel')
-# client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
-# client.build_kg_file(file, level='rel', use_hash=True, update_interval=1)
-# client.dict_to_matrix()
-# client.save_matrix()
-# print(client.kg_vector)
-# client.save_vector()
+    # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
+
+
+    # dice = Novelty_Detection()
+    # for i in range(10000):
+    #     l = []
+    #     l.append(random.randint(1,3))
+    #     l.append(random.randint(1,2)+random.randint(1,2))
+    #     dice.record_history_new_dice(l)
+    # print(dice.dice_evaluate(dice.new_dice))
+    # print(dice.new_dice)
+    # dice.add_new_to_total_dice()
+    # for i in range(1000):
+    #     l = []
+    #     l.append(random.randint(1,3))
+    #     l.append(random.randint(2,4))
+    #     dice.record_history_new_dice(l)
+    # print(dice.new_dice)
+    # print(dice.dice_evaluate(dice.new_dice))
+    # print(dice.compare_dice_novelty())
+
+    # import time
+    # start = time.time()
+    # file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
+    # log_file = open(file,'r')
+    # client = KG_OpenIE()
+    # client.read_json(level='rel')
+    # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
+    # client.build_kg_file(file, level='rel', use_hash=True, update_interval=1)
+    # client.dict_to_matrix()
+    # client.save_matrix()
+    # print(client.kg_vector)
+    # client.save_vector()
 
 
 
 
-#
-# # client.read_json(level='rel')
-# for line in log_file:
-#     kg_change = client.build_kg(line,level='rel',use_hash=True)
-# # client.save_json(level='rel')
-# # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
-#
-# # print(client.kg_rel.keys())
-# # line = 'Vermont-Avenue is colored as SkyBlue'
-# # kg_change = client.build_kg(line,level='sub')
-# print(client.kg_rel_diff)
-# end = time.time()
-# print(str(end-start))
+    #
+    # # client.read_json(level='rel')
+    # for line in log_file:
+    #     kg_change = client.build_kg(line,level='rel',use_hash=True)
+    # # client.save_json(level='rel')
+    # # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
+    #
+    # # print(client.kg_rel.keys())
+    # # line = 'Vermont-Avenue is colored as SkyBlue'
+    # # kg_change = client.build_kg(line,level='sub')
+    # print(client.kg_rel_diff)
+    # end = time.time()
+    # print(str(end-start))
 
-# row = np.array([0, 0, 1, 2, 2, 1])
-# col = np.array([0, 2, 2, 0, 1, 2])
-# data = np.array([1, 2, 3, 4, 5, 6])
-# a = csr_matrix((data, (row, col)), shape=(3, 3))
-# print('a',a)
-# save_npz('/media/becky/GNOME-p3/KG-rule/matrix_rule/a.npz',a)
-# sparse_matrix = load_npz('/media/becky/GNOME-p3/KG-rule/matrix_rule/a.npz')
-# print('sparse_matrix',sparse_matrix)
+    # row = np.array([0, 0, 1, 2, 2, 1])
+    # col = np.array([0, 2, 2, 0, 1, 2])
+    # data = np.array([1, 2, 3, 4, 5, 6])
+    # a = csr_matrix((data, (row, col)), shape=(3, 3))
+    # print('a',a)
+    # save_npz('/media/becky/GNOME-p3/KG-rule/matrix_rule/a.npz',a)
+    # sparse_matrix = load_npz('/media/becky/GNOME-p3/KG-rule/matrix_rule/a.npz')
+    # print('sparse_matrix',sparse_matrix)
