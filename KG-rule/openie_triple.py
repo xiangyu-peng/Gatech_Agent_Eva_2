@@ -17,6 +17,7 @@ from scipy.sparse import csr_matrix, load_npz, save_npz
 from configparser import ConfigParser
 from collections import Counter
 import random
+from scipy import stats
 
 
 
@@ -55,6 +56,7 @@ class KG_OpenIE():
         self.update_interval = self.params['update_interval']
         self.detection_num = self.params['detection_num']
         self.kg_change = []
+        self.history_update_interval = self.params['history_update_interval']
 
         #for kg to matrix
         self.matrix_params = self.params_read(config_data, keys='matrix')
@@ -80,6 +82,7 @@ class KG_OpenIE():
 
         #Dice Novelty
         self.dice = Novelty_Detection()
+        self.text_dice_num = 0
 
     def build_empty_matrix_dict(self):
         sparse_matrix_dict = dict()
@@ -196,6 +199,7 @@ class KG_OpenIE():
     def build_kg_file(self, file_name, level='sub', use_hash=False):
 
         file = open(file_name, 'r')
+
         for line in file:
             kg_change = self.build_kg_text(line, level=level, use_hash=use_hash)
             if kg_change:
@@ -211,11 +215,19 @@ class KG_OpenIE():
                 self.build_vector()
                 self.new_kg_tuple = dict() #reset new_kg_tuple
                  #update history while only detect rule change after simulating 100 games
-            if self.update_num > self.detection_num:
-                self.dice.run()
-            else:
-                self.dice.add_new_to_total_dice()
 
+        if self.text_dice_num > self.detection_num:
+            self.dice.run()
+            self.text_dice_num = 1
+        elif self.text_dice_num % self.history_update_interval == 0:
+            self.dice.add_new_to_total_dice()
+        else:
+            pass
+
+        if self.dice.novelty:
+            return self.dice.type_record
+        else:
+            return None
 
     def build_kg_text(self, text, level='sub',use_hash=False):
         '''
@@ -228,6 +240,7 @@ class KG_OpenIE():
 
         #Add history of dice
         if 'die' in text and '[' in text:
+            self.text_dice_num += 1
             dice_list = list(map(lambda x: int(x), text[text.index('[') + 1 : text.index(']')].split(',')))
             self.dice.record_history_new_dice(dice_list)
             return diff
@@ -466,16 +479,31 @@ class Novelty_Detection():
         num_dice = len(evaluated_dice_dict.keys()) #int : 2
         state_dice = [] # [[1,2,3],[1,2]]
         type_dice = []
+        percentages = []
         for key in evaluated_dice_dict.keys():
-            state_dice.append(list(map(lambda x: x[0], sorted(list(evaluated_dice_dict[key].items()), key=lambda x: x[0]))))
+            state = list(map(lambda x: x[0], sorted(list(evaluated_dice_dict[key].items()), key=lambda x: x[0])))
+            state_dice.append(state)
             nums = list(map(lambda x: x[1], sorted(list(evaluated_dice_dict[key].items()), key=lambda x: x[0])))
             percentage = [num / sum(nums) for num in nums]
-            if max(percentage) - min(percentage) >= self.percentage_var / num_dice:
+
+            #Use KS-test to evaluate dice type:
+            test_list = []
+            test_distri = []
+
+            for i, state_number in enumerate(state):
+                test_list += [state_number for j in range(nums[i])]
+                test_distri += [state_number for j in range(int(sum(nums)/len(state)))]
+
+            p_value = stats.ks_2samp(np.array(test_list), np.array(test_distri)).pvalue
+
+            if p_value <= self.percentage_var:
                 type_dice.append('Bias')
             else:
                 type_dice.append('Uniform')
+                percentage = [1/len(nums) for j in range(len(state))]
 
-        return num_dice, state_dice, type_dice, percentage
+            percentages.append(percentage)
+        return num_dice, state_dice, type_dice, percentages
 
     def compare_dice_novelty(self):
         '''
@@ -496,11 +524,14 @@ class Novelty_Detection():
             dice_novelty_list.append(('State',state_dice_new, state_dice))
         if type_dice_new != type_dice:
             dice_novelty_list.append(('Type', type_dice_new, percentage_new, type_dice, percentage))
+
         if dice_novelty_list:
             self.novelty.append(dice_novelty_list)
             self.type_record[1] = {'num': num_dice_new, 'state': state_dice_new, 'type': type_dice_new,
                                    'percentage': percentage_new}
             self.type_record[0] = {'num': num_dice, 'state': state_dice, 'type': type_dice, 'percentage': percentage}
+
+            # print('dice_novelty_list',dice_novelty_list)
         return dice_novelty_list
 
 
@@ -509,22 +540,22 @@ if __name__ == '__main__':
     client = KG_OpenIE()
     file_name='/media/becky/GNOME-p3/KG-rule/test.txt'
 
-    for i in range(150):
+    for i in range(12):
         file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "w")
-        for j in range(500):
+        for j in range(1000):
             l = []
-            l.append(random.randint(1,3))
-            l.append(random.randint(1,2) + random.randint(1,3))
+            l.append(random.randint(2,4))
+            l.append(random.randint(2,4))
             file.write('die come to' + str(l) +' \n')
         file.close()
         client.build_kg_file(file_name, level='rel', use_hash=True)
 
-    for i in range(100):
+    for i in range(10):
         file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "w")
-        for j in range(50*10):
+        for j in range(1000):
 
             l = []
-            l.append(random.randint(1,3))
+            l.append(random.randint(1,2) + random.randint(1,2))
             l.append(random.randint(2,4))
             file.write('die come to' + str(l) + ' \n')
         # file.close()
