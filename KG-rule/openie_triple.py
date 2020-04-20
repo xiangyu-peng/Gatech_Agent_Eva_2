@@ -43,7 +43,7 @@ class KG_OpenIE():
         self.params = self.params_read(config_data, keys='kg')
         self.jsonfile = self.params['jsonfile']
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
-        self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away']
+        self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away', 'type', 'cost', 'direct']
         self.relations_full = ['is priced at', 'is located at', 'is rented-0-house at', 'is rented-0-house-full-color at'] #, 'is colored as', 'is classified as']
         self.kg_rel = dict()
         self.kg_sub = dict()
@@ -66,7 +66,7 @@ class KG_OpenIE():
         self.action_name = ['is ' + str(i) +'-step away from' for i in range(1,41)]
         self.board_name = ['Go','Mediterranean-Avenue', 'Community Chest-One',
                 'Baltic-Avenue', 'Income Tax', 'Reading Railroad', 'Oriental-Avenue',
-                'Chance-One', 'Vermont-Avenue', 'Connecticut-Avenue', 'In Jail/Just Visiting',
+                'Chance-One', 'Vermont-Avenue', 'Connecticut-Avenue', 'In-Jail/Just-Visiting',
                 'St. Charles Place', 'Electric Company', 'States-Avenue', 'Virginia-Avenue',
                 'Pennsylvania Railroad', 'St. James Place', 'Community Chest-Two', 'Tennessee-Avenue',
                 'New-York-Avenue', 'Free Parking', 'Kentucky-Avenue', 'Chance-Two', 'Indiana-Avenue',
@@ -81,7 +81,7 @@ class KG_OpenIE():
         self.vector_file = self.matrix_params['vector_file']
 
         #Dice Novelty
-        self.dice = Novelty_Detection()
+        self.dice = Novelty_Detection_Dice()
         self.text_dice_num = 0
 
     def build_empty_matrix_dict(self):
@@ -115,6 +115,8 @@ class KG_OpenIE():
         :return: Depending on simple_format: full or simpler format of triples <subject, relation, object>.
         """
         # https://stanfordnlp.github.io/CoreNLP/openie.html
+        text = text.replace('_', '-')
+
         core_nlp_output = self.client.annotate(text=text, annotators=['openie'], output_format='json',
                                                properties_key=properties_key, properties=properties)
         if simple_format:
@@ -403,7 +405,7 @@ class KG_OpenIE():
 
 
 
-class Novelty_Detection():
+class Novelty_Detection_Dice():
     def __init__(self, config_file='/media/becky/GNOME-p3/monopoly_simulator/config.ini'):
         #Novelty Detection
         config_data = ConfigParser()
@@ -534,34 +536,44 @@ class Novelty_Detection():
             # print('dice_novelty_list',dice_novelty_list)
         return dice_novelty_list
 
+# def Novelty_Detection_Card():
+#     def __init__(self, config_file='/media/becky/GNOME-p3/monopoly_simulator/config.ini'):
+#         #Novelty Detection
+#         config_data = ConfigParser()
+#         config_data.read(config_file)
+#         self.novelty_params = self.params_read(config_data, keys='novelty')
+#         self.card = dict()
+#         self.new_card = dict()
+
 
 
 if __name__ == '__main__':
-    client = KG_OpenIE()
-    file_name='/media/becky/GNOME-p3/KG-rule/test.txt'
+    # client = KG_OpenIE()
 
-    for i in range(12):
-        file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "w")
-        for j in range(1000):
-            l = []
-            l.append(random.randint(2,4))
-            l.append(random.randint(2,4))
-            file.write('die come to' + str(l) +' \n')
-        file.close()
-        client.build_kg_file(file_name, level='rel', use_hash=True)
-
-    for i in range(10):
-        file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "w")
-        for j in range(1000):
-
-            l = []
-            l.append(random.randint(1,2) + random.randint(1,2))
-            l.append(random.randint(2,4))
-            file.write('die come to' + str(l) + ' \n')
-        # file.close()
-        client.build_kg_file(file_name, level='rel', use_hash=True)
-    # print(client.kg_change)
-    print(client.dice.type_record)
+    # file_name='/media/becky/GNOME-p3/KG-rule/test.txt'
+    #
+    # for i in range(12):
+    #     file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "w")
+    #     for j in range(1000):
+    #         l = []
+    #         l.append(random.randint(2,4))
+    #         l.append(random.randint(2,4))
+    #         file.write('die come to' + str(l) +' \n')
+    #     file.close()
+    #     client.build_kg_file(file_name, level='rel', use_hash=True)
+    #
+    # for i in range(10):
+    #     file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "w")
+    #     for j in range(1000):
+    #
+    #         l = []
+    #         l.append(random.randint(1,2) + random.randint(1,2))
+    #         l.append(random.randint(2,4))
+    #         file.write('die come to' + str(l) + ' \n')
+    #     # file.close()
+    #     client.build_kg_file(file_name, level='rel', use_hash=True)
+    # # print(client.kg_change)
+    # print(client.dice.type_record)
 
 
 
@@ -586,14 +598,15 @@ if __name__ == '__main__':
     # print(dice.dice_evaluate(dice.new_dice))
     # print(dice.compare_dice_novelty())
 
-    # import time
-    # start = time.time()
-    # file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
+    import time
+    start = time.time()
+    file='/media/becky/GNOME-p3/monopoly_simulator/gameplay.log'
     # log_file = open(file,'r')
-    # client = KG_OpenIE()
+    client = KG_OpenIE()
     # client.read_json(level='rel')
     # client.generate_graphviz_graph_(png_filename='graph.png',kg_level='rel')
-    # client.build_kg_file(file, level='rel', use_hash=True, update_interval=1)
+    client.build_kg_file(file, level='rel', use_hash=True)
+    print(client.kg_rel)
     # client.dict_to_matrix()
     # client.save_matrix()
     # print(client.kg_vector)
