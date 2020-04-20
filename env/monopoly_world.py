@@ -50,6 +50,7 @@ class Monopoly_world():
         self.env_num = 0
         self.value_past = self.hyperparams['initial_cash']
         self.value_total = 2 * self.hyperparams['initial_cash']
+        self.kg_change = []
 
 
     def params_read(self, config_data):
@@ -91,6 +92,10 @@ class Monopoly_world():
         self.player_decision_agents['player_2'] = P2Agent_v2()
 
         self.game_elements = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-2.json', self.player_decision_agents, self.num_active_players)
+
+        if self.env_num > 1000:
+            inject_novelty(self.game_elements)
+
         np.random.seed(self.seeds) #control the seed!!!!
         self.game_elements['seed'] = self.seeds
         self.game_elements['card_seed'] = self.seeds
@@ -188,6 +193,7 @@ class Monopoly_world():
 
         #When last state has a winner, we will reset the game
         if self.terminal == 1:
+            self.save_kg()
             self.reset()
             state_space = self.a.board_to_state(self.game_elements)
             reward = 0
@@ -309,7 +315,6 @@ class Monopoly_world():
 
         if self.terminal > 0:
             self.save_kg()
-            print('Save KG!!!')
             self.reset()
             state_space = self.a.board_to_state(self.game_elements)
             reward = 0
@@ -410,10 +415,17 @@ class Monopoly_world():
         return self.seeds
 
     def save_kg(self):
-        self.kg.build_kg_file(self.log_path, level='rel', use_hash=True, update_interval=self.kg_save_interval)
+        self.kg_change = self.kg.build_kg_file(self.log_path, level='rel', use_hash=True)
         # file = open(self.log_path,'r')
         # for line in file:
         #     kg_change = self.kg.build_kg(line, level='rel', use_hash=True)
+
+        #TODO: change name to config
+        # if self.kg_change:
+        #     file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "a")
+        #     file.write(str(self.kg_change) + ' \n')
+        #     file.close()
+
         self.kg_save_num += 1
         #save knowledge graph when simulating num of games is self.kg_save_interval
         if self.kg_save_num % self.kg_save_interval == 0:
@@ -421,6 +433,13 @@ class Monopoly_world():
             self.kg.dict_to_matrix()
             self.kg.save_matrix()
             self.kg.save_vector()
+            # file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "a")
+            # if self.kg_change == []:
+            #     file.write('None' + ' \n')
+
+            file.write(str(self.kg_change) + ' \n')
+            file.close()
+
 
 
 
