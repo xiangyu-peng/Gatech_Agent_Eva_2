@@ -10,7 +10,7 @@ import diagnostics
 from interface import Interface
 import sys, os
 from card_utility_actions import move_player_after_die_roll
-
+import location
 import novelty_generator
 import xlsxwriter
 import logging
@@ -165,27 +165,27 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
 
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, win_indicator, masked_actions
 
-def after_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, a, params):
+def after_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     # def after_agent(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params):
     a.board_to_state(game_elements)
     # print('state_space', a.state_space)
     current_player = game_elements['players'][current_player_index]
-    # # if not current_player.currently_in_jail:
-    # #got state and masked actions => agent => output actions and move
-    # #action vector => actions
-    # move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
-    # logger.debug('move_actions =====>'+ str(move_actions))
-    # current_player.agent.set_move_actions(move_actions)
-    # current_player.make_post_roll_moves(game_elements)
-    # #####################################################################
-    #
-    # # add to game history
-    # game_elements['history']['function'].append(current_player.make_post_roll_moves)
-    # params = dict()
-    # params['self'] = current_player
-    # params['current_gameboard'] = game_elements
-    # game_elements['history']['param'].append(params)
-    # game_elements['history']['return'].append(None)
+    # if not current_player.currently_in_jail:
+    #got state and masked actions => agent => output actions and move
+    #action vector => actions
+    move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
+    logger.debug('move_actions =====>'+ str(move_actions))
+    current_player.agent.set_move_actions(move_actions)
+    current_player.make_post_roll_moves(game_elements)
+    #####################################################################
+
+    # add to game history.
+    game_elements['history']['function'].append(current_player.make_post_roll_moves)
+    params = dict()
+    params['self'] = current_player
+    params['current_gameboard'] = game_elements
+    game_elements['history']['param'].append(params)
+    game_elements['history']['return'].append(None)
 
     logger.debug('now Player after actions is in jail? ' + str(current_player.currently_in_jail))
 
@@ -309,6 +309,8 @@ def simulate_game_step_tf_step(game_elements, num_active_players, num_die_rolls,
 
     win_indicator = 0
     a = Interface()
+    a.set_board(game_elements)
+
     if current_player.current_cash < 0:
         game_elements, num_active_players, a, win_indicator = \
             cash_negative(game_elements, current_player, num_active_players, a, win_indicator)
@@ -351,6 +353,7 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
     winner = None
 
     a = Interface()
+    a.set_board(game_elements)
     die_roll = [0]
     markder = []
     while num_active_players > 1:
@@ -675,6 +678,7 @@ def simulate_game_step_tf_nochange(game_elements, num_active_players, num_die_ro
 
     win_indicator = 0
     a = Interface()
+    a.set_board(game_elements)
     if current_player.current_cash < 0:
         game_elements, num_active_players, a, win_indicator = \
             cash_negative(game_elements, current_player, num_active_players, a, win_indicator)
@@ -736,22 +740,25 @@ def inject_novelty(current_gameboard, novelty_schema=None):
     # i,e the orchid color group now has Baltic Avenue besides St. Charles Place, States Avenue and Virginia Avenue. The player acquires a monopoly
     # only on the ownership of all the 4 properties in this case.
     inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
-    inanimateNovelty.map_property_set_to_color(current_gameboard, [current_gameboard['location_objects']['Park Place'], current_gameboard['location_objects']['Boardwalk']], 'Brown')
-    inanimateNovelty.map_property_to_color(current_gameboard, current_gameboard['location_objects']['Baltic-Avenue'], 'Orchid')
-    #setting new rents for Indiana Avenue
+    # inanimateNovelty.map_property_set_to_color(current_gameboard, [current_gameboard['location_objects']['Park Place'], current_gameboard['location_objects']['Boardwalk']], 'Brown')
+    # inanimateNovelty.map_property_to_color(current_gameboard, current_gameboard['location_objects']['Baltic-Avenue'], 'Orchid')
+    # #setting new rents for Indiana Avenue
     inanimateNovelty.rent_novelty(current_gameboard['location_objects']['Indiana-Avenue'], {'rent': 50, 'rent_1_house': 150})
 
 
-    '''
-    #Level 3 Novelty
-    granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 6)
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States Avenue'], 20)
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee Avenue'], 27)
-    spatialNovelty = novelty_generator.SpatialRepresentationNovelty()
-    spatialNovelty.color_reordering(current_gameboard, ['Boardwalk', 'Park Place'], 'Blue')
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
-    '''
+
+    # Level 3 Novelty
+    # Change game board
+
+    # granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic-Avenue'], 6)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States-Avenue'], 20)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee-Avenue'], 27)
+
+    # spatialNovelty = novelty_generator.SpatialRepresentationNovelty()
+    # spatialNovelty.color_reordering(current_gameboard, ['Boardwalk', 'Park Place'], 'Blue')
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
+    return current_gameboard
 if __name__ == '__main__':
     # this is where everything begins. Assign decision agents to your players, set up the board and start simulating! You can
     # control any number of players you like, and assign the rest to the simple agent. We plan to release a more sophisticated
@@ -770,5 +777,6 @@ if __name__ == '__main__':
 
     game_elements = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-2.json',
                                  player_decision_agents, num_active_players)
+
     inject_novelty(game_elements)
     simulate_game_instance(game_elements, num_active_players, np_seed=8)
