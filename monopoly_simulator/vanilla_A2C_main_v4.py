@@ -145,6 +145,7 @@ class MonopolyTrainer:
                     #     break
                     a.append(a_once)
                 # while opposite happens. Step won't change env, step_nochange changes the env\
+
                 s_prime_cal, r, done, masked_actions = self.envs.step_nochange(a)
 
                 values.append(self.model.critic(s))
@@ -153,14 +154,13 @@ class MonopolyTrainer:
                 entropy += Categorical(prob).entropy().mean()
                 log_probs.append(log_prob)
                 rewards.append(torch.FloatTensor(r).unsqueeze(1).to(self.device))
-                done = [[1] if i > 0 else [0] for i in done]
+                done = [[0] if i > 0 else [1] for i in done]
                 masks.append(torch.tensor(done, device=self.device).float())
 
                 a_tf = [0 for i in range(self.n_train_processes)]
                 s_prime, _, done_hyp, masked_actions = self.envs.step_hyp(a)
 
                 if done_hyp:
-                    s_prime, _, done, masked_actions = self.envs.step_hyp(a_tf)
                     s_prime, _, done, masked_actions = self.envs.step_after_nochange(a_tf)
 
                 s = s_prime
@@ -177,9 +177,7 @@ class MonopolyTrainer:
 
                 actor_loss = -(log_probs * advantage.detach()).mean()
                 critic_loss = advantage.pow(2).mean()
-
                 loss += actor_loss + 0.5 * critic_loss - 0.001 * entropy
-                # print('loss', loss)
 
             loss /= interval
             self.loss = loss

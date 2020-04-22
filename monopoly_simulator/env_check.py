@@ -58,9 +58,10 @@ print(s,mask)
 done_num = 0
 done_num_total = 2
 while done_num < done_num_total:
+
     with HiddenPrints():
         s, rew, done, info = env.step_nochange(0)
-    print('s',s, rew, info)
+    print('s-nochange',s, rew, info)
 
     if done > 0:
         # print('Done')
@@ -73,7 +74,7 @@ while done_num < done_num_total:
     while done_after == False:
         with HiddenPrints():
             s, rew, done_after, info = env.step_hyp(0)
-        print('s', s, rew, info, done_after)
+        print('s-hyp0', s, rew, info, done_after)
 
         with HiddenPrints():
             s, rew, done_after, info = env.step_hyp(1)

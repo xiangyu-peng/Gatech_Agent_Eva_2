@@ -83,6 +83,8 @@ class MonopolyTrainer:
         self.loss = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
+        self.memory = Memory()
+
     def train(self):
         step_idx = 0
         with HiddenPrints():
@@ -121,6 +123,7 @@ class MonopolyTrainer:
                     a.append(a_once)
                 # while opposite happens. Step won't change env, step_nochange changes the env\
                 s_prime_cal, r, done, _ = self.envs.step_nochange(a)
+                # s_prime_cal = torch.tensor(s_prime_cal, device=self.device).float()
 
                 values.append(self.model.critic(torch.tensor(s, device=self.device).float()))
 
@@ -128,11 +131,18 @@ class MonopolyTrainer:
                 entropy += Categorical(prob).entropy().mean()
                 log_probs.append(log_prob)
                 rewards.append(torch.FloatTensor(r).unsqueeze(1).to(self.device))
-                done = [[1] if i > 0 else [0] for i in done]
+                # print('done', done)
+                done = [[0] if i > 0 else [1] for i in done]
                 masks.append(torch.tensor(done, device=self.device).float())
-
+                # print('masks', masks)
                 a_tf = [0 for i in range(self.n_train_processes)]
                 s_prime, _, _, _ = self.envs.step_after_nochange(a_tf)
+
+                # print('333333333333')
+                # print(s)
+                # print(r)
+                # print('rewards', rewards)
+                # print(self.model.critic(torch.tensor(s, device=self.device).float()))
 
                 s = s_prime
 
@@ -142,14 +152,21 @@ class MonopolyTrainer:
                 # loss cal
                 log_probs = torch.cat(log_probs)
                 returns = compute_returns(self.model.critic(s_prime_cal), rewards, masks, gamma=0.99)
+                # print(s_prime_cal)
+                # print(self.model.critic(s_prime_cal))
+
                 returns = torch.cat(returns).detach()
+                # print('returns',returns)
                 values = torch.cat(values)
                 advantage = returns - values
-
+                # print('log_probs',log_probs)
                 actor_loss = -(log_probs * advantage.detach()).mean()
+                print('actor_loss',actor_loss)
                 critic_loss = advantage.pow(2).mean()
-
+                print('critic_loss',critic_loss)
                 loss += actor_loss + 0.5 * critic_loss - 0.001 * entropy
+                self.memory.clear()
+                print('loss',loss)
 
             loss /= self.update_interval
             self.loss = loss
