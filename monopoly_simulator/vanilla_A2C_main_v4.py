@@ -1,5 +1,5 @@
 '''
-This version include representation vector of game rule in the game state.
+This version include representation vector of game rule in the game state
 '''
 from vanilla_A2C import *
 from configparser import ConfigParser
