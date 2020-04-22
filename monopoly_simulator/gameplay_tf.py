@@ -179,7 +179,7 @@ def after_agent_tf_step(game_elements, num_active_players, num_die_rolls, curren
     current_player.make_post_roll_moves(game_elements)
     #####################################################################
 
-    # add to game history
+    # add to game history.
     game_elements['history']['function'].append(current_player.make_post_roll_moves)
     params = dict()
     params['self'] = current_player
