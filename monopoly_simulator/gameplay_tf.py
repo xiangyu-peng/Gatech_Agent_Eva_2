@@ -566,7 +566,7 @@ def after_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, cu
     current_player_index = (current_player_index+1)%len(game_elements['players'])
 
     done_indicator = 0
-    if diagnostics.max_cash_balance(game_elements) > 300000: # this is our limit for runaway cash for testing purposes only.
+    if diagnostics.max_cash_balance(game_elements) > 10000: # this is our limit for runaway cash for testing purposes only.
                                                              # We print some diagnostics and return if any player exceeds this.
         diagnostics.print_asset_owners(game_elements)
         diagnostics.print_player_cash_balances(game_elements)
@@ -685,7 +685,7 @@ def simulate_game_step_tf_nochange(game_elements, num_active_players, num_die_ro
 
     done_indicator = 0
     if diagnostics.max_cash_balance(
-            game_elements) > 300000:  # this is our limit for runaway cash for testing purposes only.
+            game_elements) > 10000:  # this is our limit for runaway cash for testing purposes only.
         # We print some diagnostics and return if any player exceeds this.
         diagnostics.print_asset_owners(game_elements)
         diagnostics.print_player_cash_balances(game_elements)
@@ -712,22 +712,24 @@ def inject_novelty(current_gameboard, novelty_schema=None):
 
 
     #Level 1 Novelty
-    numberDieNovelty = novelty_generator.NumberClassNovelty()
-    numberDieNovelty.die_novelty(current_gameboard, 2, die_state_vector=[[1,2,3,4],[1,2,3,4]])
-    classDieNovelty = novelty_generator.TypeClassNovelty()
-    # die_state_distribution_vector = ['uniform','uniform','biased','biased']
-    die_state_distribution_vector = ['uniform', 'uniform']
-    die_type_vector = ['odd_only','even_only']
-    classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
-    classCardNovelty = novelty_generator.TypeClassNovelty()
-    novel_cc = dict()
-    novel_cc["street_repairs"] = "alternate_contingency_function_1"
-    novel_chance = dict()
-    novel_chance["general_repairs"] = "alternate_contingency_function_1"
-    classCardNovelty.card_novelty(current_gameboard, novel_cc, novel_chance)
+    # numberDieNovelty = novelty_generator.NumberClassNovelty()
+    # numberDieNovelty.die_novelty(current_gameboard, 2, die_state_vector=[[1,2,3,4,5],[1,2,3,4,5]])
+    # classDieNovelty = novelty_generator.TypeClassNovelty()
+    # # die_state_distribution_vector = ['uniform','uniform','biased','biased']
+    # die_state_distribution_vector = ['uniform', 'uniform']
+    # die_type_vector = ['odd_only','even_only']
+    # classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
 
 
-    '''
+    # classCardNovelty = novelty_generator.TypeClassNovelty()
+    # novel_cc = dict()
+    # novel_cc["street_repairs"] = "alternate_contingency_function_1"
+    # novel_chance = dict()
+    # novel_chance["general_repairs"] = "alternate_contingency_function_1"
+    # classCardNovelty.card_novelty(current_gameboard, novel_cc, novel_chance)
+
+
+
     #Level 2 Novelty
     #The below combination reassigns property groups and individual properties to different colors.
     #On playing the game it is verified that the newly added property to the color group is taken into account for monopolizing a color group,
@@ -735,10 +737,10 @@ def inject_novelty(current_gameboard, novelty_schema=None):
     # only on the ownership of all the 4 properties in this case.
     inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
     inanimateNovelty.map_property_set_to_color(current_gameboard, [current_gameboard['location_objects']['Park Place'], current_gameboard['location_objects']['Boardwalk']], 'Brown')
-    inanimateNovelty.map_property_to_color(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 'Orchid')
+    inanimateNovelty.map_property_to_color(current_gameboard, current_gameboard['location_objects']['Baltic-Avenue'], 'Orchid')
     #setting new rents for Indiana Avenue
-    inanimateNovelty.rent_novelty(current_gameboard['location_objects']['Indiana Avenue'], {'rent': 50, 'rent_1_house': 150})
-    '''
+    inanimateNovelty.rent_novelty(current_gameboard['location_objects']['Indiana-Avenue'], {'rent': 50, 'rent_1_house': 150})
+
 
     '''
     #Level 3 Novelty

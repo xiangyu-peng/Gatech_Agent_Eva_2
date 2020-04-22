@@ -795,6 +795,8 @@ def move_player(player, card, current_gameboard):
     """
     logger.debug('executing move_player for '+player.player_name)
     logger.debug('destination specified on card is '+card.destination.name)
+    logger.info(card.name + ' is typed as ' + card.card_type)
+    logger.info(card.name + ' is directed to ' + card.destination.name)
     new_position = card.destination.start_position
     jail_position = current_gameboard['jail_position']
     if new_position == jail_position:
@@ -840,6 +842,8 @@ def bank_cash_transaction(player, card, current_gameboard):
     :return: None
     """
     logger.debug('executing bank_cash_transaction for '+ player.player_name)
+    logger.info(card.name + 'is typed as ' + card.card_type)
+    logger.info(card.name + 'is cost as ' + str(card.amount))
     if card.amount < 0:
         player.charge_player(-1*card.amount)
         # add to game history
@@ -949,8 +953,13 @@ def calculate_street_repair_cost(player, card, current_gameboard): # assesses, n
     :return: None
     """
     logger.debug('executing calculate_street_repair_cost for '+player.player_name)
+
+
     cost_per_house = 40
     cost_per_hotel = 115
+    logger.info(card.name + ' is typed as ' + card.card_type)
+    logger.info(card.name + ' is cost_per_house as ' + str(cost_per_house))
+    logger.info(card.name + ' is cost_per_hotel as ' + str(cost_per_hotel))
     cost = player.num_total_houses*cost_per_house+player.num_total_hotels*cost_per_hotel
     player.charge_player(cost)
     # add to game history

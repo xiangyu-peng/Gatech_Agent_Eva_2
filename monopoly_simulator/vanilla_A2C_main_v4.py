@@ -17,7 +17,7 @@ warnings.filterwarnings('ignore')
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 #
 class Config:
-    device = torch.device('cuda:3')
+    device = torch.device('cuda:0')
 
 class HiddenPrints:
     def __enter__(self):
