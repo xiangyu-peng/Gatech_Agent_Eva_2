@@ -4,6 +4,8 @@ curr_path = os.getcwd()
 curr_path = curr_path.replace("/monopoly_simulator", "")
 sys.path.append(curr_path + '/env')
 sys.path.append(curr_path + '/KG-rule')
+upper_path = '/'.join(os.getcwd().split('/')[:-1])
+
 from gameplay_step import *
 from gameplay_tf import *
 from interface import Interface
@@ -24,7 +26,7 @@ from configparser import ConfigParser
 class Monopoly_world():
     def __init__(self):
         #get config data
-        config_file = '/media/becky/GNOME-p3/monopoly_simulator/config.ini'
+        config_file = upper_path + '/monopoly_simulator/config.ini'
         config_data = ConfigParser()
         config_data.read(config_file)
         self.hyperparams = self.params_read(config_data)
@@ -43,14 +45,18 @@ class Monopoly_world():
         self.win_indicator = 0
         self.die_roll = []
         self.masked_actions = []
+        self.value_past = self.hyperparams['initial_cash']
+        self.value_total = 2 * self.hyperparams['initial_cash']
+
+        # Rule learning
         self.kg = KG_OpenIE()
         self.kg_save_num = 0
         self.kg_save_interval = self.hyperparams['kg_save_interval']
         self.log_path = self.hyperparams['log_path']
         self.env_num = 0
-        self.value_past = self.hyperparams['initial_cash']
-        self.value_total = 2 * self.hyperparams['initial_cash']
         self.kg_change = []
+        self.novelty_inject_num = self.hyperparams['novelty_inject_num']
+        self.rule_change_path = upper_path + self.hyperparams['rule_change_path']
 
 
     def params_read(self, config_data):
@@ -93,7 +99,7 @@ class Monopoly_world():
 
         self.game_elements = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-2.json', self.player_decision_agents, self.num_active_players)
 
-        if self.env_num > 1000:
+        if self.env_num > self.novelty_inject_num:
             inject_novelty(self.game_elements)
 
         np.random.seed(self.seeds) #control the seed!!!!
@@ -416,15 +422,6 @@ class Monopoly_world():
 
     def save_kg(self):
         self.kg_change = self.kg.build_kg_file(self.log_path, level='rel', use_hash=True)
-        # file = open(self.log_path,'r')
-        # for line in file:
-        #     kg_change = self.kg.build_kg(line, level='rel', use_hash=True)
-
-        #TODO: change name to config
-        # if self.kg_change:
-        #     file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "a")
-        #     file.write(str(self.kg_change) + ' \n')
-        #     file.close()
 
         self.kg_save_num += 1
         #save knowledge graph when simulating num of games is self.kg_save_interval
@@ -433,10 +430,8 @@ class Monopoly_world():
             self.kg.dict_to_matrix()
             self.kg.save_matrix()
             self.kg.save_vector()
-            # file = open("/media/becky/GNOME-p3/KG-rule/test.txt", "a")
-            # if self.kg_change == []:
-            #     file.write('None' + ' \n')
 
+            file = open(self.rule_change_path, "a")
             file.write(str(self.kg_change) + ' \n')
             file.close()
 
