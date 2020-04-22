@@ -23,7 +23,7 @@ class Interface(object):
                    'North-Carolina-Avenue', 'Pennsylvania-Avenue', 'Park Place', 'Boardwalk']
         self.board_state = ['Go','Mediterranean-Avenue', 'Community Chest-One',
                 'Baltic-Avenue', 'Income Tax', 'Reading Railroad', 'Oriental-Avenue',
-                'Chance-One', 'Vermont-Avenue', 'Connecticut-Avenue', 'In Jail/Just Visiting',
+                'Chance-One', 'Vermont-Avenue', 'Connecticut-Avenue', 'In-Jail/Just-Visiting',
                 'St. Charles Place', 'Electric Company', 'States-Avenue', 'Virginia-Avenue',
                 'Pennsylvania Railroad', 'St. James Place', 'Community Chest-Two', 'Tennessee-Avenue',
                 'New-York-Avenue', 'Free Parking', 'Kentucky-Avenue', 'Chance-Two', 'Indiana-Avenue',

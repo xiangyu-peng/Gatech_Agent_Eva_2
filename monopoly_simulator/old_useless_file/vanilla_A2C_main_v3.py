@@ -1,11 +1,8 @@
-'''
-This version include representation vector of game rule in the game state
-'''
 from vanilla_A2C import *
 from configparser import ConfigParser
 import graphviz
 from torchviz import make_dot
-from gameplay_tf import *
+from gameplay_simple_tf import *
 import logger
 import os
 import sys
@@ -17,7 +14,7 @@ warnings.filterwarnings('ignore')
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 #
 class Config:
-    device = torch.device('cuda:0')
+    device = torch.device('cuda:3')
 
 class HiddenPrints:
     def __enter__(self):
@@ -86,26 +83,7 @@ class MonopolyTrainer:
         self.loss = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
-    def train_kg(self):
-        with HiddenPrints():
-            self.envs.reset()
-        train_kg_num = 0
-        while train_kg_num < 100000:
-            train_kg_num += 1
-            a_tf = [0 for i in range(self.n_train_processes)]
-            s_prime, _, done, masked_actions = self.envs.step_after_nochange(a_tf)
-            if masked_actions[0][1] != []:
-                self.kg_vector = masked_actions[0][1]
-                # print('self.kg_vector ===>',self.kg_vector)
-                break
-
-    def add_vector_to_state(self, state, vector, device):
-        new_state = np.concatenate((vector.reshape(1, -1), state), axis=1)
-        return torch.tensor(new_state, device=device).float()
-
-
     def train(self):
-        self.train_kg()
         step_idx = 0
         with HiddenPrints():
             reset_array = self.envs.reset()
@@ -117,16 +95,13 @@ class MonopolyTrainer:
         loss_train = torch.tensor(0, device=self.device).float()
         while step_idx < self.max_train_steps:
             loss = torch.tensor(0, device=self.device).float()
-            # for _ in range(self.update_interval):
-            done_hyp = False
-            interval = 0
-            while done_hyp == False:
-                interval += 1
+            for _ in range(self.update_interval):
                 # move form last layer
                 entropy = 0
                 log_probs, masks, rewards, values = [], [], [], []
-                s = self.add_vector_to_state(s, self.kg_vector, self.device)
-                prob = self.model.actor(s)  # s => tensor #output = prob for actions
+
+                # s = s.reshape(n_train_processes, -1)
+                prob = self.model.actor(torch.tensor(s, device=self.device).float())  # s => tensor #output = prob for actions
                 # prob = model.actor(torch.from_numpy(s,device=device).float()) # s => tensor #output = prob for actions
                 # use the action from the distribution if it is in masked
 
@@ -145,9 +120,9 @@ class MonopolyTrainer:
                     #     break
                     a.append(a_once)
                 # while opposite happens. Step won't change env, step_nochange changes the env\
-                s_prime_cal, r, done, masked_actions = self.envs.step_nochange(a)
+                s_prime_cal, r, done, _ = self.envs.step_nochange(a)
 
-                values.append(self.model.critic(s))
+                values.append(self.model.critic(torch.tensor(s, device=self.device).float()))
 
                 log_prob = Categorical(prob).log_prob(torch.tensor(a, device=self.device))
                 entropy += Categorical(prob).entropy().mean()
@@ -157,16 +132,12 @@ class MonopolyTrainer:
                 masks.append(torch.tensor(done, device=self.device).float())
 
                 a_tf = [0 for i in range(self.n_train_processes)]
-                s_prime, _, done_hyp, masked_actions = self.envs.step_hyp(a)
-
-                if done_hyp:
-                    s_prime, _, done, masked_actions = self.envs.step_hyp(a_tf)
-                    s_prime, _, done, masked_actions = self.envs.step_after_nochange(a_tf)
+                s_prime, _, _, _ = self.envs.step_after_nochange(a_tf)
 
                 s = s_prime
 
                 ##########
-                s_prime_cal = self.add_vector_to_state(s_prime_cal, self.kg_vector, self.device)
+                s_prime_cal = torch.tensor(s_prime_cal, device=self.device).float()
 
                 # loss cal
                 log_probs = torch.cat(log_probs)
@@ -179,11 +150,9 @@ class MonopolyTrainer:
                 critic_loss = advantage.pow(2).mean()
 
                 loss += actor_loss + 0.5 * critic_loss - 0.001 * entropy
-                # print('loss', loss)
 
-            loss /= interval
+            loss /= self.update_interval
             self.loss = loss
-            # print('loss', loss)
             loss_train += loss
             # print('loss', loss)
             if loss != torch.tensor(0, device=self.device):
@@ -197,48 +166,20 @@ class MonopolyTrainer:
                 self.TB.logkv('loss_train', round(float(loss_train) / self.PRINT_INTERVAL, 3))
                 loss_train = torch.tensor(0, device=self.device).float()
                 # if step_idx % PRINT_INTERVAL == 0:
-                avg_score, avg_winnning = self.test_v2(step_idx, self.model, self.device, num_test=1, kg_vector=self.kg_vector)
+                avg_score, avg_winnning = test(step_idx, self.model, self.device, num_test=1)
                 self.TB.logkv('avg_score', avg_score)
                 self.TB.logkv('avg_winning', avg_winnning)
                 self.TB.dumpkvs()
                 # save weights of A2C
                 if step_idx % self.PRINT_INTERVAL == 0:
                     save_path = '/media/becky/GNOME-p3/monopoly_simulator/weights'
-                    save_name = save_path + '/push_buy_tf_ne_v4_' + str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
+                    save_name = save_path + '/push_buy_tf_ne_v3_' + str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
                     torch.save(self.model, save_name)
 
             step_idx += 1
             # print('step_idx',step_idx)
         envs.close()
 
-    def test_v2(self,step_idx, model, device, num_test, kg_vector):
-        env = gym.make('monopoly_simple-v1')
-        score = 0.0
-        done = False
-        win_num = 0
-        for _ in range(num_test):
-            with HiddenPrints():
-                s, masked_actions = env.reset()
-            num_game = 0
-            score_game = 0
-
-            while not done:
-                num_game += 1
-                s = s.reshape(1, -1)
-                s = self.add_vector_to_state(s, kg_vector, device)
-                prob = model.actor(s)
-                a = Categorical(prob).sample().cpu().numpy()  # substitute
-                with HiddenPrints():
-                    s_prime, r, done, masked_actions = env.step(a[0])
-                s = s_prime
-                score_game += r
-            score += score_game/num_game
-            win_num += int(done) - 1
-            done = 0
-        print(f"Step # :{step_idx}, avg score : {score/num_test:.3f}")
-        print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
-        env.close()
-        return round(score/num_test, 3), round(win_num/num_test, 3)
 
 if __name__ == '__main__':
     # read the config file and set the hyper-param
@@ -277,8 +218,6 @@ if __name__ == '__main__':
         trainer = MonopolyTrainer(params, device_id)
         trainer.train()
 
-    # a = np.zeros([2,2])
-    # print(np.concatenate((a.reshape(1,-1), np.zeros([1,5])),axis=1))
 # if __name__ == '__main__':
 #     config_file = '/media/becky/Novelty-Generation-Space-A2C/Vanilla-A2C/config.ini'
 #     config_data = ConfigParser()

@@ -110,7 +110,7 @@ def _initialize_locations(game_elements, game_schema):
             railroad_positions.append(i)
         elif loc.loc_class == 'utility':
             utility_positions.append(i)
-        elif loc.name == 'In Jail/Just Visiting':
+        elif loc.name == 'In-Jail/Just-Visiting':
             game_elements['jail_position'] = i
 
     game_elements['railroad_positions'] = railroad_positions

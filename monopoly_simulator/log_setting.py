@@ -1,6 +1,6 @@
 import logging
 import os
-filename = 'gameplay_2'
+filename = 'gameplay'
 def ini_log_level():
 
 
