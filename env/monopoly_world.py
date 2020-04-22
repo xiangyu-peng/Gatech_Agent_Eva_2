@@ -5,7 +5,6 @@ curr_path = curr_path.replace("/monopoly_simulator", "")
 sys.path.append(curr_path + '/env')
 sys.path.append(curr_path + '/KG-rule')
 upper_path = '/'.join(os.getcwd().split('/')[:-1])
-
 from gameplay_step import *
 from gameplay_tf import *
 from interface import Interface
@@ -52,7 +51,7 @@ class Monopoly_world():
         self.kg = KG_OpenIE()
         self.kg_save_num = 0
         self.kg_save_interval = self.hyperparams['kg_save_interval']
-        self.log_path = self.hyperparams['log_path']
+        self.log_path = upper_path + self.hyperparams['log_path']
         self.env_num = 0
         self.kg_change = []
         self.novelty_inject_num = self.hyperparams['novelty_inject_num']
