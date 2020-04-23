@@ -89,15 +89,13 @@ class Monopoly_world():
 
     def reset(self):
         self.init()
-        # if os.path.exists(self.log_path):
-        #     os.remove(self.log_path)
-        logger = set_log_level()
-        # logger.info('seed is ' + str(self.seeds))
         self.player_decision_agents['player_1'] = P1Agent()
         self.player_decision_agents['player_2'] = P2Agent_v2()
 
         self.game_elements = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-2.json', self.player_decision_agents, self.num_active_players)
+        self.a.set_board(self.game_elements)
 
+        # Inject novelty here
         if self.env_num > self.novelty_inject_num:
             inject_novelty(self.game_elements)
 
@@ -248,11 +246,8 @@ class Monopoly_world():
             action = self.a.action_num2vec(action)
             self.die_roll = []
 
-            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, params, self.masked_actions, done_hyp = \
-                after_agent_hyp(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index,
-                            action, self.a, self.params)
             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-                after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params)
+                after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
             if self.num_active_players > 1:
                 self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
                     simulate_game_step_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.die_roll)
@@ -298,7 +293,7 @@ class Monopoly_world():
         # be obstructed in one state
         action = self.a.action_num2vec(action)
         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-            after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, self.params)
+            after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.a, self.params)
         if self.num_active_players > 1:
             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
                 simulate_game_step_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.die_roll)
@@ -347,6 +342,7 @@ class Monopoly_world():
         #     self.die_roll = []
 
         a = Interface()
+        a.set_board(self.game_elements)
         action = a.action_num2vec(action)
         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.a, params, self.masked_actions, done_hyp = \
             after_agent_hyp(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, a,
@@ -384,6 +380,7 @@ class Monopoly_world():
 
         else:
             a = Interface()
+            a.set_board(self.game_elements)
             action = a.action_num2vec(action)
             game_elements, num_active_players, num_die_rolls, current_player_index, done_indicator, win_indicator = \
                 after_agent_tf_nochange(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, a, self.params)
