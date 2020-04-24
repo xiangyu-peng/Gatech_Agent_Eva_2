@@ -50,6 +50,7 @@ def test_eva(step_idx, model, device, num_test, vector):
         score_game = 0
         while not done:
             s = s.reshape(1, -1)
+            print('s', s)
             s = add_vector_to_state(s, vector, device)
             num_game += 1
             # s = torch.tensor(s, device=device).float()
@@ -57,7 +58,7 @@ def test_eva(step_idx, model, device, num_test, vector):
             prob = model.actor(s)
 
             #debug
-            print('s',s)
+            # print('s',s)
             print('prob', prob)
             if num_game > 0:
                 break

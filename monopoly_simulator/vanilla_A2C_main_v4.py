@@ -121,6 +121,7 @@ class MonopolyTrainer:
             done_hyp = False
             interval = 0
             while done_hyp == False:
+                done_hyp = True
                 interval += 1
                 # move form last layer
                 entropy = 0
@@ -158,7 +159,7 @@ class MonopolyTrainer:
                 masks.append(torch.tensor(done, device=self.device).float())
 
                 a_tf = [0 for i in range(self.n_train_processes)]
-                s_prime, _, done_hyp, masked_actions = self.envs.step_hyp(a)
+                # s_prime, _, done_hyp, masked_actions = self.envs.step_hyp(a)
 
                 if done_hyp:
                     s_prime, _, done, masked_actions = self.envs.step_after_nochange(a_tf)

@@ -1,0 +1,97 @@
+loss_train ===> tensor(2.3414e-05, device='cuda:0', grad_fn=<DivBackward0>)
+Remove monopoly_simple-v1 from registry
+Step # :0, avg score : 0.006
+Step # :0, avg winning : 0.000
+loss_train ===> tensor(0.0023, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :10000, avg score : 0.004
+Step # :10000, avg winning : 0.000
+loss_train ===> tensor(0.0017, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :20000, avg score : 0.013
+Step # :20000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :30000, avg score : 0.008
+Step # :30000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :40000, avg score : 0.009
+Step # :40000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :50000, avg score : 0.007
+Step # :50000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :60000, avg score : 0.016
+Step # :60000, avg winning : 0.000
+loss_train ===> tensor(0.0013, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :70000, avg score : 0.009
+Step # :70000, avg winning : 0.000
+loss_train ===> tensor(0.0013, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :80000, avg score : 0.016
+Step # :80000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :90000, avg score : 0.014
+Step # :90000, avg winning : 0.000
+loss_train ===> tensor(0.0012, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :100000, avg score : 0.012
+Step # :100000, avg winning : 0.000
+loss_train ===> tensor(0.0010, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :110000, avg score : 0.017
+Step # :110000, avg winning : 0.000
+loss_train ===> tensor(0.0013, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :120000, avg score : 0.009
+Step # :120000, avg winning : 0.000
+loss_train ===> tensor(0.0011, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :130000, avg score : 0.014
+Step # :130000, avg winning : 0.000
+loss_train ===> tensor(0.0011, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :140000, avg score : 0.017
+Step # :140000, avg winning : 0.000
+loss_train ===> tensor(0.0011, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :150000, avg score : 0.018
+Step # :150000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :160000, avg score : 0.014
+Step # :160000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :170000, avg score : 0.017
+Step # :170000, avg winning : 0.000
+loss_train ===> tensor(0.0011, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :180000, avg score : 0.015
+Step # :180000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :190000, avg score : 0.015
+Step # :190000, avg winning : 0.000
+loss_train ===> tensor(0.0016, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :200000, avg score : 0.017
+Step # :200000, avg winning : 0.000
+loss_train ===> tensor(0.0013, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :210000, avg score : 0.014
+Step # :210000, avg winning : 0.000
+loss_train ===> tensor(0.0015, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :220000, avg score : 0.016
+Step # :220000, avg winning : 0.000
+loss_train ===> tensor(0.0013, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :230000, avg score : 0.014
+Step # :230000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :240000, avg score : 0.014
+Step # :240000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :250000, avg score : 0.017
+Step # :250000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :260000, avg score : 0.018
+Step # :260000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :270000, avg score : 0.017
+Step # :270000, avg winning : 0.000
+loss_train ===> tensor(0.0014, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :280000, avg score : 0.016
+Step # :280000, avg winning : 0.000
+loss_train ===> tensor(0.0016, device='cuda:0', grad_fn=<DivBackward0>)
+Step # :290000, avg score : 0.017
+Step # :290000, avg winning : 0.000
+Traceback (most recent call last):
+  File "vanilla_A2C_main_v4.py", line 276, in <module>
+    trainer.train()
+  File "vanilla_A2C_main_v4.py", line 210, in train
+    envs.close()
+NameError: name 'envs' is not defined
