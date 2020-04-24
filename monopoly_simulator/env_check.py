@@ -77,6 +77,14 @@ while done_num < done_num_total:
         print('s-hyp0', s, rew, info, done_after)
 
         with HiddenPrints():
+            s, rew, done, info = env.step_nochange(0)
+        print('s-nochange', s, rew, info)
+        
+        with HiddenPrints():
+            s, rew, done_after, info = env.step_hyp(0)
+        print('s-hyp0', s, rew, info, done_after)
+
+        with HiddenPrints():
             s, rew, done_after, info = env.step_hyp(1)
         print('s', s, rew, info, done_after)
 
