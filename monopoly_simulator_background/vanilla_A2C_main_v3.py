@@ -126,6 +126,10 @@ class MonopolyTrainer:
         return torch.tensor(state_return, device=device).float()
 
     def test_v2(self, step_idx, seed):
+
+        # model_path = '/media/becky/GNOME-p3/monopoly_simulator_background/weights/v3_lr_0.001_#_' + str(step_idx) + '.pkl'
+        # model = torch.load(model_path)
+
         # Set the env for testing
         env = gym.make('monopoly_simple-v1')
         env.set_kg(self.kg_use)
@@ -152,7 +156,7 @@ class MonopolyTrainer:
                 s = torch.tensor(s, device=self.device).float()
                 prob = self.model.actor(s)
                 a = Categorical(prob).sample().cpu().numpy()  # substitute
-                print(a[0])
+                # print(a[0])
                 if masked_actions[a[0]] == 0:
                     a = [1]
                 with HiddenPrints():
@@ -160,7 +164,7 @@ class MonopolyTrainer:
                 s = s_prime
 
                 if done_type:
-                    print('reset', s, masked_actions)
+                    # print('reset', s, masked_actions)
                     done_type = False
 
                 score_game += r
@@ -174,6 +178,11 @@ class MonopolyTrainer:
             print(f"Step # :{step_idx}, avg winning : {win_num / self.num_test:.3f}")
             print(f"Step # :{step_idx}, avg diff : {avg_diff / self.num_test:.3f}")
 
+            end_time = datetime.datetime.now()
+            self.spend_time = (end_time - self.start_time).seconds / 60 / 60  # hr
+            print('step => ', step_idx // self.PRINT_INTERVAL, ' costs ',
+                  (end_time - self.start_time).seconds / 60, ' mins')
+
         env.close()
 
         return round(score/self.num_test, 5), round(win_num/self.num_test, 5), round(avg_diff/self.num_test, 5)
@@ -181,9 +190,6 @@ class MonopolyTrainer:
     def save(self, step_idx):
         save_name = self.save_path + '/v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
         print(save_name)
-        end_time = datetime.datetime.now()
-        self.spend_time = (end_time - self.start_time).seconds / 60 / 60
-        print('step => ',step_idx // self.PRINT_INTERVAL, ' costs ', (end_time - self.start_time).seconds / 60, ' mins')
         torch.save(self.model, save_name)
 
     def train(self):
@@ -272,6 +278,10 @@ class MonopolyTrainer:
                 self.optimizer.step()
 
             if step_idx % self.PRINT_INTERVAL == 0:
+                # save weights of A2C
+                self.save(step_idx)
+
+
                 # loss_train = torch.tensor(0, device=self.device).float()
                 avg_score, avg_winning, avg_diff = self.test_v2(step_idx, seed=0)
 
@@ -289,14 +299,14 @@ class MonopolyTrainer:
                     self.TB.logkv('avg_winning', avg_winning)
                     self.TB.logkv('avg_diff', avg_diff)
                     self.TB.dumpkvs()
-                # save weights of A2C
-                if step_idx % self.PRINT_INTERVAL == 0:
-                    self.save(step_idx)
-                # print(self.model.named_parameters())
-                # for i, (name, param) in enumerate(self.model.named_parameters()):
-                #     if 'bn' not in name:
-                #         self.writer.add_histogram(name, param, 0)
-                #         self.writer.add_scalar('loss', loss_train / self.PRINT_INTERVAL, i)
+
+                    # plot the results
+                    # print(self.model.named_parameters())
+                    # for i, (name, param) in enumerate(self.model.named_parameters()):
+                    #     if 'bn' not in name:
+                    #         self.writer.add_histogram(name, param, 0)
+                    #         self.writer.add_scalar('loss', loss_train / self.PRINT_INTERVAL, i)
+
 
             step_idx += 1
             end_time = datetime.datetime.now()

@@ -10,6 +10,9 @@ from multiprocessing.connection import Listener
 import monopoly_simulator.action_choices as action_choices
 import monopoly_simulator.background_agent_v3 as background_agent_v3
 
+import logging
+logger = logging.getLogger('monopoly_simulator.logging_info.server_agent')
+
 # All of the gameplay functions just send a request to the client to call the function with the given arguments and send
 # back a reply which is then returned.
 
@@ -109,8 +112,8 @@ class ServerAgent(Agent):
         self.listener.close()
         return super().shutdown()
 
-    # def start_tournament(self):
-    #     self.conn.send(("start_tournament", ()))
-    #     return self.conn.recv()
+    def start_tournament(self, f_name):
+        self.conn.send(("start_tournament", (f_name)))
+        return self.conn.recv()
 
 

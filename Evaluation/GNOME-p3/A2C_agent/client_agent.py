@@ -18,8 +18,8 @@ from configparser import ConfigParser
 from monopoly_simulator_background.vanilla_A2C_main_v3 import MonopolyTrainer
 import random
 import shutil, copy
-
-
+import logging
+logger = logging.getLogger('monopoly_simulator.logging_info.client_agent')
 
 class ClientAgent(Agent):
     """
@@ -56,8 +56,12 @@ class ClientAgent(Agent):
         self.config_data = ConfigParser()
         self.config_data.read(self.config_file)
         self.hyperparams = self.params_read(self.config_data, 'server')
-        self.kg_rel_path = self.upper_path_eva + self.hyperparams['kg_rel_path']
-        self.rule_change_path = self.upper_path_eva + self.hyperparams['rule_change_path']
+        # self.kg_rel_path = self.upper_path_eva + self.hyperparams['kg_rel_path']
+        self.rule_change_name = self.hyperparams['rule_change_name']
+        self.log_file_name = self.hyperparams['log_file_name']
+
+        # Save path
+        self.folder_path = None
 
         #A2C model parameters
         self.state_num = 90
@@ -65,8 +69,12 @@ class ClientAgent(Agent):
         model_path = self.upper_path_eva + '/A2C_agent/weights/Original.pkl'
         self.model = torch.load(model_path)
 
-        # folder_save_weights
-        self.folder_path = self.upper_path_eva + '/A2C_agent/weights/' + str(self.seed)
+        logger.debug('model will be saved in here')
+
+
+    def define_path(self, path):
+        # Define the folder place the saved weights
+        self.folder_path = self.upper_path_eva + '/A2C_agent/weights/' + path + '/'
         print(self.folder_path)
         if not os.path.exists(self.folder_path):
             os.makedirs(self.folder_path)
@@ -105,12 +113,12 @@ class ClientAgent(Agent):
         :return:
         """
         self.interface.set_board(current_gameboard)
-        self.interface.get_logging_info_once(current_gameboard)
-        self.interface.get_logging_info(current_gameboard)
+        self.interface.get_logging_info_once(current_gameboard, self.folder_path+self.log_file_name)
+        self.interface.get_logging_info(current_gameboard, self.folder_path+self.log_file_name)
 
         #######Add kg here######
         self.kg.set_gameboard(current_gameboard)
-        self.kg.build_kg_file(self.upper_path_eva + '/A2C_agent/log/game_log.txt', level='rel', use_hash=False)
+        self.kg.build_kg_file(self.folder_path+self.log_file_name, level='rel', use_hash=False)
 
         # self.kg.save_file(self.kg.kg_rel, self.kg_rel_path)
         # print('kg_run!!!!!!!!')
@@ -135,7 +143,7 @@ class ClientAgent(Agent):
             self.kg_change.append(self.kg.kg_change[:])
 
         # Only when never retrained and detect novelty, will call retrain
-        if self.kg_change_wait > 2 and self.kg_change_bool == False:
+        if self.kg_change_wait > 3 and self.kg_change_bool == False:
             self.retrain_signal = True if self.kg_change_bool == False else False
             # ini_current_gameboard = self.initialize_gameboard(current_gameboard)
             # model_retrained_path = self.retrain_from_scratch(ini_current_gameboard)
@@ -143,7 +151,6 @@ class ClientAgent(Agent):
             # self.state_num = len(self.interface.board_to_state(current_gameboard))  # reset the state_num size
             # self.kg_change_bool = True
             # self.kg_change_wait = 0
-
         print('self.kg_change', self.kg_change)
 
     def params_read(self, config_data, key_word):
@@ -160,10 +167,6 @@ class ClientAgent(Agent):
         :param gameboard:
         :return:
         """
-        # Write to history
-        file = open(self.rule_change_path, "a")
-        file.write('seed = ' + str(self.seed) + str(self.kg_change) + ' \n')
-        file.close()
 
         # Retrain the network
         params = self.params_read(self.config_data, 'hyper')
@@ -199,12 +202,20 @@ class ClientAgent(Agent):
             #     self.clear_weights()
             #     result = 1
 
-            if func_name == "startup": # args = (current_gameboard, indicator)
-                self.interface.clear_history()
-                self.interface.set_board(args[0])
+            # When the tournament begins, we need to
+            if func_name == "start_tournament":
+                self.define_path(args)
+                result = 1
+
+            # Before simulating each game, we have to make sure if we need retrain the network
+            elif func_name == "startup": # args = (current_gameboard, indicator)
+                # Clear interface history and set the init for interface
+                self.interface.clear_history(self.folder_path+self.log_file_name)
+                self.interface.set_board(args[0])  # args[0] is current_gameboard
                 s = self.interface.board_to_state(args[0])
                 self.game_num += 1  # number of games simulated
 
+                # We need to have a baseline of the gameboard
                 if self.game_num == 1:
                     self.gameboard_ini = args[0]
 
@@ -254,6 +265,12 @@ class ClientAgent(Agent):
 
             # Close connection after each tournament
             if func_name == "end_tournament":
+
+                # Write to history
+                file = open(self.folder_path + self.rule_change_name, "a")
+                file.write('seed = ' + str(self.seed) + str(self.kg_change) + ' \n')
+                file.close()
+
                 self.conn.close()
                 break
 
@@ -269,7 +286,7 @@ class ClientAgent(Agent):
 
         # if player.assets == None:
         # a.save_bool(0)
-        self.interface.get_logging_info_once(current_gameboard)
+        self.interface.get_logging_info_once(current_gameboard, self.folder_path+self.log_file_name)
 
         s = self.interface.board_to_state(current_gameboard)
 

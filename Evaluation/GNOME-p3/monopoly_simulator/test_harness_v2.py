@@ -67,6 +67,8 @@ def play_tournament_without_novelty(tournament_log_folder=None, meta_seed=5, num
     out_file.close()
     #####GT - Call agent here#####
     agent = ServerAgent()
+    f_name = "meta_seed_" + str(meta_seed) + '_without_novelty'
+    agent.start_tournament(f_name)
     ##############################
     for t in tournament_seeds:
         print('Logging gameplay for seed: ', str(t), ' ---> Game ' + str(count))
@@ -137,6 +139,8 @@ def play_tournament_with_novelty_1(tournament_log_folder=None, meta_seed=5, num_
     out_file.close()
     #####GT - Call agent here#####
     agent = ServerAgent()
+    f_name = "meta_seed_" + str(meta_seed) + '_with_novelty'
+    agent.start_tournament(f_name)
     ##############################
     for t in range(0,novelty_index):
         print('Logging gameplay without novelty for seed: ', str(t), ' ---> Game ' + str(count))
@@ -169,6 +173,8 @@ def play_tournament_with_novelty_1(tournament_log_folder=None, meta_seed=5, num_
 
     print('pre_novelty winners', winners)
     print('post_novelty_winners', new_winners)
+
+    # GT -Close the connection #
     agent.end_tournament()
 
 
@@ -207,32 +213,39 @@ def class_novelty_1(current_gameboard):
     # cardamountNovelty.card_amount_novelty(current_gameboard, community_chest_card_amounts=community_chest_card_amounts)
 
     # Type - Card
-    cardtypeNovelty = novelty_generator.TypeClassNovelty()
-    community_chest_cards_contingency = dict()
-    community_chest_cards_contingency["street_repairs"] = "alternate_contingency_function_1"
-    cardtypeNovelty.card_novelty(current_gameboard,
-                                 community_chest_cards_contingency=community_chest_cards_contingency,
-                                 chance_cards_contingency=dict())
+    # cardtypeNovelty = novelty_generator.TypeClassNovelty()
+    # community_chest_cards_contingency = dict()
+    # community_chest_cards_contingency["street_repairs"] = "alternate_contingency_function_1"
+    # cardtypeNovelty.card_novelty(current_gameboard,
+    #                              community_chest_cards_contingency=community_chest_cards_contingency,
+    #                              chance_cards_contingency=dict())
 
     # Inanimate
 
     # Tax
-    # taxNovelty = novelty_generator.InanimateAttributeNovelty()
-    # tax_location = current_gameboard['location_objects']["Luxury Tax"]
-    # # tax_location = location.TaxLocation("tax", "Luxury Tax", 38, 39, "None", 100)
-    # taxNovelty.tax_novelty(tax_location, 200)
+    taxNovelty = novelty_generator.InanimateAttributeNovelty()
+    tax_location = current_gameboard['location_objects']["Luxury Tax"]
+    # tax_location = location.TaxLocation("tax", "Luxury Tax", 38, 39, "None", 100)
+    taxNovelty.tax_novelty(tax_location, 200)
 
     # Mortgage
-    # morNovelty = novelty_generator.InanimateAttributeNovelty()
-    # mor_location = current_gameboard['location_objects']["Mediterranean Avenue"]
-    # morNovelty.mortgage_novelty(mor_location, 40)
+    morNovelty = novelty_generator.InanimateAttributeNovelty()
+    mor_location = current_gameboard['location_objects']["Mediterranean Avenue"]
+    morNovelty.mortgage_novelty(mor_location, 40)
 
     # Contingent
     # bank - percentage
-    # conNovelty = novelty_generator.ContingentAttributeNovelty()
-    # conNovelty.change_mortgage_percentage(current_gameboard, 0.2)
+    conNovelty = novelty_generator.ContingentAttributeNovelty()
+    conNovelty.change_mortgage_percentage(current_gameboard, 0.2)
 
     # Granularity
+    # granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 6)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States Avenue'], 20)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee Avenue'], 27)
+    # spatialNovelty = novelty_generator.SpatialRepresentationNovelty()
+    # spatialNovelty.color_reordering(current_gameboard, ['Boardwalk', 'Park Place'], 'Blue')
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
 
 
 
@@ -244,6 +257,6 @@ except:
     pass
 
 #Specify the name of the folder in which the tournament games has to be logged in the following format: "/name_of_your_folder/"
-# play_tournament_without_novelty('/tournament_without_novelty_4/', meta_seed=1, num_games=3)
+# play_tournament_without_novelty('/tournament_without_novelty_4/', meta_seed=1, num_games=100)
 
-play_tournament_with_novelty_1('/tournament_with_novelty/', meta_seed=1, num_games=10, novelty_index=3)
+play_tournament_with_novelty_1('/tournament_with_novelty/', meta_seed=1, num_games=12, novelty_index=5)

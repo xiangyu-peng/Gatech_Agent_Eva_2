@@ -66,6 +66,7 @@ def test_v2(step_idx, model, device, num_test, seed):
             num_game += 1
             s = s.reshape(1, -1)
             s = torch.tensor(s, device=device).float()
+            # print(s)
             prob = model.actor(s)
             #
             # if num_game == 2:

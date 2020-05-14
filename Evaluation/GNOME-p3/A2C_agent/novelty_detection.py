@@ -20,6 +20,7 @@ import pickle
 from monopoly_simulator.gameplay import set_up_board
 from monopoly_simulator import background_agent_v3
 from monopoly_simulator.agent import Agent
+import copy
 
 class History_Record(object):
     def params_read(self, config_data, keys):
@@ -308,9 +309,8 @@ class KG_OpenIE_eva(History_Record):
         if self.update_num % self.update_interval == 0:
 
             #solve differnce of locations
-            if 'is located at' not in self.kg_rel.keys():
-                self.kg_rel['is located at'] = dict()
-            else:
+            if 'is located at' in self.kg_rel.keys():
+                # Compare the exisiting KG about location with the one learned in the last self.update_interval
                 diff = self.compare_loc_record(self.kg_rel['is located at'], self.location_record)
                 if diff:
                     for d in diff:
@@ -326,7 +326,7 @@ class KG_OpenIE_eva(History_Record):
                         if exist_bool == False:
                             self.kg_change.append(d)
 
-            self.kg_rel['is located at'] = self.location_record.copy()
+            self.kg_rel['is located at'] = copy.deepcopy(self.location_record)
             self.location_record.clear()
             if self.new_kg_tuple:
                 ####Evaluation -no need###
@@ -385,6 +385,7 @@ class KG_OpenIE_eva(History_Record):
         entity_relations = self.annotate(text, simple_format=True)
 
         for er in entity_relations:  # er is a dict() containing sub, rel and obj
+            # location info, may appears before
             if 'locate' in text:
                 kg_change_once = self.add_loc_history(er)
                 return diff
@@ -399,7 +400,7 @@ class KG_OpenIE_eva(History_Record):
 
     def add_loc_history(self, triple):
         """
-        Add location info to subject => dict()
+        Add location info triple to subject => dict()
         :param triple: dict()
         :return: None
         """
@@ -613,7 +614,7 @@ class Novelty_Detection_Dice(History_Record):
             else:
                 if novelty_temp:
                     self.temp_bool = True
-                    self.new_dice_temp = self.new_dice.copy()
+                    self.new_dice_temp = copy.deepcopy(self.new_dice)
                     self.new_dice.clear()
                     return []
                 else:
@@ -738,7 +739,7 @@ class Novelty_Detection_Dice(History_Record):
         if dice_novelty_list:
             # When U detect sth. new, do not tell the agent immediately
             if self.temp_bool == False:
-                self.new_dice_temp = new_dice.copy()  # Record this and compare later
+                self.new_dice_temp = copy.deepcopy(new_dice)  # Record this and compare later
                 self.temp_bool = True
                 return []
             else:

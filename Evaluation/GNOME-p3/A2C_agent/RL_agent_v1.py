@@ -13,7 +13,9 @@ from A2C_agent.vanilla_A2C import *
 from configparser import ConfigParser
 # from novelty_detection import KG_OpenIE
 import pickle
-logger = logging.getLogger('monopoly_simulator.logging_info.background_agent')
+
+import logging
+logger = logging.getLogger('monopoly_simulator.logging_info.RL_agent')
 # export PYTHONHASHSEED=0
 """
 All external decision_agent functions must have the exact signatures we have indicated in this document. Beyond
@@ -142,269 +144,269 @@ def make_out_of_turn_move(player, current_gameboard, allowable_moves, code):
 
     '''
 
-    # if action_choices.accept_trade_offer in allowable_moves:
-    #     param = dict()
-    #     param['player'] = player
-    #     param['current_gameboard'] = current_gameboard
-    #     logger.debug(player.player_name + ': Should I accept the trade offer by ' + player.outstanding_trade_offer[
-    #         'from_player'].player_name + '?')
-    #     logger.debug('(' + player.player_name + ' currently has cash balance of ' + str(player.current_cash) + ')')
-    #
-    #     if (player.outstanding_trade_offer['cash_offered'] <= 0 and len(
-    #             player.outstanding_trade_offer['property_set_offered']) == 0) and \
-    #             (player.outstanding_trade_offer['cash_wanted'] > 0 or len(
-    #                 player.outstanding_trade_offer['property_set_wanted']) > 0):
-    #         logger.debug('Asking for free money or property without money or property in return.')
-    #         logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #             'from_player'].player_name)
-    #         pass  # asking for free money or property without anything in return(ie no money and no property offered), -->reject the trade offer
-    #
-    #     elif player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
-    #         'cash_offered'] > player.current_cash:
-    #         logger.debug(
-    #             'Cash wanted from me in the trade offer is more than the cash in hand with me or I am near bankruptcy situation and need to play safe.')
-    #         logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #             'from_player'].player_name)
-    #         pass  # cash wanted is more than that offered and the net difference exceeds the cash that the player has --> then reject the tade offer
-    #
-    #     else:
-    #         reject_flag = 0
-    #         offered_properties_net_worth = 0
-    #         wanted_properties_net_worth = 0
-    #         for prop in player.outstanding_trade_offer['property_set_wanted']:
-    #             if prop.is_mortgaged:
-    #                 reject_flag = 1  # cannot trade mortgaged properties, reject trade offer
-    #                 logger.debug('Trade offer invovlves mortgaged properties.')
-    #                 logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #                     'from_player'].player_name)
-    #                 break
-    #             else:
-    #                 wanted_properties_net_worth += prop.price
-    #
-    #         if reject_flag == 0:
-    #             for prop in player.outstanding_trade_offer['property_set_offered']:
-    #                 if prop.is_mortgaged:
-    #                     reject_flag = 1  # from_player cannot offer mortgaged properties, reject trade offer
-    #                     logger.debug('Trade offer invovlves mortgaged properties.')
-    #                     logger.debug(
-    #                         player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #                             'from_player'].player_name)
-    #                     break
-    #                 else:
-    #                     offered_properties_net_worth += prop.price
-    #         if reject_flag == 0:
-    #             # GOAL -- increase monopolies
-    #             # calculate the net worth of offer vs net worth of request --> makes sense to accept trade only if the offer is greater than request
-    #             # net worth of offer = cash + total price of all houses
-    #             # positive net_amount_requested implies that the requested net amount is greater than offered net amount
-    #             net_offer_worth = (offered_properties_net_worth + player.outstanding_trade_offer['cash_offered']) - \
-    #                               (wanted_properties_net_worth + player.outstanding_trade_offer['cash_wanted'])
-    #             net_amount_requested = -1 * net_offer_worth
-    #
-    #             count_create_new_monopoly = 0
-    #             count_lose_existing_monopoly = 0  ##ideally player doesnot have to worry about losing monopolies since the player who makes the offer
-    #             # only requests for lone properties
-    #             for prop in player.outstanding_trade_offer['property_set_offered']:
-    #                 if agent_helper_functions.will_property_complete_set(player, prop, current_gameboard):
-    #                     count_create_new_monopoly += 1
-    #             for prop in player.outstanding_trade_offer['property_set_wanted']:
-    #                 if prop.color in player.full_color_sets_possessed:
-    #                     count_lose_existing_monopoly += 1
-    #
-    #             # if you end up losing more monopolies than gaining monopolies (although this condition should never come up) then reject trade offer
-    #             if count_lose_existing_monopoly - count_create_new_monopoly > 0:
-    #                 logger.debug('Player loses more monopolies than he gains.')
-    #                 logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #                     'from_player'].player_name)
-    #                 reject_flag = 1
-    #
-    #             # if you end up losing the same number of monopolies as you gain, then accept the offer based on the following multiple conditions.
-    #             # Basically you get no new monopolies since ideally you dont lose monopolies (only properties that dont belong to your monopolized color
-    #             # groups are only requested from you in the trade.)
-    #             elif count_lose_existing_monopoly - count_create_new_monopoly == 0:
-    #                 if (player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
-    #                     'cash_offered']) >= player.current_cash:
-    #                     logger.debug(
-    #                         'Cash wanted from me in the trade offer is more than the cash in hand with me or I am near bankruptcy situation and need to play safe.')
-    #                     logger.debug(
-    #                         player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #                             'from_player'].player_name)
-    #                     reject_flag = 1  ##just double checking although this condition was verified before getting here.
-    #                 elif player.current_cash - (
-    #                         player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
-    #                     'cash_offered']) < current_gameboard['go_increment'] / 2:
-    #                     logger.debug(
-    #                         'Cash wanted from me in the trade offer is more than the cash in hand with me or I am near bankruptcy situation and need to play safe.')
-    #                     logger.debug(
-    #                         player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #                             'from_player'].player_name)
-    #                     reject_flag = 1  ##too risky if players cash after transaction drops below half of go_increment value --> hence reject trade offer
-    #                 elif (player.current_cash - (
-    #                         player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
-    #                     'cash_offered']) < current_gameboard['go_increment']) \
-    #                         and net_offer_worth <= 0:
-    #                     logger.debug('No gain from accepting trade offer.')
-    #                     logger.debug(
-    #                         player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #                             'from_player'].player_name)
-    #                     reject_flag = 1  ##if player has cash > go_increement/2 and < go_increement but net worth of total transaction is negative --> reject trade offer
-    #                 else:
-    #                     reject_flag = 0  ##accept only if you end up getting a higher net worth by accepting the trade although you get no new monopolies
-    #
-    #
-    #             # else you get to monopolize more locations than you had before --> then ACCEPT THE TRADE OFFER
-    #             elif count_create_new_monopoly - count_lose_existing_monopoly > 0:
-    #                 if (player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
-    #                     'cash_offered']) >= player.current_cash:
-    #                     logger.debug(
-    #                         'Cash wanted from me in the trade offer is more than the cash in hand with me or I am near bankruptcy situation and need to play safe.')
-    #                     logger.debug(
-    #                         player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
-    #                             'from_player'].player_name)
-    #                     reject_flag = 1  ##just double checking although this condition was verified before getting here.
-    #                 else:
-    #                     reject_flag = 0
-    #
-    #         if reject_flag == 0:
-    #             logger.debug(player.player_name + " accepted trade offer from " + player.outstanding_trade_offer[
-    #                 'from_player'].player_name)
-    #             logger.debug(player.player_name + " recieved amount = " + str(
-    #                 player.outstanding_trade_offer['cash_offered']) + " and offered amount = " +
-    #                          str(player.outstanding_trade_offer['cash_wanted']) + " during trade")
-    #             player.agent._agent_memory['previous_action'] = action_choices.accept_trade_offer
-    #             return (action_choices.accept_trade_offer, param)
-    #
-    #         elif reject_flag == 1:
-    #             # logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer['from_player'].player_name)
-    #             pass
-    #
-    # if action_choices.accept_sell_property_offer in allowable_moves:
-    #     ## Ideally accept_sell_offer should never enter allowable moves since henceforth make_trade_offer also takes care of make_sell_offer and
-    #     ## accept_trade_offer takes care of accept_sell_offer.
-    #     ## This case is included to accomodate a make_sell_property offer raised by an external agent.
-    #     ## Our agent will never make a sell property offer, only makes trade offers which raises an accpet_trade_offer action.
-    #     param = dict()
-    #     param['player'] = player
-    #     param['current_gameboard'] = current_gameboard
-    #     # we accept an offer under one of two conditions:
-    #     logger.debug(player.player_name + ': Should I accept the offer by ' + player.outstanding_property_offer[
-    #         'from_player'].player_name + ' to buy ' + \
-    #                  player.outstanding_property_offer['asset'].name + ' for ' + str(
-    #         player.outstanding_property_offer['price']) + '?')
-    #     logger.debug('(' + player.player_name + ' currently has cash balance of ' + str(player.current_cash) + ')')
-    #     if player.outstanding_property_offer['asset'].is_mortgaged or player.outstanding_property_offer[
-    #         'price'] > player.current_cash:
-    #         pass  # ignore the offer if the property is mortgaged or will result in insolvency. This pass doesn't require 'filling' in.
-    #     elif player.current_cash - player.outstanding_property_offer['price'] >= current_gameboard['go_increment'] and \
-    #             player.outstanding_property_offer['price'] <= player.outstanding_property_offer['asset'].price:
-    #         # 1. we can afford it, and it's at or below market rate so let's buy it
-    #         logger.debug(player.player_name + ': I am accepting the offer to buy ' + player.outstanding_property_offer[
-    #             'asset'].name + ' since I can afford' \
-    #                             'it and it is being offered at or below market rate.')
-    #         player.agent._agent_memory['previous_action'] = action_choices.accept_sell_property_offer
-    #         return (action_choices.accept_sell_property_offer, param)
-    #
-    #     elif agent_helper_functions.will_property_complete_set(player, player.outstanding_property_offer['asset'],
-    #                                                            current_gameboard):
-    #         # 2. less affordable, but we stand to gain by monopoly
-    #         if player.current_cash - player.outstanding_property_offer['price'] >= current_gameboard[
-    #             'go_increment'] / 2:  # risky, but worth it
-    #             logger.debug(
-    #                 player.player_name + ': I am accepting the offer to buy ' + player.outstanding_property_offer[
-    #                     'asset'].name + ' since I can afford ' \
-    #                                     'it (albeit barely so) and it will let me complete my color set.')
-    #             player.agent._agent_memory['previous_action'] = action_choices.accept_sell_property_offer
-    #             return (action_choices.accept_sell_property_offer, param)
-    #
-    # if player.status != 'current_move':  # these actions are considered only if it's NOT our turn to roll the dice.
-    #     if action_choices.improve_property in allowable_moves:  # beef up full color sets to maximize rent potential.
-    #         param = agent_helper_functions.identify_improvement_opportunity(player, current_gameboard)
-    #         if param:
-    #             if 'previous_action' in player.agent._agent_memory.keys():
-    #                 if player.agent._agent_memory['previous_action'] == action_choices.improve_property and code == -1:
-    #                     logger.debug(player.player_name + ': I want to improve property ' + param[
-    #                         'asset'].name + ' but I cannot, due to reasons I do not understand. Aborting improvement attempt...')
-    #             else:
-    #                 logger.debug(player.player_name + ': I am going to improve property ' + param['asset'].name)
-    #                 player.agent._agent_memory['previous_action'] = action_choices.improve_property
-    #                 return (action_choices.improve_property, param)
-    #
-    #     player_mortgaged_assets_list = list()
-    #     if player.mortgaged_assets:
-    #         player_mortgaged_assets_list = _set_to_sorted_list_mortgaged_assets(player.mortgaged_assets)
-    #     for m in player_mortgaged_assets_list:
-    #         if player.current_cash - (m.mortgage * 1.1) >= current_gameboard[
-    #             'go_increment'] and action_choices.free_mortgage in allowable_moves:
-    #             # free mortgages till we can afford it. the second condition should not be necessary but just in case.
-    #             param = dict()
-    #             param['player'] = player
-    #             param['asset'] = m
-    #             param['current_gameboard'] = current_gameboard
-    #             logger.debug(player.player_name + ': I am going to free mortgage on ' + param['asset'].name)
-    #             player.agent._agent_memory['previous_action'] = action_choices.free_mortgage
-    #             return (action_choices.free_mortgage, param)
-    #
-    # else:
-    #     # purpose_flags are sent while curating a trade offer to imply why the trade offer was made:
-    #     ## 1 --> low on cash, urgently in need of cash
-    #     ## 2 --> gain monopoly
-    #     if player.current_cash < current_gameboard[
-    #         'go_increment'] and action_choices.make_trade_offer in allowable_moves:
-    #         # in this case, the trade offer is a duplication of make_sell_property_offer since the player is in urgent need of cash and
-    #         # cannot strategize a trade
-    #         potential_offer_list = agent_helper_functions.identify_property_trade_offer_to_player(player,
-    #                                                                                               current_gameboard)
-    #         potential_request_list = agent_helper_functions.identify_property_trade_wanted_from_player(player,
-    #                                                                                                    current_gameboard)
-    #         param_list = agent_helper_functions.curate_trade_offer_multiple_players(player, potential_offer_list,
-    #                                                                                 potential_request_list,
-    #                                                                                 current_gameboard, purpose_flag=1)
-    #         # logger.debug(param)
-    #         return_action_list = []
-    #         return_param_list = []
-    #         if param_list and player.agent._agent_memory[
-    #             'previous_action'] != action_choices.make_trade_offer:  # we only make one offer per turn. Otherwise we'd
-    #             # be stuck in a loop
-    #             if len(param_list) > 1:
-    #                 logger.debug(
-    #                     player.player_name + ": I am going to make trade offers to multiple players, ie " + str(
-    #                         len(param_list)) + " players.")
-    #             for param in param_list:
-    #                 logger.debug(player.player_name + ': I am making an offer to trade ' +
-    #                              list(param['offer']['property_set_offered'])[0].name + ' to ' +
-    #                              param['to_player'].player_name + ' for ' + str(
-    #                     param['offer']['cash_wanted']) + ' dollars')
-    #                 player.agent._agent_memory['previous_action'] = action_choices.make_trade_offer
-    #                 return_action_list.append(action_choices.make_trade_offer)
-    #                 return_param_list.append(param)
-    #             return (return_action_list, return_param_list)
-    #
-    #     elif action_choices.make_trade_offer in allowable_moves:
-    #         # trade offer is being curated to maximise monopolies
-    #         potential_offer_list = agent_helper_functions.identify_property_trade_offer_to_player(player,
-    #                                                                                               current_gameboard)
-    #         potential_request_list = agent_helper_functions.identify_property_trade_wanted_from_player(player,
-    #                                                                                                    current_gameboard)
-    #         param_list = agent_helper_functions.curate_trade_offer_multiple_players(player, potential_offer_list,
-    #                                                                                 potential_request_list,
-    #                                                                                 current_gameboard, purpose_flag=2)
-    #         # logger.debug(param)
-    #         return_action_list = []
-    #         return_param_list = []
-    #         if 'previous_action' in player.agent._agent_memory.keys():
-    #             if param_list and player.agent._agent_memory['previous_action'] != action_choices.make_trade_offer:  # we only make one offer per turn. Otherwise we'd
-    #                 # be stuck in a loop
-    #                 if len(param_list) > 1:
-    #                     logger.debug(
-    #                         player.player_name + ": I am going to make trade offers to multiple players, ie " + str(
-    #                             len(param_list)) + " players.")
-    #                 for param in param_list:
-    #                     logger.debug(
-    #                         player.player_name + ': I am making a trade offer with ' + param['to_player'].player_name)
-    #                     player.agent._agent_memory['previous_action'] = action_choices.make_trade_offer
-    #                     return_action_list.append(action_choices.make_trade_offer)
-    #                     return_param_list.append(param)
-    #                 return (return_action_list, return_param_list)
+    if action_choices.accept_trade_offer in allowable_moves:
+        param = dict()
+        param['player'] = player
+        param['current_gameboard'] = current_gameboard
+        logger.debug(player.player_name + ': Should I accept the trade offer by ' + player.outstanding_trade_offer[
+            'from_player'].player_name + '?')
+        logger.debug('(' + player.player_name + ' currently has cash balance of ' + str(player.current_cash) + ')')
+
+        if (player.outstanding_trade_offer['cash_offered'] <= 0 and len(
+                player.outstanding_trade_offer['property_set_offered']) == 0) and \
+                (player.outstanding_trade_offer['cash_wanted'] > 0 or len(
+                    player.outstanding_trade_offer['property_set_wanted']) > 0):
+            logger.debug('Asking for free money or property without money or property in return.')
+            logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                'from_player'].player_name)
+            pass  # asking for free money or property without anything in return(ie no money and no property offered), -->reject the trade offer
+
+        elif player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
+            'cash_offered'] > player.current_cash:
+            logger.debug(
+                'Cash wanted from me in the trade offer is more than the cash in hand with me or I am near bankruptcy situation and need to play safe.')
+            logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                'from_player'].player_name)
+            pass  # cash wanted is more than that offered and the net difference exceeds the cash that the player has --> then reject the tade offer
+
+        else:
+            reject_flag = 0
+            offered_properties_net_worth = 0
+            wanted_properties_net_worth = 0
+            for prop in player.outstanding_trade_offer['property_set_wanted']:
+                if prop.is_mortgaged:
+                    reject_flag = 1  # cannot trade mortgaged properties, reject trade offer
+                    logger.debug('Trade offer invovlves mortgaged properties.')
+                    logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                        'from_player'].player_name)
+                    break
+                else:
+                    wanted_properties_net_worth += prop.price
+
+            if reject_flag == 0:
+                for prop in player.outstanding_trade_offer['property_set_offered']:
+                    if prop.is_mortgaged:
+                        reject_flag = 1  # from_player cannot offer mortgaged properties, reject trade offer
+                        logger.debug('Trade offer invovlves mortgaged properties.')
+                        logger.debug(
+                            player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                                'from_player'].player_name)
+                        break
+                    else:
+                        offered_properties_net_worth += prop.price
+            if reject_flag == 0:
+                # GOAL -- increase monopolies
+                # calculate the net worth of offer vs net worth of request --> makes sense to accept trade only if the offer is greater than request
+                # net worth of offer = cash + total price of all houses
+                # positive net_amount_requested implies that the requested net amount is greater than offered net amount
+                net_offer_worth = (offered_properties_net_worth + player.outstanding_trade_offer['cash_offered']) - \
+                                  (wanted_properties_net_worth + player.outstanding_trade_offer['cash_wanted'])
+                net_amount_requested = -1 * net_offer_worth
+
+                count_create_new_monopoly = 0
+                count_lose_existing_monopoly = 0  ##ideally player doesnot have to worry about losing monopolies since the player who makes the offer
+                # only requests for lone properties
+                for prop in player.outstanding_trade_offer['property_set_offered']:
+                    if agent_helper_functions.will_property_complete_set(player, prop, current_gameboard):
+                        count_create_new_monopoly += 1
+                for prop in player.outstanding_trade_offer['property_set_wanted']:
+                    if prop.color in player.full_color_sets_possessed:
+                        count_lose_existing_monopoly += 1
+
+                # if you end up losing more monopolies than gaining monopolies (although this condition should never come up) then reject trade offer
+                if count_lose_existing_monopoly - count_create_new_monopoly > 0:
+                    logger.debug('Player loses more monopolies than he gains.')
+                    logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                        'from_player'].player_name)
+                    reject_flag = 1
+
+                # if you end up losing the same number of monopolies as you gain, then accept the offer based on the following multiple conditions.
+                # Basically you get no new monopolies since ideally you dont lose monopolies (only properties that dont belong to your monopolized color
+                # groups are only requested from you in the trade.)
+                elif count_lose_existing_monopoly - count_create_new_monopoly == 0:
+                    if (player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
+                        'cash_offered']) >= player.current_cash:
+                        logger.debug(
+                            'Cash wanted from me in the trade offer is more than the cash in hand with me or I am near bankruptcy situation and need to play safe.')
+                        logger.debug(
+                            player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                                'from_player'].player_name)
+                        reject_flag = 1  ##just double checking although this condition was verified before getting here.
+                    elif player.current_cash - (
+                            player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
+                        'cash_offered']) < current_gameboard['go_increment'] / 2:
+                        logger.debug(
+                            'Cash wanted from me in the trade offer is more than the cash in hand with me or I am near bankruptcy situation and need to play safe.')
+                        logger.debug(
+                            player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                                'from_player'].player_name)
+                        reject_flag = 1  ##too risky if players cash after transaction drops below half of go_increment value --> hence reject trade offer
+                    elif (player.current_cash - (
+                            player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
+                        'cash_offered']) < current_gameboard['go_increment']) \
+                            and net_offer_worth <= 0:
+                        logger.debug('No gain from accepting trade offer.')
+                        logger.debug(
+                            player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                                'from_player'].player_name)
+                        reject_flag = 1  ##if player has cash > go_increement/2 and < go_increement but net worth of total transaction is negative --> reject trade offer
+                    else:
+                        reject_flag = 0  ##accept only if you end up getting a higher net worth by accepting the trade although you get no new monopolies
+
+
+                # else you get to monopolize more locations than you had before --> then ACCEPT THE TRADE OFFER
+                elif count_create_new_monopoly - count_lose_existing_monopoly > 0:
+                    if (player.outstanding_trade_offer['cash_wanted'] - player.outstanding_trade_offer[
+                        'cash_offered']) >= player.current_cash:
+                        logger.debug(
+                            'Cash wanted from me in the trade offer is more than the cash in hand with me or I am near bankruptcy situation and need to play safe.')
+                        logger.debug(
+                            player.player_name + " rejected trade offer from " + player.outstanding_trade_offer[
+                                'from_player'].player_name)
+                        reject_flag = 1  ##just double checking although this condition was verified before getting here.
+                    else:
+                        reject_flag = 0
+
+            if reject_flag == 0:
+                logger.debug(player.player_name + " accepted trade offer from " + player.outstanding_trade_offer[
+                    'from_player'].player_name)
+                logger.debug(player.player_name + " recieved amount = " + str(
+                    player.outstanding_trade_offer['cash_offered']) + " and offered amount = " +
+                             str(player.outstanding_trade_offer['cash_wanted']) + " during trade")
+                player.agent._agent_memory['previous_action'] = action_choices.accept_trade_offer
+                return (action_choices.accept_trade_offer, param)
+
+            elif reject_flag == 1:
+                # logger.debug(player.player_name + " rejected trade offer from " + player.outstanding_trade_offer['from_player'].player_name)
+                pass
+
+    if action_choices.accept_sell_property_offer in allowable_moves:
+        ## Ideally accept_sell_offer should never enter allowable moves since henceforth make_trade_offer also takes care of make_sell_offer and
+        ## accept_trade_offer takes care of accept_sell_offer.
+        ## This case is included to accomodate a make_sell_property offer raised by an external agent.
+        ## Our agent will never make a sell property offer, only makes trade offers which raises an accpet_trade_offer action.
+        param = dict()
+        param['player'] = player
+        param['current_gameboard'] = current_gameboard
+        # we accept an offer under one of two conditions:
+        logger.debug(player.player_name + ': Should I accept the offer by ' + player.outstanding_property_offer[
+            'from_player'].player_name + ' to buy ' + \
+                     player.outstanding_property_offer['asset'].name + ' for ' + str(
+            player.outstanding_property_offer['price']) + '?')
+        logger.debug('(' + player.player_name + ' currently has cash balance of ' + str(player.current_cash) + ')')
+        if player.outstanding_property_offer['asset'].is_mortgaged or player.outstanding_property_offer[
+            'price'] > player.current_cash:
+            pass  # ignore the offer if the property is mortgaged or will result in insolvency. This pass doesn't require 'filling' in.
+        elif player.current_cash - player.outstanding_property_offer['price'] >= current_gameboard['go_increment'] and \
+                player.outstanding_property_offer['price'] <= player.outstanding_property_offer['asset'].price:
+            # 1. we can afford it, and it's at or below market rate so let's buy it
+            logger.debug(player.player_name + ': I am accepting the offer to buy ' + player.outstanding_property_offer[
+                'asset'].name + ' since I can afford' \
+                                'it and it is being offered at or below market rate.')
+            player.agent._agent_memory['previous_action'] = action_choices.accept_sell_property_offer
+            return (action_choices.accept_sell_property_offer, param)
+
+        elif agent_helper_functions.will_property_complete_set(player, player.outstanding_property_offer['asset'],
+                                                               current_gameboard):
+            # 2. less affordable, but we stand to gain by monopoly
+            if player.current_cash - player.outstanding_property_offer['price'] >= current_gameboard[
+                'go_increment'] / 2:  # risky, but worth it
+                logger.debug(
+                    player.player_name + ': I am accepting the offer to buy ' + player.outstanding_property_offer[
+                        'asset'].name + ' since I can afford ' \
+                                        'it (albeit barely so) and it will let me complete my color set.')
+                player.agent._agent_memory['previous_action'] = action_choices.accept_sell_property_offer
+                return (action_choices.accept_sell_property_offer, param)
+
+    if player.status != 'current_move':  # these actions are considered only if it's NOT our turn to roll the dice.
+        if action_choices.improve_property in allowable_moves:  # beef up full color sets to maximize rent potential.
+            param = agent_helper_functions.identify_improvement_opportunity(player, current_gameboard)
+            if param:
+                if 'previous_action' in player.agent._agent_memory.keys():
+                    if player.agent._agent_memory['previous_action'] == action_choices.improve_property and code == -1:
+                        logger.debug(player.player_name + ': I want to improve property ' + param[
+                            'asset'].name + ' but I cannot, due to reasons I do not understand. Aborting improvement attempt...')
+                else:
+                    logger.debug(player.player_name + ': I am going to improve property ' + param['asset'].name)
+                    player.agent._agent_memory['previous_action'] = action_choices.improve_property
+                    return (action_choices.improve_property, param)
+
+        player_mortgaged_assets_list = list()
+        if player.mortgaged_assets:
+            player_mortgaged_assets_list = _set_to_sorted_list_mortgaged_assets(player.mortgaged_assets)
+        for m in player_mortgaged_assets_list:
+            if player.current_cash - (m.mortgage * 1.1) >= current_gameboard[
+                'go_increment'] and action_choices.free_mortgage in allowable_moves:
+                # free mortgages till we can afford it. the second condition should not be necessary but just in case.
+                param = dict()
+                param['player'] = player
+                param['asset'] = m
+                param['current_gameboard'] = current_gameboard
+                logger.debug(player.player_name + ': I am going to free mortgage on ' + param['asset'].name)
+                player.agent._agent_memory['previous_action'] = action_choices.free_mortgage
+                return (action_choices.free_mortgage, param)
+
+    else:
+        # purpose_flags are sent while curating a trade offer to imply why the trade offer was made:
+        ## 1 --> low on cash, urgently in need of cash
+        ## 2 --> gain monopoly
+        if player.current_cash < current_gameboard[
+            'go_increment'] and action_choices.make_trade_offer in allowable_moves:
+            # in this case, the trade offer is a duplication of make_sell_property_offer since the player is in urgent need of cash and
+            # cannot strategize a trade
+            potential_offer_list = agent_helper_functions.identify_property_trade_offer_to_player(player,
+                                                                                                  current_gameboard)
+            potential_request_list = agent_helper_functions.identify_property_trade_wanted_from_player(player,
+                                                                                                       current_gameboard)
+            param_list = agent_helper_functions.curate_trade_offer_multiple_players(player, potential_offer_list,
+                                                                                    potential_request_list,
+                                                                                    current_gameboard, purpose_flag=1)
+            # logger.debug(param)
+            return_action_list = []
+            return_param_list = []
+            if param_list and player.agent._agent_memory[
+                'previous_action'] != action_choices.make_trade_offer:  # we only make one offer per turn. Otherwise we'd
+                # be stuck in a loop
+                if len(param_list) > 1:
+                    logger.debug(
+                        player.player_name + ": I am going to make trade offers to multiple players, ie " + str(
+                            len(param_list)) + " players.")
+                for param in param_list:
+                    logger.debug(player.player_name + ': I am making an offer to trade ' +
+                                 list(param['offer']['property_set_offered'])[0].name + ' to ' +
+                                 param['to_player'].player_name + ' for ' + str(
+                        param['offer']['cash_wanted']) + ' dollars')
+                    player.agent._agent_memory['previous_action'] = action_choices.make_trade_offer
+                    return_action_list.append(action_choices.make_trade_offer)
+                    return_param_list.append(param)
+                return (return_action_list, return_param_list)
+
+        elif action_choices.make_trade_offer in allowable_moves:
+            # trade offer is being curated to maximise monopolies
+            potential_offer_list = agent_helper_functions.identify_property_trade_offer_to_player(player,
+                                                                                                  current_gameboard)
+            potential_request_list = agent_helper_functions.identify_property_trade_wanted_from_player(player,
+                                                                                                       current_gameboard)
+            param_list = agent_helper_functions.curate_trade_offer_multiple_players(player, potential_offer_list,
+                                                                                    potential_request_list,
+                                                                                    current_gameboard, purpose_flag=2)
+            # logger.debug(param)
+            return_action_list = []
+            return_param_list = []
+            if 'previous_action' in player.agent._agent_memory.keys():
+                if param_list and player.agent._agent_memory['previous_action'] != action_choices.make_trade_offer:  # we only make one offer per turn. Otherwise we'd
+                    # be stuck in a loop
+                    if len(param_list) > 1:
+                        logger.debug(
+                            player.player_name + ": I am going to make trade offers to multiple players, ie " + str(
+                                len(param_list)) + " players.")
+                    for param in param_list:
+                        logger.debug(
+                            player.player_name + ': I am making a trade offer with ' + param['to_player'].player_name)
+                        player.agent._agent_memory['previous_action'] = action_choices.make_trade_offer
+                        return_action_list.append(action_choices.make_trade_offer)
+                        return_param_list.append(param)
+                    return (return_action_list, return_param_list)
     #
     # if we ran the gamut, and did not return, then it's time to skip turn or conclude actions
     if action_choices.skip_turn in allowable_moves:
