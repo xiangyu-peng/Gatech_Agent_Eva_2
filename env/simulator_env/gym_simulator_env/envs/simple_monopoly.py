@@ -66,5 +66,10 @@ class Sim_Monopoly(gym.Env):
     def seed(self, seed=None):
         self.seeds = self.MonopolyWorld.seed(seed)
         return self.seeds
+    def set_board(self, board=None):
+        self.MonopolyWorld.set_initial_gameboard(gameboard=board)
+
+    def set_kg(self, kg_use):
+        self.MonopolyWorld.kg_use = kg_use
     # def render(self, mode='human', close=False):
     #     pass

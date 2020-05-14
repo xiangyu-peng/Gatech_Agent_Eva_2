@@ -15,10 +15,10 @@ def detect_card_nevelty(current_gameboard, gameboard_ini):
     card_keys = ['chance_cards', 'community_chest_cards']
     for card_key in card_keys:
         if card_type_detect(current_gameboard[card_key]) != card_type_detect(gameboard_ini[card_key]):
-            print('different')
+            # print('different')
             novelty = dict_difference(card_type_detect(gameboard_ini[card_key]), card_type_detect(current_gameboard[card_key]))
-        else:
-            print('same')
+        # else:
+        #     print('same')
     if novelty:
         return novelty
     else:
@@ -59,7 +59,7 @@ def card_move(card):
     elif type(card) == CashFromBankCard:
         return card.amount
     elif type(card) == ContingentCashFromBankCard:
-        print(card.contingency)
+        # print(card.contingency)
         return card.contingency
     elif type(card) == CashFromPlayersCard:
         return card.amount_per_player

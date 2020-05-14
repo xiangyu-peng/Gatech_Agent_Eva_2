@@ -80,13 +80,14 @@ gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-
                                       player_decision_agents)
 ############
 
-env.set_board(gameboard_initial)
+# env.set_board(gameboard_initial)
 env.set_kg(False)
-# env.set_board()
+env.set_board()
 env.seed(seed=n)
 # with HiddenPrints():
 s,mask = env.reset()
 print(s,mask)
+
 done_num = 0
 done_num_total = 5000
 # i = 0
@@ -97,13 +98,16 @@ s_old = [1,2,2]
 while done_num < done_num_total:
 
     with HiddenPrints():
-        s, rew, done, info = env.step_nochange(1)
-    print('s-nochange',s, rew, info)
+        s, rew, done, info = env.step(1)
+    # print('s-nochange',s, rew, info)
 
+    if done_num == 1:
+        print('reset', s, len(s))
+        break
     if done > 0:
-        # print('Done')
+        print('Done',s)
         done_num += 1
-        print('s', s, rew)
+    # print('s', s, rew)
 
     # if done_num == done_num_total:
     #     break
@@ -127,16 +131,16 @@ while done_num < done_num_total:
         #     s, rew, done_after, info = env.step_hyp(1)
         # print('s-hyp1', s, rew, info, done_after)
 
-    with HiddenPrints():
-        s, rew, done_after, info = env.step_after_nochange(1)
-    print('s_after', s, rew, info)
-    if s_old[-1] <= 0 and s_old[-2] <= 0 and s_old[-3] <= 0 and s[-1] <= 0 and s[-2] <= 0 and s[-3] <= 0:
-        break
+    # with HiddenPrints():
+    #     s, rew, done_after, info = env.step_after_nochange(1)
+    # print('s_after', s, rew, info)
+    # if s_old[-1] <= 0 and s_old[-2] <= 0 and s_old[-3] <= 0 and s[-1] <= 0 and s[-2] <= 0 and s[-3] <= 0:
+    #     break
 
-    s_old = s
+    # s_old = s
     print('===========')
 
-    done_num += 1
+    # done_num += 1
     # print('s',s,rew)
 end = time.time()
 # print('Run %d environments need %f' % (done_num_total, float(str(end-start))))

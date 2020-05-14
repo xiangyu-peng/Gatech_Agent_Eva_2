@@ -17,7 +17,7 @@ from monopoly_simulator import action_choices
 from configparser import ConfigParser
 from monopoly_simulator_background.vanilla_A2C_main_v3 import MonopolyTrainer
 import random
-import shutil
+import shutil, copy
 
 
 
@@ -49,6 +49,7 @@ class ClientAgent(Agent):
         self.upper_path_eva = self.upper_path + '/Evaluation/GNOME-p3'
         self.game_num = 0
         self.seed = random.randint(0, 10000)
+        self.retrain_signal = False
 
         #Read the config
         self.config_file = self.upper_path_eva + '/A2C_agent/config.ini'
@@ -61,7 +62,7 @@ class ClientAgent(Agent):
         #A2C model parameters
         self.state_num = 90
         self.device = torch.device('cuda:0')
-        model_path = self.upper_path_eva + '/A2C_agent/weights/abc.pkl'
+        model_path = self.upper_path_eva + '/A2C_agent/weights/Original.pkl'
         self.model = torch.load(model_path)
 
         # folder_save_weights
@@ -135,12 +136,13 @@ class ClientAgent(Agent):
 
         # Only when never retrained and detect novelty, will call retrain
         if self.kg_change_wait > 2 and self.kg_change_bool == False:
-            ini_current_gameboard = self.initialize_gameboard(current_gameboard)
-            model_retrained_path = self.retrain_from_scratch(ini_current_gameboard)
-            self.model = torch.load(model_retrained_path)
-            self.state_num = len(self.interface.board_to_state(current_gameboard))  # reset the state_num size
-            self.kg_change_bool = True
-            self.kg_change_wait = 0
+            self.retrain_signal = True if self.kg_change_bool == False else False
+            # ini_current_gameboard = self.initialize_gameboard(current_gameboard)
+            # model_retrained_path = self.retrain_from_scratch(ini_current_gameboard)
+            # self.model = torch.load(model_retrained_path)
+            # self.state_num = len(self.interface.board_to_state(current_gameboard))  # reset the state_num size
+            # self.kg_change_bool = True
+            # self.kg_change_wait = 0
 
         print('self.kg_change', self.kg_change)
 
@@ -220,12 +222,13 @@ class ClientAgent(Agent):
                     self.novelty_bank = []
 
                 # if board size changed, before the game, we need to retrain the NN
-                if self.state_num != len(s):
-                    ini_current_gameboard = self.initialize_gameboard(args[1])
+                if self.state_num != len(s) or self.retrain_signal:
+                    ini_current_gameboard = self.initialize_gameboard(args[0])
                     model_retrained_path = self.retrain_from_scratch(ini_current_gameboard)
                     self.model = torch.load(model_retrained_path)
-                    self.state_num = len(self.interface.board_to_state(args[1]))  # reset the state_num size
+                    self.state_num = len(self.interface.board_to_state(args[0]))  # reset the state_num size
                     self.kg_change_bool = True
+                    self.retrain_signal = False
                     self.kg_change_wait = 0
 
                 result = getattr(self, func_name)(*args)
@@ -259,7 +262,7 @@ class ClientAgent(Agent):
 
     def make_post_roll_move_agent(self, args):
         player, current_gameboard, allowable_moves, code = args
-        self.gameboard = current_gameboard.copy()
+        self.gameboard = copy.deepcopy(current_gameboard)
 
         # self.interface.set_board(current_gameboard)
         # a.save_history(current_gameboard, save_path='/media/becky/Evaluation/GNOME-p3/monopoly_simulator/loc_history.pickle')
@@ -280,6 +283,7 @@ class ClientAgent(Agent):
 
 
         s = s.reshape(1, -1)
+        # print(s.shape)
         s = torch.tensor(s, device=self.device).float()
         prob = self.model.actor(s)
         action = Categorical(prob).sample().cpu().numpy()

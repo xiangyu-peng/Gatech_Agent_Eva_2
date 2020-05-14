@@ -232,18 +232,10 @@ def class_novelty_1(current_gameboard):
     # conNovelty = novelty_generator.ContingentAttributeNovelty()
     # conNovelty.change_mortgage_percentage(current_gameboard, 0.2)
 
+    # Granularity
 
 
-    # # classCardNovelty = novelty_generator.InanimateAttributeNovelty()
-    # classCardNovelty = novelty_generator.TypeClassNovelty()
-    # novel_cc = dict()
-    # novel_cc["street_repairs"] = "alternate_contingency_function_1"
-    # novel_chance = dict()
-    # novel_chance["general_repairs"] = "alternate_contingency_function_1"
-    # classCardNovelty.card_novelty(current_gameboard, novel_cc, novel_chance)
-    # classCardNovelty.card_amount_novelty(current_gameboard)
-    # inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
-    # inanimateNovelty.rent_novelty(current_gameboard['location_objects']['Indiana Avenue'], {'rent': 50, 'rent_1_house': 150})
+
 
 #All the tournaments get logged in seperate folders inside ../tournament_logs folder
 try:
