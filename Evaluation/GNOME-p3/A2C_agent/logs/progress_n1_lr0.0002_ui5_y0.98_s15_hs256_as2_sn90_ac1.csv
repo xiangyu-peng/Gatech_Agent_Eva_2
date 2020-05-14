@@ -1,0 +1,3 @@
+step_idx,loss_train,avg_winning,avg_diff,avg_score
+0,0.0,0.25,0.02279,2.50095
+10,0.0,0.25,0.04034,2.5009
