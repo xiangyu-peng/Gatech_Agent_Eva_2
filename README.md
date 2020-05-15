@@ -1,3 +1,16 @@
+## Evaluation
+### RL_agent
+All the agent path is relative, and located at `~/Evaluation/monopoly_simulator/A2C_agent`. 
+
+### Changes in simulator
+1. Add few lines in test_harness_v2.py and gameplay_v2.py
+2. Add one file called server_agent.py to `~/Evaluation/monopoly_simulator`
+
+### Tutorial for running test_harness
+1. Run `python test_harness_v2.py` in `~/Evaluation/monopoly_simulator`
+2. Then run `python client_agent.py` in `~/Evaluation/monopoly_simulator/A2C_agent/`
+3. Novelty detection file and log file located in `/media/becky/GNOME-p3/Evaluation/monopoly_simulator/A2C_agent/weights`
+
 ## Game Environment
 ### Environment Development
 * The environment is developed as the form of [OpenIE gym library](http://gym.openai.com/docs/), which can find in **~/env**.
