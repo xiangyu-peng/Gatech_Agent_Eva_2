@@ -1,8 +1,0 @@
-{
-    "function": "play_tournament_with_novelty_1",
-    "parameters": {
-        "meta_seed": 1,
-        "novelty_index": 50,
-        "num_game": 200
-    }
-}

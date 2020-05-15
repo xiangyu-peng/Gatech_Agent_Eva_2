@@ -1,7 +1,0 @@
-{
-    "function": "play_tournament_without_novelty",
-    "parameters": {
-        "meta_seed": 1,
-        "num_game": 200
-    }
-}
