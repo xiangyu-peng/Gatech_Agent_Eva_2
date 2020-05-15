@@ -2,7 +2,7 @@ import sys, os
 upper_path = os.path.abspath('..')
 sys.path.append(upper_path + '/KG_rule')
 sys.path.append(upper_path)
-sys.path.append(upper_path + '/Evaluation/GNOME-p3')
+sys.path.append(upper_path + '/Evaluation')
 ####################
 from monopoly_simulator_background.vanilla_A2C import *
 from configparser import ConfigParser
@@ -66,11 +66,14 @@ def test_v2(step_idx, model, device, num_test, seed):
             num_game += 1
             s = s.reshape(1, -1)
             s = torch.tensor(s, device=device).float()
-            # print(s)
+
             prob = model.actor(s)
-            #
+            # print(prob)
+            # break
+
             # if num_game == 2:
-            #     print(prob, s[0][-10])
+            #     print(prob, s)
+            #     s= s[0]
             #     break
             a = Categorical(prob).sample().cpu().numpy()  # substitute
             if masked_actions[a[0]] == 0:
@@ -218,19 +221,19 @@ if __name__ == '__main__':
     import os
     # os.environ["CUDA_VISIBLE_DEVICES"] = '0'
     # torch.cuda.set_device(1)
-    device = torch.device("cuda:0")
+    device = torch.device("cpu")
 
     #######################################
     with HiddenPrints():
         envs = ParallelEnv(n_train_processes)
     # vector = np.load('/media/becky/GNOME-p3/KG-rule/vector.npy')
     score_list, win_list, pie_list, diff_list, diff_neg_list = [], [], [], [], []
-    for seed in range(0,1):
-        for i in range(0,6):  # From 0(1) to 6(2) and interval is 5(3) => [0,5]
-            model_path = '/media/becky/GNOME-p3/monopoly_simulator_background/weights/v3_lr_0.001_#_' +str(i) + '.pkl'
+    for seed in range(2,3):
+        for i in range(1,20):  # From 0(1) to 6(2) and interval is 5(3) => [0,5]
+            model_path = '/media/becky/GNOME-p3/monopoly_simulator_background/weights/cpu_v3_lr_0.001_#_' +str(i) + '.pkl'
             model = torch.load(model_path)
             print('i = ', i)
-            score, win, diff = test_v2(1, model, device, 100, seed=seed)
+            score, win, diff = test_v2(1, model, device, 500, seed=seed)
             # score_list.append(score)
             # win_list.append(win)
             # pie_list.append(pie)

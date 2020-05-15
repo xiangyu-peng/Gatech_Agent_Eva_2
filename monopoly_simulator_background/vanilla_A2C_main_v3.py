@@ -2,9 +2,9 @@
 # Only consider 2 actions
 # Only take one action each time
 import sys, os
-upper_path = os.path.abspath('..').replace('/Evaluation/GNOME-p3','')
+upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
 sys.path.append(upper_path)
-sys.path.append(upper_path + '/Evaluation/GNOME-p3')
+sys.path.append(upper_path + '/Evaluation')
 sys.path.append(upper_path + '/KG_rule')
 ####################
 from monopoly_simulator_background.vanilla_A2C import *
@@ -83,7 +83,7 @@ class MonopolyTrainer:
                                + '_as' + str(self.action_space) + '_sn' + str(self.state_num) \
                                + '_ac' + str(self.actor_loss_coefficient)
             self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/', log_suffix=hyper_config_str)])
-            self.start_time = datetime.datetime.now()
+        self.start_time = datetime.datetime.now()
         if not self._device_id:  # use all available devices
             use_cuda = torch.cuda.is_available()
             self.device = torch.device("cuda" if use_cuda else "cpu")
@@ -92,7 +92,7 @@ class MonopolyTrainer:
             self.device = torch.device('cuda:0')
 
         ###set to cpu for evaluation
-        self.device = torch.device('cuda:0')
+        self.device = torch.device('cpu')
             #######################################
 
         with HiddenPrints():
@@ -188,12 +188,12 @@ class MonopolyTrainer:
         return round(score/self.num_test, 5), round(win_num/self.num_test, 5), round(avg_diff/self.num_test, 5)
 
     def save(self, step_idx):
-        save_name = self.save_path + '/v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
+        save_name = self.save_path + '/cpu_v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
         print(save_name)
         torch.save(self.model, save_name)
 
     def train(self):
-        step_idx = 0
+        step_idx = 1
         with HiddenPrints():
             reset_array = self.envs.reset()
 
@@ -312,6 +312,13 @@ class MonopolyTrainer:
             end_time = datetime.datetime.now()
 
             self.spend_time = (end_time - self.start_time).seconds / 60 / 60
+
+            # After converge, we will stop the training
+            if len(self.test_result['winning_rate']) > 10:
+                if max(self.test_result['winning_rate'][:-10]) > max(self.test_result['winning_rate'][-10:]) +  0.05:
+                    break
+                if (max(self.test_result['winning_rate'][-5:]) - min(self.test_result['winning_rate'][-5:])) < 0.03:
+                    break
 
         self.envs.close()
 

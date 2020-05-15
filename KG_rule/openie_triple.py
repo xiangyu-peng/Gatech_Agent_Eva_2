@@ -1,9 +1,9 @@
 #####Evaluation#####
 import sys, os
-upper_path = os.path.abspath('..').replace('/Evaluation/GNOME-p3','')
-upper_path_eva = upper_path + '/Evaluation/GNOME-p3'
+upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
+upper_path_eva = upper_path + '/Evaluation/monopoly_simulator'
 sys.path.append(upper_path)
-sys.path.append(upper_path + '/Evaluation/GNOME-p3')
+sys.path.append(upper_path + '/Evaluation')
 #####################################
 
 import tempfile
@@ -86,7 +86,7 @@ class History_Record(object):
 class KG_OpenIE(History_Record):
     def __init__(self, gameboard,\
                  core_nlp_version: str = '2018-10-05', config_file=None):
-        self.upper_path = os.path.abspath('..').replace('/Evaluation/GNOME-p3', '')
+        self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
         self.remote_url = 'https://nlp.stanford.edu/software/stanford-corenlp-full-{}.zip'.format(core_nlp_version)
         self.install_dir = Path('~/.stanfordnlp_resources/').expanduser()
         self.install_dir.mkdir(exist_ok=True)
@@ -600,7 +600,7 @@ class KG_OpenIE(History_Record):
 class Novelty_Detection_Dice(History_Record):
     def __init__(self, config_file=None):
         #Novelty Detection
-        self.upper_path = os.path.abspath('..').replace('/Evaluation/GNOME-p3', '')
+        self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
         if config_file == None:
             config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
@@ -782,7 +782,7 @@ class Novelty_Detection_Dice(History_Record):
 class Novelty_Detection_Card(History_Record):
     def __init__(self, config_file=None):
         # Novelty Detection
-        self.upper_path = os.path.abspath('..').replace('/Evaluation/GNOME-p3', '')
+        self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
         if config_file == None:
             config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
         config_data = ConfigParser()

@@ -1,0 +1,8 @@
+2020-05-15 14:39:24,810:monopoly_simulator.logging_info:DEBUG:seed used: 486337
+2020-05-15 14:39:24,811:monopoly_simulator.logging_info.init_game_elements:DEBUG:Beginning game set up...
+2020-05-15 14:39:24,811:monopoly_simulator.logging_info.init_game_elements:DEBUG:Successfully instantiated and initialized bank.
+2020-05-15 14:39:24,811:monopoly_simulator.logging_info.init_game_elements:DEBUG:Successfully instantiated and initialized all locations on board.
+2020-05-15 14:39:24,812:monopoly_simulator.logging_info.init_game_elements:DEBUG:Successfully instantiated and initialized dies
+2020-05-15 14:39:24,814:monopoly_simulator.logging_info.init_game_elements:DEBUG:Successfully instantiated and initialized cards
+2020-05-15 14:39:24,814:monopoly_simulator.logging_info.init_game_elements:DEBUG:Successfully instantiated and initialized players and decision agents
+2020-05-15 14:39:24,814:monopoly_simulator.logging_info.init_game_elements:DEBUG:Successfully instantiated game history data structures

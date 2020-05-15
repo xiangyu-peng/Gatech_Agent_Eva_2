@@ -1,9 +1,10 @@
 import sys, os
-upper_path = os.path.abspath('..').replace('/Evaluation/GNOME-p3','')
+upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
 print(upper_path)
-upper_path_eva = upper_path + '/Evaluation/GNOME-p3'
+upper_path_eva = upper_path + '/Evaluation/monopoly_simulator'
 sys.path.append(upper_path)
-sys.path.append(upper_path + '/Evaluation/GNOME-p3')
+sys.path.append(upper_path + '/Evaluation')
+sys.path.append(upper_path_eva)
 ####################
 
 from monopoly_simulator_background.gameplay_step import *
@@ -29,7 +30,7 @@ from monopoly_simulator import initialize_game_elements
 class Monopoly_world():
     def __init__(self):
         # Get config data
-        self.upper_path = os.path.abspath('..').replace('/Evaluation/GNOME-p3','')
+        self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
         # self.config_file = '/media/becky/GNOME-p3/Evaluation/GNOME-p3/A2C_agent/config.ini'
         self.config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
         config_data = ConfigParser()
