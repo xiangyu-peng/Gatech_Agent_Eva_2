@@ -110,6 +110,12 @@ class Interface(object):
                 file.write(self.mapping(space.name) + ' is mortgaged at ' + str(space.mortgage) + '\n')
                 file.write(self.mapping(space.name) + ' is priced at ' + str(space.price) + '\n')
 
+            if loc_class == 'tax':
+                file.write(self.mapping(space.name) + ' is cost at ' + str(space.amount_due) + '\n')
+
+        # Add go_increment to the file
+        file.write('GO is incremtent as ' + str(game_elements['go_increment']) + '\n')
+        file.write('GO is located at ' + str(game_elements['go_position']) + '\n')
 
 
         file.close()

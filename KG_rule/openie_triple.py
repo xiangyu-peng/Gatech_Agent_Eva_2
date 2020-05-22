@@ -109,7 +109,7 @@ class KG_OpenIE(History_Record):
         self.params = self.params_read(config_data, keys='kg')
         self.jsonfile = self.upper_path + self.params['jsonfile']
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
-        self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away', 'type', 'cost', 'direct']
+        self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away', 'type', 'cost', 'direct', 'mortgaged', 'increment']
         self.relations_full = ['is priced at', 'is located at', 'is rented-0-house at'] #, 'is colored as', 'is classified as']
         self.kg_rel = dict()  # the total kg rule for "rel" KG
         self.kg_sub = dict()  # the total kg rule for "sub" KG
