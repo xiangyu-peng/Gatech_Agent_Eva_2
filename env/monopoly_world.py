@@ -312,9 +312,9 @@ class Monopoly_world():
         #When last state has a winner, we will reset the game
         if self.terminal > 0:
             if self.kg_use:
-                self.interface.get_logging_info(self.game_elements, 0, 1)
+                self.interface.get_logging_info(self.game_elements, current_player_index=0,file_path=self.upper_path+'/KG_rule/game_log.txt')
                 self.save_kg()
-                self.interface.clear_history()
+                self.interface.clear_history(file_path=self.upper_path+'/KG_rule/game_log.txt')
             self.reset()
             state_space = self.interface.board_to_state(self.game_elements)
             reward = 0
@@ -462,9 +462,9 @@ class Monopoly_world():
 
         if self.terminal > 0:
             if self.kg_use:
-                self.interface.get_logging_info(self.game_elements, 0, 1)
+                self.interface.get_logging_info(self.game_elements, current_player_index=0, file_path=self.upper_path+'/KG_rule/game_log.txt')
                 self.save_kg()
-                self.interface.clear_history()
+                self.interface.clear_history(file_path=self.upper_path+'/KG_rule/game_log.txt')
             state_space, masked_actions = self.reset()
             # state_space = self.interface.board_to_state(self.game_elements)
             reward = 0

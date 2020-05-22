@@ -76,7 +76,7 @@ gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-
 ############
 
 # env.set_board(gameboard_initial)
-env.set_kg(False)
+env.set_kg(True)
 env.set_board()
 env.seed(seed=n)
 # with HiddenPrints():

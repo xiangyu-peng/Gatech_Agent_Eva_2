@@ -1,4 +1,5 @@
-import sys, os
+import sys
+import os
 upper_path = os.path.abspath('..')
 sys.path.append(upper_path + '/KG_rule')
 sys.path.append(upper_path)
@@ -19,10 +20,13 @@ class Config:
 
 def parse_args():
     parser = argparse.ArgumentParser()
+
     parser.add_argument('--seed', default=0, type=int)
     parser.add_argument('--model_path', default=upper_path + '/monopoly_simulator_background/weights/v3_lr_0.001_#_18.pkl', type=str)
     parser.add_argument('--device_name', default='cuda:0', type=str)
     parser.add_argument('--num_t', default='cuda:0', type=str)
+    parser.add_argument('--performance_count', default=10, type=int)
+
     args = parser.parse_args()
     params = vars(args)
     return params
@@ -38,19 +42,23 @@ class HiddenPrints:
         sys.stdout = self._original_stdout
 
 
-class Hyp_Learner():
+class Hyp_Learner(object):
     """
     This class is separated into on-line learning and off-line learning.
     """
+    #TODO:
     def __init__(self):
         args = parse_args()
         self.device = torch.device(args['device_name'])
         self.model = torch.load(args['model_path'])
         self.seed = args['seed']
 
-        # game env
-         = []
+        # game env/ novelty injection
+        self.retrain_signal = False  # denotes if we will retrain the agent during next game
+        self.performance_before_inject = [[], [], []]
 
+        #performance of agents
+        self.performance_count = args['performance_count']  # default is 10; we average the performance of 10 games
 
     def online_testing(self):
         # Set the env for testing
@@ -64,49 +72,54 @@ class Hyp_Learner():
         win_num = 0
         avg_diff = 0
 
-        with HiddenPrints():
+        with HiddenPrints():  # reset the env
             s, masked_actions = env.reset()
 
+        num_test = 0  # count the # of games before novelty injection
         for _ in range(self.num_test):
-            num_game = 0
+            num_test += 1
+            round_num_game = 0
             score_game = 0
 
             while not done:
-                num_game += 1
+                round_num_game += 1
                 s = s.reshape(1, -1)
                 s = torch.tensor(s, device=device).float()
-
                 prob = model.actor(s)
-                # print(prob)
-                # break
-
-                # if num_game == 2:
-                #     print(prob, s)
-                #     s= s[0]
-                #     break
                 a = Categorical(prob).sample().cpu().numpy()  # substitute
-                if masked_actions[a[0]] == 0:
+                if masked_actions[a[0]] == 0:  # check whether the action is valid
                     a = [1]
                 with HiddenPrints():
                     s_prime, r, done, masked_actions = env.step(a[0])
                 s = s_prime
                 score_game += r
 
-            # Check the novelty of game
-            if env.kg_change_output():
-                # retrain
-
             # s = s.cpu().numpy()[0]
             avg_diff += s[-2] - s[-1]
-            score += score_game / num_game + 10 * abs(abs(int(done) - 2) - 1)
+            score += score_game / round_num_game + 10 * abs(abs(int(done) - 2) - 1)
             win_num += abs(abs(int(done) - 2) - 1)
             done = 0
 
-        # print(f"Step # :{step_idx}, avg score : {score / num_test:.3f}")
-        # print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
-        # print(f"Step # :{step_idx}, avg diff : {avg_diff / num_test:.3f}")
+            # Record the performance of the agent
+            if num_test % self.performance_count == 0:
+                self.performance_before_inject[0].append(round(score / self.performance_count, 3))     # score/ rewards
+                self.performance_before_inject[0].append(round(win_num / self.performance_count, 3))   # winning rate
+                self.performance_before_inject[0].append(round(avg_diff / self.performance_count, 3))  # difference of the cash at the end of game
+
+            # Check the novelty of game
+            if env.kg_change_output():
+                self.retrain_signal = True
+                self.performance_before_inject = [round(score / num_test, 3), round(win_num / num_test, 3), round(avg_diff / num_test, 3)]
+                num_test = 0
+
+                print(f"Step # :{step_idx}, avg score : {score / num_test:.3f}")
+                print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
+                print(f"Step # :{step_idx}, avg diff : {avg_diff / num_test:.3f}")
+
+        #TODO: Check the novelty
 
         env.close()
+
 
 if __name__ == '__main__':
     hyp = Hyp_Learner()

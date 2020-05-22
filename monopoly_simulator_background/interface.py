@@ -50,7 +50,7 @@ class Interface(object):
 
 
 
-    def get_logging_info(self, game_elements, current_player_index, num_active_players, file_path=upper_path+'/KG_rule/game_log.txt'):
+    def get_logging_info(self, game_elements, current_player_index, file_path=upper_path+'/KG_rule/game_log.txt'):
         file = open(file_path, "w")
         current_player = game_elements['players'][current_player_index]
 
