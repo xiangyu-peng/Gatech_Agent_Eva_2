@@ -10,8 +10,9 @@ from configparser import ConfigParser
 import os, sys
 import time
 from monopoly_simulator_background.simple_background_agent_becky_p1 import P1Agent
-# from monopoly_simulator_background.background_agent_v2_agent import P2Agent_v2
+from monopoly_simulator import background_agent_v3
 from monopoly_simulator_background.gameplay_tf import *
+from monopoly_simulator.agent import Agent
 class HiddenPrints:
     def __enter__(self):
         self._original_stdout = sys.stdout
@@ -67,17 +68,19 @@ player_decision_agents['player_1'] = P1Agent()
 
 # Assign the beckground agents to the players
 name_num = 1
-num_player = 4
+num_player = 3
 while name_num < num_player:
     name_num += 1
-    player_decision_agents['player_' + str(name_num)] = P1Agent()
+    player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
 
-gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-1.json', player_decision_agents)
+gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-1.json',
+                                 player_decision_agents,
+                                 num_player)
 ############
 
 # env.set_board(gameboard_initial)
 env.set_kg(True)
-env.set_board()
+env.set_board(gameboard_initial)
 env.seed(seed=n)
 # with HiddenPrints():
 s,mask = env.reset()
@@ -101,9 +104,8 @@ while done_num < done_num_total:
     print('s-step',s, rew, info)
 
     if done > 0:
-        # print('Done')
         done_num += 1
-        print('s', s, rew)
+        print('s', s, rew, len(s))
 
     # if done_num == done_num_total:
     #     break

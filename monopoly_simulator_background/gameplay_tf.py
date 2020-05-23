@@ -448,9 +448,10 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
     return
 
 
-def set_up_board(game_schema_file_path, player_decision_agents): #, num_active_players):
+def set_up_board(game_schema_file_path, player_decision_agents, num_active_players):
     game_schema = json.load(open(game_schema_file_path, 'r'))
-    return initialize_game_elements.initialize_board(game_schema, player_decision_agents) #, num_active_players)
+    game_schema['players']['player_states']['player_name'] = game_schema['players']['player_states']['player_name'][: num_active_players]
+    return initialize_game_elements.initialize_board(game_schema, player_decision_agents)
 
 
 # def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, a, die_roll):

@@ -93,15 +93,17 @@ class Monopoly_world():
 
             # set player.agent to  the gameboard
             self.gameboard_initial['players'] = dict()
+            game_board_schema = json.load(open(self.upper_path + '/monopoly_game_schema_v1-1.json', 'r'))
+            game_board_schema['players']['player_states']['player_name'] = \
+                game_board_schema['players']['player_states']['player_name'][: self.num_players]  # change the player_num
             initialize_game_elements._initialize_players(
-                self.gameboard_initial, json.load(open(self.upper_path + '/monopoly_game_schema_v1-1.json', 'r')),
+                self.gameboard_initial,
+                game_board_schema,
                 self.player_decision_agents)  # json path here doesn't matter
 
         # OR We use the default gameboard
         else:
-            # self.gameboard_set_ini = None
             self.num_players = self.hyperparams['num_active_players']
-
             # Reset the player.agents ##########################
             # Set up agents
             self.player_decision_agents['player_1'] = P1Agent()
@@ -113,8 +115,8 @@ class Monopoly_world():
                 self.player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
 
             self.gameboard_initial = set_up_board(self.upper_path + '/monopoly_game_schema_v1-1.json',
-                                                  self.player_decision_agents)
-                                                  #self.num_players)
+                                                  self.player_decision_agents,
+                                                  self.num_players)
             #####################################################
 
         # In case of the gameboard we use to assign here has history, we have to clear the history here
@@ -145,7 +147,6 @@ class Monopoly_world():
         """
         RESET all the parameters before each game
         """
-        # self.gameboard_initial = self.set_initial_gameboard(self.gameboard_set_ini)  # Reset the game-board
         self.num_active_players = self.num_players  # Reset the active players number to players number
         self.num_die_rolls = 0
         self.current_player_index = 0
