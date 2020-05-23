@@ -793,13 +793,13 @@ def inject_novelty(current_gameboard, novelty_schema=None):
 
 
     #Level 1 Novelty
-    numberDieNovelty = novelty_generator.NumberClassNovelty()
-    numberDieNovelty.die_novelty(current_gameboard, 2, die_state_vector=[[1,2,3,4,5,6],[1,2,3,4,5,6]])
-    classDieNovelty = novelty_generator.TypeClassNovelty()
-    # die_state_distribution_vector = ['uniform','uniform','biased','biased']
-    die_state_distribution_vector = ['uniform', 'uniform']
-    die_type_vector = ['odd_only','even_only']
-    classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
+    # numberDieNovelty = novelty_generator.NumberClassNovelty()
+    # numberDieNovelty.die_novelty(current_gameboard, 2, die_state_vector=[[1,2,3,4,5,6],[1,2,3,4,5,6]])
+    # classDieNovelty = novelty_generator.TypeClassNovelty()
+    # # die_state_distribution_vector = ['uniform','uniform','biased','biased']
+    # die_state_distribution_vector = ['uniform', 'uniform']
+    # die_type_vector = ['odd_only','even_only']
+    # classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
 
 
     # classCardNovelty = novelty_generator.TypeClassNovelty()
@@ -816,11 +816,14 @@ def inject_novelty(current_gameboard, novelty_schema=None):
     #On playing the game it is verified that the newly added property to the color group is taken into account for monopolizing a color group,
     # i,e the orchid color group now has Baltic Avenue besides St. Charles Place, States Avenue and Virginia Avenue. The player acquires a monopoly
     # only on the ownership of all the 4 properties in this case.
-    # inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
+    inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
     # inanimateNovelty.map_property_set_to_color(current_gameboard, [current_gameboard['location_objects']['Park Place'], current_gameboard['location_objects']['Boardwalk']], 'Brown')
     # inanimateNovelty.map_property_to_color(current_gameboard, current_gameboard['location_objects']['Baltic-Avenue'], 'Orchid')
     # #setting new rents for Indiana Avenue
     # inanimateNovelty.rent_novelty(current_gameboard['location_objects']['Indiana Avenue'], {'rent': 50, 'rent_1_house': 150})
+    asset_lists = ["Mediterranean Avenue", "Baltic Avenue", "Reading Railroad", "Oriental Avenue", "Vermont Avenue", "Connecticut Avenue", "St. Charles Place", "Electric Company", "States Avenue", "Virginia Avenue", "Pennsylvania Railroad", "St. James Place", "Tennessee Avenue", "New York Avenue", "Kentucky Avenue", "Indiana Avenue", "Illinois Avenue", "B&O Railroad", "Atlantic Avenue", "Ventnor Avenue", "Water Works", "Marvin Gardens", "Pacific Avenue", "North Carolina Avenue", "Pennsylvania Avenue", "Short Line", "Park Place", "Boardwalk"]
+    for asset in asset_lists:
+        inanimateNovelty.price_novelty(current_gameboard['location_objects'][asset], 1499)
 
 
 

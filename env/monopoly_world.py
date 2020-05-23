@@ -27,6 +27,8 @@ from monopoly_simulator import read_write_current_state
 from monopoly_simulator import initialize_game_elements
 # import monopoly_simulator_background.hypothetical_simulator
 # from monopoly_simulator_background.agent_helper_functions import *
+
+
 class Monopoly_world():
     def __init__(self):
         # Get config data
@@ -171,9 +173,9 @@ class Monopoly_world():
         if self.kg_use:
             self.kg.set_gameboard(self.game_elements)  # Deliver gameboard info to openie
 
-        # # Inject novelty here
-        # if self.game_num > self.novelty_inject_num:
-        #     inject_novelty(self.game_elements)
+        # Inject novelty here
+        if self.game_num > self.novelty_inject_num:
+            inject_novelty(self.game_elements)
 
         np.random.seed(self.seeds)  # control the seed!!!!
         self.game_elements['seed'] = self.seeds

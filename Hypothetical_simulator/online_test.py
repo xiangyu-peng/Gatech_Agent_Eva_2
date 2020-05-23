@@ -20,13 +20,11 @@ class Config:
 
 def parse_args():
     parser = argparse.ArgumentParser()
-
     parser.add_argument('--seed', default=0, type=int)
     parser.add_argument('--model_path', default=upper_path + '/monopoly_simulator_background/weights/v3_lr_0.001_#_18.pkl', type=str)
     parser.add_argument('--device_name', default='cuda:0', type=str)
-    parser.add_argument('--num_t', default='cuda:0', type=str)
-    parser.add_argument('--performance_count', default=10, type=int)
-
+    parser.add_argument('--num_test', default=600, type=int)
+    parser.add_argument('--performance_count', default=100, type=int)
     args = parser.parse_args()
     params = vars(args)
     return params
@@ -46,7 +44,6 @@ class Hyp_Learner(object):
     """
     This class is separated into on-line learning and off-line learning.
     """
-    #TODO:
     def __init__(self):
         args = parse_args()
         self.device = torch.device(args['device_name'])
@@ -58,6 +55,7 @@ class Hyp_Learner(object):
         self.performance_before_inject = [[], [], []]
 
         #performance of agents
+        self.num_test = args['num_test']
         self.performance_count = args['performance_count']  # default is 10; we average the performance of 10 games
 
     def online_testing(self):
@@ -84,8 +82,8 @@ class Hyp_Learner(object):
             while not done:
                 round_num_game += 1
                 s = s.reshape(1, -1)
-                s = torch.tensor(s, device=device).float()
-                prob = model.actor(s)
+                s = torch.tensor(s, device=self.device).float()
+                prob = self.model.actor(s)
                 a = Categorical(prob).sample().cpu().numpy()  # substitute
                 if masked_actions[a[0]] == 0:  # check whether the action is valid
                     a = [1]
@@ -94,7 +92,6 @@ class Hyp_Learner(object):
                 s = s_prime
                 score_game += r
 
-            # s = s.cpu().numpy()[0]
             avg_diff += s[-2] - s[-1]
             score += score_game / round_num_game + 10 * abs(abs(int(done) - 2) - 1)
             win_num += abs(abs(int(done) - 2) - 1)
@@ -105,24 +102,25 @@ class Hyp_Learner(object):
                 self.performance_before_inject[0].append(round(score / self.performance_count, 3))     # score/ rewards
                 self.performance_before_inject[0].append(round(win_num / self.performance_count, 3))   # winning rate
                 self.performance_before_inject[0].append(round(avg_diff / self.performance_count, 3))  # difference of the cash at the end of game
+                print(f"Step # :{num_test}, avg score : {score / num_test:.3f}")
+                print(f"Step # :{num_test}, avg winning : {win_num / num_test:.3f}")
+                print(f"Step # :{num_test}, avg diff : {avg_diff / num_test:.3f}")
+
+            # TODO: Check the novelty
 
             # Check the novelty of game
-            if env.kg_change_output():
+            if env.output_kg_change():
                 self.retrain_signal = True
-                self.performance_before_inject = [round(score / num_test, 3), round(win_num / num_test, 3), round(avg_diff / num_test, 3)]
-                num_test = 0
+                # print(env.output_kg_change())
 
-                print(f"Step # :{step_idx}, avg score : {score / num_test:.3f}")
-                print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
-                print(f"Step # :{step_idx}, avg diff : {avg_diff / num_test:.3f}")
 
-        #TODO: Check the novelty
 
         env.close()
 
 
 if __name__ == '__main__':
     hyp = Hyp_Learner()
+    hyp.online_testing()
 
 
 # def add_vector_to_state(state, vector, device):

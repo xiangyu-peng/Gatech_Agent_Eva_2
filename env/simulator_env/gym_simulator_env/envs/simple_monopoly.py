@@ -73,3 +73,6 @@ class Sim_Monopoly(gym.Env):
         self.MonopolyWorld.kg_use = kg_use
     # def render(self, mode='human', close=False):
     #     pass
+
+    def output_kg_change(self):
+        return self.MonopolyWorld.kg_change
