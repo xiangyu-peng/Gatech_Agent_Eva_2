@@ -19,6 +19,7 @@ from monopoly_simulator_background.log_setting import ini_log_level, set_log_lev
 logger = set_log_level()
 
 class Interface(object):
+
     def __init__(self):
         self.board_owned = []
         self.board_building = []
@@ -30,7 +31,7 @@ class Interface(object):
         self.action_space = []
         self.site_space = []
         self.loc_history = set()
-
+        self.num_players = 0
 
     def mapping(self, name):
         name = name.replace('&','-')
@@ -47,8 +48,6 @@ class Interface(object):
         for p in game_elements['players']:
             if p.current_position:
                 self.loc_history.add(p.current_position)
-
-
 
     def get_logging_info(self, game_elements, current_player_index, file_path=upper_path+'/KG_rule/game_log.txt'):
         file = open(file_path, "w")
@@ -117,9 +116,7 @@ class Interface(object):
         file.write('GO is incremtent as ' + str(game_elements['go_increment']) + '\n')
         file.write('GO is located at ' + str(game_elements['go_position']) + '\n')
 
-
         file.close()
-
 
     def set_board(self, gameboard):
         # Set the full board
@@ -139,20 +136,17 @@ class Interface(object):
                 board_owned.append(k)
         self.board_owned = board_owned
 
-        #Set the
-
-
-
+        #Set the players number
+        self.num_players = len(gameboard['players'])
 
     #state_space = 28+22+n+n+2 = 56
     def board_to_state(self, current_board):
-        '''
-        :param current_board:
-        :return: state_space
-        '''
-
+        """
+        Transfer the game board into a vector
+        :param current_board: a dict, current game board
+        :return: state_space: a numpy array
+        """
         state_space = []
-
         # Ownership of property => # of board states
         # -1 means other players, 0 means bank, and 1 means agent/ player 1
         state_space_owned = []
@@ -213,19 +207,16 @@ class Interface(object):
         np.set_printoptions(suppress=True)
         self.state_space = np.array(state_space)
 
-
-
         return self.state_space
 
     def get_masked_actions(self, allowable_actions, param, current_player):
-        '''
+        """
         This function is to transfer allowable actions to vector/array.
         :param allowable_actions: a set. allowed actions from player.py.
         :param param: dict. parameters for allowed actions from play.py.
         :param current_player: player class.
         :return: masked_actions, a list.
-        '''
-
+        """
         masked_actions = []
         #1 first denotes the action -> buy or not buy
         if buy_property in allowable_actions:
@@ -275,12 +266,11 @@ class Interface(object):
 
     #action space 1+22+28+28+1 = 80
     def get_action_space(self, current_board, current_player):
-        '''
-
-        :param current_board: the gameboard with history.
-        :param current_player: the player moving now: in our game, is player_1.
+        """
+        :param current_board: a dict, the game board with history.
+        :param current_player: player object, the player moving now: in our game, is player_1.
         :return:
-        '''
+        """
 
         if self.site_space:
             if current_player.current_position != None:
@@ -316,10 +306,10 @@ class Interface(object):
 
         return self.action_space, self.site_space
 
-        #take into array/vector and output the actions
-    actions_vector_default = [1] + [0]
+    #     #take into array/vector and output the actions
+    # actions_vector_default = [1] + [0]
 
-    def vector_to_actions(self, current_board, current_player, actions_vector=actions_vector_default):
+    def vector_to_actions(self, current_board, current_player, actions_vector=None):
         '''
         Take into array/vector of actions from agent and output the actions which are taken into env
         :param current_board: dict.
@@ -340,12 +330,28 @@ class Interface(object):
 
         self.move_actions = move_actions
         return self.move_actions
-        #####becky - may be deleted##########
-        # allowed_types = [ location.UtilityLocation,  location.RailroadLocation,  location.RealEstateLocation]
-        # if type(move_actions[0][1]) in allowed_types:
-        #     return self.move_actions
-        # else:
-        #     return []
+
+    def check_relative_state(self, state_space, spaces_set):
+        """
+        Given the state_space, which is a list of current game state and the novelty set which involves all the
+        spaces with novelty, then return if the state has novelty already.
+        :param state_space: a list, the game state from board_to_state()
+        :param spaces_set: a set, involves all the spaces having novelty
+        :return: a boolean, denotes whether novelty has been introduced into this state already
+        """
+        for space in spaces_set:
+            index_space = self.board_state.index(space)
+            if state_space[index_space] != 0:
+                return True
+            if index_space in state_space[-2 * self.num_players - 2 : -self.num_players - 2]:
+                return True
+
+        return False
+
+
+
+
+
 
 
 

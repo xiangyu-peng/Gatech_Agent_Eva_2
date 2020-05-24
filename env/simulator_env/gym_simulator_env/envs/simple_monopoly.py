@@ -76,3 +76,6 @@ class Sim_Monopoly(gym.Env):
 
     def output_kg_change(self):
         return self.MonopolyWorld.kg_change
+
+    def output_interface(self):
+        return self.MonopolyWorld.interface

@@ -53,6 +53,7 @@ class Hyp_Learner(object):
         # game env/ novelty injection
         self.retrain_signal = False  # denotes if we will retrain the agent during next game
         self.performance_before_inject = [[], [], []]
+        self.novelty_spaces = set()
 
         #performance of agents
         self.num_test = args['num_test']
@@ -109,13 +110,19 @@ class Hyp_Learner(object):
             # TODO: Check the novelty
 
             # Check the novelty of game
+
             if env.output_kg_change():
-                self.retrain_signal = True
-                # print(env.output_kg_change())
-
-
-
+                # self.retrain_signal = True
+                for novelty in env.output_kg_change():
+                    self.novelty_spaces.add(novelty[0].replace('-', ' '))
+                    print(novelty[0].replace('-', ' '))
         env.close()
+
+    def find_novelty_state(self, interface, state):
+        # TODO: add signal to retrain in this class.
+        interface.check_relative_state(state, self.novelty_spaces)
+
+        return True
 
 
 if __name__ == '__main__':
