@@ -588,12 +588,12 @@ class Monopoly_world():
             self.kg.save_matrix()
             self.kg.save_vector()
 
-            # Visulalize the novelty change in the network
-            if self.kg.kg_change != self.kg_change:
-                file = open(self.rule_change_path, "a")
-                file.write(str(self.kg.kg_change) + ' \n')
-                file.close()
+        # Visulalize the novelty change in the network
+        if self.kg.kg_change != self.kg_change:
+            file = open(self.rule_change_path, "a")
+            file.write(str(self.kg.kg_change) + ' \n')
+            file.close()
 
-            self.kg_change = self.kg.kg_change[:]
+        self.kg_change = self.kg.kg_change[:]
 
 

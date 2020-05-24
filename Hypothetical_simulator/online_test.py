@@ -77,12 +77,19 @@ class Hyp_Learner(object):
         num_test = 0  # count the # of games before novelty injection
         for _ in range(self.num_test):
             num_test += 1
-            round_num_game = 0
-            score_game = 0
+            round_num_game, score_game = 0, 0
+            retrain_signal_per_game = False  # define if we need to retrain tall the states after this state
 
             while not done:
                 round_num_game += 1
                 s = s.reshape(1, -1)
+
+                # check the novelty in the state
+                # TODO: hypothetical silumator, backward one step
+                if self.novelty_spaces and not retrain_signal_per_game:
+                    print(num_test, self.find_novelty_state(env.output_interface(), s[0]), self.novelty_spaces)
+                    retrain_signal_per_game = self.find_novelty_state(env.output_interface(), s[0])
+
                 s = torch.tensor(s, device=self.device).float()
                 prob = self.model.actor(s)
                 a = Categorical(prob).sample().cpu().numpy()  # substitute
@@ -115,14 +122,12 @@ class Hyp_Learner(object):
                 # self.retrain_signal = True
                 for novelty in env.output_kg_change():
                     self.novelty_spaces.add(novelty[0].replace('-', ' '))
-                    print(novelty[0].replace('-', ' '))
         env.close()
 
     def find_novelty_state(self, interface, state):
         # TODO: add signal to retrain in this class.
-        interface.check_relative_state(state, self.novelty_spaces)
+        return interface.check_relative_state(state, self.novelty_spaces)
 
-        return True
 
 
 if __name__ == '__main__':

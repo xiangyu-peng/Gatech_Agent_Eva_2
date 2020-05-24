@@ -1,635 +1,50 @@
-Dice => [3, 2]
-Dice => [1, 2]
-Dice => [6, 5]
-Dice => [4, 3]
-Dice => [1, 2]
-Dice => [3, 4]
-Dice => [5, 3]
-Dice => [4, 4]
-Dice => [6, 5]
-Dice => [4, 6]
-Dice => [2, 2]
-Dice => [1, 6]
-Dice => [6, 2]
-Dice => [4, 2]
-Dice => [5, 1]
-Dice => [2, 6]
-Dice => [3, 4]
-Dice => [2, 5]
-Dice => [6, 3]
 Dice => [3, 3]
-Dice => [4, 6]
-Dice => [5, 4]
-Dice => [4, 4]
-Dice => [5, 1]
 Dice => [1, 6]
-Dice => [2, 6]
-Dice => [4, 3]
-Dice => [6, 2]
-Dice => [5, 6]
-Dice => [4, 5]
-Dice => [2, 2]
-Dice => [2, 6]
-Dice => [1, 6]
+Dice => [1, 2]
 Dice => [6, 4]
-Dice => [5, 4]
-Dice => [1, 2]
-Dice => [4, 4]
-Dice => [2, 1]
-Dice => [3, 5]
-Dice => [1, 1]
-Dice => [6, 4]
-Dice => [1, 3]
-Dice => [4, 2]
-Dice => [5, 2]
-Dice => [1, 3]
-Dice => [3, 4]
-Dice => [6, 2]
-Dice => [1, 2]
-Dice => [5, 6]
-Dice => [1, 6]
-Dice => [6, 1]
-Dice => [3, 2]
-Dice => [2, 2]
-Dice => [5, 1]
-Dice => [6, 6]
-Dice => [1, 2]
-Dice => [4, 6]
-Dice => [6, 6]
-Dice => [2, 5]
-Dice => [5, 4]
-Dice => [3, 3]
-Dice => [4, 1]
-Dice => [5, 6]
-Dice => [5, 6]
-Dice => [6, 3]
-Dice => [1, 6]
-Dice => [4, 3]
-Dice => [3, 3]
-Dice => [1, 1]
-Dice => [4, 4]
-Dice => [5, 6]
-Dice => [1, 5]
-Dice => [3, 1]
-Dice => [4, 6]
-Dice => [6, 3]
-Dice => [4, 2]
-Dice => [1, 1]
-Dice => [3, 3]
-Dice => [3, 2]
-Dice => [2, 1]
-Dice => [1, 6]
-Dice => [6, 6]
-Dice => [4, 4]
-Dice => [4, 4]
-Dice => [1, 1]
-Dice => [5, 1]
-Dice => [5, 2]
-Dice => [5, 3]
-Dice => [4, 4]
-Dice => [4, 3]
-Dice => [6, 3]
-Dice => [2, 1]
 Dice => [4, 5]
-Dice => [1, 1]
-Dice => [2, 2]
-Dice => [4, 2]
-Dice => [5, 2]
-Dice => [1, 6]
-Dice => [3, 6]
-Dice => [1, 2]
-Dice => [6, 1]
-Dice => [3, 5]
-Dice => [5, 6]
 Dice => [6, 6]
-Dice => [1, 1]
+Dice => [4, 3]
 Dice => [2, 6]
-Dice => [3, 4]
-Dice => [3, 6]
-Dice => [5, 4]
-Dice => [2, 2]
-Dice => [5, 1]
-Dice => [6, 5]
-Dice => [6, 4]
-Dice => [3, 2]
-Dice => [4, 1]
-Dice => [6, 6]
-Dice => [6, 5]
-Dice => [6, 2]
-Dice => [5, 6]
-Dice => [5, 6]
-Dice => [2, 4]
-Dice => [1, 6]
-Dice => [4, 5]
-Dice => [1, 6]
-Dice => [3, 3]
-Dice => [1, 3]
-Dice => [3, 1]
-Dice => [4, 5]
-Dice => [5, 4]
-Dice => [3, 5]
-Dice => [3, 4]
-Dice => [2, 4]
-Dice => [1, 3]
-Dice => [6, 6]
-Dice => [5, 1]
-Dice => [1, 3]
-Dice => [6, 5]
-Dice => [3, 2]
-Dice => [3, 4]
-Dice => [4, 6]
-Dice => [3, 2]
-Dice => [4, 4]
 Dice => [6, 3]
-Dice => [6, 1]
-Dice => [4, 4]
-Dice => [3, 2]
-Dice => [2, 3]
-Dice => [4, 1]
-Dice => [6, 4]
 Dice => [2, 2]
-Dice => [4, 3]
-Dice => [6, 5]
-Dice => [2, 6]
-Dice => [1, 5]
-Dice => [2, 3]
-Dice => [5, 1]
 Dice => [4, 6]
-Dice => [3, 3]
-Dice => [3, 2]
-Dice => [2, 5]
-Dice => [3, 4]
-Dice => [5, 5]
-Dice => [5, 1]
-Dice => [3, 5]
-Dice => [1, 6]
-Dice => [2, 5]
-Dice => [5, 4]
-Dice => [6, 4]
-Dice => [5, 6]
-Dice => [4, 4]
-Dice => [6, 4]
-Dice => [3, 5]
-Dice => [5, 4]
-Dice => [4, 1]
-Dice => [4, 1]
-Dice => [4, 3]
-Dice => [4, 4]
-Dice => [2, 5]
-Dice => [4, 5]
-Dice => [1, 2]
-Dice => [5, 3]
-Dice => [4, 3]
-Dice => [2, 4]
-Dice => [4, 3]
-Dice => [4, 5]
-Dice => [6, 3]
-Dice => [2, 1]
-Dice => [2, 2]
-Dice => [3, 5]
-Dice => [3, 5]
-Dice => [4, 1]
-Dice => [2, 5]
-Dice => [2, 3]
-Dice => [5, 6]
-Dice => [2, 5]
-Dice => [1, 2]
-Dice => [4, 5]
-Dice => [3, 4]
-Dice => [3, 5]
-Dice => [5, 1]
-Dice => [1, 4]
-Dice => [6, 2]
-Dice => [2, 3]
-Dice => [5, 4]
 Dice => [1, 1]
-Dice => [1, 2]
-Dice => [6, 6]
-Dice => [5, 1]
-Dice => [4, 3]
-Dice => [6, 6]
-Dice => [1, 4]
-Dice => [4, 6]
-Dice => [4, 5]
-Dice => [3, 1]
-Dice => [2, 3]
-Dice => [1, 1]
-Dice => [6, 1]
-Dice => [6, 2]
-Dice => [1, 5]
-Dice => [2, 1]
-Dice => [2, 6]
-Dice => [2, 1]
-Dice => [5, 2]
-Dice => [1, 4]
-Dice => [3, 3]
-Dice => [4, 5]
-Dice => [4, 1]
-Dice => [6, 5]
-Dice => [3, 3]
-Dice => [2, 4]
-Dice => [4, 5]
-Dice => [2, 2]
-Dice => [4, 3]
-Dice => [5, 3]
-Dice => [1, 6]
-Dice => [4, 2]
 Dice => [6, 5]
 Dice => [2, 4]
-Dice => [1, 3]
-Dice => [3, 5]
-Dice => [2, 3]
-Dice => [6, 1]
-Dice => [3, 4]
-Dice => [4, 1]
-Dice => [3, 6]
-Dice => [3, 6]
-Dice => [2, 1]
-Dice => [5, 6]
+Dice => [5, 3]
 Dice => [6, 5]
-Dice => [2, 5]
-Dice => [6, 4]
-Dice => [1, 6]
-Dice => [4, 6]
-Dice => [1, 1]
-Dice => [1, 5]
-Dice => [5, 3]
-Dice => [3, 4]
-Dice => [5, 1]
-Dice => [1, 6]
-Dice => [5, 3]
-Dice => [3, 5]
-Dice => [3, 1]
-Dice => [3, 3]
-Dice => [5, 1]
-Dice => [6, 2]
-Dice => [6, 6]
-Dice => [2, 2]
-Dice => [1, 5]
-Dice => [6, 6]
-Dice => [2, 1]
 Dice => [4, 2]
-Dice => [5, 3]
-Dice => [3, 2]
-Dice => [3, 1]
-Dice => [1, 1]
-Dice => [4, 6]
-Dice => [1, 1]
-Dice => [1, 4]
-Dice => [2, 3]
-Dice => [3, 2]
-Dice => [6, 5]
-Dice => [3, 3]
-Dice => [2, 2]
-Dice => [5, 1]
-Dice => [6, 4]
-Dice => [1, 5]
-Dice => [4, 5]
-Dice => [2, 2]
-Dice => [1, 1]
-Dice => [4, 6]
-Dice => [4, 3]
-Dice => [3, 5]
-Dice => [5, 6]
-Dice => [4, 5]
-Dice => [1, 2]
-Dice => [1, 6]
-Dice => [6, 4]
-Dice => [4, 3]
-Dice => [4, 6]
-Dice => [3, 4]
-Dice => [3, 6]
-Dice => [6, 4]
-Dice => [1, 3]
-Dice => [3, 5]
-Dice => [5, 5]
-Dice => [5, 2]
-Dice => [4, 4]
-Dice => [1, 5]
-Dice => [1, 4]
-Dice => [5, 4]
-Dice => [2, 1]
-Dice => [2, 1]
-Dice => [1, 2]
-Dice => [4, 4]
-Dice => [2, 3]
-Dice => [5, 1]
-Dice => [4, 5]
-Dice => [3, 1]
-Dice => [1, 6]
-Dice => [5, 3]
-Dice => [3, 5]
-Dice => [4, 4]
-Dice => [4, 1]
-Dice => [1, 4]
-Dice => [5, 6]
-Dice => [6, 4]
-Dice => [6, 1]
-Dice => [5, 4]
-Dice => [1, 1]
-Dice => [3, 2]
-Dice => [3, 3]
-Dice => [4, 6]
-Dice => [4, 3]
-Dice => [3, 6]
-Dice => [2, 6]
-Dice => [4, 1]
-Dice => [1, 1]
-Dice => [5, 1]
-Dice => [4, 1]
-Dice => [3, 3]
-Dice => [2, 5]
-Dice => [5, 4]
-Dice => [3, 2]
-Dice => [1, 3]
-Dice => [3, 2]
-Dice => [6, 5]
-Dice => [3, 4]
-Dice => [5, 5]
-Dice => [3, 3]
-Dice => [4, 3]
-Dice => [5, 5]
-Dice => [2, 5]
-Dice => [1, 5]
-Dice => [5, 5]
-Dice => [4, 3]
-Dice => [2, 5]
-Dice => [3, 4]
-Dice => [5, 3]
-Dice => [5, 4]
-Dice => [2, 3]
-Dice => [5, 5]
-Dice => [3, 1]
-Dice => [2, 2]
-Dice => [4, 4]
 Dice => [6, 6]
-Dice => [5, 2]
+Dice => [6, 6]
+Dice => [4, 1]
+Dice => [6, 1]
+Dice => [2, 3]
+Dice => [5, 6]
+Dice => [2, 5]
 Dice => [6, 2]
 Dice => [2, 3]
-Dice => [1, 2]
-Dice => [5, 2]
-Dice => [4, 1]
 Dice => [2, 5]
-Dice => [2, 3]
-Dice => [6, 4]
-Dice => [3, 3]
-Dice => [1, 6]
-Dice => [5, 4]
-Dice => [5, 3]
-Dice => [5, 3]
-Dice => [6, 4]
-Dice => [3, 5]
-Dice => [2, 3]
-Dice => [5, 5]
-Dice => [3, 3]
-Dice => [4, 2]
-Dice => [6, 5]
-Dice => [6, 1]
-Dice => [1, 2]
-Dice => [1, 3]
-Dice => [6, 1]
-Dice => [4, 6]
-Dice => [1, 5]
-Dice => [3, 6]
-Dice => [2, 1]
-Dice => [1, 5]
-Dice => [1, 4]
-Dice => [4, 5]
-Dice => [4, 5]
-Dice => [2, 5]
-Dice => [3, 5]
-Dice => [5, 6]
-Dice => [6, 2]
-Dice => [5, 4]
-Dice => [3, 3]
-Dice => [2, 6]
 Dice => [5, 1]
-Dice => [6, 5]
-Dice => [5, 2]
-Dice => [6, 6]
-Dice => [6, 1]
-Dice => [6, 1]
-Dice => [1, 6]
-Dice => [2, 3]
-Dice => [6, 6]
 Dice => [1, 2]
-Dice => [5, 3]
-Dice => [6, 4]
-Dice => [2, 5]
+Dice => [1, 4]
+Dice => [5, 2]
+Dice => [3, 3]
+Dice => [2, 4]
 Dice => [6, 1]
-Dice => [5, 6]
-Dice => [5, 6]
-Dice => [3, 2]
-Dice => [2, 2]
-Dice => [4, 4]
-Dice => [1, 5]
-Dice => [4, 1]
+Dice => [3, 1]
+Dice => [4, 5]
 Dice => [2, 5]
-Dice => [1, 1]
-Dice => [3, 3]
-Dice => [4, 4]
-Dice => [1, 3]
-Dice => [2, 4]
-Dice => [2, 4]
-Dice => [3, 3]
-Dice => [5, 5]
-Dice => [6, 3]
-Dice => [6, 3]
-Chance Card => go_to_boardwalk
-Chance Card => advance_to_go
+Dice => [6, 2]
+Dice => [4, 1]
+Dice => [1, 6]
+Dice => [5, 1]
 Chance Card => building_loan_matures
-Community_chest Card => consultancy_fee
-Community_chest Card => advance_to_go
-Chance Card => get_out_of_jail_free
-Community_chest Card => consultancy_fee
-Community_chest Card => income_tax_refund
-Chance Card => building_loan_matures
-Chance Card => win_crossword_competition
-Chance Card => go_to_st_charles
-Community_chest Card => life_insurance_matures
-Chance Card => go_to_nearest_railroad_pay_double
 Chance Card => go_back_three_spaces
-Chance Card => go_back_three_spaces
-Community_chest Card => school_fee
-Chance Card => go_back_three_spaces
-Chance Card => go_to_boardwalk
-Community_chest Card => birthday
-Community_chest Card => income_tax_refund
-Community_chest Card => grand_opera_night
-Community_chest Card => holiday_fund_matures
-Community_chest Card => doctor_fee
-Chance Card => go_to_reading_railroad
-Chance Card => go_to_reading_railroad
-Chance Card => go_back_three_spaces
-Chance Card => go_back_three_spaces
-Chance Card => win_crossword_competition
-Chance Card => bank_dividend
-Chance Card => bank_dividend
-Community_chest Card => go_to_jail
-Chance Card => go_to_nearest_utility
-Community_chest Card => school_fee
-Chance Card => bank_dividend
-Chance Card => go_to_boardwalk
-Community_chest Card => consultancy_fee
-Community_chest Card => street_repairs
-Community_chest Card => street_repairs
-Chance Card => pay_poor_tax
-Chance Card => go_to_boardwalk
-Chance Card => go_to_st_charles
-Chance Card => go_to_illinois_avenue
-Chance Card => go_to_boardwalk
-Community_chest Card => bank_error
-Community_chest Card => doctor_fee
-Chance Card => elected_board_chairman
-Community_chest Card => go_to_jail
-Community_chest Card => hospital_fee
-Chance Card => bank_dividend
-Community_chest Card => grand_opera_night
-Community_chest Card => grand_opera_night
-Chance Card => go_to_boardwalk
-Chance Card => pay_poor_tax
-Community_chest Card => grand_opera_night
-Community_chest Card => grand_opera_night
-Chance Card => go_to_nearest_utility
-Community_chest Card => sale_of_stock
-Chance Card => go_to_st_charles
-Community_chest Card => income_tax_refund
-Chance Card => elected_board_chairman
-Chance Card => go_to_boardwalk
-Chance Card => go_to_reading_railroad
-Community_chest Card => holiday_fund_matures
-Community_chest Card => sale_of_stock
-Community_chest Card => go_to_jail
-Chance Card => go_to_boardwalk
-go_to_boardwalk is classified as movement
-Chance Card => advance_to_go
-advance_to_go is classified as movement
 Chance Card => building_loan_matures
 building_loan_matures is classified as positive_cash_from_bank
-Community_chest Card => consultancy_fee
-consultancy_fee is classified as positive_cash_from_bank
-Community_chest Card => advance_to_go
-advance_to_go is classified as movement
-Chance Card => get_out_of_jail_free
-get_out_of_jail_free is classified as contingent_movement
-Community_chest Card => consultancy_fee
-consultancy_fee is classified as positive_cash_from_bank
-Community_chest Card => income_tax_refund
-income_tax_refund is classified as positive_cash_from_bank
-Chance Card => building_loan_matures
-building_loan_matures is classified as positive_cash_from_bank
-Chance Card => win_crossword_competition
-win_crossword_competition is classified as positive_cash_from_bank
-Chance Card => go_to_st_charles
-go_to_st_charles is classified as movement
-Community_chest Card => life_insurance_matures
-life_insurance_matures is classified as positive_cash_from_bank
-Chance Card => go_to_nearest_railroad_pay_double
-go_to_nearest_railroad_pay_double is classified as movement_payment
 Chance Card => go_back_three_spaces
 go_back_three_spaces is classified as movement_relative
-Chance Card => go_back_three_spaces
-go_back_three_spaces is classified as movement_relative
-Community_chest Card => school_fee
-school_fee is classified as negative_cash_from_bank
-Chance Card => go_back_three_spaces
-go_back_three_spaces is classified as movement_relative
-Chance Card => go_to_boardwalk
-go_to_boardwalk is classified as movement
-Community_chest Card => birthday
-birthday is classified as positive_cash_from_players
-Community_chest Card => income_tax_refund
-income_tax_refund is classified as positive_cash_from_bank
-Community_chest Card => grand_opera_night
-grand_opera_night is classified as positive_cash_from_players
-Community_chest Card => holiday_fund_matures
-holiday_fund_matures is classified as positive_cash_from_bank
-Community_chest Card => doctor_fee
-doctor_fee is classified as negative_cash_from_bank
-Chance Card => go_to_reading_railroad
-go_to_reading_railroad is classified as movement
-Chance Card => go_to_reading_railroad
-go_to_reading_railroad is classified as movement
-Chance Card => go_back_three_spaces
-go_back_three_spaces is classified as movement_relative
-Chance Card => go_back_three_spaces
-go_back_three_spaces is classified as movement_relative
-Chance Card => win_crossword_competition
-win_crossword_competition is classified as positive_cash_from_bank
-Chance Card => bank_dividend
-bank_dividend is classified as positive_cash_from_bank
-Chance Card => bank_dividend
-bank_dividend is classified as positive_cash_from_bank
-Community_chest Card => go_to_jail
-go_to_jail is classified as movement
-Chance Card => go_to_nearest_utility
-go_to_nearest_utility is classified as movement_payment
-Community_chest Card => school_fee
-school_fee is classified as negative_cash_from_bank
-Chance Card => bank_dividend
-bank_dividend is classified as positive_cash_from_bank
-Chance Card => go_to_boardwalk
-go_to_boardwalk is classified as movement
-Community_chest Card => consultancy_fee
-consultancy_fee is classified as positive_cash_from_bank
-Community_chest Card => street_repairs
-street_repairs is classified as contingent_cash_from_bank
-Community_chest Card => street_repairs
-street_repairs is classified as contingent_cash_from_bank
-Chance Card => pay_poor_tax
-pay_poor_tax is classified as negative_cash_from_bank
-Chance Card => go_to_boardwalk
-go_to_boardwalk is classified as movement
-Chance Card => go_to_st_charles
-go_to_st_charles is classified as movement
-Chance Card => go_to_illinois_avenue
-go_to_illinois_avenue is classified as movement
-Chance Card => go_to_boardwalk
-go_to_boardwalk is classified as movement
-Community_chest Card => bank_error
-bank_error is classified as positive_cash_from_bank
-Community_chest Card => doctor_fee
-doctor_fee is classified as negative_cash_from_bank
-Chance Card => elected_board_chairman
-elected_board_chairman is classified as negative_cash_from_players
-Community_chest Card => go_to_jail
-go_to_jail is classified as movement
-Community_chest Card => hospital_fee
-hospital_fee is classified as negative_cash_from_bank
-Chance Card => bank_dividend
-bank_dividend is classified as positive_cash_from_bank
-Community_chest Card => grand_opera_night
-grand_opera_night is classified as positive_cash_from_players
-Community_chest Card => grand_opera_night
-grand_opera_night is classified as positive_cash_from_players
-Chance Card => go_to_boardwalk
-go_to_boardwalk is classified as movement
-Chance Card => pay_poor_tax
-pay_poor_tax is classified as negative_cash_from_bank
-Community_chest Card => grand_opera_night
-grand_opera_night is classified as positive_cash_from_players
-Community_chest Card => grand_opera_night
-grand_opera_night is classified as positive_cash_from_players
-Chance Card => go_to_nearest_utility
-go_to_nearest_utility is classified as movement_payment
-Community_chest Card => sale_of_stock
-sale_of_stock is classified as positive_cash_from_bank
-Chance Card => go_to_st_charles
-go_to_st_charles is classified as movement
-Community_chest Card => income_tax_refund
-income_tax_refund is classified as positive_cash_from_bank
-Chance Card => elected_board_chairman
-elected_board_chairman is classified as negative_cash_from_players
-Chance Card => go_to_boardwalk
-go_to_boardwalk is classified as movement
-Chance Card => go_to_reading_railroad
-go_to_reading_railroad is classified as movement
-Community_chest Card => holiday_fund_matures
-holiday_fund_matures is classified as positive_cash_from_bank
-Community_chest Card => sale_of_stock
-sale_of_stock is classified as positive_cash_from_bank
-Community_chest Card => go_to_jail
-go_to_jail is classified as movement
 Mediterranean-Avenue is located at 1
 Mediterranean-Avenue is classified as real_estate
 Mediterranean-Avenue is colored as Brown
@@ -641,9 +56,7 @@ Mediterranean-Avenue is rented-2-house at 30
 Mediterranean-Avenue is rented-3-house at 90
 Mediterranean-Avenue is rented-4-house at 160
 Mediterranean-Avenue is mortgaged at 30
-Mediterranean-Avenue is priced at 1499
-Community-Chest is located at 2
-Community-Chest is classified as action
+Mediterranean-Avenue is priced at 60
 Baltic-Avenue is located at 3
 Baltic-Avenue is classified as real_estate
 Baltic-Avenue is colored as Brown
@@ -656,13 +69,6 @@ Baltic-Avenue is rented-3-house at 180
 Baltic-Avenue is rented-4-house at 320
 Baltic-Avenue is mortgaged at 30
 Baltic-Avenue is priced at 1499
-Income-Tax is located at 4
-Income-Tax is classified as tax
-Income-Tax is cost at 200
-Reading-Railroad is located at 5
-Reading-Railroad is classified as railroad
-Reading-Railroad is mortgaged at 100
-Reading-Railroad is priced at 1499
 Oriental-Avenue is located at 6
 Oriental-Avenue is classified as real_estate
 Oriental-Avenue is colored as SkyBlue
@@ -674,7 +80,7 @@ Oriental-Avenue is rented-2-house at 90
 Oriental-Avenue is rented-3-house at 270
 Oriental-Avenue is rented-4-house at 400
 Oriental-Avenue is mortgaged at 50
-Oriental-Avenue is priced at 1499
+Oriental-Avenue is priced at 100
 Chance is located at 7
 Chance is classified as action
 Vermont-Avenue is located at 8
@@ -688,19 +94,7 @@ Vermont-Avenue is rented-2-house at 90
 Vermont-Avenue is rented-3-house at 270
 Vermont-Avenue is rented-4-house at 400
 Vermont-Avenue is mortgaged at 50
-Vermont-Avenue is priced at 1499
-Connecticut-Avenue is located at 9
-Connecticut-Avenue is classified as real_estate
-Connecticut-Avenue is colored as SkyBlue
-Connecticut-Avenue is price-1-house at 50
-Connecticut-Avenue is rented-1-hotel at 600
-Connecticut-Avenue is rented-0-house at 8
-Connecticut-Avenue is rented-1-house at 40
-Connecticut-Avenue is rented-2-house at 100
-Connecticut-Avenue is rented-3-house at 300
-Connecticut-Avenue is rented-4-house at 450
-Connecticut-Avenue is mortgaged at 60
-Connecticut-Avenue is priced at 1499
+Vermont-Avenue is priced at 100
 In-Jail/Just-Visiting is located at 10
 In-Jail/Just-Visiting is classified as do_nothing
 St.-Charles-Place is located at 11
@@ -714,39 +108,15 @@ St.-Charles-Place is rented-2-house at 150
 St.-Charles-Place is rented-3-house at 450
 St.-Charles-Place is rented-4-house at 625
 St.-Charles-Place is mortgaged at 70
-St.-Charles-Place is priced at 1499
+St.-Charles-Place is priced at 140
 Electric-Company is located at 12
 Electric-Company is classified as utility
 Electric-Company is mortgaged at 75
-Electric-Company is priced at 1499
-States-Avenue is located at 13
-States-Avenue is classified as real_estate
-States-Avenue is colored as Orchid
-States-Avenue is price-1-house at 10
-States-Avenue is rented-1-hotel at 750
-States-Avenue is rented-0-house at 10
-States-Avenue is rented-1-house at 50
-States-Avenue is rented-2-house at 150
-States-Avenue is rented-3-house at 450
-States-Avenue is rented-4-house at 625
-States-Avenue is mortgaged at 70
-States-Avenue is priced at 1499
-Virginia-Avenue is located at 14
-Virginia-Avenue is classified as real_estate
-Virginia-Avenue is colored as Orchid
-Virginia-Avenue is price-1-house at 12
-Virginia-Avenue is rented-1-hotel at 900
-Virginia-Avenue is rented-0-house at 12
-Virginia-Avenue is rented-1-house at 60
-Virginia-Avenue is rented-2-house at 180
-Virginia-Avenue is rented-3-house at 500
-Virginia-Avenue is rented-4-house at 700
-Virginia-Avenue is mortgaged at 80
-Virginia-Avenue is priced at 1499
+Electric-Company is priced at 150
 Pennsylvania-Railroad is located at 15
 Pennsylvania-Railroad is classified as railroad
 Pennsylvania-Railroad is mortgaged at 100
-Pennsylvania-Railroad is priced at 1499
+Pennsylvania-Railroad is priced at 200
 St.-James-Place is located at 16
 St.-James-Place is classified as real_estate
 St.-James-Place is colored as Orange
@@ -758,9 +128,7 @@ St.-James-Place is rented-2-house at 200
 St.-James-Place is rented-3-house at 550
 St.-James-Place is rented-4-house at 750
 St.-James-Place is mortgaged at 90
-St.-James-Place is priced at 1499
-Community-Chest is located at 17
-Community-Chest is classified as action
+St.-James-Place is priced at 180
 Tennessee-Avenue is located at 18
 Tennessee-Avenue is classified as real_estate
 Tennessee-Avenue is colored as Orange
@@ -772,7 +140,7 @@ Tennessee-Avenue is rented-2-house at 200
 Tennessee-Avenue is rented-3-house at 550
 Tennessee-Avenue is rented-4-house at 750
 Tennessee-Avenue is mortgaged at 90
-Tennessee-Avenue is priced at 1499
+Tennessee-Avenue is priced at 180
 New-York-Avenue is located at 19
 New-York-Avenue is classified as real_estate
 New-York-Avenue is colored as Orange
@@ -784,7 +152,7 @@ New-York-Avenue is rented-2-house at 220
 New-York-Avenue is rented-3-house at 600
 New-York-Avenue is rented-4-house at 800
 New-York-Avenue is mortgaged at 100
-New-York-Avenue is priced at 1499
+New-York-Avenue is priced at 200
 Free-Parking is located at 20
 Free-Parking is classified as do_nothing
 Kentucky-Avenue is located at 21
@@ -798,9 +166,7 @@ Kentucky-Avenue is rented-2-house at 250
 Kentucky-Avenue is rented-3-house at 700
 Kentucky-Avenue is rented-4-house at 875
 Kentucky-Avenue is mortgaged at 110
-Kentucky-Avenue is priced at 1499
-Chance is located at 22
-Chance is classified as action
+Kentucky-Avenue is priced at 220
 Indiana-Avenue is located at 23
 Indiana-Avenue is classified as real_estate
 Indiana-Avenue is colored as Red
@@ -812,7 +178,7 @@ Indiana-Avenue is rented-2-house at 250
 Indiana-Avenue is rented-3-house at 700
 Indiana-Avenue is rented-4-house at 875
 Indiana-Avenue is mortgaged at 110
-Indiana-Avenue is priced at 1499
+Indiana-Avenue is priced at 220
 Illinois-Avenue is located at 24
 Illinois-Avenue is classified as real_estate
 Illinois-Avenue is colored as Red
@@ -824,39 +190,15 @@ Illinois-Avenue is rented-2-house at 300
 Illinois-Avenue is rented-3-house at 750
 Illinois-Avenue is rented-4-house at 925
 Illinois-Avenue is mortgaged at 120
-Illinois-Avenue is priced at 1499
+Illinois-Avenue is priced at 240
 B-O-Railroad is located at 25
 B-O-Railroad is classified as railroad
 B-O-Railroad is mortgaged at 100
-B-O-Railroad is priced at 1499
-Atlantic-Avenue is located at 26
-Atlantic-Avenue is classified as real_estate
-Atlantic-Avenue is colored as Yellow
-Atlantic-Avenue is price-1-house at 150
-Atlantic-Avenue is rented-1-hotel at 1150
-Atlantic-Avenue is rented-0-house at 22
-Atlantic-Avenue is rented-1-house at 110
-Atlantic-Avenue is rented-2-house at 330
-Atlantic-Avenue is rented-3-house at 800
-Atlantic-Avenue is rented-4-house at 975
-Atlantic-Avenue is mortgaged at 130
-Atlantic-Avenue is priced at 1499
-Ventnor-Avenue is located at 27
-Ventnor-Avenue is classified as real_estate
-Ventnor-Avenue is colored as Yellow
-Ventnor-Avenue is price-1-house at 150
-Ventnor-Avenue is rented-1-hotel at 1150
-Ventnor-Avenue is rented-0-house at 22
-Ventnor-Avenue is rented-1-house at 110
-Ventnor-Avenue is rented-2-house at 330
-Ventnor-Avenue is rented-3-house at 800
-Ventnor-Avenue is rented-4-house at 975
-Ventnor-Avenue is mortgaged at 130
-Ventnor-Avenue is priced at 1499
+B-O-Railroad is priced at 200
 Water-Works is located at 28
 Water-Works is classified as utility
 Water-Works is mortgaged at 75
-Water-Works is priced at 1499
+Water-Works is priced at 150
 Marvin-Gardens is located at 29
 Marvin-Gardens is classified as real_estate
 Marvin-Gardens is colored as Yellow
@@ -868,7 +210,7 @@ Marvin-Gardens is rented-2-house at 360
 Marvin-Gardens is rented-3-house at 850
 Marvin-Gardens is rented-4-house at 1025
 Marvin-Gardens is mortgaged at 140
-Marvin-Gardens is priced at 1499
+Marvin-Gardens is priced at 280
 Pacific-Avenue is located at 31
 Pacific-Avenue is classified as real_estate
 Pacific-Avenue is colored as Green
@@ -880,7 +222,7 @@ Pacific-Avenue is rented-2-house at 390
 Pacific-Avenue is rented-3-house at 900
 Pacific-Avenue is rented-4-house at 1100
 Pacific-Avenue is mortgaged at 150
-Pacific-Avenue is priced at 1499
+Pacific-Avenue is priced at 300
 North-Carolina-Avenue is located at 32
 North-Carolina-Avenue is classified as real_estate
 North-Carolina-Avenue is colored as Green
@@ -892,7 +234,7 @@ North-Carolina-Avenue is rented-2-house at 390
 North-Carolina-Avenue is rented-3-house at 900
 North-Carolina-Avenue is rented-4-house at 1100
 North-Carolina-Avenue is mortgaged at 150
-North-Carolina-Avenue is priced at 1499
+North-Carolina-Avenue is priced at 300
 Community-Chest is located at 33
 Community-Chest is classified as action
 Pennsylvania-Avenue is located at 34
@@ -906,39 +248,10 @@ Pennsylvania-Avenue is rented-2-house at 450
 Pennsylvania-Avenue is rented-3-house at 1000
 Pennsylvania-Avenue is rented-4-house at 1200
 Pennsylvania-Avenue is mortgaged at 160
-Pennsylvania-Avenue is priced at 1499
+Pennsylvania-Avenue is priced at 320
 Short-Line is located at 35
 Short-Line is classified as railroad
 Short-Line is mortgaged at 100
-Short-Line is priced at 1499
-Chance is located at 36
-Chance is classified as action
-Park-Place is located at 37
-Park-Place is classified as real_estate
-Park-Place is colored as Blue
-Park-Place is price-1-house at 200
-Park-Place is rented-1-hotel at 1500
-Park-Place is rented-0-house at 35
-Park-Place is rented-1-house at 175
-Park-Place is rented-2-house at 500
-Park-Place is rented-3-house at 1100
-Park-Place is rented-4-house at 1300
-Park-Place is mortgaged at 175
-Park-Place is priced at 1499
-Luxury-Tax is located at 38
-Luxury-Tax is classified as tax
-Luxury-Tax is cost at 100
-Boardwalk is located at 39
-Boardwalk is classified as real_estate
-Boardwalk is colored as Blue
-Boardwalk is price-1-house at 200
-Boardwalk is rented-1-hotel at 2000
-Boardwalk is rented-0-house at 50
-Boardwalk is rented-1-house at 200
-Boardwalk is rented-2-house at 600
-Boardwalk is rented-3-house at 1400
-Boardwalk is rented-4-house at 1700
-Boardwalk is mortgaged at 200
-Boardwalk is priced at 1499
+Short-Line is priced at 200
 GO is incremtent as 200
 GO is located at 0
