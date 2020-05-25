@@ -1,3 +1,11 @@
+import sys, os
+upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
+upper_path = os.path.abspath('..').replace('/Evaluation','')
+upper_path_eva = upper_path + '/Evaluation/monopoly_simulator'
+sys.path.append(upper_path)
+sys.path.append(upper_path + '/Evaluation')
+sys.path.append(upper_path_eva)
+
 import json
 from monopoly_simulator.bank import Bank
 import copy
@@ -243,7 +251,7 @@ def _populate_dict_with_cards(current_gameboard, ans, game_schema):
                 chance_card['action'] = l['action']
             if item.card_type == 'contingent_cash_from_bank' and item.card_type == l['card_type']:
                 chance_card['contingency'] = l['contingency']
-
+                print(l['contingency'])
         ans['cards']['chance_cards']['card_states'].append(chance_card)
     ans['cards']['chance_cards']['card_count'] = chance_count
 
@@ -638,7 +646,12 @@ def _initialize_cards(current_gameboard, game_schema):
                 card_args = specific_card.copy()
                 del card_args['num']
                 card_args['action'] = getattr(sys.modules[__name__], specific_card['action'])
-                card_args['contingency'] = getattr(sys.modules[__name__], specific_card['contingency'])
+                #######################
+                if isinstance(specific_card['contingency'], str):
+                    card_args['contingency'] = getattr(sys.modules[__name__], specific_card['contingency'])
+                else:
+                    card_args['contingency'] = getattr(sys.modules[__name__], specific_card['contingency'][0])
+                ########################
                 card_obj = card.ContingentCashFromBankCard(**card_args)
                 community_chest_cards.add(card_obj)
 
@@ -711,7 +724,12 @@ def _initialize_cards(current_gameboard, game_schema):
                 card_args = specific_card.copy()
                 del card_args['num']
                 card_args['action'] = getattr(sys.modules[__name__], specific_card['action'])
-                card_args['contingency'] = getattr(sys.modules[__name__], specific_card['contingency'])
+                ##########
+                if isinstance(specific_card['contingency'], str):
+                    card_args['contingency'] = getattr(sys.modules[__name__], specific_card['contingency'])
+                else:
+                    card_args['contingency'] = getattr(sys.modules[__name__], specific_card['contingency'][0])
+                ########
                 card_obj = card.ContingentCashFromBankCard(**card_args)
                 chance_cards.add(card_obj)
 
@@ -752,3 +770,13 @@ def _initialize_game_history_structs(current_gameboard):
     current_gameboard['history']['function'] = list()
     current_gameboard['history']['param'] = list()
     current_gameboard['history']['return'] = list()
+
+if __name__ == '__main__':
+    from monopoly_simulator.agent import Agent
+    from monopoly_simulator import background_agent_v3
+    infile = '/media/becky/GNOME-p3/KG_rule/current_gameboard_state.json'
+    player_decision_agents = dict()
+    for name_num in range(1,5):
+        player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
+    game_element = read_in_current_state_from_file(infile, player_decision_agents)
+    print(game_element['players'][0].assets)

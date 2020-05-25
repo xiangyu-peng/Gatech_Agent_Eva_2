@@ -2,7 +2,7 @@
 import os, sys
 upper_path = '/'.join(os.getcwd().split('/')[:-1])
 sys.path.append(upper_path)
-import A2C_agent.RL_agent_v1
+# import A2C_agent.RL_agent_v1
 #####################
 
 from monopoly_simulator import initialize_game_elements
@@ -260,7 +260,7 @@ def die_roll_substitute(die_objects, hypothetical_gameboard):
     print('rolling die...')
     return [hypothetical_gameboard['randomState'].choice(d.die_state) for d in die_objects]
 
-test_gameboard('/media/becky/GNOME-p3/Evaluation/monopoly_game_schema_v1-2.json') # use this to set up a gameboard and test various things
+test_gameboard('/media/becky/GNOME-p3/KG_rule/current_gameboard_state.json') # use this to set up a gameboard and test various things
 
 # die_objects = [[1,2,3,4,5,6],[1,2,3,4,5,6]]
 # count = 0
