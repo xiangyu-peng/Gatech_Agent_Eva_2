@@ -92,7 +92,7 @@ def simulate_game_instance(game_elements, history_log_file=None, np_seed=124):
     num_active_players = 4
     winner = None
     workbook = None
-    history_log_file = '/media/becky/Evaluation/GNOME-p3/monopoly_simulator/history_log.xlsx'
+    history_log_file = None
     if history_log_file:
         workbook = xlsxwriter.Workbook(history_log_file)
 
@@ -239,8 +239,8 @@ def simulate_game_instance(game_elements, history_log_file=None, np_seed=124):
         #Uncomment the following piece of code to write out the gameboard current_state to file at the "count_json" iteration.
         #All the data from game_elements will be written to a .json file which can be read back to intialize a new game with
         #those gameboard values to start the game from that point onwards.
-        '''
-        if count_json == 50:
+
+        if count_json % 5 == 0:
             outfile = '../current_gameboard_state.json'
             oot_code = read_write_current_state.write_out_current_state_to_file(game_elements, outfile)
             if oot_code == 1:
@@ -252,7 +252,7 @@ def simulate_game_instance(game_elements, history_log_file=None, np_seed=124):
             else:
                 print("Something went wrong when trying to write gameboard state to file. "
                       "Rest of the game will be played as normal but will not log state to file.")
-        '''
+
         count_json += 1
 
     if workbook:
@@ -380,6 +380,8 @@ def play_game():
     game_elements = read_write_current_state.read_in_current_state_from_file(infile, player_decision_agents)
     '''
 
+
+
     inject_novelty(game_elements)
 
     if player_decision_agents['player_1'].startup(game_elements) == -1 or player_decision_agents['player_2'].startup(game_elements) == -1 or \
@@ -414,8 +416,8 @@ def play_game_in_tournament(game_seed, inject_novelty_function=None):
     player_decision_agents = dict()
     # for p in ['player_1','player_3']:
     #     player_decision_agents[p] = simple_decision_agent_1.decision_agent_methods
-    player_decision_agents['player_1'] = Agent(**RL_agent_v1.decision_agent_methods)
-    # player_decision_agents['player_1'] = Agent(**background_agent_v3.decision_agent_methods)
+    # player_decision_agents['player_1'] = Agent(**RL_agent_v1.decision_agent_methods)
+    player_decision_agents['player_1'] = Agent(**background_agent_v3.decision_agent_methods)
     player_decision_agents['player_2'] = Agent(**background_agent_v3.decision_agent_methods)
     player_decision_agents['player_3'] = Agent(**background_agent_v3.decision_agent_methods)
     player_decision_agents['player_4'] = Agent(**background_agent_v3.decision_agent_methods)
@@ -426,11 +428,11 @@ def play_game_in_tournament(game_seed, inject_novelty_function=None):
     #Comment out the above line and uncomment the piece of code to read the gameboard state from an existing json file so that
     #the game starts from a particular game state instead of initializing the gameboard with default start values.
     #Note that the novelties introduced in that particular game which was saved to file will be loaded into this game board as well.
-    '''
-    logger.debug("Loading gameboard from an existing game state that was saved to file.")
-    infile = '../current_gameboard_state.json'
-    game_elements = read_write_current_state.read_in_current_state_from_file(infile, player_decision_agents)
-    '''
+
+    # logger.debug("Loading gameboard from an existing game state that was saved to file.")
+    # infile = '../current_gameboard_state.json'
+    # game_elements = read_write_current_state.read_in_current_state_from_file(infile, player_decision_agents)
+
 
     if inject_novelty_function:
         inject_novelty_function(game_elements)

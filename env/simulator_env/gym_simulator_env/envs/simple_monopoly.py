@@ -79,3 +79,6 @@ class Sim_Monopoly(gym.Env):
 
     def output_interface(self):
         return self.MonopolyWorld.interface
+
+    def save_gameboard(self):
+        return self.MonopolyWorld.save_gameboard()

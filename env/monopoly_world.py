@@ -25,6 +25,7 @@ from configparser import ConfigParser
 from monopoly_simulator import player
 from monopoly_simulator import read_write_current_state
 from monopoly_simulator import initialize_game_elements
+from monopoly_simulator.read_write_current_state import write_out_current_state_to_file
 # import monopoly_simulator_background.hypothetical_simulator
 # from monopoly_simulator_background.agent_helper_functions import *
 
@@ -72,6 +73,9 @@ class Monopoly_world():
         self.novelty_inject_num = self.hyperparams['novelty_inject_num']
         self.rule_change_path = self.upper_path + self.hyperparams['rule_change_path']
         self.kg_rel_path = self.upper_path + self.hyperparams['kg_rel_path']
+
+        #hypothetical simulator
+        self.saved_gameboard_path = self.upper_path + self.hyperparams['saved_gameboard_path']
 
     def set_initial_gameboard(self, gameboard=None):
         # If we assign a gameboard instead of using the default one
@@ -595,5 +599,8 @@ class Monopoly_world():
             file.close()
 
         self.kg_change = self.kg.kg_change[:]
+
+    def save_gameboard(self):
+        return write_out_current_state_to_file(self.game_elements, self.saved_gameboard_path)
 
 

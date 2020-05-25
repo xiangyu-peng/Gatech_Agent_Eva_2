@@ -11,6 +11,7 @@ from monopoly_simulator.player import Player
 from monopoly_simulator import card
 from monopoly_simulator import action_choices
 
+import numpy
 
 def read_in_current_state_from_file(infile, player_decision_agents):
     """
@@ -46,18 +47,47 @@ def write_out_current_state_to_file(current_gameboard, outfile):
     :param outfile: the .json file to which you want to write out your gameboard state.
     :return: returns 1 if writing to file has been successful.
     """
-    file = open(outfile, 'w+')
-    default_schema = '../monopoly_game_schema_v1-2.json'
+
+    def myconverter(obj):
+        if isinstance(obj, np.integer):
+            return int(obj)
+        elif isinstance(obj, np.floating):
+            return float(obj)
+        elif isinstance(obj, np.ndarray):
+            return obj.tolist()
+        else:
+            return obj
+
+    def convert_dict(dicts):
+        if isinstance(dicts, dict) == False and isinstance(dicts, list) == False and \
+                isinstance(dicts, np.ndarray) == False:
+            return myconverter(dicts)
+
+        else:
+            if isinstance(dicts, list) or isinstance(dicts, np.ndarray):
+                enu_stuff = enumerate(dicts)
+            else:
+                enu_stuff = dicts.items()
+            for key, value in enu_stuff:
+                dicts[key] = myconverter(dicts[key])
+                if isinstance(dicts[key], dict) or isinstance(dicts[key], list) or isinstance(dicts[key], np.ndarray):
+                    dicts[key] = convert_dict(dicts[key])
+            return dicts
+
+    default_schema = '/media/becky/GNOME-p3/Evaluation/monopoly_novelty_schema_v2.json'
     game_schema = json.load(open(default_schema, 'r'))
-    ans = dict()
-    _populate_dict_with_bank(current_gameboard, ans)
-    _populate_dict_with_locations(current_gameboard, ans, game_schema)
-    _populate_dict_with_dice(current_gameboard, ans)
-    _populate_dict_with_cards(current_gameboard, ans, game_schema)
-    _populate_dict_with_players(current_gameboard, ans)
-    _populate_dict_with_dice(current_gameboard, ans)
-    json.dump(ans, file)
-    file.close()
+
+    with open(outfile, 'w+') as f:
+        ans = dict()
+        _populate_dict_with_bank(current_gameboard, ans)
+        _populate_dict_with_locations(current_gameboard, ans, game_schema)
+        _populate_dict_with_dice(current_gameboard, ans)
+        _populate_dict_with_cards(current_gameboard, ans, game_schema)
+        _populate_dict_with_players(current_gameboard, ans)
+        _populate_dict_with_dice(current_gameboard, ans)
+        ans = convert_dict(ans)
+        json.dump(ans, f)
+
     return 1
 
 

@@ -260,7 +260,7 @@ def die_roll_substitute(die_objects, hypothetical_gameboard):
     print('rolling die...')
     return [hypothetical_gameboard['randomState'].choice(d.die_state) for d in die_objects]
 
-test_gameboard('/media/becky/Evaluation/GNOME-p3/monopoly_game_schema_v1-2.json') # use this to set up a gameboard and test various things
+test_gameboard('/media/becky/GNOME-p3/Evaluation/monopoly_game_schema_v1-2.json') # use this to set up a gameboard and test various things
 
 # die_objects = [[1,2,3,4,5,6],[1,2,3,4,5,6]]
 # count = 0
