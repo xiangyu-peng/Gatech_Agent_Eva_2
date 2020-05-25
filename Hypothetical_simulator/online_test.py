@@ -81,12 +81,14 @@ class Hyp_Learner(object):
             s, masked_actions = env.reset()
 
         num_test = 0  # count the # of games before novelty injection
+        done_reset_bool = False
         for _ in range(self.num_test):
             num_test += 1
             round_num_game, score_game = 0, 0
             retrain_signal_per_game = False  # define if we need to retrain tall the states after this state
 
             while not done:
+                # print(round_num_game, s)
                 round_num_game += 1
                 s = s.reshape(1, -1)
 
@@ -97,8 +99,12 @@ class Hyp_Learner(object):
                     # Find the state, involving novelty
                     retrain_signal_per_game = self.find_novelty_state(env.output_interface(), s[0])
                     # Save each game board before the novelty
-                    code = env.save_gameboard()
-                    print(num_test, code)
+                    # if novelty is found in s, do not save, and begin retrain
+                    if retrain_signal_per_game == False and done_reset_bool == False:
+                        code = env.save_gameboard()
+                        print(num_test, code)
+
+
 
                 s = torch.tensor(s, device=self.device).float()
                 prob = self.model.actor(s)
@@ -109,11 +115,13 @@ class Hyp_Learner(object):
                     s_prime, r, done, masked_actions = env.step(a[0])
                 s = s_prime
                 score_game += r
+                done_reset_bool = False
 
             avg_diff += s[-2] - s[-1]
             score += score_game / round_num_game + 10 * abs(abs(int(done) - 2) - 1)
             win_num += abs(abs(int(done) - 2) - 1)
             done = 0
+            done_reset_bool = True
 
             # Record the performance of the agent
             if num_test % self.performance_count == 0:

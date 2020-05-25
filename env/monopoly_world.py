@@ -25,9 +25,10 @@ from configparser import ConfigParser
 from monopoly_simulator import player
 from monopoly_simulator import read_write_current_state
 from monopoly_simulator import initialize_game_elements
-from monopoly_simulator.read_write_current_state import write_out_current_state_to_file
-# import monopoly_simulator_background.hypothetical_simulator
+from monopoly_simulator.read_write_current_state import write_out_current_state_to_file, read_in_current_state_from_file
+from monopoly_simulator.hypothetical_simulator import initialize_hypothetical_universe
 # from monopoly_simulator_background.agent_helper_functions import *
+from monopoly_simulator_background.agent_helper_functions import identify_improvement_opportunity_all
 
 
 class Monopoly_world():
@@ -76,62 +77,74 @@ class Monopoly_world():
 
         #hypothetical simulator
         self.saved_gameboard_path = self.upper_path + self.hyperparams['saved_gameboard_path']
+        self.running_hyp = False
 
     def set_initial_gameboard(self, gameboard=None):
-        # If we assign a gameboard instead of using the default one
-        if gameboard:
-            # if self.gameboard_set_ini == None:
-            #     self.gameboard_set_ini = gameboard
-            self.gameboard_initial = copy.deepcopy(gameboard)
-            self.num_players = len(self.gameboard_initial['players'])  # Update # of players
-
-            # Reset the player.agents ##########################
-            # Set up agents back to the agents we can use
-            self.player_decision_agents['player_1'] = None
-            self.player_decision_agents['player_1'] = P1Agent()
-
-            # Assign the beckground agents to the players
-            name_num = 1
-            while name_num < self.num_players:
-                name_num += 1
-                self.player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
-            #####################################################
-
-            # set player.agent to  the gameboard
-            self.gameboard_initial['players'] = dict()
-            game_board_schema = json.load(open(self.upper_path + '/monopoly_game_schema_v1-1.json', 'r'))
-            game_board_schema['players']['player_states']['player_name'] = \
-                game_board_schema['players']['player_states']['player_name'][: self.num_players]  # change the player_num
-            initialize_game_elements._initialize_players(
-                self.gameboard_initial,
-                game_board_schema,
-                self.player_decision_agents)  # json path here doesn't matter
-
-        # OR We use the default gameboard
-        else:
+        # If we run the hypothetical simulator, the gameboard is written to a file
+        if isinstance(gameboard, str):  # this trigger the hypothetical simulation, gameboard is a file path
             self.num_players = self.hyperparams['num_active_players']
-            # Reset the player.agents ##########################
-            # Set up agents
             self.player_decision_agents['player_1'] = P1Agent()
-
-            # Assign the beckground agents to the players
             name_num = 1
             while name_num < self.num_players:
                 name_num += 1
-                self.player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
+                self.player_decision_agents['player_' + str(name_num)] = Agent(
+                    **background_agent_v3.decision_agent_methods)
+            self.gameboard_initial = read_in_current_state_from_file(gameboard, self.player_decision_agents)
+            # TODO: seed
+            self.running_hyp = True
 
-            self.gameboard_initial = set_up_board(self.upper_path + '/monopoly_game_schema_v1-1.json',
-                                                  self.player_decision_agents,
-                                                  self.num_players)
-            #####################################################
+        else:
+            # If we assign a gameboard instead of using the default one
+            if gameboard:
+                self.gameboard_initial = copy.deepcopy(gameboard)
+                self.num_players = len(self.gameboard_initial['players'])  # Update # of players
 
-        # In case of the gameboard we use to assign here has history, we have to clear the history here
-        if 'seed' in self.gameboard_initial:
-            self.gameboard_initial.pop('seed')
-        if 'card_seed' in self.gameboard_initial:
-            self.gameboard_initial.pop('card_seed')
-        if 'choice_function' in self.gameboard_initial:
-            self.gameboard_initial.pop('choice_function')
+                # Reset the player.agents ##########################
+                # Set up agents back to the agents we can use
+                self.player_decision_agents['player_1'] = P1Agent()
+
+                # Assign the beckground agents to the players
+                name_num = 1
+                while name_num < self.num_players:
+                    name_num += 1
+                    self.player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
+                #####################################################
+
+                # set player.agent to  the gameboard
+                self.gameboard_initial['players'] = dict()
+                game_board_schema = json.load(open(self.upper_path + '/monopoly_game_schema_v1-1.json', 'r'))
+                game_board_schema['players']['player_states']['player_name'] = \
+                    game_board_schema['players']['player_states']['player_name'][: self.num_players]  # change the player_num
+                initialize_game_elements._initialize_players(
+                    self.gameboard_initial,
+                    game_board_schema,
+                    self.player_decision_agents)  # json path here doesn't matter
+
+            # OR We use the default gameboard
+            else:
+                self.num_players = self.hyperparams['num_active_players']
+                # Reset the player.agents ##########################
+                # Set up agents
+                self.player_decision_agents['player_1'] = P1Agent()
+
+                # Assign the beckground agents to the players
+                name_num = 1
+                while name_num < self.num_players:
+                    name_num += 1
+                    self.player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
+
+                self.gameboard_initial = set_up_board(self.upper_path + '/monopoly_game_schema_v1-1.json',
+                                                      self.player_decision_agents,
+                                                      self.num_players)
+                #####################################################
+
+            # In case of the gameboard we use to assign here has history, we have to clear the history here
+            if 'seed' in self.gameboard_initial:
+                self.gameboard_initial.pop('seed')
+            if 'card_seed' in self.gameboard_initial:
+                self.gameboard_initial.pop('card_seed')
+            if 'choice_function' in self.gameboard_initial:
+                self.gameboard_initial.pop('choice_function')
 
         # KG for rule learning
         if self.kg_use:
@@ -178,22 +191,33 @@ class Monopoly_world():
             self.kg.set_gameboard(self.game_elements)  # Deliver gameboard info to openie
 
         # Inject novelty here
-        if self.game_num > self.novelty_inject_num:
+        if self.game_num > self.novelty_inject_num and self.running_hyp == False:
             inject_novelty(self.game_elements)
 
-        np.random.seed(self.seeds)  # control the seed!!!!
-        self.game_elements['seed'] = self.seeds
-        self.game_elements['card_seed'] = self.seeds
-        self.game_elements['choice_function'] = np.random.choice
-        self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.interface, self.params, self.win_indicator, masked_actions = \
-            before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.interface)
-        self.interface.board_to_state(self.game_elements)
-        self.masked_actions = masked_actions
+        if self.running_hyp:
+            state = self.interface.board_to_state(self.game_elements)
+            allowable_actions = self.game_elements['players'][0].compute_allowable_post_roll_actions(self.game_elements)
+            params_mask = identify_improvement_opportunity_all(self.game_elements['players'][0], self.game_elements)
+            self.masked_actions = self.interface.get_masked_actions(allowable_actions, params_mask, self.game_elements['players'][0])
+            np.random.seed(self.seeds)  # control the seed!!!!
+            self.game_elements['seed'] = self.seeds
+            self.game_elements['card_seed'] = self.seeds
+            self.game_elements['choice_function'] = np.random.choice
+
+        else:
+            np.random.seed(self.seeds)  # control the seed!!!!
+            self.game_elements['seed'] = self.seeds
+            self.game_elements['card_seed'] = self.seeds
+            self.game_elements['choice_function'] = np.random.choice
+            self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.interface, self.params, self.win_indicator, masked_actions = \
+                before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.interface)
+            state = self.interface.board_to_state(self.game_elements)
+            self.masked_actions = masked_actions
 
         # calculate average sum of dice for calculating rewards
         self.avg_die = sum([sum(i.die_state)/len(i.die_state) for i in self.game_elements['dies']])
 
-        return self.interface.state_space, self.masked_actions
+        return state, self.masked_actions
 
 
     def get_income(self, index):
@@ -314,7 +338,7 @@ class Monopoly_world():
         :return: state, reward, done and info/ masked_actions
         '''
 
-        masked_actions = [1, 1] #we don't consider if action is valid or not in this function
+        # masked_actions = [1, 1] #we don't consider if action is valid or not in this function
 
         #When last state has a winner, we will reset the game
         if self.terminal > 0:
@@ -322,50 +346,11 @@ class Monopoly_world():
                 self.interface.get_logging_info(self.game_elements, current_player_index=0,file_path=self.upper_path+'/KG_rule/game_log.txt')
                 self.save_kg()
                 self.interface.clear_history(file_path=self.upper_path+'/KG_rule/game_log.txt')
-            self.reset()
-            state_space = self.interface.board_to_state(self.game_elements)
+            state_space, masked_actions = self.reset()
             reward = 0
             terminal = 0
-            masked_actions = self.interface.masked_actions
+
         else:
-        #     action_num = action
-        #     masked_actions_reward = self.interface.masked_actions.copy()
-        #
-        #     #When the action is not valid, the state won't change and the reward will be negative
-        #     if masked_actions_reward[action_num] == 0:
-        #         state_space = self.interface.board_to_state(self.game_elements)
-        #         self.reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
-        #         reward = self.reward
-        #         terminal = self.terminal
-        #         masked_actions = self.masked_actions
-        #
-        #     #When the action from agent is valid, the state will go to next step
-        #     else:
-        #         action = self.interface.action_num2vec(action)
-        #         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-        #             after_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, action, self.interface, self.params)
-        #         if self.num_active_players > 1:
-        #             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
-        #                 simulate_game_step(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index)
-        #         if self.num_active_players > 1:
-        #             self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.interface, self.params, self.win_indicator, masked_actions = \
-        #                 before_agent(self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.interface)
-        #
-        #         self.terminal = 0 if self.num_active_players > 1 else 1
-        #         if self.done_indicator == 1:
-        #             self.terminal = 1
-        #         self.reward = self.reward_cal(self.win_indicator, action_num, masked_actions_reward)
-        #         if self.terminal:
-        #             if self.win_indicator == 1:
-        #                 self.terminal = 2
-        #         state_space = self.interface.board_to_state(self.game_elements)
-        #         reward = self.reward
-        #         terminal = self.terminal
-        #         self.masked_actions = masked_actions
-        #
-        # return state_space, reward, terminal, masked_actions #can put KG in info
-
-
             action_num = action
             masked_actions_reward = self.interface.masked_actions.copy()
             action = self.interface.action_num2vec(action)
@@ -408,6 +393,7 @@ class Monopoly_world():
             state_space = self.interface.board_to_state(self.game_elements)
             reward = self.reward
             terminal = self.terminal
+            masked_actions = self.interface.masked_actions
 
         return state_space, reward, terminal, masked_actions #can put KG in info
 

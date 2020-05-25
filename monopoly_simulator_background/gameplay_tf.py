@@ -824,7 +824,7 @@ def inject_novelty(current_gameboard, novelty_schema=None):
     # asset_lists = ["Mediterranean Avenue", "Baltic Avenue", "Reading Railroad", "Oriental Avenue", "Vermont Avenue", "Connecticut Avenue", "St. Charles Place", "Electric Company", "States Avenue", "Virginia Avenue", "Pennsylvania Railroad", "St. James Place", "Tennessee Avenue", "New York Avenue", "Kentucky Avenue", "Indiana Avenue", "Illinois Avenue", "B&O Railroad", "Atlantic Avenue", "Ventnor Avenue", "Water Works", "Marvin Gardens", "Pacific Avenue", "North Carolina Avenue", "Pennsylvania Avenue", "Short Line", "Park Place", "Boardwalk"]
     # for asset in asset_lists:
     #     inanimateNovelty.price_novelty(current_gameboard['location_objects'][asset], 1499)
-    inanimateNovelty.price_novelty(current_gameboard['location_objects']['Baltic Avenue'], 1499)
+    inanimateNovelty.price_novelty(current_gameboard['location_objects']['Baltic Avenue'], 1000)
 
 
     # Level 3 Novelty

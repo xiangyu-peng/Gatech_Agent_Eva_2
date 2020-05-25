@@ -779,4 +779,4 @@ if __name__ == '__main__':
     for name_num in range(1,5):
         player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
     game_element = read_in_current_state_from_file(infile, player_decision_agents)
-    print(game_element['players'][0].assets)
+    print(game_element['players'][3].current_position)

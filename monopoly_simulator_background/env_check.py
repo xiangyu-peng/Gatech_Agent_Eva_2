@@ -80,11 +80,11 @@ gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-
 
 # env.set_board(gameboard_initial)
 env.set_kg(True)
-env.set_board(gameboard_initial)
+env.set_board('/media/becky/GNOME-p3/KG_rule/current_gameboard_state.json')
 env.seed(seed=n)
 # with HiddenPrints():
 s,mask = env.reset()
-print(s,mask)
+print('reset',s,mask, len(s))
 done_num = 0
 done_num_total = 5000
 # i = 0
@@ -92,7 +92,7 @@ done_num_total = 5000
 #     i += 1
 #     s, rew, done_after, info = env.step_after_nochange(0)
 
-
+bool = False
 while done_num < done_num_total:
 
     # with HiddenPrints():
@@ -101,11 +101,16 @@ while done_num < done_num_total:
 
     with HiddenPrints():
         s, rew, done, info = env.step(1)
-    print('s-step',s, rew, info)
+    # print('s-step',s, rew, info)
+    if bool:
 
+        bool = False
     if done > 0:
         done_num += 1
-        print('s', s, rew, len(s))
+        bool = True
+        print('done', s)
+
+        # print('s', s, rew, len(s), done)
 
     # if done_num == done_num_total:
     #     break
