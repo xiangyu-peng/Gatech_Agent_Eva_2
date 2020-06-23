@@ -10,9 +10,10 @@ import graphviz
 from torchviz import make_dot
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
 class Config:
-    device = torch.device('cuda:0')
+    device = torch.device('cuda:2')
 import os, sys
 
 class HiddenPrints:
@@ -41,9 +42,14 @@ def largest_prob(prob, masked_actions):
         largest_num -= 1
     return a
 
-def test_v2(step_idx, model, device, num_test, seed):
+def test_v2(step_idx, model, device, num_test, seed, config_file):
+    # for i, (name, param) in enumerate(model.named_parameters()):
+    #     if i == 0:
+    #         print('test_out', param)
+
     # Set the env for testing
     env = gym.make('monopoly_simple-v1')
+    env.set_config_file(config_file)
     env.set_kg(False)
     env.set_board()
     env.seed(seed)
@@ -52,15 +58,18 @@ def test_v2(step_idx, model, device, num_test, seed):
     done = False
     win_num = 0
     avg_diff = 0
+    pie_num = 0
 
     with HiddenPrints():
-        s, masked_actions = env.reset()
-    # print('s',s)
+        s, (masked_actions, background_action) = env.reset()
 
+    game_num = 0
     for _ in range(num_test):
+        game_num += 1
 
         num_game = 0
         score_game = 0
+        background_action_num = 0
 
         while not done:
             num_game += 1
@@ -68,29 +77,52 @@ def test_v2(step_idx, model, device, num_test, seed):
             s = torch.tensor(s, device=device).float()
 
             prob = model.actor(s)
-            # print(prob)
             # break
+
 
             # if num_game == 2:
             #     print(prob, s)
             #     s= s[0]
             #     break
             a = Categorical(prob).sample().cpu().numpy()  # substitute
+            # a = [prob.cpu().tolist()[0].index(max(prob.cpu().tolist()[0]))]
             if masked_actions[a[0]] == 0:
                 a = [1]
+            # print(masked_actions, a[0])
+            # if num_game == 10:
+            #     print('s', s[0][-6], masked_actions, s[0][-2], s)
+            #     print(prob, a[0])
+            #     break
             with HiddenPrints():
-                s_prime, r, done, masked_actions = env.step(a[0])
+                a_random = random.randint(0,1)
+                print(a_random)
+                s_prime, r, done, (masked_actions,background_action) = env.step(a[0])
+                # s_prime, r, done, (masked_actions,background_action) = env.step(background_action)
+            if background_action == 0:
+                background_action_num += 1
+            # print(s_prime, done, masked_actions,background_action)
+
             s = s_prime
             score_game += r
         # s = s.cpu().numpy()[0]
+
         avg_diff += s[-2] - s[-1]
-        score += score_game/num_game + 10 * abs(abs(int(done) - 2) - 1)
+        score += score_game/num_game + 1 * abs(abs(int(done) - 2) - 1)
         win_num += abs(abs(int(done) - 2) - 1)
+        if done ==3:
+            pie_num += 1
         done = 0
+        # print(background_action_num/num_game)
+
+        # if game_num == num_test / 2 or game_num == num_test:
+        #     print(f"Step # :{step_idx}, avg winning : {win_num / game_num:.3f}")
+        #     print('========', num_test, game_num)
+
 
     print(f"Step # :{step_idx}, avg score : {score/num_test:.3f}")
-    print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
+    print(f"Step # :{step_idx}, avg winning : {win_num / num_test/(1-pie_num / num_test):.3f}")
     print(f"Step # :{step_idx}, avg diff : {avg_diff / num_test:.3f}")
+    print(f"Step # :{step_idx}, avg pie : {pie_num / num_test:.3f}")
 
     env.close()
 
@@ -107,7 +139,10 @@ def test_eva(step_idx, model, device, num_test, vector):
     else_num = 0
     diff_total_pos = 0
     diff_total_neg = 0
+    game_num = 0
     for _ in range(num_test):
+        game_num += 1
+
         with HiddenPrints():
             s, masked_actions = env.reset()
         num_game = 0
@@ -122,6 +157,7 @@ def test_eva(step_idx, model, device, num_test, vector):
             s = torch.tensor(s, device=device).float()
             before_action = model.critic(s)
             prob = model.actor(s)
+
             #debug
             # print('s',s)
             # print('prob', pr ob)
@@ -167,9 +203,9 @@ def test_eva(step_idx, model, device, num_test, vector):
             # s_prime_cal = torch.tensor(s_prime, device=device).float()
             # print('after action',model.critic(s_prime_cal) - before_action)
             # break
-            
-            
-            
+
+
+
             # print(a)
             # s_prime, r, done, info = env.step(a)
             s = s_prime
@@ -189,10 +225,15 @@ def test_eva(step_idx, model, device, num_test, vector):
             diff_total_neg += max(s[-3:])
         done = 0
 
+        if game_num == num_test/2 or num_test:
+            print(f"Step # :{step_idx}, avg winning : {win_num / game_num:.3f}")
+
+
 
         # print('s===>',s)
         # print('skip_num', skip_num, 'buy_num', buy_num, 'else_num', else_num)
     # print('weight = test> ', model.fc_actor.weight)
+
     print(f"Step # :{step_idx}, avg score : {score/num_test:.3f}")
     print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
     print(f"Step # :{step_idx}, avg pie : {else_num / num_test:.3f}")
@@ -214,26 +255,48 @@ if __name__ == '__main__':
     PRINT_INTERVAL = update_interval * 10
     config = Config()
     config.hidden_state = 256
-    config.action_space = 90
+    config.action_space = 86
     save_dir = '/media/becky/GNOME-p3/monopoly_simulator_background'
     # device = torch.device('cuda:0')
     save_name = '/push_buy'
     import os
     # os.environ["CUDA_VISIBLE_DEVICES"] = '0'
     # torch.cuda.set_device(1)
-    device = torch.device("cpu")
+    device = torch.device("cuda:1")
 
     #######################################
-    with HiddenPrints():
-        envs = ParallelEnv(n_train_processes)
+    # with HiddenPrints():
+    #     envs = ParallelEnv(n_train_processes)
     # vector = np.load('/media/becky/GNOME-p3/KG-rule/vector.npy')
     score_list, win_list, pie_list, diff_list, diff_neg_list = [], [], [], [], []
-    for seed in range(2,3):
-        for i in range(1,20):  # From 0(1) to 6(2) and interval is 5(3) => [0,5]
-            model_path = '/media/becky/GNOME-p3/monopoly_simulator_background/weights/cpu_v3_lr_0.001_#_' +str(i) + '.pkl'
-            model = torch.load(model_path)
-            print('i = ', i)
-            score, win, diff = test_v2(1, model, device, 500, seed=seed)
+    for seed in range(8,9):
+        s_ran = [random.randint(-1, 1) for k in range(40)]
+        # s_ran[11] = -1
+        for i in range(2,25,1):  # From 0(1) to 6(2) and interval is 5(3) => [0,5]
+            model_path = '/media/becky/GNOME-p3/monopoly_simulator_background/weights/hyp_1_7_seed8_v3_lr_0.0001_#_' +str(i) + '.pkl'
+            # model_path = '/media/becky/GNOME-p3/Hypothetical_simulator/weights/hyp_1/hyp_v3_lr_0.0001_#_' +str(i) + '.pkl'
+            # model_path = '/media/becky/GNOME-p3/Hypothetical_simulator/weights/hyp/60/_60/hyp_v3_lr_0.0001_#_1.pkl'
+            # model_path = '/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
+            # model_path = '/media/becky/GNOME-p3/monopoly_simulator_background/weights/ran_2_7_v3_lr_0.0001_#_'+str(i) +'.pkl'
+
+            model = torch.load(model_path, map_location={"cuda:2": "cuda:1"})
+            score, win, diff = test_v2(i , model, device, 100, seed=seed, config_file='/Hypothetical_simulator/config_offline_hyp_1.ini')
+
+            # for j in range(40):
+            #     if j == 8:
+            #         import random
+            #         s = [0 for i in range(40)]
+            #         s[j] = 1
+            #         s_m = [0,0,0,1,0,0]
+            #         import random
+            #         s = s_ran + s + s_m + s_m
+            #
+            #         s = np.array(s)
+            #         s = s.reshape(1, -1)
+            #         s = torch.tensor(s, device=device).float()
+            #
+            #         prob = model.actor(s)
+            #         print(j, prob)
             # score_list.append(score)
             # win_list.append(win)
             # pie_list.append(pie)
