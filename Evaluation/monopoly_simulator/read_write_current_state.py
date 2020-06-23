@@ -251,7 +251,6 @@ def _populate_dict_with_cards(current_gameboard, ans, game_schema):
                 chance_card['action'] = l['action']
             if item.card_type == 'contingent_cash_from_bank' and item.card_type == l['card_type']:
                 chance_card['contingency'] = l['contingency']
-                print(l['contingency'])
         ans['cards']['chance_cards']['card_states'].append(chance_card)
     ans['cards']['chance_cards']['card_count'] = chance_count
 
@@ -774,9 +773,11 @@ def _initialize_game_history_structs(current_gameboard):
 if __name__ == '__main__':
     from monopoly_simulator.agent import Agent
     from monopoly_simulator import background_agent_v3
-    infile = '/media/becky/GNOME-p3/KG_rule/current_gameboard_state.json'
+    infile = '/media/becky/GNOME-p3/Hypothetical_simulator/game_board/current_gameboard_state33.json'
     player_decision_agents = dict()
     for name_num in range(1,5):
         player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
     game_element = read_in_current_state_from_file(infile, player_decision_agents)
-    print(game_element['players'][3].current_position)
+    for i in range(4):
+        print(game_element['players'][i].status, game_element['players'][i].current_position)
+        print(game_element['players'][i].current_cash, game_element['players'][i].assets)

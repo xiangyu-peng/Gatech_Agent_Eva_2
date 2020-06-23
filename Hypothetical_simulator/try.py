@@ -1,41 +1,24 @@
 import numpy as np
-a = {'I' : [{'love': np.int_([1,2,4])}], 'Love' : {'I' : {'love': np.int64(5)}}}
+import torch
 
+import csv
+# with open('eggs.csv', 'w', newline='') as csvfile:
+#     spamwriter = csv.writer(csvfile, delimiter=' ',
+#                             quotechar='|', quoting=csv.QUOTE_MINIMAL)
+#     spamwriter.writerow(['a','b','c'])
+# with open('eggs.csv', newline='') as csvfile:
+#     spamreader = csv.reader(csvfile, delimiter=' ', quotechar='|')
+#     for row in spamreader:
+#         print(row)
+#
+# from gym.utils import seeding
+# print(seeding.np_random(0))
+# print(seeding.hash_seed(0 + 1) % 2 ** 31)
 
-def myconverter(obj):
-    if isinstance(obj, np.integer):
-        return int(obj)
-    elif isinstance(obj, np.floating):
-        return float(obj)
-    elif isinstance(obj, np.ndarray):
-        return obj.tolist()
-    else:
-        return obj
+import pickle
 
-
-def convert_dict(dicts):
-    if isinstance(dicts, dict) == False and isinstance(dicts, list)== False and \
-            isinstance(dicts, np.ndarray) == False:
-        print('Not dicts', dicts)
-        return myconverter(dicts)
-
-    else:
-        print('dicts', dicts)
-        if isinstance(dicts, list) or isinstance(dicts, np.ndarray):
-            enu_stuff = enumerate(dicts)
-        else:
-            enu_stuff = dicts.items()
-        for key, value in enu_stuff:
-            print('key', key)
-            dicts[key] = myconverter(dicts[key])
-            print(type(dicts[key]))
-            if isinstance(dicts[key], dict) or isinstance(dicts[key], list) or isinstance(dicts[key], np.ndarray):
-                dicts[key] = convert_dict(dicts[key])
-
-        return dicts
+import torch
+torch.load('/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_66.pkl')
 
 
 
-a = convert_dict(a)
-print(a)
-print(type(a['I'][0]['love']), type(a['Love']['I']['love']))

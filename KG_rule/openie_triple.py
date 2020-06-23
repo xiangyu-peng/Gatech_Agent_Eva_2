@@ -44,49 +44,35 @@ class History_Record(object):
         return params
 
     def save_json(self, save_dict, save_path):
-        '''
+        """
         Save kg dict to json file
         For kg save_dict = self.kg_rel
         For kg save_path = self.jsonfile
         :param level:
         :return: None
-        '''
-
-        # if type == 'json':
-        #     import json
-        #     with open(save_path, 'w') as f:
-        #         json.dump(save_dict, f)
-        # if type == 'pickle':
+        """
         import pickle
         with open(save_path, 'wb') as f:
             pickle.dump(save_dict, f)
 
     def read_json(self, load_dict, load_path):
-        '''
+        """
         Read kg dict file from json file
         :param level:
         :return: None
-        '''
-
+        """
         load_dict = dict()
-        # if type == 'json':
-        #     with open(load_path, 'r') as f:
-        #         load_dict = json.load(f)
-
-        # if type == 'pickle':
         with open(load_path, 'rb')as f:
             load_dict = pickle.load(f)
 
         return load_dict
 
 
-
-
-
 class KG_OpenIE(History_Record):
     def __init__(self, gameboard,\
                  core_nlp_version: str = '2018-10-05', config_file=None):
-        self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
+        self.upper_path = '/media/becky/GNOME-p3'
+        # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
         self.remote_url = 'https://nlp.stanford.edu/software/stanford-corenlp-full-{}.zip'.format(core_nlp_version)
         self.install_dir = Path('~/.stanfordnlp_resources/').expanduser()
         self.install_dir.mkdir(exist_ok=True)
@@ -102,15 +88,16 @@ class KG_OpenIE(History_Record):
         from stanfordnlp.server import CoreNLPClient
 
         # For generating kg
-        if config_file == None:
-            config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
+        # if config_file == None:
+        #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
         config_data = ConfigParser()
         config_data.read(config_file)
         self.params = self.params_read(config_data, keys='kg')
         self.jsonfile = self.upper_path + self.params['jsonfile']
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
         self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away', 'type', 'cost', 'direct', 'mortgaged', 'increment']
-        self.relations_full = ['is priced at', 'is located at', 'is rented-0-house at'] #, 'is colored as', 'is classified as']
+        self.relations_matrix = ['is priced at', 'is located at'] #, 'is colored as', 'is classified as']
+        self.relations_node = ['Price_', 'Location_']
         self.kg_rel = dict()  # the total kg rule for "rel" KG
         self.kg_sub = dict()  # the total kg rule for "sub" KG
         self.kg_set = set()   # the set recording the kg rule for searching if the rule exists quickly
@@ -135,9 +122,6 @@ class KG_OpenIE(History_Record):
         self.board_name = []
 
         self.set_gameboard(gameboard) #get info about the gameboard each round
-
-
-
         # self.board_name = ['Go','Mediterranean-Avenue', 'Community Chest-One',
         #         'Baltic-Avenue', 'Income Tax', 'Reading Railroad', 'Oriental-Avenue',
         #         'Chance-One', 'Vermont-Avenue', 'Connecticut-Avenue', 'In-Jail/Just-Visiting',
@@ -148,18 +132,18 @@ class KG_OpenIE(History_Record):
         #         'Water Works', 'Marvin Gardens', 'Go-to-Jail', 'Pacific-Avenue', 'North-Carolina-Avenue',
         #         'Community Chest-Three', 'Pennsylvania-Avenue', 'Short Line', 'Chance-Three', 'Park Place',
         #                                 'Luxury Tax', 'Boardwalk']
-
+        self.node_number = 0
         self.sparse_matrix_dict = self.build_empty_matrix_dict()
         self.matrix_folder = self.upper_path + self.matrix_params['matrix_folder']
-        self.kg_vector = np.zeros([len(self.relations_full), len(self.board_name)])
+        self.kg_vector = np.zeros([len(self.relations_matrix), len(self.board_name)])
         self.vector_file = self.upper_path + self.matrix_params['vector_file']
 
         # Dice Novelty
-        self.dice = Novelty_Detection_Dice()
+        self.dice = Novelty_Detection_Dice(config_file)
         self.text_dice_num = 0
         self.dice_novelty = []
         # self.text_card_num = 0
-        # self.card = Novelty_Detection_Card()
+        # self.card = Novelty_Detection_Card(config_file)
 
     def set_gameboard(self, gameboard):
         self.gameboard = gameboard
@@ -167,15 +151,72 @@ class KG_OpenIE(History_Record):
         for i, name in enumerate(self.board_name):
             self.board_name[i] = '-'.join(name.split(' '))
 
+    # def build_empty_matrix_dict(self):
+    #     sparse_matrix_dict = dict()
+    #     for rel in self.action_name:
+    #         sparse_matrix_dict[rel] = dict()
+    #         sparse_matrix_dict[rel]['row'] = []
+    #         sparse_matrix_dict[rel]['col'] = []
+    #         sparse_matrix_dict[rel]['data'] = []
+    #     return sparse_matrix_dict
 
+    def hash_money(self, money):
+        return str(min(money // 250 * 250, 1250))
 
     def build_empty_matrix_dict(self):
+        """
+        Build a empty dict for storing the matrix
+        :return: a dict
+        """
         sparse_matrix_dict = dict()
-        for rel in self.action_name:
-            sparse_matrix_dict[rel] = dict()
-            sparse_matrix_dict[rel]['row'] = []
-            sparse_matrix_dict[rel]['col'] = []
-            sparse_matrix_dict[rel]['data'] = []
+        sparse_matrix_dict['number_nodes'] = dict()
+        sparse_matrix_dict['nodes_number'] = dict()
+        sparse_matrix_dict['out'] = dict()
+        sparse_matrix_dict['in'] = dict()
+        sparse_matrix_dict['number_rel'] = dict()
+        sparse_matrix_dict['rel_number'] = dict()
+
+        # Define the relation/edge number
+        for i,rel in enumerate(self.relations_matrix):
+            sparse_matrix_dict['number_rel'][i] = rel
+            sparse_matrix_dict['rel_number'][rel] = i
+
+        # Define the number of nodes
+        # name of location
+
+        for i, node in enumerate(self.board_name):
+            sparse_matrix_dict['number_nodes'][i] = node
+            sparse_matrix_dict['nodes_number'][node] = i
+
+        # Price: 0 - 250 -> i + 1; 250 - 5-- -> i + 2 ... [0 - 1500]
+        # [40] = 0; [41] = 250
+        for j, price in enumerate((range(0,1500,250))):
+            sparse_matrix_dict['number_nodes'][i + j + 1] = 'Price_' + str(price)
+            sparse_matrix_dict['nodes_number']['Price_' + str(price)] = i + j + 1
+        #location
+        for k, loc in enumerate(range(40)):
+            sparse_matrix_dict['number_nodes'][i + j + k + 2] = 'Location_' + str(k)
+            sparse_matrix_dict['nodes_number']['Location_' + str(k)] = i + j + k + 2
+
+        self.node_number = len(sparse_matrix_dict['number_nodes'].keys())
+
+        # Define 'in' column names
+        for rel in self.relations_matrix:
+            sparse_matrix_dict['in'][rel] = dict()
+            for node in range(self.node_number):
+                sparse_matrix_dict['in'][rel][node] = 0
+
+        # Define 'out' column names
+        for rel in self.relations_matrix:
+            sparse_matrix_dict['out'][rel] = dict()
+            for node in range(self.node_number):
+                sparse_matrix_dict['out'][rel][node] = 0
+
+        # for rel in self.action_name:
+        #     sparse_matrix_dict[rel] = dict()
+        #     sparse_matrix_dict[rel]['row'] = []
+        #     sparse_matrix_dict[rel]['col'] = []
+        #     sparse_matrix_dict[rel]['data'] = []
         return sparse_matrix_dict
 
     def annotate(self, text: str, properties_key: str = None, properties: dict = None, simple_format: bool = True):
@@ -349,13 +390,15 @@ class KG_OpenIE(History_Record):
                                 exist_bool = True
                         if exist_bool == False:
                             self.kg_change.append(d)
+            # for loc in self.location_record:
+            #     self.kg_rel['is located at'][loc] = self.location_record[loc]
 
             self.kg_rel['is located at'] = self.location_record.copy()
             self.location_record.clear()
             if self.new_kg_tuple:
                 self.build_matrix_dict()
                 self.dict_to_matrix()
-                self.build_vector()
+                # self.build_vector()
                 self.new_kg_tuple = dict()  # Reset new_kg_tuple
                  # Update history while only detect rule change after simulating 100 games
 
@@ -441,8 +484,9 @@ class KG_OpenIE(History_Record):
         """
         diff = []
         for space in total.keys():
-            if sorted(total[space]) != sorted(new[space]):
-                diff.append([space, 'is located at', [sorted(total[space]), sorted(new[space])]])
+            if space in new:
+                if sorted(total[space]) != sorted(new[space]):
+                    diff.append([space, 'is located at', [sorted(total[space]), sorted(new[space])]])
         for space in new.keys():
             if space not in total.keys():
                 diff.append([space, 'is located at', [[], sorted(new[space])]])
@@ -537,19 +581,37 @@ class KG_OpenIE(History_Record):
         '''
         build a dict for building sparse matrix
         '''
-        for rel in self.action_name:
+        for i , rel in enumerate(self.relations_matrix):
             if rel in self.new_kg_tuple.keys():
                 for sub in self.new_kg_tuple[rel].keys():
-                    index_sub = self.board_name.index(sub)
-                    index_obj = self.board_name.index(self.new_kg_tuple[rel][sub])
-                    self.sparse_matrix_dict[rel]['row'].append(index_sub)
-                    self.sparse_matrix_dict[rel]['col'].append(index_obj)
-                    self.sparse_matrix_dict[rel]['data'].append(1)
+                    number_sub = self.sparse_matrix_dict['nodes_number'][sub]
+
+
+                    # Adjust for more rel/edges: TODO
+                    if i == 0:
+                        number_obj = self.sparse_matrix_dict['nodes_number'][self.relations_node[i] + self.hash_money(int(self.new_kg_tuple[rel][sub]))]
+                    else:
+                        number_obj = self.sparse_matrix_dict['nodes_number'][self.relations_node[i] + str(self.new_kg_tuple[rel][sub])]
+
+                    self.sparse_matrix_dict['out'][rel][number_sub] = number_obj
+                    self.sparse_matrix_dict['in'][rel][number_obj] = number_sub
+                    # self.sparse_matrix_dict[rel]['row'].append(index_sub)
+                    # self.sparse_matrix_dict[rel]['col'].append(index_obj)
+                    # self.sparse_matrix_dict[rel]['data'].append(1)
 
     def dict_to_matrix(self):
         self.sparse_matrix = []
-        for rel in self.action_name:
-            self.sparse_matrix.append(csr_matrix((self.sparse_matrix_dict[rel]['data'], (self.sparse_matrix_dict[rel]['row'], self.sparse_matrix_dict[rel]['col'])), shape=(self.entity_num, self.entity_num)))
+        for i in range(self.node_number):
+            self.sparse_matrix.append([])
+            for type in ['out', 'in']:
+                for rel in self.relations_matrix:
+                    node_1 = self.sparse_matrix_dict[type][rel][i] if i in self.sparse_matrix_dict[type][rel] else -1
+                    matrix_1 = [0 for j in range(self.node_number)]
+                    matrix_1[node_1] = 1 if node_1 > 0 else 0
+                    self.sparse_matrix[-1] += matrix_1
+        self.sparse_matrix = np.array(self.sparse_matrix)  # save as np array
+        # for rel in self.action_name:
+        #     self.sparse_matrix.append(csr_matrix((self.sparse_matrix_dict[rel]['data'], (self.sparse_matrix_dict[rel]['row'], self.sparse_matrix_dict[rel]['col'])), shape=(self.entity_num, self.entity_num)))
 
     def update_new_kg_tuple(self, triple):
         '''
@@ -568,10 +630,7 @@ class KG_OpenIE(History_Record):
         Save sparse matrix of kg
         :return:
         '''
-        num = 0
-        for rel in self.action_name:
-            save_npz(self.matrix_folder + '/' + str(rel) + '.npz', self.sparse_matrix[num])
-            num += 1
+        np.save(self.matrix_folder + 'kg_matrix.npz', self.sparse_matrix)
 
     def save_vector(self):
         np.save(self.vector_file, self.kg_vector)
@@ -581,7 +640,7 @@ class KG_OpenIE(History_Record):
         Build the representation vector using knowledge graph
         '''
         num = 0
-        for rel in self.relations_full:
+        for rel in self.relations_matrix:
             if rel in self.new_kg_tuple.keys():
                 for sub in self.new_kg_tuple[rel].keys():
                     index_sub = int(self.board_name.index(sub))
@@ -600,9 +659,10 @@ class KG_OpenIE(History_Record):
 class Novelty_Detection_Dice(History_Record):
     def __init__(self, config_file=None):
         #Novelty Detection
-        self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        if config_file == None:
-            config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
+        # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
+        self.upper_path = '/media/becky/GNOME-p3'
+        # if config_file == None:
+        #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
         config_data = ConfigParser()
         config_data.read(config_file)
@@ -782,9 +842,11 @@ class Novelty_Detection_Dice(History_Record):
 class Novelty_Detection_Card(History_Record):
     def __init__(self, config_file=None):
         # Novelty Detection
-        self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        if config_file == None:
-            config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
+        # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
+        self.upper_path = '/media/becky/GNOME-p3'
+        # if config_file == None:
+        #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
+
         config_data = ConfigParser()
         config_data.read(config_file)
         self.novelty_params = self.params_read(config_data, keys='novelty')
@@ -820,7 +882,7 @@ if __name__ == '__main__':
     gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-1.json',
                                      player_decision_agents, num_active_players=4)
 
-    client = KG_OpenIE(gameboard_initial)
+    client = KG_OpenIE(gameboard_initial, config_file='/media/becky/GNOME-p3/Hypothetical_simulator/config_online_baseline.ini')
     client.annotate('I love U')
     # client.build_kg_file('/media/becky/GNOME-p3/KG-rule/game_log.txt', level='rel', use_hash=True)
 

@@ -9,6 +9,8 @@ from monopoly_world import Monopoly_world
 # from summary_provider.dummy_summary import DummySummaryProvider
 # from summary_provider.individual_sentiment_summary import IndividualSentimentSummary
 # from data_utils.data_provider import GutenburgDataProvider
+
+
 try:
     from debug_print import print
 except:
@@ -30,14 +32,21 @@ def self_register():
     )
 
 class Sim_Monopoly(gym.Env):
+    """
+    To run this env, U must follow the remaining procedure!
+    env = gym.make('monopoly_simple-v1')
+    env.set_config_file()
+    env.set_kg(False)
+    env.set_board(path)
+    env.seed(seed=1)
+
+    """
     metadata = {'render.modes': ['human']}
 
     def __init__(self):
-        world = Monopoly_world()
-        self.MonopolyWorld = world
-        self.observation_space = np.array([0 for i in range(52 + 2 * self.MonopolyWorld.num_active_players)])
-        self.action_space = [0 for i in range(80)]
-        self.masked_actions = [0 for i in range(80)]
+        self.MonopolyWorld = None
+        self.observation_space = []
+        self.masked_actions = []
         self.seeds = 0
         self.reward = 0
         self.terminal = False
@@ -66,6 +75,7 @@ class Sim_Monopoly(gym.Env):
     def seed(self, seed=None):
         self.seeds = self.MonopolyWorld.seed(seed)
         return self.seeds
+
     def set_board(self, board=None):
         self.MonopolyWorld.set_initial_gameboard(gameboard=board)
 
@@ -80,5 +90,11 @@ class Sim_Monopoly(gym.Env):
     def output_interface(self):
         return self.MonopolyWorld.interface
 
-    def save_gameboard(self):
-        return self.MonopolyWorld.save_gameboard()
+    def save_gameboard(self, path=None):
+        return self.MonopolyWorld.save_gameboard(path)
+
+    def set_config_file(self, config_data=None):
+        if config_data:
+            self.MonopolyWorld = Monopoly_world(config_data)
+        else:
+            self.MonopolyWorld = Monopoly_world()

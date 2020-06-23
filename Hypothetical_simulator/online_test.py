@@ -17,6 +17,7 @@ import shutil
 from Hypothetical_simulator.logging_info import log_file_create
 from monopoly_simulator_background.vanilla_A2C_main_v3 import MonopolyTrainer
 from monopoly_simulator_background.evaluate_a2c import test_v2
+import csv
 logger = logging.getLogger('logging_info.online_testing')
 
 class Config:
@@ -26,17 +27,18 @@ class Config:
 def parse_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--seed', default=0, type=int)
-    parser.add_argument('--model_path', default=upper_path + '/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_38.pkl', type=str)
+    parser.add_argument('--model_path', default=upper_path + '/monopoly_simulator_background/weights/baseline.pkl', type=str)
     parser.add_argument('--device_name', default='cuda:2', type=str)
-    parser.add_argument('--num_test', default=2000, type=int)
+    parser.add_argument('--num_test', default=60000000, type=int)
     parser.add_argument('--performance_count', default=100, type=int)
     parser.add_argument('--retrain_type', default=None, type=str) # or hyp or baseline
     parser.add_argument('--config_file_offline_baseline', default='/Hypothetical_simulator/config_offline_baseline.ini', type=str)
-    parser.add_argument('--config_file_offline_hyp', default='/Hypothetical_simulator/config_offline_hyp.ini', type=str)
+    parser.add_argument('--config_file_offline_hyp', default='/Hypothetical_simulator/config_offline_hyp_1.ini', type=str)
     parser.add_argument('--config_file_online_baseline', default='/Hypothetical_simulator/config_online_baseline.ini', type=str)
-    parser.add_argument('--config_file_online_hyp', default='/Hypothetical_simulator/config_online_hyp.ini', type=str)
+    parser.add_argument('--config_file_online_hyp', default='/Hypothetical_simulator/config_online_hyp_1.ini', type=str)
     parser.add_argument('--config_file_online', default='/Hypothetical_simulator/config_online.ini', type=str)
     parser.add_argument('--upper_path', default='/media/becky/GNOME-p3', type=str)
+    parser.add_argument('--result_csv_path', default='/Hypothetical_simulator/result_int_1.csv', type=str)
     args = parser.parse_args()
     params = vars(args)
     return params
@@ -57,6 +59,7 @@ class Hyp_Learner(object):
     This class is separated into on-line learning and off-line learning.
     """
     def __init__(self):
+        self.interval = '_1'
         args = parse_args()
         self.device = torch.device(args['device_name'])
         self.model_path = args['model_path']
@@ -75,21 +78,26 @@ class Hyp_Learner(object):
         #performance of agents
         self.num_test = args['num_test']
         self.performance_count = args['performance_count']  # default is 10; we average the performance of 10 games
+        self.test_interval = 0
 
         # retraining parameters
         self.config_file_offline_baseline = args['config_file_offline_baseline']
         self.config_file_offline_hyp = args['config_file_offline_hyp']
         self.retrain_type = args['retrain_type']
         self.retrain_signal = False  # denotes if we will retrain the agent during next game
+        self.trainer = self.set_offline_train_setting()
 
         self.retrain_steps = 0
+        self.stop_sign = False
 
         # logger info
         if self.retrain_type:
             self.logger = log_file_create(
-                upper_path + '/Hypothetical_simulator/log_testing_' + self.retrain_type + '.log')
+                upper_path + '/Hypothetical_simulator/log_testing_' + self.retrain_type + self.interval + '.log')
         else:
             self.logger = log_file_create(upper_path + '/Hypothetical_simulator/log_testing_noretrain.log')
+        self.result_csv_path = self.upper_path + args['result_csv_path']  # save the retraining results to the csv
+
 
     def online_testing(self):
         """
@@ -154,7 +162,7 @@ class Hyp_Learner(object):
                 #         if i == 0:
                 #             print(i, (name, param))
 
-                # Make the game board used in retrain is the one step backward!
+
 
                 s = torch.tensor(s, device=self.device).float()
                 prob = self.model.actor(s)
@@ -169,16 +177,23 @@ class Hyp_Learner(object):
                 score_game += r
                 # done_reset_bool = done
 
-                # save all the novelty related states for retraining
-                if self.novelty_spaces:
-                    if self.retrain_type == 'hyp':
-                        path_name = '/Hypothetical_simulator/game_board/gameboard_#' + str(
-                            num_test) +'_round_' + str(round_num_game) + '.json'
-                        env.save_gameboard(path_name)
-                    save_signal = True
 
+                # Make the game board used in retrain is the one step backward!
+                # if self.novelty_spaces:
+                #     if self.retrain_type == 'hyp':
+                #         path_name = '/Hypothetical_simulator/game_board/gameboard_#' + str(
+                #             num_test) + '_round_' + str(round_num_game) + '.json'
+                #         env.save_gameboard(path_name)
+                #     save_signal = True
+
+                # save all the novelty related states for retraining
                 if self.novelty_spaces and self.find_novelty_state(env.output_interface(), s):
                     novelty_state_num.append(round_num_game)
+                    # save gameboard
+                    path_name = '/Hypothetical_simulator/game_board/gameboard_#' + str(num_test) \
+                                + '_round_' + str(round_num_game) + self.interval + '.json'
+                    env.save_gameboard(path_name)
+
                     retrain_signal_per_game = True
 
             # done_reset_bool = True
@@ -192,13 +207,17 @@ class Hyp_Learner(object):
 
 
             # retrain the agent when the retrain_signal is triggered
-            if retrain_signal_per_game and save_signal and self.retrain_type and len(novelty_state_num) > 1:
-                new_model_path = self.offline_testing(retrain_type=self.retrain_type,
-                                                       num_test=num_test,
-                                                       novelty_set=novelty_state_num[1:])
-                #Update the agent
-                self.model = torch.load(new_model_path)
-                self.model_path = new_model_path
+            if retrain_signal_per_game and self.retrain_type:
+                if len(novelty_state_num) == 1 and novelty_state_num[0] == 1:
+                    pass
+                else:
+
+                    new_model_path = self.offline_testing(retrain_type=self.retrain_type,
+                                                           num_test=num_test,
+                                                           novelty_set=novelty_state_num)
+                    #Update the agent
+                    self.model = torch.load(new_model_path)
+                    self.model_path = new_model_path
 
             # Record the performance of the agent
             if num_test % self.performance_count == 0:
@@ -221,7 +240,9 @@ class Hyp_Learner(object):
                                   ' th game and will run novelty_state detection for every state now!')
                 self.logger.debug(str(env.output_kg_change()))
                 for novelty in env.output_kg_change():
-                    self.novelty_spaces.add(novelty[0].replace('-', ' '))
+                    if novelty:
+                        self.logger.debug('novelty is ' + novelty[0].replace('-', ' '))
+                        self.novelty_spaces.add(novelty[0].replace('-', ' '))
         env.close()
 
     def find_novelty_state(self, interface, state):
@@ -234,6 +255,25 @@ class Hyp_Learner(object):
             params[key] = v
         return params
 
+    def set_offline_train_setting(self):
+        config_data = ConfigParser()
+        config_data.read(self.upper_path + self.config_file_offline_hyp)
+        params = self.params_read(config_data, 'hyper')
+
+        # Begin retraining
+        model_path = self.model_path
+        # Set trainer:
+        trainer = MonopolyTrainer(params=params,
+                                  device_id=None,
+                                  gameboard=None,
+                                  kg_use=False,
+                                  logger_use=False,
+                                  config_file=self.config_file_offline_hyp,
+                                  test_required=True,
+                                  pretrain_model=model_path,
+                                  seed=self.seed)
+        return trainer
+
     def offline_testing(self, retrain_type='hyp', num_test=None, novelty_set=[]):
         """
         Off line training.
@@ -243,52 +283,82 @@ class Hyp_Learner(object):
         :return : str, trained weight file path
         """
         # clear the folder or make a empty one
-        config_data = ConfigParser()
-        config_data.read(self.upper_path+self.config_file_offline_hyp)
-        params = self.params_read(config_data, 'hyper')
-        params['save_path'] = params['save_path'] + '/' + retrain_type + '/' + str(num_test)
-        if os.path.exists(params['save_path']):
-            shutil.rmtree(params['save_path'])
-            os.makedirs(params['save_path'])
+        save_path = '/media/becky/GNOME-p3/Hypothetical_simulator/weights' + \
+                    '/' + retrain_type + '/' + str(num_test) + '/' + self.interval
+        if os.path.exists(save_path):
+            shutil.rmtree(save_path)
+            os.makedirs(save_path)
         else:
-            os.makedirs(params['save_path'])
+            os.makedirs(save_path)
 
         # Begin retraining
-        model_path = self.model_path
-
         for num in novelty_set:
-            gameboard = '/Hypothetical_simulator/game_board/gameboard_#' + str(
-                        num_test) +'_round_' + str(num) + '.json'
-            trainer = MonopolyTrainer(params=params,
-                                      device_id=None,
-                                      gameboard=gameboard,
-                                      kg_use=False,
-                                      logger_use=False,
-                                      config_file=self.config_file_offline_hyp,
-                                      test_required=False,
-                                      pretrain_model=model_path,
-                                      seed=self.seed)
-            trainer.train()
-            model_path = params['save_path'] + '/hyp_v3_lr_0.0001_#_1.pkl'
+            if num != 1:
+                gameboard = '/Hypothetical_simulator/game_board/gameboard_#' + str(
+                            num_test) +'_round_' + str(num) + self.interval + '.json'
 
-        self.retrain_steps += 10 * len(novelty_set)
-        avg_score, avg_winrate, avg_diff = test_v2(step_idx=self.retrain_steps,
-                                                   model=torch.load(model_path),
-                                                   device=self.device,
-                                                   num_test=200,
-                                                   seed=self.seed)
-        self.logger.debug('Step is ' + str(self.retrain_steps))
-        self.logger.debug('Avg score is ' + str(avg_score))
-        self.logger.debug('Avg winning rate is ' + str(avg_winrate))
-        self.logger.debug('Avg diff is ' + str(avg_diff))
-        self.logger.debug('=====================================')
-
-        return params['save_path'] + '/hyp_v3_lr_0.0001_#_1.pkl'
-
+                test_required = True if self.test_interval > 1000 else False
+                if not self.stop_sign:
+                    self.trainer.set_gameboard(gameboard=gameboard,
+                                               seed=self.seed,
+                                               save_path=save_path,
+                                               test_required=test_required)
+                else:
+                    save_path = '/media/becky/GNOME-p3/Hypothetical_simulator/weights' + \
+                                '/' + retrain_type + '/' + self.interval
+                    if os.path.exists(save_path):
+                        shutil.rmtree(save_path)
+                        os.makedirs(save_path)
+                    else:
+                        os.makedirs(save_path)
+                    self.trainer.set_gameboard(gameboard=None,
+                                               seed=10,
+                                               save_path=save_path,
+                                               test_required=True,
+                                               print_interval=1000,
+                                               max_train_steps=500000,
+                                               logger_use=True,
+                                               logger_name=self.interval)
 
 
+                loss_return, avg_score, avg_winrate, avg_diff = self.trainer.train()
+                # print(loss_return, avg_score, avg_winrate, avg_diff)
 
+                if avg_winrate >= 0.6:
+                    self.stop_sign = True
 
+                # model_path = save_path + '/hyp_v3_lr_0.0001_#_1.pkl'
+
+                if test_required:
+                    # avg_score, avg_winrate, avg_diff = self.trainer.test_v2(step_idx=self.retrain_steps,
+                    #                                                         seed=0,
+                    #                                                         config_file=self.config_file_offline_hyp,
+                    #                                                         num_test=200)
+                    # avg_score_2, avg_winrate_2, avg_diff_2 = test_v2(step_idx=self.retrain_steps,
+                    #                                                  model=torch.load(save_path + '/hyp_v3_lr_0.0001_#_1.pkl'),
+                    #                                                  device=self.device,
+                    #                                                  num_test=200,
+                    #                                                  seed=0,
+                    #                                                  config_file=self.config_file_offline_hyp)
+
+                    # self.logger.debug('Avg score is ' + str(avg_score))
+                    self.logger.debug('Avg winning rate is ' + str(avg_winrate))
+                    # self.logger.debug('Avg diff is ' + str(avg_diff))
+                    self.logger.debug('=====================================')
+
+                    # save the results to the cav file for figures
+                    with open(self.result_csv_path, 'a', newline='') as csvfile:
+                        resultwriter = csv.writer(csvfile, delimiter=' ',
+                                                quotechar='|', quoting=csv.QUOTE_MINIMAL)
+                        resultwriter.writerow([str(self.retrain_steps), str(avg_score), str(avg_winrate), str(avg_diff)])
+                        # resultwriter.writerow([str(self.retrain_steps), str(avg_score_2), str(avg_winrate_2), str(avg_diff_2)])
+
+                    self.test_interval = 0
+
+                self.retrain_steps += 1/10
+                self.test_interval += 1/10
+
+        return save_path + '/hyp_v3_lr_0.0001_#_1.pkl'
 
 if __name__ == '__main__':
     hyp = Hyp_Learner()

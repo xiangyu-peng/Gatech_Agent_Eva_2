@@ -1,6 +1,5 @@
 import sys, os
 upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
-print(upper_path)
 upper_path_eva = upper_path + '/Evaluation/monopoly_simulator'
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
@@ -11,8 +10,10 @@ from monopoly_simulator_background.gameplay_step import *
 from monopoly_simulator_background.gameplay_tf import *
 from monopoly_simulator_background.interface import Interface
 from monopoly_simulator_background.simple_background_agent_becky_p1 import P1Agent
+from monopoly_simulator_background.simple_background_agent_becky_p2 import P2Agent
 from monopoly_simulator import background_agent_v3
 from monopoly_simulator.agent import Agent
+from monopoly_simulator import action_choices
 from gym.utils import seeding
 from random import randint
 from monopoly_simulator.location import *
@@ -32,11 +33,11 @@ from monopoly_simulator_background.agent_helper_functions import identify_improv
 
 
 class Monopoly_world():
-    def __init__(self):
+    def __init__(self, config_file=None):
         # Get config data
-        self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
-        # self.config_file = '/media/becky/GNOME-p3/Evaluation/GNOME-p3/A2C_agent/config.ini'
-        self.config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
+        # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
+        self.upper_path = '/media/becky/GNOME-p3'
+        self.config_file = self.upper_path + config_file
         config_data = ConfigParser()
         config_data.read(self.config_file)
         self.hyperparams = self.params_read(config_data, 'env')
@@ -60,6 +61,8 @@ class Monopoly_world():
         # self.value_past = self.hyperparams['initial_cash']
         # self.value_total = 2 * self.hyperparams['initial_cash']
         self.avg_die = 0  # dice average roll sum
+        self.action_background = None
+        self.reward_diff = 0
 
         # Rule learning
         self.kg_use = True  # True: learn kg, False: no kg rule
@@ -76,7 +79,7 @@ class Monopoly_world():
         self.kg_rel_path = self.upper_path + self.hyperparams['kg_rel_path']
 
         #hypothetical simulator
-        self.saved_gameboard_path = self.upper_path + self.hyperparams['saved_gameboard_path']
+        self.saved_gameboard_path = None
         self.running_hyp = False
 
     def set_initial_gameboard(self, gameboard=None):
@@ -87,9 +90,8 @@ class Monopoly_world():
             name_num = 1
             while name_num < self.num_players:
                 name_num += 1
-                self.player_decision_agents['player_' + str(name_num)] = Agent(
-                    **background_agent_v3.decision_agent_methods)
-            self.gameboard_initial = read_in_current_state_from_file(gameboard, self.player_decision_agents)
+                self.player_decision_agents['player_' + str(name_num)] = P2Agent() #Agent(**background_agent_v3.decision_agent_methods)
+            self.gameboard_initial = read_in_current_state_from_file(self.upper_path+gameboard, self.player_decision_agents)
             # TODO: seed
             self.running_hyp = True
 
@@ -107,7 +109,7 @@ class Monopoly_world():
                 name_num = 1
                 while name_num < self.num_players:
                     name_num += 1
-                    self.player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
+                    self.player_decision_agents['player_' + str(name_num)] = P2Agent() #Agent(**background_agent_v3.decision_agent_methods)
                 #####################################################
 
                 # set player.agent to  the gameboard
@@ -131,7 +133,7 @@ class Monopoly_world():
                 name_num = 1
                 while name_num < self.num_players:
                     name_num += 1
-                    self.player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
+                    self.player_decision_agents['player_' + str(name_num)] = P2Agent() #Agent(**background_agent_v3.decision_agent_methods)
 
                 self.gameboard_initial = set_up_board(self.upper_path + '/monopoly_game_schema_v1-1.json',
                                                       self.player_decision_agents,
@@ -148,7 +150,7 @@ class Monopoly_world():
 
         # KG for rule learning
         if self.kg_use:
-            self.kg = KG_OpenIE(self.gameboard_initial)
+            self.kg = KG_OpenIE(self.gameboard_initial, config_file=self.config_file)
 
         return self.gameboard_initial
 
@@ -178,6 +180,7 @@ class Monopoly_world():
         # self.value_past = self.hyperparams['initial_cash']
         # self.value_total = 2 * self.hyperparams['initial_cash']
         self.game_elements = copy.deepcopy(self.gameboard_initial)
+        self.reward_diff = 0
 
 
     def reset(self):
@@ -191,18 +194,21 @@ class Monopoly_world():
             self.kg.set_gameboard(self.game_elements)  # Deliver gameboard info to openie
 
         # Inject novelty here
-        if self.game_num > self.novelty_inject_num and self.running_hyp == False:
+        if self.game_num > self.novelty_inject_num:
             inject_novelty(self.game_elements)
 
         if self.running_hyp:
+            current_player = self.game_elements['players'][0]
             state = self.interface.board_to_state(self.game_elements)
-            allowable_actions = self.game_elements['players'][0].compute_allowable_post_roll_actions(self.game_elements)
-            params_mask = identify_improvement_opportunity_all(self.game_elements['players'][0], self.game_elements)
+            allowable_actions = current_player.compute_allowable_post_roll_actions(self.game_elements)
+            params_mask = identify_improvement_opportunity_all(current_player, self.game_elements)
             self.masked_actions = self.interface.get_masked_actions(allowable_actions, params_mask, self.game_elements['players'][0])
             np.random.seed(self.seeds)  # control the seed!!!!
             self.game_elements['seed'] = self.seeds
             self.game_elements['card_seed'] = self.seeds
             self.game_elements['choice_function'] = np.random.choice
+            self.num_active_players = self.num_active_players - sum([1 if player.status == 'lost'\
+                else 0 for player in self.game_elements['players']])  # some players may lose already
 
         else:
             np.random.seed(self.seeds)  # control the seed!!!!
@@ -217,7 +223,10 @@ class Monopoly_world():
         # calculate average sum of dice for calculating rewards
         self.avg_die = sum([sum(i.die_state)/len(i.die_state) for i in self.game_elements['dies']])
 
-        return state, self.masked_actions
+        self.action_background = self.background_agent_decision(self.masked_actions)
+        self.reward_diff = self.reward_cal(win_indicator=0, action_num=None, masked_actions_reward=None)
+
+        return state, (self.masked_actions, self.action_background)
 
 
     def get_income(self, index):
@@ -254,7 +263,7 @@ class Monopoly_world():
         opponents = [self.game_elements['players'][i] for i in opponents_index]
         player_money_norm = self.normalize(player.current_cash, x_min=0, x_max=10000, a=0)
         opps_money_norm = self.normalize(opponents[0].current_cash, x_min=0, x_max=10000, a=0) if len(opponents) == 1 else 0
-        return player_money_norm - opps_money_norm
+        return (player_money_norm - opps_money_norm) / max(player_money_norm, opps_money_norm)
 
 
     def get_income_diff(self, player_index, opponents_index):
@@ -269,7 +278,7 @@ class Monopoly_world():
         player_income_norm = self.normalize(self.get_income(player_index), x_min=0, x_max=2000, a=0)
         opps_income_norm = self.normalize(self.get_income(1), x_min=0, x_max=2000, a=0) if len(
             opponents_index) == 1 else 0
-        return player_income_norm - opps_income_norm
+        return (player_income_norm - opps_income_norm) / max(player_income_norm, opps_income_norm, 0.000000000001)
 
 
     def normalize(self, x, x_min, x_max, a=-1, b=1):
@@ -286,7 +295,7 @@ class Monopoly_world():
         return value
 
 
-    def reward_cal(self, win_indicator, action_num, masked_actions_reward):
+    def reward_cal(self, win_indicator=0, action_num=None, masked_actions_reward=None):
         """
         Calculating rewards of each state
         :param win_indicator: win or lose
@@ -295,35 +304,44 @@ class Monopoly_world():
         :return: float : reward
         """
         # If this action is invalid:
-        if masked_actions_reward[action_num] == 0:
-            return -0.001
+        # value_now = self.game_elements['players'][self.current_player_index].current_cash +\
+        #          self.cal_asset_value(self.current_player_index)
+        # rewards_total = 0
+        # for num in range(self.num_players):
+        #     rewards_total += self.game_elements['players'][num].current_cash
+        #     rewards_total += self.cal_asset_value(num)
+        # reward = (value_now - self.value_past) / self.value_total
 
-        else:
-            # value_now = self.game_elements['players'][self.current_player_index].current_cash +\
-            #          self.cal_asset_value(self.current_player_index)
-            # rewards_total = 0
-            # for num in range(self.num_players):
-            #     rewards_total += self.game_elements['players'][num].current_cash
-            #     rewards_total += self.cal_asset_value(num)
-            # reward = (value_now - self.value_past) / self.value_total
+        # Calculating rewards
+        money_diff = self.get_money_diff(0, [1])
+        income_diff = self.get_income_diff(0, [1])
+        reward = money_diff * 0.5 + income_diff * 0.5
 
-            # Calculating rewards
-            money_diff = self.get_money_diff(0, [1])
-            income_diff = self.get_income_diff(0, [1])
-            reward = money_diff * 0.15 + income_diff * 0.85
-
-            # We give a little more rewards to but_property action
-            # if action_num == 0:
-            #     reward += 0.001
-
-            # self.value_total = rewards_total
-            # self.value_past = value_now
-
-            # If this action is the only action we can choose, we give it a little bonus
-            if masked_actions_reward[(action_num + 1) % 2] == 0:
-                return 0.001
-
+        if masked_actions_reward == None:
             return reward
+
+        if masked_actions_reward[action_num] == 0:
+            self.reward_diff = reward
+            return -0.01
+
+        reward, self.reward_diff = reward - self.reward_diff, reward
+        # We give a little more rewards to but_property action
+        # if action_num == 0:
+        #     reward += 0.001
+
+        # self.value_total = rewards_total
+        # self.value_past = value_now
+
+        # if the action is the same with the one of background agent, we will have a bonus
+        if self.action_background == action_num and action_num == 0:
+            reward += 0.1
+        elif self.action_background == action_num and action_num == 1:
+            reward += 0.01
+        # If this action is the only action we can choose, we give it a little bonus
+        if masked_actions_reward[(action_num + 1) % 2] == 0:
+            return max(0.001, reward)
+
+        return reward
 
     # Hypothetical training
     # def next_hypothetical_training(self, action):
@@ -343,10 +361,10 @@ class Monopoly_world():
         #When last state has a winner, we will reset the game
         if self.terminal > 0:
             if self.kg_use:
-                self.interface.get_logging_info(self.game_elements, current_player_index=0,file_path=self.upper_path+'/KG_rule/game_log.txt')
+                self.interface.get_logging_info(self.game_elements, current_player_index=0,file_path=self.log_path)
                 self.save_kg()
-                self.interface.clear_history(file_path=self.upper_path+'/KG_rule/game_log.txt')
-            state_space, masked_actions = self.reset()
+                self.interface.clear_history(file_path=self.log_path)
+            state_space, (masked_actions, action_background) = self.reset()
             reward = 0
             terminal = 0
 
@@ -394,19 +412,17 @@ class Monopoly_world():
             reward = self.reward
             terminal = self.terminal
             masked_actions = self.interface.masked_actions
+            if self.terminal:
+                action_background = 1
+            else:
+                action_background = self.background_agent_decision(masked_actions)
 
-        return state_space, reward, terminal, masked_actions #can put KG in info
+
+        return state_space, reward, terminal, (masked_actions,action_background) #can put KG in info
 
 
     def next_after_nochange(self, action):
         masked_actions = [1, 1]
-        # if self.terminal == 1:
-        #     self.reset()
-        #     state_space = self.interface.board_to_state(self.game_elements)
-        #     reward = 0
-        #     terminal = 0
-        #     masked_actions = self.interface.masked_actions
-        # else:
         action_num = action
         masked_actions_reward = self.interface.masked_actions.copy()
         # When the action is not valid, the state won't change and the reward will be negative
@@ -455,21 +471,24 @@ class Monopoly_world():
 
         if self.terminal > 0:
             if self.kg_use:
-                self.interface.get_logging_info(self.game_elements, current_player_index=0, file_path=self.upper_path+'/KG_rule/game_log.txt')
+                self.interface.get_logging_info(self.game_elements, current_player_index=0, file_path=self.log_path)
                 self.save_kg()
-                self.interface.clear_history(file_path=self.upper_path+'/KG_rule/game_log.txt')
-            state_space, masked_actions = self.reset()
+                self.interface.clear_history(file_path=self.log_path)
+            state_space, (masked_actions, action_background) = self.reset()
             # state_space = self.interface.board_to_state(self.game_elements)
             reward = 0
             terminal = 1
             # masked_actions = self.masked_actions
 
-            info = (masked_actions, [])
-            if self.game_num >= 10:
-                if self.kg_use:
-                    info = (masked_actions, self.kg.kg_vector)
+            info = (masked_actions, action_background)
+            # if self.game_num >= 10:
+            #     if self.kg_use:
+            #         info = (masked_actions, self.kg.kg_vector)
         else:
-            info = (masked_actions,[])
+            action_background = self.background_agent_decision(masked_actions)
+            info = (masked_actions,action_background)
+        self.action_background = action_background
+        self.masked_actions = masked_actions
         return state_space, 0, terminal, info  #can put KG in info
 
     def next_hyp(self, action):
@@ -511,7 +530,7 @@ class Monopoly_world():
 
         masked_actions = [1, 1]
         action_num = action
-        masked_actions_reward = self.interface.masked_actions.copy()
+        masked_actions_reward = self.masked_actions
 
         # When the action is not valid, the state won't change and the reward will be negative
         # if masked_actions_reward[action_num] == 0:
@@ -545,13 +564,13 @@ class Monopoly_world():
         terminal = 0 if win_indicator == 0 else 1
         if done_indicator == 1:
             terminal = 1
+
         reward = self.reward_cal(win_indicator, action_num, masked_actions_reward)
 
         if terminal:
             if win_indicator == 1:
                 terminal = 2
         state_space = self.interface.board_to_state(game_elements)
-
 
         self.game_elements = game_elements_ori
         self.num_active_players = num_active_players_ori
@@ -562,7 +581,7 @@ class Monopoly_world():
 
         return state_space, reward, terminal, masked_actions#can put KG in info
 
-    def seed(self, seed=None):
+    def seed(self, seed=0):
         np_random, seed1 = seeding.np_random(seed)
         self.seeds = seeding.hash_seed(seed1 + 1) % 2 ** 31
         # self.seeds = seed
@@ -576,7 +595,7 @@ class Monopoly_world():
             self.kg.save_json(self.kg.kg_rel, self.kg_rel_path)
             self.kg.dict_to_matrix()
             self.kg.save_matrix()
-            self.kg.save_vector()
+            # self.kg.save_vector()
 
         # Visulalize the novelty change in the network
         if self.kg.kg_change != self.kg_change:
@@ -586,7 +605,26 @@ class Monopoly_world():
 
         self.kg_change = self.kg.kg_change[:]
 
-    def save_gameboard(self):
-        return write_out_current_state_to_file(self.game_elements, self.saved_gameboard_path)
+    def save_gameboard(self, path=None):
+        if path:
+            return write_out_current_state_to_file(self.game_elements, self.upper_path + path)
+        # else:
+        #     return write_out_current_state_to_file(self.game_elements, self.saved_gameboard_path)
 
+    def background_agent_decision(self, masked_actions):  # only consider 2 actions
+        player = self.game_elements['players'][0]
+        # if masked_actions[0] == 1:
+        #     allowable_moves = {action_choices.buy_property, action_choices.concluded_actions}
+        # else:
+        #     return 1
+        # actions = self.player_decision_agents['player_2'].make_post_roll_move(player, self.game_elements, allowable_moves, 1)
+        # if actions[-1] == dict():
+        #     return 1
+        # else:
+        #     return 0
 
+        if masked_actions[0] == 1:
+            asset = self.game_elements['location_sequence'][player.current_position]
+            if type(asset) == RealEstateLocation or type(asset) == UtilityLocation or type(asset) == RailroadLocation:
+                return 0 if self.player_decision_agents['player_2'].make_buy_property_decision(player, self.game_elements, asset) else 1
+        return 1

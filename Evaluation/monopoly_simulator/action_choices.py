@@ -1,4 +1,5 @@
 import logging
+from monopoly_simulator.location import RealEstateLocation, UtilityLocation, RailroadLocation
 logger = logging.getLogger('monopoly_simulator.logging_info.action_choices')
 
 
@@ -539,7 +540,9 @@ def buy_property(player, asset, current_gameboard):
     :return: 1 if player has succeeded in buying the property, -1 if either the player has failed OR if the property ended
     up going to auction (in the latter case, the player may still succeed in obtaining the asset!)
     """
-
+    allowed_types = [UtilityLocation, RailroadLocation, RealEstateLocation]
+    if type(asset) not in allowed_types:
+        return -1
     if asset.owned_by != current_gameboard['bank']:
         logger.debug(asset.name+' is not owned by Bank! Resetting option_to_buy for player and returning code -1')
         player.reset_option_to_buy()

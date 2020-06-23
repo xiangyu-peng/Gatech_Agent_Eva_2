@@ -1,0 +1,88 @@
+2020-06-14 14:18:57,144:Hypothetical_simulator.logging_info:DEBUG:Find the novelty in 52 th game and will run novelty_state detection for every state now!
+2020-06-14 14:18:57,144:Hypothetical_simulator.logging_info:DEBUG:[['Mediterranean-Avenue', 'is priced at', ['60', '1499']], ['Reading-Railroad', 'is priced at', ['200', '1499']], ['Oriental-Avenue', 'is priced at', ['100', '1499']], ['Vermont-Avenue', 'is priced at', ['100', '1499']], ['Electric-Company', 'is priced at', ['150', '1499']]]
+2020-06-14 14:18:57,144:Hypothetical_simulator.logging_info:DEBUG:novelty is Mediterranean Avenue
+2020-06-14 14:18:57,144:Hypothetical_simulator.logging_info:DEBUG:novelty is Reading Railroad
+2020-06-14 14:18:57,144:Hypothetical_simulator.logging_info:DEBUG:novelty is Oriental Avenue
+2020-06-14 14:18:57,144:Hypothetical_simulator.logging_info:DEBUG:novelty is Vermont Avenue
+2020-06-14 14:18:57,144:Hypothetical_simulator.logging_info:DEBUG:novelty is Electric Company
+2020-06-14 14:19:21,227:Hypothetical_simulator.logging_info:DEBUG:Find the novelty in 53 th game and will run novelty_state detection for every state now!
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:[['Mediterranean-Avenue', 'is priced at', ['60', '1499']], ['Reading-Railroad', 'is priced at', ['200', '1499']], ['Oriental-Avenue', 'is priced at', ['100', '1499']], ['Vermont-Avenue', 'is priced at', ['100', '1499']], ['Electric-Company', 'is priced at', ['150', '1499']], ['Baltic-Avenue', 'is priced at', ['60', '1499']], ['Connecticut-Avenue', 'is priced at', ['120', '1499']], ['St.-Charles-Place', 'is priced at', ['140', '1499']]]
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:novelty is Mediterranean Avenue
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:novelty is Reading Railroad
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:novelty is Oriental Avenue
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:novelty is Vermont Avenue
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:novelty is Electric Company
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:novelty is Baltic Avenue
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:novelty is Connecticut Avenue
+2020-06-14 14:19:21,228:Hypothetical_simulator.logging_info:DEBUG:novelty is St. Charles Place
+2020-06-14 14:22:07,916:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.214
+2020-06-14 14:22:07,916:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:25:16,501:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.221
+2020-06-14 14:25:16,501:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:28:20,687:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.216
+2020-06-14 14:28:20,687:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:31:34,991:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.235
+2020-06-14 14:31:34,991:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:34:36,947:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.223
+2020-06-14 14:34:36,947:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:37:46,772:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.214
+2020-06-14 14:37:46,773:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:40:46,610:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.243
+2020-06-14 14:40:46,610:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:43:46,410:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.224
+2020-06-14 14:43:46,411:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:46:43,576:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.226
+2020-06-14 14:46:43,576:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:49:57,109:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.226
+2020-06-14 14:49:57,110:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:53:18,926:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.213
+2020-06-14 14:53:18,927:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:56:40,758:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.227
+2020-06-14 14:56:40,758:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 14:57:58,800:Hypothetical_simulator.logging_info:DEBUG:Step # :100 avg score : 2.626
+2020-06-14 14:57:58,800:Hypothetical_simulator.logging_info:DEBUG:Step # :100 avg winning : 0.26
+2020-06-14 14:57:58,800:Hypothetical_simulator.logging_info:DEBUG:Step # :100 avg diff : 0.02
+2020-06-14 15:00:03,179:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.207
+2020-06-14 15:00:03,180:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:03:29,114:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.211
+2020-06-14 15:03:29,114:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:06:42,255:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.209
+2020-06-14 15:06:42,255:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:10:08,752:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.208
+2020-06-14 15:10:08,753:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:13:30,215:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.217
+2020-06-14 15:13:30,215:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:16:43,250:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.213
+2020-06-14 15:16:43,250:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:20:01,882:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.209
+2020-06-14 15:20:01,882:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:23:40,859:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.205
+2020-06-14 15:23:40,859:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:27:06,384:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.21
+2020-06-14 15:27:06,385:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:30:28,829:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.198
+2020-06-14 15:30:28,829:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:33:39,165:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.195
+2020-06-14 15:33:39,165:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:36:56,827:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.196
+2020-06-14 15:36:56,827:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:40:18,301:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.202
+2020-06-14 15:40:18,301:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:43:25,646:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.201
+2020-06-14 15:43:25,646:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:46:40,874:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.204
+2020-06-14 15:46:40,874:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:49:54,885:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.181
+2020-06-14 15:49:54,886:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:53:15,305:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.194
+2020-06-14 15:53:15,305:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:56:33,284:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.203
+2020-06-14 15:56:33,284:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 15:59:40,890:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.216
+2020-06-14 15:59:40,890:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 16:02:54,437:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.199
+2020-06-14 16:02:54,437:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 16:05:59,108:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.198
+2020-06-14 16:05:59,108:Hypothetical_simulator.logging_info:DEBUG:=====================================
+2020-06-14 16:09:24,034:Hypothetical_simulator.logging_info:DEBUG:Avg winning rate is 0.2
+2020-06-14 16:09:24,034:Hypothetical_simulator.logging_info:DEBUG:=====================================

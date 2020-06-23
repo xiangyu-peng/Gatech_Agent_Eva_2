@@ -1,5 +1,6 @@
 from monopoly_simulator.action_choices import *
 from monopoly_simulator.location import RealEstateLocation, UtilityLocation, RailroadLocation
+from monopoly_simulator.bank import Bank
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info.player')
 
@@ -29,7 +30,7 @@ class Player(object):
 
 
         """
-        self.current_position = current_position # this is an integer. Use 'location_sequence' in the game schema to map position into an actual location
+        self.current_position = current_position if current_position else 0#this is an integer. Use 'location_sequence' in the game schema to map position into an actual location
         self.status = status
         self.has_get_out_of_jail_chance_card = has_get_out_of_jail_chance_card
         self.has_get_out_of_jail_community_chest_card = has_get_out_of_jail_community_chest_card
@@ -626,8 +627,13 @@ class Player(object):
             if len(self.mortgaged_assets) < len(self.assets):
                 allowable_actions.add(mortgage_property)
 
-        if self._option_to_buy is True:
-            allowable_actions.add(buy_property)
+        # if self._option_to_buy is True:
+        #     allowable_actions.add(buy_property)
+        #becky#
+        if type(current_gameboard['location_sequence'][self.current_position]) in [RealEstateLocation, UtilityLocation, RailroadLocation]:
+            if self.current_cash > current_gameboard['location_sequence'][self.current_position].price:
+                if type(current_gameboard['location_sequence'][self.current_position].owned_by) == Bank:
+                    allowable_actions.add(buy_property)
 
         return allowable_actions
 
@@ -946,49 +952,50 @@ class Player(object):
         :param asset: A purchaseable Location instance. If the player does not buy it, we will invoke auction proceedings.
         :return: None
         """
-        logger.debug('Executing _own_or_auction for '+self.player_name)
-
-        dec = self.agent.make_buy_property_decision(self, current_gameboard, asset) # your agent has to make a decision here
-        # add to game history
-        current_gameboard['history']['function'].append(self.agent.make_buy_property_decision)
-        params = dict()
-        params['asset'] = asset
-        params['player'] = self
-        params['current_gameboard'] = current_gameboard
-        current_gameboard['history']['param'].append(params)
-        current_gameboard['history']['return'].append(dec)
-
-        logger.debug(self.player_name+' decides to purchase? '+str(dec))
-        if dec is True:
-            asset.update_asset_owner(self, current_gameboard)
-            # add to game history
-            current_gameboard['history']['function'].append(asset.update_asset_owner)
-            params = dict()
-            params['self'] = asset
-            params['player'] = self
-            params['current_gameboard'] = current_gameboard
-            current_gameboard['history']['param'].append(params)
-            current_gameboard['history']['return'].append(None)
-
-            return
-        else:
-            logger.debug('Since '+self.player_name+' decided not to purchase, we are invoking auction proceedings for asset '+asset.name)
-            index_current_player = current_gameboard['players'].index(self)  # in players, find the index of the current player
-            starting_player_index = (index_current_player + 1) % len(current_gameboard['players'])  # the next player's index. this player will start the auction
-            # the auction function will automatically check whether the player is still active or not etc. We don't need to
-            # worry about conducting a valid auction in this function.
-            current_gameboard['bank'].auction(starting_player_index, current_gameboard, asset)
-            # add to game history
-            current_gameboard['history']['function'].append(current_gameboard['bank'].auction)
-            params = dict()
-            params['self'] = current_gameboard['bank']
-            params['starting_player_index'] = starting_player_index
-            params['current_gameboard'] = current_gameboard
-            params['asset'] = asset
-            current_gameboard['history']['param'].append(params)
-            current_gameboard['history']['return'].append(None)
-
-            return
+        # logger.debug('Executing _own_or_auction for '+self.player_name)
+        #
+        # dec = self.agent.make_buy_property_decision(self, current_gameboard, asset) # your agent has to make a decision here
+        # # add to game history
+        # current_gameboard['history']['function'].append(self.agent.make_buy_property_decision)
+        # params = dict()
+        # params['asset'] = asset
+        # params['player'] = self
+        # params['current_gameboard'] = current_gameboard
+        # current_gameboard['history']['param'].append(params)
+        # current_gameboard['history']['return'].append(dec)
+        #
+        # logger.debug(self.player_name+' decides to purchase? '+str(dec))
+        # if dec is True:
+        #     asset.update_asset_owner(self, current_gameboard)
+        #     # add to game history
+        #     current_gameboard['history']['function'].append(asset.update_asset_owner)
+        #     params = dict()
+        #     params['self'] = asset
+        #     params['player'] = self
+        #     params['current_gameboard'] = current_gameboard
+        #     current_gameboard['history']['param'].append(params)
+        #     current_gameboard['history']['return'].append(None)
+        #
+        #     return
+        # else:
+        #     logger.debug('Since '+self.player_name+' decided not to purchase, we are invoking auction proceedings for asset '+asset.name)
+        #     index_current_player = current_gameboard['players'].index(self)  # in players, find the index of the current player
+        #     starting_player_index = (index_current_player + 1) % len(current_gameboard['players'])  # the next player's index. this player will start the auction
+        #     # the auction function will automatically check whether the player is still active or not etc. We don't need to
+        #     # worry about conducting a valid auction in this function.
+        #     current_gameboard['bank'].auction(starting_player_index, current_gameboard, asset)
+        #     # add to game history
+        #     current_gameboard['history']['function'].append(current_gameboard['bank'].auction)
+        #     params = dict()
+        #     params['self'] = current_gameboard['bank']
+        #     params['starting_player_index'] = starting_player_index
+        #     params['current_gameboard'] = current_gameboard
+        #     params['asset'] = asset
+        #     current_gameboard['history']['param'].append(params)
+        #     current_gameboard['history']['return'].append(None)
+        #
+        #     return
+        return
 
     def _execute_action(self, action_to_execute, parameters, current_gameboard):
         """

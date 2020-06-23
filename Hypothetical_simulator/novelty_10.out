@@ -1,0 +1,2777 @@
+Remove monopoly_simple-v1 from registry
+1
+[]
+2
+[]
+3
+[]
+4
+[]
+5
+[]
+6
+[]
+7
+[]
+8
+[]
+9
+[]
+10
+[]
+11
+[]
+12
+[]
+13
+[]
+14
+[]
+15
+[]
+16
+[]
+17
+[]
+18
+[]
+19
+[]
+20
+[]
+21
+[]
+22
+[]
+23
+[]
+24
+[]
+25
+[]
+26
+[]
+27
+[]
+28
+[]
+29
+[]
+30
+[]
+31
+[]
+32
+[]
+33
+[]
+34
+[]
+35
+[]
+36
+[]
+37
+[]
+38
+[]
+39
+[]
+40
+[]
+41
+[]
+42
+[]
+43
+[]
+44
+[]
+45
+[]
+46
+[]
+47
+[]
+48
+[]
+49
+[]
+50
+[]
+51
+[]
+52
+[]
+53
+[1, 17, 18, 23, 24, 38, 39, 55, 57, 58, 63, 70, 111, 113, 114]
+Step # :140, avg score : 3.053
+Step # :140, avg winning : 0.305
+Step # :140, avg diff : 0.035
+Step # :140, avg pie : 0.000
+54
+[1, 12, 13, 18, 34]
+Step # :180, avg score : 3.104
+Step # :180, avg winning : 0.310
+Step # :180, avg diff : 0.050
+Step # :180, avg pie : 0.000
+55
+[1, 2, 48]
+Step # :200, avg score : 3.253
+Step # :200, avg winning : 0.325
+Step # :200, avg diff : 0.040
+Step # :200, avg pie : 0.000
+56
+[2, 31, 32, 41, 42, 45, 47, 49, 51, 52, 55, 56, 57, 61, 63, 69, 70, 71, 76, 80]
+Step # :390, avg score : 3.155
+Step # :390, avg winning : 0.315
+Step # :390, avg diff : 0.015
+Step # :390, avg pie : 0.000
+57
+[1, 35, 36, 53, 54, 59, 60, 62, 66, 67, 68, 72, 73, 77, 83, 93, 97]
+Step # :550, avg score : 3.354
+Step # :550, avg winning : 0.335
+Step # :550, avg diff : 0.040
+Step # :550, avg pie : 0.000
+58
+[1, 2, 32, 38, 39, 40, 44, 45, 51, 59]
+Step # :640, avg score : 3.157
+Step # :640, avg winning : 0.315
+Step # :640, avg diff : 0.050
+Step # :640, avg pie : 0.000
+59
+[2, 25, 26, 27, 33, 34, 36, 45, 46, 50, 51, 52, 56, 57, 58, 59, 61, 62, 66, 68]
+Step # :830, avg score : 3.209
+Step # :830, avg winning : 0.320
+Step # :830, avg diff : 0.055
+Step # :830, avg pie : 0.000
+60
+[1, 20, 28, 29, 36, 50, 53]
+Step # :890, avg score : 2.603
+Step # :890, avg winning : 0.260
+Step # :890, avg diff : 0.050
+Step # :890, avg pie : 0.000
+61
+[2, 16, 17, 20, 22, 23, 29, 36, 41, 42, 47, 48]
+Step # :1000, avg score : 2.854
+Step # :1000, avg winning : 0.285
+Step # :1000, avg diff : 0.005
+Step # :1000, avg pie : 0.000
+62
+[1, 19, 24, 25, 26, 31, 35, 36, 40, 41, 46, 47, 50, 51, 52, 56, 62, 71, 75, 76, 79, 81, 84, 85]
+Step # :1230, avg score : 3.255
+Step # :1230, avg winning : 0.325
+Step # :1230, avg diff : 0.025
+Step # :1230, avg pie : 0.000
+63
+[1, 16, 17, 19, 31, 32, 33, 37, 39, 40, 47, 48, 57, 58, 62]
+Step # :1370, avg score : 2.554
+Step # :1370, avg winning : 0.255
+Step # :1370, avg diff : 0.025
+Step # :1370, avg pie : 0.000
+64
+[1, 9, 10, 25, 32, 33, 43, 55]
+Step # :1440, avg score : 2.053
+Step # :1440, avg winning : 0.205
+Step # :1440, avg diff : 0.020
+Step # :1440, avg pie : 0.000
+65
+[2, 14, 20, 22, 26, 31, 36, 43, 48, 51, 52, 53, 58, 61, 63, 64, 67, 68, 69, 74, 78, 90, 94, 96, 108, 109]
+Step # :1690, avg score : 2.404
+Step # :1690, avg winning : 0.240
+Step # :1690, avg diff : 0.025
+Step # :1690, avg pie : 0.000
+66
+[1, 14, 15, 20, 21, 22, 27, 28, 32, 33, 34, 38, 39, 44, 48, 49]
+Step # :1840, avg score : 2.606
+Step # :1840, avg winning : 0.260
+Step # :1840, avg diff : 0.040
+Step # :1840, avg pie : 0.000
+67
+[1, 12, 13, 25, 26, 29, 30, 31, 35, 36, 37, 38, 54, 55, 56]
+Step # :1980, avg score : 2.554
+Step # :1980, avg winning : 0.255
+Step # :1980, avg diff : 0.030
+Step # :1980, avg pie : 0.000
+68
+[1, 2, 36, 38, 41, 42, 51, 55, 59, 63, 64, 65, 70, 71, 72, 73, 78, 79, 81, 82, 83, 96, 97, 100, 104, 106]
+Step # :2230, avg score : 2.204
+Step # :2230, avg winning : 0.220
+Step # :2230, avg diff : 0.030
+Step # :2230, avg pie : 0.000
+69
+[1, 18, 20, 35, 38, 40, 43, 44, 49, 60, 61, 62, 70, 71, 76, 81]
+Step # :2380, avg score : 1.755
+Step # :2380, avg winning : 0.175
+Step # :2380, avg diff : 0.015
+Step # :2380, avg pie : 0.000
+70
+[1]
+71
+[1, 12, 13, 19, 20, 27, 31, 36, 37, 42, 43, 50, 54, 55, 56, 57, 61, 63, 66, 67]
+Step # :2570, avg score : 2.106
+Step # :2570, avg winning : 0.210
+Step # :2570, avg diff : 0.020
+Step # :2570, avg pie : 0.000
+72
+[1, 16, 17, 18, 21, 22, 27, 28, 31, 32, 40, 45, 46, 47, 51, 52, 58, 64, 67, 72, 75, 79, 83, 84]
+Step # :2800, avg score : 2.655
+Step # :2800, avg winning : 0.265
+Step # :2800, avg diff : 0.005
+Step # :2800, avg pie : 0.000
+73
+[1, 38, 39, 55, 59, 64, 66, 69, 72]
+Step # :2880, avg score : 1.854
+Step # :2880, avg winning : 0.185
+Step # :2880, avg diff : 0.030
+Step # :2880, avg pie : 0.000
+74
+[2, 3, 7, 9, 17, 21, 27, 28, 29, 33, 34, 40, 50, 52]
+Step # :3010, avg score : 2.052
+Step # :3010, avg winning : 0.205
+Step # :3010, avg diff : 0.050
+Step # :3010, avg pie : 0.000
+75
+[1, 18, 19, 22]
+Step # :3040, avg score : 2.054
+Step # :3040, avg winning : 0.205
+Step # :3040, avg diff : 0.035
+Step # :3040, avg pie : 0.000
+76
+[1]
+77
+[1, 2, 16, 17, 18, 46, 48, 55, 60, 61, 62, 63, 67, 68]
+Step # :3170, avg score : 1.401
+Step # :3170, avg winning : 0.140
+Step # :3170, avg diff : 0.045
+Step # :3170, avg pie : 0.000
+78
+[1, 6, 9, 10, 11, 15, 16, 17, 25, 26, 28, 34, 45, 47, 48, 52, 53, 58, 59, 60, 64, 74]
+Step # :3380, avg score : 1.852
+Step # :3380, avg winning : 0.185
+Step # :3380, avg diff : 0.080
+Step # :3380, avg pie : 0.000
+79
+[2, 13, 14, 15, 27, 30, 32, 46, 47, 51, 52, 53, 57, 58, 64, 65, 70, 71, 72, 78, 82, 83, 88, 94, 100, 106]
+Step # :3630, avg score : 2.102
+Step # :3630, avg winning : 0.210
+Step # :3630, avg diff : 0.080
+Step # :3630, avg pie : 0.000
+80
+[2, 3, 44, 45, 49]
+Step # :3670, avg score : 1.703
+Step # :3670, avg winning : 0.170
+Step # :3670, avg diff : 0.035
+Step # :3670, avg pie : 0.000
+81
+[1, 3, 4, 11, 12, 13, 19, 20, 27, 33, 38, 42, 43, 55, 56, 59, 60, 61, 65, 77, 114]
+Step # :3870, avg score : 1.750
+Step # :3870, avg winning : 0.175
+Step # :3870, avg diff : 0.005
+Step # :3870, avg pie : 0.000
+82
+[2, 14, 15, 18, 23, 28, 29, 30, 33, 34, 35, 38, 41, 42, 48, 49, 50, 55, 60, 63, 64, 65, 70, 71, 72, 75, 79, 80, 81, 84, 85, 94, 98, 124, 125, 129, 130, 134, 135, 136, 137]
+Step # :4270, avg score : 2.104
+Step # :4270, avg winning : 0.210
+Step # :4270, avg diff : 0.020
+Step # :4270, avg pie : 0.000
+83
+[2, 13, 18, 19, 21, 26, 31, 32, 33, 35, 36, 41, 42, 46, 47, 68, 69, 71, 75, 76, 77, 79, 91, 97, 110]
+Step # :4510, avg score : 1.501
+Step # :4510, avg winning : 0.150
+Step # :4510, avg diff : 0.015
+Step # :4510, avg pie : 0.000
+84
+[2, 35, 36, 37, 41, 42, 46, 50, 54, 55, 97]
+Step # :4610, avg score : 1.802
+Step # :4610, avg winning : 0.180
+Step # :4610, avg diff : 0.015
+Step # :4610, avg pie : 0.000
+85
+[1, 3, 23, 27, 32, 37, 38, 42, 44, 47, 54, 57, 61, 62, 63, 64, 67, 72, 78, 79, 83, 84, 86]
+Step # :4830, avg score : 1.802
+Step # :4830, avg winning : 0.180
+Step # :4830, avg diff : 0.040
+Step # :4830, avg pie : 0.000
+86
+[2, 4, 5, 20, 22, 26, 27, 29, 52, 53, 61]
+Step # :4930, avg score : 2.202
+Step # :4930, avg winning : 0.220
+Step # :4930, avg diff : 0.035
+Step # :4930, avg pie : 0.000
+87
+[4, 22, 23, 28, 29, 33, 34, 35, 41, 54, 65, 70, 72, 76, 77, 82, 95, 132]
+Step # :5100, avg score : 1.751
+Step # :5100, avg winning : 0.175
+Step # :5100, avg diff : 0.045
+Step # :5100, avg pie : 0.000
+88
+[1, 32, 33]
+Step # :5120, avg score : 1.353
+Step # :5120, avg winning : 0.135
+Step # :5120, avg diff : 0.060
+Step # :5120, avg pie : 0.000
+89
+[1, 11, 22, 23, 26, 27, 28, 37, 38, 39, 56, 75, 77, 80, 81]
+Step # :5260, avg score : 1.755
+Step # :5260, avg winning : 0.175
+Step # :5260, avg diff : 0.040
+Step # :5260, avg pie : 0.000
+90
+[1, 2, 52, 53, 59, 62, 63, 66, 70, 71, 76, 77]
+Step # :5370, avg score : 1.855
+Step # :5370, avg winning : 0.185
+Step # :5370, avg diff : 0.040
+Step # :5370, avg pie : 0.000
+91
+[1]
+92
+[1, 17, 19, 20, 23, 24, 25, 31, 35, 36, 39, 41, 44, 45, 46, 52, 53, 56, 57]
+Step # :5550, avg score : 1.955
+Step # :5550, avg winning : 0.195
+Step # :5550, avg diff : 0.025
+Step # :5550, avg pie : 0.000
+93
+[2, 17, 18, 27, 28, 71, 73, 74]
+Step # :5620, avg score : 1.202
+Step # :5620, avg winning : 0.120
+Step # :5620, avg diff : 0.035
+Step # :5620, avg pie : 0.000
+94
+[1, 47, 50, 51, 63, 64]
+Step # :5670, avg score : 1.807
+Step # :5670, avg winning : 0.180
+Step # :5670, avg diff : 0.040
+Step # :5670, avg pie : 0.000
+95
+[1, 15, 19, 20, 22, 23, 26, 27, 28, 37, 39, 42, 43, 44, 49, 50]
+Step # :5820, avg score : 1.852
+Step # :5820, avg winning : 0.185
+Step # :5820, avg diff : 0.045
+Step # :5820, avg pie : 0.000
+96
+[2, 7, 8, 9, 12, 20, 25, 26, 31, 48, 49, 50, 52, 54, 55]
+Step # :5960, avg score : 2.104
+Step # :5960, avg winning : 0.210
+Step # :5960, avg diff : 0.040
+Step # :5960, avg pie : 0.000
+97
+[2, 24, 29, 30, 35, 40, 42, 43, 49, 50, 51, 55, 60, 71, 72, 77, 80, 92, 102, 121, 122, 123, 127, 128, 129, 133, 134, 135]
+Step # :6230, avg score : 1.250
+Step # :6230, avg winning : 0.125
+Step # :6230, avg diff : 0.035
+Step # :6230, avg pie : 0.000
+98
+[1, 44, 45, 49, 52, 53, 54, 57, 58, 59, 66, 70, 71, 76]
+Step # :6360, avg score : 2.054
+Step # :6360, avg winning : 0.205
+Step # :6360, avg diff : 0.035
+Step # :6360, avg pie : 0.000
+99
+[1, 6, 7, 8, 12, 13, 14, 17, 18, 20, 25, 32, 38, 43, 61, 62, 63, 69, 75, 87, 88, 103, 106, 110, 112, 116, 123, 124, 127, 128, 133, 135, 138]
+Step # :6680, avg score : 1.750
+Step # :6680, avg winning : 0.175
+Step # :6680, avg diff : 0.055
+Step # :6680, avg pie : 0.000
+100
+[1, 23, 24, 25, 26, 48, 49, 54, 58, 60, 64, 69, 82, 87, 88, 89, 91, 92, 98, 99, 103, 104, 105, 110]
+Step # :6910, avg score : 1.251
+Step # :6910, avg winning : 0.125
+Step # :6910, avg diff : 0.055
+Step # :6910, avg pie : 0.000
+101
+[1, 4, 14, 15, 16, 20, 21, 25, 26, 27, 31, 36, 42, 43, 48, 49, 50, 57, 58, 81]
+Step # :7100, avg score : 2.155
+Step # :7100, avg winning : 0.215
+Step # :7100, avg diff : 0.025
+Step # :7100, avg pie : 0.000
+102
+[1]
+103
+[1, 2, 5, 6, 9, 10, 11, 36, 38, 43, 44, 45, 49, 54, 55, 60, 61, 65, 70, 75, 76, 77, 83, 86, 87, 88, 93, 94]
+Step # :7370, avg score : 1.953
+Step # :7370, avg winning : 0.195
+Step # :7370, avg diff : 0.025
+Step # :7370, avg pie : 0.000
+104
+[1]
+105
+[2, 3, 7, 8, 9, 16, 17, 18, 22, 48, 62, 72, 74, 77, 82, 83]
+Step # :7520, avg score : 2.453
+Step # :7520, avg winning : 0.245
+Step # :7520, avg diff : 0.025
+Step # :7520, avg pie : 0.000
+106
+[3, 9, 10, 15, 16, 17, 23, 28, 31, 32, 38, 43, 44, 47, 87]
+Step # :7660, avg score : 2.353
+Step # :7660, avg winning : 0.235
+Step # :7660, avg diff : 0.045
+Step # :7660, avg pie : 0.000
+107
+[1, 37]
+Step # :7670, avg score : 2.605
+Step # :7670, avg winning : 0.260
+Step # :7670, avg diff : 0.050
+Step # :7670, avg pie : 0.000
+108
+[1, 20, 21, 23, 24, 27, 28, 34, 35]
+Step # :7750, avg score : 2.401
+Step # :7750, avg winning : 0.240
+Step # :7750, avg diff : 0.035
+Step # :7750, avg pie : 0.000
+109
+[3, 7, 8, 17, 18, 22, 23, 24, 26, 27, 37, 38, 41, 45, 48, 52, 53, 57, 58]
+Step # :7930, avg score : 2.702
+Step # :7930, avg winning : 0.270
+Step # :7930, avg diff : 0.060
+Step # :7930, avg pie : 0.000
+110
+[3, 12, 13, 14, 23, 40, 42, 43, 44, 47, 52, 53, 57, 58, 63, 68, 82, 100, 104, 116]
+Step # :8120, avg score : 2.554
+Step # :8120, avg winning : 0.255
+Step # :8120, avg diff : 0.035
+Step # :8120, avg pie : 0.000
+111
+[2, 3, 4, 7, 9, 14, 15, 18, 23, 26]
+Step # :8210, avg score : 2.603
+Step # :8210, avg winning : 0.260
+Step # :8210, avg diff : 0.035
+Step # :8210, avg pie : 0.000
+112
+[1, 53, 77]
+Step # :8230, avg score : 2.547
+Step # :8230, avg winning : 0.255
+Step # :8230, avg diff : 0.035
+Step # :8230, avg pie : 0.000
+113
+[1, 14, 17, 18, 23, 25, 28, 29, 30, 35, 36, 38, 43, 44, 50, 51, 52, 54, 55]
+Step # :8410, avg score : 2.503
+Step # :8410, avg winning : 0.250
+Step # :8410, avg diff : 0.060
+Step # :8410, avg pie : 0.000
+114
+[1, 14, 24, 28, 29, 30, 35, 40, 41, 42, 46, 48, 57, 60]
+Step # :8540, avg score : 2.603
+Step # :8540, avg winning : 0.260
+Step # :8540, avg diff : 0.055
+Step # :8540, avg pie : 0.000
+115
+[2, 9, 10, 14, 15, 16, 20, 21, 22, 28, 31, 35, 36, 41, 42, 47, 48, 49, 54]
+Step # :8720, avg score : 2.604
+Step # :8720, avg winning : 0.260
+Step # :8720, avg diff : 0.005
+Step # :8720, avg pie : 0.000
+116
+[1, 76]
+Step # :8730, avg score : 3.207
+Step # :8730, avg winning : 0.320
+Step # :8730, avg diff : 0.020
+Step # :8730, avg pie : 0.000
+117
+[2, 19, 20, 25, 30, 31, 35, 37, 38, 41, 43, 48, 49, 50]
+Step # :8860, avg score : 2.452
+Step # :8860, avg winning : 0.245
+Step # :8860, avg diff : 0.025
+Step # :8860, avg pie : 0.000
+118
+[4, 21, 22, 29, 30, 35, 37, 42]
+Step # :8930, avg score : 2.549
+Step # :8930, avg winning : 0.255
+Step # :8930, avg diff : 0.045
+Step # :8930, avg pie : 0.000
+119
+[1]
+120
+[3, 7, 8, 9, 12, 14, 20, 21, 22]
+Step # :9010, avg score : 2.100
+Step # :9010, avg winning : 0.210
+Step # :9010, avg diff : 0.080
+Step # :9010, avg pie : 0.000
+121
+[2, 40, 50, 76, 77, 78, 81, 82, 87, 88, 89, 90]
+Step # :9120, avg score : 2.855
+Step # :9120, avg winning : 0.285
+Step # :9120, avg diff : 0.040
+Step # :9120, avg pie : 0.000
+122
+[2, 40, 41, 52, 56, 59, 63, 66, 69, 70, 74, 79, 80, 86]
+Step # :9250, avg score : 2.602
+Step # :9250, avg winning : 0.260
+Step # :9250, avg diff : 0.035
+Step # :9250, avg pie : 0.000
+123
+[1, 51, 52, 53, 58, 62, 63, 65, 69, 77, 103]
+Step # :9350, avg score : 2.953
+Step # :9350, avg winning : 0.295
+Step # :9350, avg diff : 0.000
+Step # :9350, avg pie : 0.000
+124
+[2, 29, 30]
+Step # :9370, avg score : 2.701
+Step # :9370, avg winning : 0.270
+Step # :9370, avg diff : 0.035
+Step # :9370, avg pie : 0.000
+125
+[2, 3, 8, 9, 13, 14, 15, 35, 37, 40, 41, 42, 43, 47, 49, 54, 59, 64, 65, 66, 70, 76, 81]
+Step # :9590, avg score : 2.453
+Step # :9590, avg winning : 0.245
+Step # :9590, avg diff : 0.050
+Step # :9590, avg pie : 0.000
+126
+[1, 58, 59, 68, 69, 71]
+Step # :9640, avg score : 3.005
+Step # :9640, avg winning : 0.300
+Step # :9640, avg diff : 0.040
+Step # :9640, avg pie : 0.000
+127
+[2]
+128
+[1, 28, 29, 30, 34, 38, 39, 45, 49, 50, 60, 67, 71]
+Step # :9760, avg score : 2.951
+Step # :9760, avg winning : 0.295
+Step # :9760, avg diff : 0.020
+Step # :9760, avg pie : 0.000
+129
+[1, 32, 33, 34, 58, 59, 60]
+Step # :9820, avg score : 2.350
+Step # :9820, avg winning : 0.235
+Step # :9820, avg diff : 0.025
+Step # :9820, avg pie : 0.000
+130
+[2, 3, 6, 7, 8, 9, 13, 14, 15, 22, 26, 27, 32, 33, 34, 50]
+Step # :9970, avg score : 2.353
+Step # :9970, avg winning : 0.235
+Step # :9970, avg diff : 0.040
+Step # :9970, avg pie : 0.000
+131
+[1, 2]
+Step # :9980, avg score : 2.449
+Step # :9980, avg winning : 0.245
+Step # :9980, avg diff : 0.055
+Step # :9980, avg pie : 0.000
+132
+[2, 6, 10, 11, 12, 15, 16, 17, 22, 25, 27, 30, 31, 32, 35, 36, 37, 39, 40, 99, 100, 105, 106, 107, 108, 112, 113, 114, 115]
+Step # :10260, avg score : 2.502
+Step # :10260, avg winning : 0.250
+Step # :10260, avg diff : 0.030
+Step # :10260, avg pie : 0.000
+133
+[7, 8, 12, 18, 48]
+Step # :10300, avg score : 2.199
+Step # :10300, avg winning : 0.220
+Step # :10300, avg diff : 0.045
+Step # :10300, avg pie : 0.000
+134
+[1]
+135
+[1, 32, 34, 39, 42, 43, 44, 51, 53, 56, 60, 61, 67, 73, 74, 79, 107]
+Step # :10460, avg score : 2.648
+Step # :10460, avg winning : 0.265
+Step # :10460, avg diff : 0.010
+Step # :10460, avg pie : 0.000
+136
+[1, 37, 38, 39, 43, 44, 45, 55, 60, 61, 71, 72, 73, 81, 93, 94, 98, 133, 179, 187, 190, 191, 203, 208]
+Step # :10690, avg score : 3.104
+Step # :10690, avg winning : 0.310
+Step # :10690, avg diff : 0.030
+Step # :10690, avg pie : 0.000
+137
+[1, 23, 24, 25, 29, 33, 34, 51, 62, 69, 74, 81, 98, 99, 101, 109, 110]
+Step # :10850, avg score : 2.951
+Step # :10850, avg winning : 0.295
+Step # :10850, avg diff : 0.030
+Step # :10850, avg pie : 0.000
+138
+[1, 2, 21, 22, 23, 24, 28, 29, 30]
+Step # :10930, avg score : 2.849
+Step # :10930, avg winning : 0.285
+Step # :10930, avg diff : 0.035
+Step # :10930, avg pie : 0.000
+139
+[1, 34, 36, 44, 45, 46, 51, 53, 58, 59, 65]
+Step # :11030, avg score : 2.753
+Step # :11030, avg winning : 0.275
+Step # :11030, avg diff : 0.030
+Step # :11030, avg pie : 0.000
+140
+[2, 6, 7, 11, 12, 13, 16, 20, 25, 26, 32]
+Step # :11130, avg score : 2.601
+Step # :11130, avg winning : 0.260
+Step # :11130, avg diff : 0.045
+Step # :11130, avg pie : 0.000
+141
+[1, 36, 37, 38, 44]
+Step # :11170, avg score : 3.000
+Step # :11170, avg winning : 0.300
+Step # :11170, avg diff : 0.030
+Step # :11170, avg pie : 0.000
+142
+[2, 37, 38]
+Step # :11190, avg score : 2.699
+Step # :11190, avg winning : 0.270
+Step # :11190, avg diff : 0.065
+Step # :11190, avg pie : 0.000
+143
+[1, 28, 30, 35, 51, 71, 76, 77, 82, 83]
+Step # :11280, avg score : 2.402
+Step # :11280, avg winning : 0.240
+Step # :11280, avg diff : 0.045
+Step # :11280, avg pie : 0.000
+144
+[1, 37, 38, 42, 43, 44, 47, 48, 54, 56, 60, 61, 67, 70, 72, 73, 82, 94, 95]
+Step # :11460, avg score : 2.949
+Step # :11460, avg winning : 0.295
+Step # :11460, avg diff : 0.035
+Step # :11460, avg pie : 0.000
+145
+[1, 2]
+Step # :11470, avg score : 2.250
+Step # :11470, avg winning : 0.225
+Step # :11470, avg diff : 0.055
+Step # :11470, avg pie : 0.000
+146
+[1, 31, 32, 35, 37]
+Step # :11510, avg score : 2.549
+Step # :11510, avg winning : 0.255
+Step # :11510, avg diff : 0.075
+Step # :11510, avg pie : 0.000
+147
+[1, 23, 24, 28, 29, 34, 35, 36, 40, 42, 43, 50, 61, 69, 70, 72, 76, 77, 78, 81, 82, 87, 89, 107]
+Step # :11740, avg score : 2.448
+Step # :11740, avg winning : 0.245
+Step # :11740, avg diff : 0.030
+Step # :11740, avg pie : 0.000
+148
+[1, 15, 16, 19, 21, 22, 24, 25, 30, 36, 52, 53, 54, 58, 67, 81, 85, 86, 90, 91, 94]
+Step # :11940, avg score : 2.749
+Step # :11940, avg winning : 0.275
+Step # :11940, avg diff : 0.045
+Step # :11940, avg pie : 0.000
+149
+[2, 28, 29, 33, 34, 53, 64, 74, 75]
+Step # :12020, avg score : 3.049
+Step # :12020, avg winning : 0.305
+Step # :12020, avg diff : 0.040
+Step # :12020, avg pie : 0.000
+150
+[1, 2, 18, 19]
+Step # :12050, avg score : 2.701
+Step # :12050, avg winning : 0.270
+Step # :12050, avg diff : 0.015
+Step # :12050, avg pie : 0.000
+151
+[2, 44, 45, 51, 52, 53, 56, 58, 59, 62, 63, 71, 72, 74]
+Step # :12180, avg score : 2.851
+Step # :12180, avg winning : 0.285
+Step # :12180, avg diff : 0.030
+Step # :12180, avg pie : 0.000
+152
+[2, 52, 53, 58, 61, 63, 68, 70]
+Step # :12250, avg score : 3.401
+Step # :12250, avg winning : 0.340
+Step # :12250, avg diff : 0.020
+Step # :12250, avg pie : 0.000
+153
+[1]
+154
+[1, 32, 33, 34, 37, 38, 39, 45, 56]
+Step # :12330, avg score : 2.550
+Step # :12330, avg winning : 0.255
+Step # :12330, avg diff : 0.030
+Step # :12330, avg pie : 0.000
+155
+[1, 48, 49, 50, 54, 60, 61, 64, 65, 80, 81]
+Step # :12430, avg score : 2.347
+Step # :12430, avg winning : 0.235
+Step # :12430, avg diff : 0.035
+Step # :12430, avg pie : 0.000
+156
+[1, 7, 8, 9, 45, 51]
+Step # :12480, avg score : 2.649
+Step # :12480, avg winning : 0.265
+Step # :12480, avg diff : 0.050
+Step # :12480, avg pie : 0.000
+157
+[1, 12, 14, 18, 19, 20, 29, 30, 34, 35, 36, 51]
+Step # :12590, avg score : 2.399
+Step # :12590, avg winning : 0.240
+Step # :12590, avg diff : 0.050
+Step # :12590, avg pie : 0.000
+158
+[2, 3, 5, 6, 11, 21, 23, 42, 50, 51, 52, 63, 64, 69, 70, 74]
+Step # :12740, avg score : 2.899
+Step # :12740, avg winning : 0.290
+Step # :12740, avg diff : 0.030
+Step # :12740, avg pie : 0.000
+159
+[1, 2]
+Step # :12750, avg score : 2.449
+Step # :12750, avg winning : 0.245
+Step # :12750, avg diff : 0.045
+Step # :12750, avg pie : 0.000
+160
+[1, 2, 31, 33, 34, 37, 44, 51, 52, 53, 58, 60, 69, 70, 73]
+Step # :12890, avg score : 2.248
+Step # :12890, avg winning : 0.225
+Step # :12890, avg diff : 0.040
+Step # :12890, avg pie : 0.000
+161
+[1, 24, 25, 26, 60]
+Step # :12930, avg score : 2.599
+Step # :12930, avg winning : 0.260
+Step # :12930, avg diff : 0.015
+Step # :12930, avg pie : 0.000
+162
+[1]
+163
+[1, 27, 28, 58, 59, 63, 124]
+Step # :12990, avg score : 2.498
+Step # :12990, avg winning : 0.250
+Step # :12990, avg diff : 0.075
+Step # :12990, avg pie : 0.000
+164
+[1, 10, 11, 12, 20, 21, 23, 49, 50, 51, 55]
+Step # :13090, avg score : 2.551
+Step # :13090, avg winning : 0.255
+Step # :13090, avg diff : 0.050
+Step # :13090, avg pie : 0.000
+165
+[1, 23, 24, 25, 77]
+Step # :13130, avg score : 2.601
+Step # :13130, avg winning : 0.260
+Step # :13130, avg diff : 0.035
+Step # :13130, avg pie : 0.000
+166
+[2, 3, 6, 12, 17, 18, 19, 28, 29, 33, 34, 35]
+Step # :13240, avg score : 2.797
+Step # :13240, avg winning : 0.280
+Step # :13240, avg diff : 0.050
+Step # :13240, avg pie : 0.000
+167
+[1, 12, 13, 17, 18, 21, 22, 23, 26, 30, 31, 38, 39, 40, 41, 48, 51, 53, 54]
+Step # :13420, avg score : 3.350
+Step # :13420, avg winning : 0.335
+Step # :13420, avg diff : 0.055
+Step # :13420, avg pie : 0.000
+168
+[1, 11, 12, 23, 25, 29, 34, 35, 36]
+Step # :13500, avg score : 2.749
+Step # :13500, avg winning : 0.275
+Step # :13500, avg diff : 0.020
+Step # :13500, avg pie : 0.000
+169
+[1]
+170
+[1]
+171
+[1, 27, 28, 29]
+Step # :13530, avg score : 2.900
+Step # :13530, avg winning : 0.290
+Step # :13530, avg diff : 0.040
+Step # :13530, avg pie : 0.000
+172
+[2, 3, 8, 9, 13, 20, 21, 28, 29, 30, 35, 37, 67]
+Step # :13650, avg score : 2.448
+Step # :13650, avg winning : 0.245
+Step # :13650, avg diff : 0.025
+Step # :13650, avg pie : 0.000
+173
+[2, 6, 11, 12, 21, 26, 27, 28, 32, 33, 34, 38, 39]
+Step # :13770, avg score : 2.298
+Step # :13770, avg winning : 0.230
+Step # :13770, avg diff : 0.040
+Step # :13770, avg pie : 0.000
+174
+[1, 14, 22, 26, 27, 37, 38, 42, 43, 49, 54]
+Step # :13870, avg score : 2.597
+Step # :13870, avg winning : 0.260
+Step # :13870, avg diff : 0.065
+Step # :13870, avg pie : 0.000
+175
+[1]
+176
+[3, 10, 11, 12, 17, 22, 23, 27, 28, 32, 33, 34, 36, 37, 38, 44]
+Step # :14020, avg score : 2.447
+Step # :14020, avg winning : 0.245
+Step # :14020, avg diff : 0.030
+Step # :14020, avg pie : 0.000
+177
+[2, 18, 19, 24, 25, 26, 31]
+Step # :14080, avg score : 2.548
+Step # :14080, avg winning : 0.255
+Step # :14080, avg diff : 0.060
+Step # :14080, avg pie : 0.000
+178
+[1, 17, 18, 19, 20, 25, 28]
+Step # :14140, avg score : 2.447
+Step # :14140, avg winning : 0.245
+Step # :14140, avg diff : 0.100
+Step # :14140, avg pie : 0.000
+179
+[2, 30, 31, 42]
+Step # :14170, avg score : 2.347
+Step # :14170, avg winning : 0.235
+Step # :14170, avg diff : 0.055
+Step # :14170, avg pie : 0.000
+180
+[7, 8, 9, 32, 37, 38, 50, 56]
+Step # :14240, avg score : 2.497
+Step # :14240, avg winning : 0.250
+Step # :14240, avg diff : 0.030
+Step # :14240, avg pie : 0.000
+181
+[1]
+182
+[1]
+183
+[1]
+184
+[2, 23, 25, 28, 29, 32, 42, 43, 49, 53, 54, 57, 58, 63, 65, 69, 71]
+Step # :14400, avg score : 2.597
+Step # :14400, avg winning : 0.260
+Step # :14400, avg diff : 0.050
+Step # :14400, avg pie : 0.000
+185
+[1, 51, 52, 72, 91]
+Step # :14440, avg score : 2.647
+Step # :14440, avg winning : 0.265
+Step # :14440, avg diff : 0.070
+Step # :14440, avg pie : 0.000
+186
+[2, 3, 6, 7, 14, 19, 20, 25, 27, 28, 29, 33, 35, 36, 39, 40]
+Step # :14590, avg score : 2.648
+Step # :14590, avg winning : 0.265
+Step # :14590, avg diff : 0.040
+Step # :14590, avg pie : 0.000
+187
+[1]
+188
+[1]
+189
+[1, 19, 33, 36, 39, 40, 43, 45, 46, 50, 51, 56, 59, 60, 64, 65]
+Step # :14740, avg score : 2.748
+Step # :14740, avg winning : 0.275
+Step # :14740, avg diff : 0.060
+Step # :14740, avg pie : 0.000
+190
+[1]
+191
+[1, 11, 12, 13]
+Step # :14770, avg score : 2.396
+Step # :14770, avg winning : 0.240
+Step # :14770, avg diff : 0.050
+Step # :14770, avg pie : 0.000
+192
+[1, 26, 27, 32, 33, 35, 36, 38, 41, 42]
+Step # :14860, avg score : 2.447
+Step # :14860, avg winning : 0.245
+Step # :14860, avg diff : 0.070
+Step # :14860, avg pie : 0.000
+193
+[1]
+194
+[1, 25, 26, 27, 38, 39, 42, 43, 44, 45, 46, 51, 53, 57]
+Step # :14990, avg score : 2.597
+Step # :14990, avg winning : 0.260
+Step # :14990, avg diff : 0.055
+Step # :14990, avg pie : 0.000
+195
+[1, 34, 35, 36, 37, 47, 49, 50]
+Step # :15060, avg score : 2.496
+Step # :15060, avg winning : 0.250
+Step # :15060, avg diff : 0.060
+Step # :15060, avg pie : 0.000
+196
+[1, 26, 71, 72]
+Step # :15090, avg score : 2.197
+Step # :15090, avg winning : 0.220
+Step # :15090, avg diff : 0.060
+Step # :15090, avg pie : 0.000
+197
+[1, 18, 83]
+Step # :15110, avg score : 2.648
+Step # :15110, avg winning : 0.265
+Step # :15110, avg diff : 0.065
+Step # :15110, avg pie : 0.000
+198
+[1, 17, 18, 19, 23, 24, 25, 30, 31, 34, 35, 39, 40, 41]
+Step # :15240, avg score : 2.597
+Step # :15240, avg winning : 0.260
+Step # :15240, avg diff : 0.055
+Step # :15240, avg pie : 0.000
+199
+[1]
+200
+[3]
+201
+[1, 10, 51]
+Step # :15260, avg score : 2.646
+Step # :15260, avg winning : 0.265
+Step # :15260, avg diff : 0.045
+Step # :15260, avg pie : 0.000
+202
+[3, 6, 7, 10, 11, 12, 13, 20, 21, 26, 27, 28]
+Step # :15370, avg score : 2.347
+Step # :15370, avg winning : 0.235
+Step # :15370, avg diff : 0.045
+Step # :15370, avg pie : 0.000
+203
+[1]
+204
+[1]
+205
+[2, 6, 7, 11, 29, 36, 37, 40, 41, 42]
+Step # :15460, avg score : 2.697
+Step # :15460, avg winning : 0.270
+Step # :15460, avg diff : 0.065
+Step # :15460, avg pie : 0.000
+206
+[1, 41, 42, 48, 53, 54, 56, 57, 60, 64, 65, 67, 72, 75, 76, 80, 85, 86]
+Step # :15630, avg score : 2.446
+Step # :15630, avg winning : 0.245
+Step # :15630, avg diff : 0.045
+Step # :15630, avg pie : 0.000
+207
+[1, 14, 15, 54, 55, 56, 60, 61, 65, 66]
+Step # :15720, avg score : 2.597
+Step # :15720, avg winning : 0.260
+Step # :15720, avg diff : 0.050
+Step # :15720, avg pie : 0.000
+208
+[2, 43, 48, 49, 54, 58, 59, 60, 61, 65, 69, 74, 75, 81, 82, 86, 87, 88, 89, 91, 93, 99, 100, 104, 122, 123, 128, 129]
+Step # :15990, avg score : 2.497
+Step # :15990, avg winning : 0.250
+Step # :15990, avg diff : 0.050
+Step # :15990, avg pie : 0.000
+209
+[1, 24]
+Step # :16000, avg score : 2.597
+Step # :16000, avg winning : 0.260
+Step # :16000, avg diff : 0.080
+Step # :16000, avg pie : 0.000
+210
+[1, 42, 43, 44, 49, 50]
+Step # :16050, avg score : 2.447
+Step # :16050, avg winning : 0.245
+Step # :16050, avg diff : 0.055
+Step # :16050, avg pie : 0.000
+211
+[1, 17, 18, 21, 22, 23, 24, 28, 29, 30, 33, 34, 35, 44, 46, 47]
+Step # :16200, avg score : 2.597
+Step # :16200, avg winning : 0.260
+Step # :16200, avg diff : 0.055
+Step # :16200, avg pie : 0.000
+212
+[1, 12, 14, 17, 18, 24, 25, 28, 46, 48, 52, 53]
+Step # :16310, avg score : 2.597
+Step # :16310, avg winning : 0.260
+Step # :16310, avg diff : 0.065
+Step # :16310, avg pie : 0.000
+213
+[2]
+214
+[12, 13, 14]
+Step # :16330, avg score : 2.748
+Step # :16330, avg winning : 0.275
+Step # :16330, avg diff : 0.060
+Step # :16330, avg pie : 0.000
+215
+[2, 6, 7, 8, 12, 36]
+Step # :16380, avg score : 2.847
+Step # :16380, avg winning : 0.285
+Step # :16380, avg diff : 0.060
+Step # :16380, avg pie : 0.000
+216
+[1]
+217
+[2, 3, 7, 8, 42, 53, 58, 60, 61, 66, 69, 70]
+Step # :16490, avg score : 2.648
+Step # :16490, avg winning : 0.265
+Step # :16490, avg diff : 0.090
+Step # :16490, avg pie : 0.000
+218
+[3, 4, 5, 7, 9, 46, 69, 70, 71, 78, 79, 84, 85, 88]
+Step # :16620, avg score : 2.296
+Step # :16620, avg winning : 0.230
+Step # :16620, avg diff : 0.045
+Step # :16620, avg pie : 0.000
+219
+[1, 30, 32, 33]
+Step # :16650, avg score : 2.345
+Step # :16650, avg winning : 0.235
+Step # :16650, avg diff : 0.065
+Step # :16650, avg pie : 0.000
+220
+[2, 5, 9, 10, 13, 14]
+Step # :16700, avg score : 2.448
+Step # :16700, avg winning : 0.245
+Step # :16700, avg diff : 0.070
+Step # :16700, avg pie : 0.000
+221
+[3, 48, 53, 59, 60, 74]
+Step # :16750, avg score : 2.446
+Step # :16750, avg winning : 0.245
+Step # :16750, avg diff : 0.060
+Step # :16750, avg pie : 0.000
+222
+[2, 42, 46, 47, 51, 52, 58]
+Step # :16810, avg score : 2.347
+Step # :16810, avg winning : 0.235
+Step # :16810, avg diff : 0.045
+Step # :16810, avg pie : 0.000
+223
+[1, 60]
+Step # :16820, avg score : 2.697
+Step # :16820, avg winning : 0.270
+Step # :16820, avg diff : 0.055
+Step # :16820, avg pie : 0.000
+224
+[2, 22, 35, 40, 41, 43, 44, 50, 52, 58, 60, 64, 65, 66, 67, 73, 79, 80]
+Step # :16990, avg score : 2.247
+Step # :16990, avg winning : 0.225
+Step # :16990, avg diff : 0.050
+Step # :16990, avg pie : 0.000
+225
+[1, 16, 17, 34, 35, 36, 40, 46, 56, 57, 58, 59]
+Step # :17100, avg score : 2.696
+Step # :17100, avg winning : 0.270
+Step # :17100, avg diff : 0.050
+Step # :17100, avg pie : 0.000
+226
+[1, 21, 22, 23, 50, 60, 61, 62, 63, 64, 69, 70, 73, 74]
+Step # :17230, avg score : 2.798
+Step # :17230, avg winning : 0.280
+Step # :17230, avg diff : 0.065
+Step # :17230, avg pie : 0.000
+227
+[1]
+228
+[1, 17, 18, 24, 33, 34, 50, 51, 52]
+Step # :17310, avg score : 2.447
+Step # :17310, avg winning : 0.245
+Step # :17310, avg diff : 0.065
+Step # :17310, avg pie : 0.000
+229
+[2, 21, 22, 25, 26, 27, 28, 42, 43]
+Step # :17390, avg score : 2.697
+Step # :17390, avg winning : 0.270
+Step # :17390, avg diff : 0.035
+Step # :17390, avg pie : 0.000
+230
+[1]
+231
+[1, 38, 40, 41, 45, 46, 52, 53]
+Step # :17460, avg score : 2.397
+Step # :17460, avg winning : 0.240
+Step # :17460, avg diff : 0.040
+Step # :17460, avg pie : 0.000
+232
+[2, 45, 46, 49, 52, 53, 57, 58, 63]
+Step # :17540, avg score : 2.647
+Step # :17540, avg winning : 0.265
+Step # :17540, avg diff : 0.060
+Step # :17540, avg pie : 0.000
+233
+[1, 21, 24, 29, 33, 34, 38, 51, 64, 65, 77, 82, 83, 86, 88, 91, 92, 94, 97, 99, 104, 106, 133]
+Step # :17760, avg score : 2.898
+Step # :17760, avg winning : 0.290
+Step # :17760, avg diff : 0.040
+Step # :17760, avg pie : 0.000
+234
+[3, 4, 7, 11, 12, 62, 63, 64, 65]
+Step # :17840, avg score : 2.897
+Step # :17840, avg winning : 0.290
+Step # :17840, avg diff : 0.035
+Step # :17840, avg pie : 0.000
+235
+[1, 47, 48, 49]
+Step # :17870, avg score : 2.547
+Step # :17870, avg winning : 0.255
+Step # :17870, avg diff : 0.080
+Step # :17870, avg pie : 0.000
+236
+[1, 48, 50, 51, 52, 55, 56, 60, 64, 66]
+Step # :17960, avg score : 2.397
+Step # :17960, avg winning : 0.240
+Step # :17960, avg diff : 0.070
+Step # :17960, avg pie : 0.000
+237
+[1, 11, 12, 18, 19, 20, 21, 24, 25, 27]
+Step # :18050, avg score : 2.747
+Step # :18050, avg winning : 0.275
+Step # :18050, avg diff : 0.060
+Step # :18050, avg pie : 0.000
+238
+[1, 26, 27, 28, 33, 38, 39, 58, 59, 67, 71, 72, 75]
+Step # :18170, avg score : 2.899
+Step # :18170, avg winning : 0.290
+Step # :18170, avg diff : 0.040
+Step # :18170, avg pie : 0.000
+239
+[1, 29, 55, 60, 61, 63, 71, 72, 75, 84, 96, 100, 118]
+Step # :18290, avg score : 2.346
+Step # :18290, avg winning : 0.235
+Step # :18290, avg diff : 0.065
+Step # :18290, avg pie : 0.000
+240
+[2, 28, 29, 30, 40, 42, 46, 47, 50, 54, 55, 56, 60, 61]
+Step # :18420, avg score : 2.748
+Step # :18420, avg winning : 0.275
+Step # :18420, avg diff : 0.050
+Step # :18420, avg pie : 0.000
+241
+[1, 29, 30, 49, 51, 61, 62, 70, 80, 81, 82, 86, 87, 92, 93]
+Step # :18560, avg score : 2.898
+Step # :18560, avg winning : 0.290
+Step # :18560, avg diff : 0.015
+Step # :18560, avg pie : 0.000
+242
+[1]
+243
+[1, 19]
+Step # :18570, avg score : 2.395
+Step # :18570, avg winning : 0.240
+Step # :18570, avg diff : 0.040
+Step # :18570, avg pie : 0.000
+244
+[1, 27, 33]
+Step # :18590, avg score : 2.599
+Step # :18590, avg winning : 0.260
+Step # :18590, avg diff : 0.060
+Step # :18590, avg pie : 0.000
+245
+[3, 7, 13, 14, 20, 28, 45, 46, 50, 51, 56, 68]
+Step # :18700, avg score : 2.347
+Step # :18700, avg winning : 0.235
+Step # :18700, avg diff : 0.060
+Step # :18700, avg pie : 0.000
+246
+[1, 58]
+Step # :18710, avg score : 2.597
+Step # :18710, avg winning : 0.260
+Step # :18710, avg diff : 0.090
+Step # :18710, avg pie : 0.000
+247
+[1, 15, 40, 41, 44, 45, 46, 50, 51, 57, 58, 59, 60, 64]
+Step # :18840, avg score : 2.548
+Step # :18840, avg winning : 0.255
+Step # :18840, avg diff : 0.055
+Step # :18840, avg pie : 0.000
+248
+[1]
+249
+[2, 24, 25, 30, 34]
+Step # :18880, avg score : 2.647
+Step # :18880, avg winning : 0.265
+Step # :18880, avg diff : 0.060
+Step # :18880, avg pie : 0.000
+250
+[2]
+251
+[2]
+252
+[1, 40, 41, 42, 56, 57]
+Step # :18930, avg score : 2.447
+Step # :18930, avg winning : 0.245
+Step # :18930, avg diff : 0.045
+Step # :18930, avg pie : 0.000
+253
+[1]
+254
+[1, 40, 42, 47, 49, 53, 60, 64, 73]
+Step # :19010, avg score : 2.497
+Step # :19010, avg winning : 0.250
+Step # :19010, avg diff : 0.090
+Step # :19010, avg pie : 0.000
+255
+[5]
+256
+[1, 17, 18, 21, 22, 23, 32, 33, 34, 37, 40, 41, 42, 43, 46, 47, 52, 54, 55, 62, 63, 68, 69]
+Step # :19230, avg score : 2.648
+Step # :19230, avg winning : 0.265
+Step # :19230, avg diff : 0.060
+Step # :19230, avg pie : 0.000
+257
+[1, 70, 72, 76, 77]
+Step # :19270, avg score : 2.597
+Step # :19270, avg winning : 0.260
+Step # :19270, avg diff : 0.055
+Step # :19270, avg pie : 0.000
+258
+[1, 19, 20, 24, 45, 46, 47, 56, 57, 58, 63]
+Step # :19370, avg score : 2.748
+Step # :19370, avg winning : 0.275
+Step # :19370, avg diff : 0.065
+Step # :19370, avg pie : 0.000
+259
+[4, 35]
+Step # :19380, avg score : 2.748
+Step # :19380, avg winning : 0.275
+Step # :19380, avg diff : 0.055
+Step # :19380, avg pie : 0.000
+260
+[1, 42, 43, 47, 51, 59]
+Step # :19430, avg score : 2.398
+Step # :19430, avg winning : 0.240
+Step # :19430, avg diff : 0.065
+Step # :19430, avg pie : 0.000
+261
+[1, 53, 54, 55, 61, 64, 66, 67, 81]
+Step # :19510, avg score : 2.647
+Step # :19510, avg winning : 0.265
+Step # :19510, avg diff : 0.040
+Step # :19510, avg pie : 0.000
+262
+[4, 7, 49, 55, 60]
+Step # :19550, avg score : 3.099
+Step # :19550, avg winning : 0.310
+Step # :19550, avg diff : 0.050
+Step # :19550, avg pie : 0.000
+263
+[3, 25, 30, 31, 34, 35, 36, 42, 43, 48, 54, 82, 87]
+Step # :19670, avg score : 2.347
+Step # :19670, avg winning : 0.235
+Step # :19670, avg diff : 0.050
+Step # :19670, avg pie : 0.000
+264
+[1, 28, 29, 31, 42, 43, 44, 52, 55, 56, 57, 63, 67, 68, 69, 74, 77, 87, 88, 93, 94, 98, 99, 101, 102]
+Step # :19910, avg score : 2.647
+Step # :19910, avg winning : 0.265
+Step # :19910, avg diff : 0.070
+Step # :19910, avg pie : 0.000
+265
+[1]
+266
+[1]
+267
+[1, 23, 24, 25, 28, 29, 34, 35, 36, 41, 42, 47, 51, 52, 53, 54, 59, 60, 61, 65]
+Step # :20100, avg score : 2.747
+Step # :20100, avg winning : 0.275
+Step # :20100, avg diff : 0.055
+Step # :20100, avg pie : 0.000
+268
+[2, 3, 7, 8, 16, 46, 47, 53]
+Step # :20170, avg score : 2.748
+Step # :20170, avg winning : 0.275
+Step # :20170, avg diff : 0.055
+Step # :20170, avg pie : 0.000
+269
+[2, 8, 37, 42, 47, 48, 53, 54, 55, 56, 61, 62]
+Step # :20280, avg score : 2.697
+Step # :20280, avg winning : 0.270
+Step # :20280, avg diff : 0.045
+Step # :20280, avg pie : 0.000
+270
+[1, 17, 18, 19]
+Step # :20310, avg score : 2.899
+Step # :20310, avg winning : 0.290
+Step # :20310, avg diff : 0.055
+Step # :20310, avg pie : 0.000
+271
+[1, 53, 54, 58, 61, 62, 74, 78, 79, 82, 84, 87, 94, 95, 99, 103, 104]
+Step # :20470, avg score : 2.598
+Step # :20470, avg winning : 0.260
+Step # :20470, avg diff : 0.055
+Step # :20470, avg pie : 0.000
+272
+[1, 47, 58, 77, 78, 79, 84, 85, 88, 91, 93, 101]
+Step # :20580, avg score : 2.748
+Step # :20580, avg winning : 0.275
+Step # :20580, avg diff : 0.060
+Step # :20580, avg pie : 0.000
+273
+[2, 11, 48, 50]
+Step # :20610, avg score : 2.699
+Step # :20610, avg winning : 0.270
+Step # :20610, avg diff : 0.065
+Step # :20610, avg pie : 0.000
+274
+[4, 50, 51]
+Step # :20630, avg score : 2.547
+Step # :20630, avg winning : 0.255
+Step # :20630, avg diff : 0.050
+Step # :20630, avg pie : 0.000
+275
+[1]
+276
+[1, 40, 41, 45, 46, 47, 51, 52, 55, 57, 62, 63, 67, 69]
+Step # :20760, avg score : 2.397
+Step # :20760, avg winning : 0.240
+Step # :20760, avg diff : 0.060
+Step # :20760, avg pie : 0.000
+277
+[1, 25, 29, 30, 45]
+Step # :20800, avg score : 2.748
+Step # :20800, avg winning : 0.275
+Step # :20800, avg diff : 0.055
+Step # :20800, avg pie : 0.000
+278
+[1, 31, 32, 39, 40, 46, 52, 58, 61, 62, 65]
+Step # :20900, avg score : 2.447
+Step # :20900, avg winning : 0.245
+Step # :20900, avg diff : 0.075
+Step # :20900, avg pie : 0.000
+279
+[1]
+280
+[1, 34, 42]
+Step # :20920, avg score : 2.648
+Step # :20920, avg winning : 0.265
+Step # :20920, avg diff : 0.025
+Step # :20920, avg pie : 0.000
+281
+[1]
+282
+[2, 47, 49, 52, 54, 57, 59, 70, 71, 72, 73, 76, 78, 92, 93, 100, 101, 104, 108, 128]
+Step # :21110, avg score : 2.597
+Step # :21110, avg winning : 0.260
+Step # :21110, avg diff : 0.040
+Step # :21110, avg pie : 0.000
+283
+[1]
+284
+[1, 6, 7, 28, 29, 30, 33, 34, 38, 39, 45, 46, 47, 53, 55, 58, 59, 60, 64]
+Step # :21290, avg score : 3.299
+Step # :21290, avg winning : 0.330
+Step # :21290, avg diff : 0.040
+Step # :21290, avg pie : 0.000
+285
+[1, 29, 31, 34, 39, 43, 53, 54]
+Step # :21360, avg score : 2.347
+Step # :21360, avg winning : 0.235
+Step # :21360, avg diff : 0.055
+Step # :21360, avg pie : 0.000
+286
+[3, 23, 40, 41, 42, 47, 49, 55, 59, 69, 74, 75]
+Step # :21470, avg score : 2.548
+Step # :21470, avg winning : 0.255
+Step # :21470, avg diff : 0.025
+Step # :21470, avg pie : 0.000
+287
+[1, 20, 35, 40, 41, 42, 43, 46, 48]
+Step # :21550, avg score : 2.899
+Step # :21550, avg winning : 0.290
+Step # :21550, avg diff : 0.020
+Step # :21550, avg pie : 0.000
+288
+[1, 33, 34, 36, 40, 41, 42, 46, 47, 51, 52, 57, 58, 63, 66]
+Step # :21690, avg score : 2.246
+Step # :21690, avg winning : 0.225
+Step # :21690, avg diff : 0.065
+Step # :21690, avg pie : 0.000
+289
+[1, 24, 30, 31, 46, 47]
+Step # :21740, avg score : 2.747
+Step # :21740, avg winning : 0.275
+Step # :21740, avg diff : 0.040
+Step # :21740, avg pie : 0.000
+290
+[1, 14, 19, 23, 24, 25, 29, 34, 35, 36, 37, 43, 44, 47, 48, 49, 50, 53, 55, 58, 64, 66, 69]
+Step # :21960, avg score : 2.547
+Step # :21960, avg winning : 0.255
+Step # :21960, avg diff : 0.035
+Step # :21960, avg pie : 0.000
+291
+[2, 6, 7, 8, 14, 15, 18, 19, 20, 24, 25, 29, 30, 33, 36, 51, 62, 64]
+Step # :22130, avg score : 2.696
+Step # :22130, avg winning : 0.270
+Step # :22130, avg diff : 0.055
+Step # :22130, avg pie : 0.000
+292
+[2, 17, 18, 29, 31]
+Step # :22170, avg score : 2.649
+Step # :22170, avg winning : 0.265
+Step # :22170, avg diff : 0.050
+Step # :22170, avg pie : 0.000
+293
+[3, 8, 9, 17, 19]
+Step # :22210, avg score : 2.851
+Step # :22210, avg winning : 0.285
+Step # :22210, avg diff : 0.080
+Step # :22210, avg pie : 0.000
+294
+[1, 31, 44]
+Step # :22230, avg score : 2.448
+Step # :22230, avg winning : 0.245
+Step # :22230, avg diff : 0.065
+Step # :22230, avg pie : 0.000
+295
+[1, 23, 30, 35, 36, 38, 42, 44]
+Step # :22300, avg score : 2.499
+Step # :22300, avg winning : 0.250
+Step # :22300, avg diff : 0.030
+Step # :22300, avg pie : 0.000
+296
+[1]
+297
+[1, 26, 40, 41, 42]
+Step # :22340, avg score : 2.297
+Step # :22340, avg winning : 0.230
+Step # :22340, avg diff : 0.050
+Step # :22340, avg pie : 0.000
+298
+[1, 25, 30, 31, 32, 33, 36, 37, 38, 42, 43, 46, 47, 49, 50, 55, 56]
+Step # :22500, avg score : 2.698
+Step # :22500, avg winning : 0.270
+Step # :22500, avg diff : 0.030
+Step # :22500, avg pie : 0.000
+299
+[1, 17, 19, 23, 26, 28, 29, 30, 34, 41, 58, 61, 67, 73]
+Step # :22630, avg score : 2.597
+Step # :22630, avg winning : 0.260
+Step # :22630, avg diff : 0.025
+Step # :22630, avg pie : 0.000
+300
+[1]
+301
+[1]
+302
+[1, 34, 35, 44]
+Step # :22660, avg score : 2.846
+Step # :22660, avg winning : 0.285
+Step # :22660, avg diff : 0.060
+Step # :22660, avg pie : 0.000
+303
+[1, 26, 27, 28, 33, 38, 39, 42, 43, 44, 53, 54, 55, 56, 61, 64, 68, 72, 74, 75, 80, 81, 82, 86, 87, 88, 93, 94]
+Step # :22930, avg score : 2.798
+Step # :22930, avg winning : 0.280
+Step # :22930, avg diff : 0.060
+Step # :22930, avg pie : 0.000
+304
+[1]
+305
+[1]
+306
+[1, 25, 26, 45, 46, 64, 68, 73, 74]
+Step # :23010, avg score : 2.748
+Step # :23010, avg winning : 0.275
+Step # :23010, avg diff : 0.030
+Step # :23010, avg pie : 0.000
+307
+[2, 19, 20, 24, 25, 26, 31, 32, 37, 38, 39, 43, 46, 49, 52, 70]
+Step # :23160, avg score : 2.497
+Step # :23160, avg winning : 0.250
+Step # :23160, avg diff : 0.065
+Step # :23160, avg pie : 0.000
+308
+[2, 7, 8, 9, 11, 17, 18, 21, 22]
+Step # :23240, avg score : 2.649
+Step # :23240, avg winning : 0.265
+Step # :23240, avg diff : 0.060
+Step # :23240, avg pie : 0.000
+309
+[2, 5, 47, 48, 52, 53, 56]
+Step # :23300, avg score : 2.449
+Step # :23300, avg winning : 0.245
+Step # :23300, avg diff : 0.045
+Step # :23300, avg pie : 0.000
+310
+[1]
+311
+[1]
+312
+[1, 31, 33, 38, 39, 44, 45, 49, 50, 51, 52, 56, 57]
+Step # :23420, avg score : 2.950
+Step # :23420, avg winning : 0.295
+Step # :23420, avg diff : 0.045
+Step # :23420, avg pie : 0.000
+313
+[2, 53, 54, 59]
+Step # :23450, avg score : 2.849
+Step # :23450, avg winning : 0.285
+Step # :23450, avg diff : 0.035
+Step # :23450, avg pie : 0.000
+314
+[2]
+315
+[1, 26, 27, 28, 32, 39, 40, 44, 53, 54, 62, 64]
+Step # :23560, avg score : 2.849
+Step # :23560, avg winning : 0.285
+Step # :23560, avg diff : 0.045
+Step # :23560, avg pie : 0.000
+316
+[8, 39]
+Step # :23570, avg score : 3.099
+Step # :23570, avg winning : 0.310
+Step # :23570, avg diff : 0.040
+Step # :23570, avg pie : 0.000
+317
+[1]
+318
+[2, 6, 10, 11, 14, 19, 20, 21, 55, 73]
+Step # :23660, avg score : 2.748
+Step # :23660, avg winning : 0.275
+Step # :23660, avg diff : 0.045
+Step # :23660, avg pie : 0.000
+319
+[1, 2, 29, 30, 31, 35, 41, 49, 50, 53, 54, 59, 70, 74, 94]
+Step # :23800, avg score : 2.850
+Step # :23800, avg winning : 0.285
+Step # :23800, avg diff : 0.045
+Step # :23800, avg pie : 0.000
+320
+[4]
+321
+[1, 27, 28, 29, 34, 35, 36]
+Step # :23860, avg score : 2.648
+Step # :23860, avg winning : 0.265
+Step # :23860, avg diff : 0.050
+Step # :23860, avg pie : 0.000
+322
+[1]
+323
+[1, 31, 32, 35, 39, 46, 48, 49, 52, 53, 54, 55, 58, 60, 73, 74, 77]
+Step # :24020, avg score : 2.447
+Step # :24020, avg winning : 0.245
+Step # :24020, avg diff : 0.055
+Step # :24020, avg pie : 0.000
+324
+[1, 40, 45, 50, 54, 55, 56, 60, 61, 64, 89, 94]
+Step # :24130, avg score : 2.549
+Step # :24130, avg winning : 0.255
+Step # :24130, avg diff : 0.050
+Step # :24130, avg pie : 0.000
+325
+[2, 3, 7, 8, 9, 13, 27, 31, 32, 37, 38, 39, 43, 56]
+Step # :24260, avg score : 2.699
+Step # :24260, avg winning : 0.270
+Step # :24260, avg diff : 0.030
+Step # :24260, avg pie : 0.000
+326
+[2, 14, 34, 37, 43, 44, 49, 50]
+Step # :24330, avg score : 2.998
+Step # :24330, avg winning : 0.300
+Step # :24330, avg diff : 0.060
+Step # :24330, avg pie : 0.000
+327
+[2]
+328
+[1, 5, 39, 40, 41, 47, 48, 52, 53, 58, 59, 66, 67, 75, 78, 79, 82, 85, 86, 90, 103, 109, 112, 113]
+Step # :24560, avg score : 2.195
+Step # :24560, avg winning : 0.220
+Step # :24560, avg diff : 0.015
+Step # :24560, avg pie : 0.000
+329
+[1]
+330
+[1, 2, 13, 15, 21, 24, 34, 36, 39, 46, 49, 51, 55]
+Step # :24680, avg score : 2.848
+Step # :24680, avg winning : 0.285
+Step # :24680, avg diff : 0.050
+Step # :24680, avg pie : 0.000
+331
+[1, 25, 35, 37, 42, 43, 44, 47, 48, 49, 55, 60, 61, 67, 85, 87]
+Step # :24830, avg score : 2.799
+Step # :24830, avg winning : 0.280
+Step # :24830, avg diff : 0.035
+Step # :24830, avg pie : 0.000
+332
+[1, 29, 30, 31, 36, 39, 40, 41, 42, 45, 46, 51, 54, 55, 59, 60, 61, 65, 69, 71, 72, 73, 76, 79, 86, 87]
+Step # :25080, avg score : 2.599
+Step # :25080, avg winning : 0.260
+Step # :25080, avg diff : 0.025
+Step # :25080, avg pie : 0.000
+333
+[1]
+334
+[1, 54, 56, 57, 66]
+Step # :25120, avg score : 2.548
+Step # :25120, avg winning : 0.255
+Step # :25120, avg diff : 0.055
+Step # :25120, avg pie : 0.000
+335
+[2]
+336
+[2, 34, 35, 63, 69, 70, 74, 75, 79, 83, 85, 90, 91, 92, 95, 138]
+Step # :25270, avg score : 2.296
+Step # :25270, avg winning : 0.230
+Step # :25270, avg diff : 0.060
+Step # :25270, avg pie : 0.000
+337
+[1]
+338
+[1, 51, 53, 54, 57, 58, 59, 63, 64, 67, 73, 77, 83, 88, 89, 93, 95]
+Step # :25430, avg score : 2.599
+Step # :25430, avg winning : 0.260
+Step # :25430, avg diff : 0.050
+Step # :25430, avg pie : 0.000
+339
+[1, 38, 39, 43, 44, 45, 51, 52, 76]
+Step # :25510, avg score : 2.749
+Step # :25510, avg winning : 0.275
+Step # :25510, avg diff : 0.090
+Step # :25510, avg pie : 0.000
+340
+[1, 24, 29, 30, 35, 36, 37, 42, 43, 48, 50, 52]
+Step # :25620, avg score : 2.998
+Step # :25620, avg winning : 0.300
+Step # :25620, avg diff : 0.055
+Step # :25620, avg pie : 0.000
+341
+[1, 22, 23, 28, 35, 36, 39, 45, 46, 50, 51, 56, 57, 58, 61, 67, 69, 72, 73, 79, 80, 82, 86, 87, 91]
+Step # :25860, avg score : 2.596
+Step # :25860, avg winning : 0.260
+Step # :25860, avg diff : 0.045
+Step # :25860, avg pie : 0.000
+342
+[1, 21, 22, 23, 32, 36, 37, 45, 46, 47, 61, 62, 67, 68, 73]
+Step # :26000, avg score : 2.447
+Step # :26000, avg winning : 0.245
+Step # :26000, avg diff : 0.030
+Step # :26000, avg pie : 0.000
+343
+[2, 7, 19, 20, 21, 25, 27, 31, 32, 36, 37, 42, 57, 58, 64]
+Step # :26140, avg score : 2.547
+Step # :26140, avg winning : 0.255
+Step # :26140, avg diff : 0.040
+Step # :26140, avg pie : 0.000
+344
+[1, 21, 25, 26, 27, 30, 31, 35, 39, 40, 44, 45, 46, 51, 54, 58, 59, 60, 64, 65, 70, 71, 75, 76, 85, 86, 87, 90, 91, 92, 94, 98, 99, 100, 104]
+Step # :26480, avg score : 2.297
+Step # :26480, avg winning : 0.230
+Step # :26480, avg diff : 0.050
+Step # :26480, avg pie : 0.000
+345
+[1, 21, 22, 23, 24, 25, 28, 31, 49, 50, 51, 55, 57]
+Step # :26600, avg score : 3.098
+Step # :26600, avg winning : 0.310
+Step # :26600, avg diff : 0.075
+Step # :26600, avg pie : 0.000
+346
+[1, 14, 15, 24, 28, 29, 39, 49, 50, 52, 54, 58, 62, 63, 67, 68, 69, 73, 74, 77, 79, 94, 104, 107, 110, 115]
+Step # :26850, avg score : 2.446
+Step # :26850, avg winning : 0.245
+Step # :26850, avg diff : 0.045
+Step # :26850, avg pie : 0.000
+347
+[2, 6, 9, 30, 33, 34]
+Step # :26900, avg score : 2.647
+Step # :26900, avg winning : 0.265
+Step # :26900, avg diff : 0.015
+Step # :26900, avg pie : 0.000
+348
+[2, 3, 6, 7, 8, 12, 41]
+Step # :26960, avg score : 2.696
+Step # :26960, avg winning : 0.270
+Step # :26960, avg diff : 0.045
+Step # :26960, avg pie : 0.000
+349
+[1]
+350
+[1]
+351
+[2, 42, 47, 53, 54]
+Step # :27000, avg score : 2.347
+Step # :27000, avg winning : 0.235
+Step # :27000, avg diff : 0.050
+Step # :27000, avg pie : 0.000
+352
+[1, 53, 55, 60, 62]
+Step # :27040, avg score : 2.544
+Step # :27040, avg winning : 0.255
+Step # :27040, avg diff : 0.045
+Step # :27040, avg pie : 0.000
+353
+[1, 18, 20, 25, 27, 30, 31, 32, 36, 37, 42, 48, 49, 56, 57]
+Step # :27180, avg score : 2.747
+Step # :27180, avg winning : 0.275
+Step # :27180, avg diff : 0.070
+Step # :27180, avg pie : 0.000
+354
+[2, 7, 9, 10]
+Step # :27210, avg score : 2.696
+Step # :27210, avg winning : 0.270
+Step # :27210, avg diff : 0.065
+Step # :27210, avg pie : 0.000
+355
+[1]
+356
+[1, 38, 46, 47, 51, 52]
+Step # :27260, avg score : 2.549
+Step # :27260, avg winning : 0.255
+Step # :27260, avg diff : 0.030
+Step # :27260, avg pie : 0.000
+357
+[1]
+358
+[1]
+359
+[1]
+360
+[1, 38, 45, 50, 54, 61, 62, 70, 71, 82, 83, 86, 89]
+Step # :27380, avg score : 2.600
+Step # :27380, avg winning : 0.260
+Step # :27380, avg diff : 0.045
+Step # :27380, avg pie : 0.000
+361
+[1, 18, 19, 20, 22, 23, 29]
+Step # :27440, avg score : 2.447
+Step # :27440, avg winning : 0.245
+Step # :27440, avg diff : 0.075
+Step # :27440, avg pie : 0.000
+362
+[1]
+363
+[1, 13, 14, 25, 26, 36, 37, 38, 45, 48, 53, 54, 55, 65]
+Step # :27570, avg score : 2.396
+Step # :27570, avg winning : 0.240
+Step # :27570, avg diff : 0.035
+Step # :27570, avg pie : 0.000
+364
+[1, 35, 36, 37, 41, 42, 47, 50, 55, 60]
+Step # :27660, avg score : 2.246
+Step # :27660, avg winning : 0.225
+Step # :27660, avg diff : 0.040
+Step # :27660, avg pie : 0.000
+365
+[2]
+366
+[1]
+367
+[3, 13, 20, 22, 24, 29, 31, 34, 35, 36, 37, 41, 46, 47, 50, 51, 52, 57, 59, 63, 64]
+Step # :27860, avg score : 2.496
+Step # :27860, avg winning : 0.250
+Step # :27860, avg diff : 0.070
+Step # :27860, avg pie : 0.000
+368
+[1, 24, 25, 28, 31, 38, 39, 44, 47, 59, 63, 64]
+Step # :27970, avg score : 2.298
+Step # :27970, avg winning : 0.230
+Step # :27970, avg diff : 0.055
+Step # :27970, avg pie : 0.000
+369
+[2, 5, 10, 11, 17, 18, 19, 22, 25, 26, 27, 37]
+Step # :28080, avg score : 2.848
+Step # :28080, avg winning : 0.285
+Step # :28080, avg diff : 0.055
+Step # :28080, avg pie : 0.000
+370
+[1, 2, 23, 24, 33, 34, 38, 40, 46, 47]
+Step # :28170, avg score : 2.699
+Step # :28170, avg winning : 0.270
+Step # :28170, avg diff : 0.070
+Step # :28170, avg pie : 0.000
+371
+[1]
+372
+[1, 24, 25, 26, 27, 32, 33, 34, 35, 39, 43, 49, 51, 54, 55, 60, 64, 65, 68, 69, 79, 81, 82, 86, 120, 125, 127, 130, 134, 135, 139, 141, 142, 143, 144]
+Step # :28510, avg score : 2.246
+Step # :28510, avg winning : 0.225
+Step # :28510, avg diff : 0.055
+Step # :28510, avg pie : 0.000
+373
+[6, 52, 64, 67]
+Step # :28540, avg score : 2.848
+Step # :28540, avg winning : 0.285
+Step # :28540, avg diff : 0.065
+Step # :28540, avg pie : 0.000
+374
+[1]
+375
+[2, 39, 44, 49, 50, 51, 56, 57, 58, 61, 64, 76, 80, 81, 84, 85, 86]
+Step # :28700, avg score : 2.545
+Step # :28700, avg winning : 0.255
+Step # :28700, avg diff : 0.045
+Step # :28700, avg pie : 0.000
+376
+[1, 23, 29, 30, 69, 70, 76, 80, 90, 96, 98, 99, 108, 109, 110]
+Step # :28840, avg score : 2.496
+Step # :28840, avg winning : 0.250
+Step # :28840, avg diff : 0.040
+Step # :28840, avg pie : 0.000
+377
+[1, 63, 65, 71, 74, 75, 76, 77, 78, 80, 101]
+Step # :28940, avg score : 2.749
+Step # :28940, avg winning : 0.275
+Step # :28940, avg diff : 0.050
+Step # :28940, avg pie : 0.000
+378
+[1, 17, 18, 19, 24, 25, 29, 30, 32, 38, 40]
+Step # :29040, avg score : 2.398
+Step # :29040, avg winning : 0.240
+Step # :29040, avg diff : 0.065
+Step # :29040, avg pie : 0.000
+379
+[1, 19, 27, 30, 31, 36, 37, 77, 81, 82, 83]
+Step # :29140, avg score : 2.598
+Step # :29140, avg winning : 0.260
+Step # :29140, avg diff : 0.045
+Step # :29140, avg pie : 0.000
+380
+[1, 2]
+Step # :29150, avg score : 2.445
+Step # :29150, avg winning : 0.245
+Step # :29150, avg diff : 0.060
+Step # :29150, avg pie : 0.000
+381
+[1, 38, 43, 47, 48, 53, 60, 64, 65, 70]
+Step # :29240, avg score : 2.398
+Step # :29240, avg winning : 0.240
+Step # :29240, avg diff : 0.050
+Step # :29240, avg pie : 0.000
+382
+[1, 17, 22, 23, 27, 28, 32, 33, 34, 38, 39, 40, 43, 47, 48, 51, 56, 57]
+Step # :29410, avg score : 2.297
+Step # :29410, avg winning : 0.230
+Step # :29410, avg diff : 0.050
+Step # :29410, avg pie : 0.000
+383
+[1, 22, 25, 27, 29, 31, 32, 35, 36, 37, 45, 95, 97, 102, 106, 110, 118, 119, 120, 121, 123, 135, 136, 139, 157, 167, 168]
+Step # :29670, avg score : 2.496
+Step # :29670, avg winning : 0.250
+Step # :29670, avg diff : 0.060
+Step # :29670, avg pie : 0.000
+384
+[1, 32, 34, 45, 46]
+Step # :29710, avg score : 2.195
+Step # :29710, avg winning : 0.220
+Step # :29710, avg diff : 0.045
+Step # :29710, avg pie : 0.000
+385
+[1, 2, 27, 28, 33, 35, 38, 39, 40, 41, 42, 64]
+Step # :29820, avg score : 2.646
+Step # :29820, avg winning : 0.265
+Step # :29820, avg diff : 0.045
+Step # :29820, avg pie : 0.000
+386
+[1, 45, 55, 61, 66, 67, 80, 81]
+Step # :29890, avg score : 2.550
+Step # :29890, avg winning : 0.255
+Step # :29890, avg diff : 0.045
+Step # :29890, avg pie : 0.000
+387
+[1, 32, 33, 38, 39, 40, 41, 44, 46, 51, 56, 58, 61, 63, 69, 70]
+Step # :30040, avg score : 2.495
+Step # :30040, avg winning : 0.250
+Step # :30040, avg diff : 0.020
+Step # :30040, avg pie : 0.000
+388
+[2, 6, 7, 11, 18, 20, 21, 24, 25, 28, 30]
+Step # :30140, avg score : 2.497
+Step # :30140, avg winning : 0.250
+Step # :30140, avg diff : 0.050
+Step # :30140, avg pie : 0.000
+389
+[1, 22, 30, 33, 41, 43, 49, 50, 51, 52, 59, 60, 61, 64, 66, 69]
+Step # :30290, avg score : 2.399
+Step # :30290, avg winning : 0.240
+Step # :30290, avg diff : 0.050
+Step # :30290, avg pie : 0.000
+390
+[1, 24, 28, 29, 62, 67, 69, 73, 79]
+Step # :30370, avg score : 2.345
+Step # :30370, avg winning : 0.235
+Step # :30370, avg diff : 0.040
+Step # :30370, avg pie : 0.000
+391
+[1, 5, 6, 7, 10, 12, 19, 20, 24, 25, 63]
+Step # :30470, avg score : 2.545
+Step # :30470, avg winning : 0.255
+Step # :30470, avg diff : 0.025
+Step # :30470, avg pie : 0.000
+392
+[1, 67, 68]
+Step # :30490, avg score : 2.145
+Step # :30490, avg winning : 0.215
+Step # :30490, avg diff : 0.040
+Step # :30490, avg pie : 0.000
+393
+[1]
+394
+[1, 2, 40, 41]
+Step # :30520, avg score : 2.597
+Step # :30520, avg winning : 0.260
+Step # :30520, avg diff : 0.050
+Step # :30520, avg pie : 0.000
+395
+[1, 41, 44, 49, 52, 54, 57, 58, 59, 64, 106, 107]
+Step # :30630, avg score : 2.546
+Step # :30630, avg winning : 0.255
+Step # :30630, avg diff : 0.050
+Step # :30630, avg pie : 0.000
+396
+[2]
+397
+[2, 3, 11, 14, 16, 17, 27, 33, 35, 37, 38, 65]
+Step # :30740, avg score : 2.748
+Step # :30740, avg winning : 0.275
+Step # :30740, avg diff : 0.060
+Step # :30740, avg pie : 0.000
+398
+[2, 3, 4, 7, 8, 11, 12, 13, 16, 17, 18, 21, 22, 23, 24, 28, 29, 30, 36, 37, 38, 43, 44, 45]
+Step # :30970, avg score : 2.396
+Step # :30970, avg winning : 0.240
+Step # :30970, avg diff : 0.050
+Step # :30970, avg pie : 0.000
+399
+[1, 19, 20, 23, 24, 25, 31, 34, 35, 36, 60, 61, 66, 67]
+Step # :31100, avg score : 2.296
+Step # :31100, avg winning : 0.230
+Step # :31100, avg diff : 0.060
+Step # :31100, avg pie : 0.000
+400
+[1, 29]
+Step # :31110, avg score : 2.297
+Step # :31110, avg winning : 0.230
+Step # :31110, avg diff : 0.040
+Step # :31110, avg pie : 0.000
+401
+[2]
+402
+[1, 2]
+Step # :31120, avg score : 2.445
+Step # :31120, avg winning : 0.245
+Step # :31120, avg diff : 0.050
+Step # :31120, avg pie : 0.000
+403
+[1, 36, 37, 42, 44, 48]
+Step # :31170, avg score : 2.546
+Step # :31170, avg winning : 0.255
+Step # :31170, avg diff : 0.045
+Step # :31170, avg pie : 0.000
+404
+[6, 7, 13, 17, 18, 19, 24]
+Step # :31230, avg score : 2.745
+Step # :31230, avg winning : 0.275
+Step # :31230, avg diff : 0.035
+Step # :31230, avg pie : 0.000
+405
+[1]
+406
+[1, 38, 40, 50, 51, 52, 57, 58, 61, 62, 78]
+Step # :31330, avg score : 2.547
+Step # :31330, avg winning : 0.255
+Step # :31330, avg diff : 0.035
+Step # :31330, avg pie : 0.000
+407
+[1]
+408
+[1, 7, 8]
+Step # :31350, avg score : 2.446
+Step # :31350, avg winning : 0.245
+Step # :31350, avg diff : 0.050
+Step # :31350, avg pie : 0.000
+409
+[1, 21]
+Step # :31360, avg score : 2.346
+Step # :31360, avg winning : 0.235
+Step # :31360, avg diff : 0.045
+Step # :31360, avg pie : 0.000
+410
+[1, 36, 37, 49, 53, 54]
+Step # :31410, avg score : 2.598
+Step # :31410, avg winning : 0.260
+Step # :31410, avg diff : 0.040
+Step # :31410, avg pie : 0.000
+411
+[1]
+412
+[1, 8, 9, 10, 14, 19, 20, 45]
+Step # :31480, avg score : 2.547
+Step # :31480, avg winning : 0.255
+Step # :31480, avg diff : 0.055
+Step # :31480, avg pie : 0.000
+413
+[1, 70, 73, 77, 78]
+Step # :31520, avg score : 2.297
+Step # :31520, avg winning : 0.230
+Step # :31520, avg diff : 0.055
+Step # :31520, avg pie : 0.000
+414
+[1, 40, 41]
+Step # :31540, avg score : 2.146
+Step # :31540, avg winning : 0.215
+Step # :31540, avg diff : 0.035
+Step # :31540, avg pie : 0.000
+415
+[2]
+416
+[2, 3, 4, 7, 8, 11, 12, 13, 17, 57]
+Step # :31630, avg score : 2.147
+Step # :31630, avg winning : 0.215
+Step # :31630, avg diff : 0.065
+Step # :31630, avg pie : 0.000
+417
+[1, 27, 28, 35, 36, 37, 65]
+Step # :31690, avg score : 2.548
+Step # :31690, avg winning : 0.255
+Step # :31690, avg diff : 0.045
+Step # :31690, avg pie : 0.000
+418
+[2]
+419
+[2, 3, 7, 64]
+Step # :31720, avg score : 2.547
+Step # :31720, avg winning : 0.255
+Step # :31720, avg diff : 0.075
+Step # :31720, avg pie : 0.000
+420
+[1, 28, 33, 35, 41, 42]
+Step # :31770, avg score : 2.197
+Step # :31770, avg winning : 0.220
+Step # :31770, avg diff : 0.045
+Step # :31770, avg pie : 0.000
+421
+[1, 14, 32, 34, 38, 39, 54]
+Step # :31830, avg score : 2.646
+Step # :31830, avg winning : 0.265
+Step # :31830, avg diff : 0.070
+Step # :31830, avg pie : 0.000
+422
+[2]
+423
+[1]
+424
+[1, 2, 24, 25]
+Step # :31860, avg score : 2.598
+Step # :31860, avg winning : 0.260
+Step # :31860, avg diff : 0.040
+Step # :31860, avg pie : 0.000
+425
+[2, 6, 7, 11, 15, 16, 20, 21, 25, 26]
+Step # :31950, avg score : 2.298
+Step # :31950, avg winning : 0.230
+Step # :31950, avg diff : 0.060
+Step # :31950, avg pie : 0.000
+426
+[1, 52, 54, 56, 61, 62, 64, 65, 67, 76, 77, 80, 93, 100, 108, 113, 114, 116, 117, 118, 133, 158, 159]
+Step # :32170, avg score : 1.994
+Step # :32170, avg winning : 0.200
+Step # :32170, avg diff : 0.080
+Step # :32170, avg pie : 0.000
+427
+[1, 2]
+Step # :32180, avg score : 2.546
+Step # :32180, avg winning : 0.255
+Step # :32180, avg diff : 0.040
+Step # :32180, avg pie : 0.000
+428
+[1, 26]
+Step # :32190, avg score : 2.296
+Step # :32190, avg winning : 0.230
+Step # :32190, avg diff : 0.045
+Step # :32190, avg pie : 0.000
+429
+[2, 3, 6, 8, 9, 11, 15, 16, 19, 20, 23, 24, 25, 51]
+Step # :32320, avg score : 2.598
+Step # :32320, avg winning : 0.260
+Step # :32320, avg diff : 0.035
+Step # :32320, avg pie : 0.000
+430
+[1, 31, 32, 33, 37, 50, 61, 62, 74, 109]
+Step # :32410, avg score : 2.196
+Step # :32410, avg winning : 0.220
+Step # :32410, avg diff : 0.015
+Step # :32410, avg pie : 0.000
+431
+[2, 6, 24, 25, 26, 30, 31, 33, 40, 41, 45, 48, 51, 53, 57, 59]
+Step # :32560, avg score : 2.646
+Step # :32560, avg winning : 0.265
+Step # :32560, avg diff : 0.055
+Step # :32560, avg pie : 0.000
+432
+[1, 51, 52]
+Step # :32580, avg score : 2.195
+Step # :32580, avg winning : 0.220
+Step # :32580, avg diff : 0.045
+Step # :32580, avg pie : 0.000
+433
+[2, 3, 7, 8, 11, 13, 16, 17, 22, 23, 24, 54, 55, 60, 70]
+Step # :32720, avg score : 2.496
+Step # :32720, avg winning : 0.250
+Step # :32720, avg diff : 0.045
+Step # :32720, avg pie : 0.000
+434
+[2]
+435
+[1, 28, 37, 38, 45, 47, 52, 53, 56, 57, 62, 63, 64]
+Step # :32840, avg score : 2.547
+Step # :32840, avg winning : 0.255
+Step # :32840, avg diff : 0.045
+Step # :32840, avg pie : 0.000
+436
+[1]
+437
+[1, 42, 47, 49, 53, 71]
+Step # :32890, avg score : 2.447
+Step # :32890, avg winning : 0.245
+Step # :32890, avg diff : 0.055
+Step # :32890, avg pie : 0.000
+438
+[2, 8, 20, 70]
+Step # :32920, avg score : 2.746
+Step # :32920, avg winning : 0.275
+Step # :32920, avg diff : 0.050
+Step # :32920, avg pie : 0.000
+439
+[1]
+440
+[1]
+441
+[3, 12, 13, 54, 63, 64, 65]
+Step # :32980, avg score : 2.547
+Step # :32980, avg winning : 0.255
+Step # :32980, avg diff : 0.030
+Step # :32980, avg pie : 0.000
+442
+[1, 2, 19, 21, 24, 25, 66, 68, 71, 72, 73, 80]
+Step # :33090, avg score : 2.346
+Step # :33090, avg winning : 0.235
+Step # :33090, avg diff : 0.040
+Step # :33090, avg pie : 0.000
+443
+[1, 15, 16, 26, 27, 28, 34, 40, 41, 46, 81]
+Step # :33190, avg score : 2.698
+Step # :33190, avg winning : 0.270
+Step # :33190, avg diff : 0.020
+Step # :33190, avg pie : 0.000
+444
+[1, 25, 27, 31, 32, 33]
+Step # :33240, avg score : 2.547
+Step # :33240, avg winning : 0.255
+Step # :33240, avg diff : 0.040
+Step # :33240, avg pie : 0.000
+445
+[2, 3, 36, 37, 41, 42, 50, 51, 56, 61, 62, 95]
+Step # :33350, avg score : 2.698
+Step # :33350, avg winning : 0.270
+Step # :33350, avg diff : 0.020
+Step # :33350, avg pie : 0.000
+446
+[1, 2, 52, 53, 54, 57, 63, 64, 65, 68, 73]
+Step # :33450, avg score : 2.397
+Step # :33450, avg winning : 0.240
+Step # :33450, avg diff : 0.045
+Step # :33450, avg pie : 0.000
+447
+[1]
+448
+[2, 16, 17, 18, 23, 24, 25, 34, 35, 36, 43, 44, 45, 50, 51, 52, 56, 57, 63, 67, 68, 75, 76]
+Step # :33670, avg score : 2.697
+Step # :33670, avg winning : 0.270
+Step # :33670, avg diff : 0.060
+Step # :33670, avg pie : 0.000
+449
+[1]
+450
+[1, 47, 48, 49, 53, 54, 59, 60, 64, 65, 69, 70, 82]
+Step # :33790, avg score : 2.597
+Step # :33790, avg winning : 0.260
+Step # :33790, avg diff : 0.055
+Step # :33790, avg pie : 0.000
+451
+[2, 7, 12, 13, 43, 44, 47, 48, 49, 80]
+Step # :33880, avg score : 2.296
+Step # :33880, avg winning : 0.230
+Step # :33880, avg diff : 0.040
+Step # :33880, avg pie : 0.000
+452
+[1, 2]
+Step # :33890, avg score : 2.599
+Step # :33890, avg winning : 0.260
+Step # :33890, avg diff : 0.045
+Step # :33890, avg pie : 0.000
+453
+[1, 27, 28, 29, 44]
+Step # :33930, avg score : 2.647
+Step # :33930, avg winning : 0.265
+Step # :33930, avg diff : 0.035
+Step # :33930, avg pie : 0.000
+454
+[1, 16, 18, 21, 27, 28, 29, 66, 67, 74, 75, 79, 81, 85]
+Step # :34060, avg score : 2.346
+Step # :34060, avg winning : 0.235
+Step # :34060, avg diff : 0.040
+Step # :34060, avg pie : 0.000
+455
+[2, 64, 65]
+Step # :34080, avg score : 2.397
+Step # :34080, avg winning : 0.240
+Step # :34080, avg diff : 0.050
+Step # :34080, avg pie : 0.000
+456
+[1]
+457
+[2, 13, 14, 15, 20, 22, 33, 35]
+Step # :34150, avg score : 2.498
+Step # :34150, avg winning : 0.250
+Step # :34150, avg diff : 0.035
+Step # :34150, avg pie : 0.000
+458
+[3, 7, 8, 9]
+Step # :34180, avg score : 2.247
+Step # :34180, avg winning : 0.225
+Step # :34180, avg diff : 0.040
+Step # :34180, avg pie : 0.000
+459
+[1, 32, 33, 38, 39, 40, 44, 49]
+Step # :34250, avg score : 2.548
+Step # :34250, avg winning : 0.255
+Step # :34250, avg diff : 0.050
+Step # :34250, avg pie : 0.000
+460
+[1, 19, 21, 22, 56]
+Step # :34290, avg score : 2.496
+Step # :34290, avg winning : 0.250
+Step # :34290, avg diff : 0.045
+Step # :34290, avg pie : 0.000
+461
+[1, 18, 21, 55, 56, 57, 64, 67, 68, 69, 70, 74, 76]
+Step # :34410, avg score : 2.397
+Step # :34410, avg winning : 0.240
+Step # :34410, avg diff : 0.070
+Step # :34410, avg pie : 0.000
+462
+[2, 7, 8, 12, 13, 20, 21, 22, 25, 27, 30, 31, 32, 63]
+Step # :34540, avg score : 2.297
+Step # :34540, avg winning : 0.230
+Step # :34540, avg diff : 0.045
+Step # :34540, avg pie : 0.000
+463
+[1, 11, 12, 13, 17, 19, 20, 24, 25, 26, 30, 31, 32, 39, 42, 43, 44, 49, 50, 84]
+Step # :34730, avg score : 2.596
+Step # :34730, avg winning : 0.260
+Step # :34730, avg diff : 0.050
+Step # :34730, avg pie : 0.000
+464
+[2, 29, 30, 34, 35, 57, 58, 61, 62]
+Step # :34810, avg score : 2.600
+Step # :34810, avg winning : 0.260
+Step # :34810, avg diff : 0.025
+Step # :34810, avg pie : 0.000
+465
+[1, 3, 36, 39, 40, 41, 44, 45, 46, 49, 50, 51, 55, 56, 57, 61, 62, 65, 70, 71, 76, 77]
+Step # :35020, avg score : 2.699
+Step # :35020, avg winning : 0.270
+Step # :35020, avg diff : 0.050
+Step # :35020, avg pie : 0.000
+466
+[1]
+467
+[1, 23, 24, 46, 47, 51, 52, 58, 64, 65, 66, 70, 71, 72]
+Step # :35150, avg score : 2.499
+Step # :35150, avg winning : 0.250
+Step # :35150, avg diff : 0.050
+Step # :35150, avg pie : 0.000
+468
+[2, 28, 29, 30, 41, 42, 43, 46]
+Step # :35220, avg score : 2.547
+Step # :35220, avg winning : 0.255
+Step # :35220, avg diff : 0.045
+Step # :35220, avg pie : 0.000
+469
+[2, 5, 39, 43, 44, 49, 50, 51, 52]
+Step # :35300, avg score : 2.347
+Step # :35300, avg winning : 0.235
+Step # :35300, avg diff : 0.050
+Step # :35300, avg pie : 0.000
+470
+[1, 36, 37, 52, 55, 56, 60, 61, 62, 65, 66]
+Step # :35400, avg score : 2.650
+Step # :35400, avg winning : 0.265
+Step # :35400, avg diff : 0.060
+Step # :35400, avg pie : 0.000
+471
+[1, 62]
+Step # :35410, avg score : 2.799
+Step # :35410, avg winning : 0.280
+Step # :35410, avg diff : 0.065
+Step # :35410, avg pie : 0.000
+472
+[2, 14, 15, 16, 25, 33, 36, 37, 38, 45, 46, 48, 50, 53, 55]
+Step # :35550, avg score : 2.398
+Step # :35550, avg winning : 0.240
+Step # :35550, avg diff : 0.060
+Step # :35550, avg pie : 0.000
+473
+[1]
+474
+[1, 48, 81, 86]
+Step # :35580, avg score : 2.647
+Step # :35580, avg winning : 0.265
+Step # :35580, avg diff : 0.050
+Step # :35580, avg pie : 0.000
+475
+[1, 39, 40, 41, 45, 46, 51, 53]
+Step # :35650, avg score : 2.598
+Step # :35650, avg winning : 0.260
+Step # :35650, avg diff : 0.065
+Step # :35650, avg pie : 0.000
+476
+[1, 8, 9, 10, 17]
+Step # :35690, avg score : 2.646
+Step # :35690, avg winning : 0.265
+Step # :35690, avg diff : 0.040
+Step # :35690, avg pie : 0.000
+477
+[1, 2, 39, 54, 55, 60, 61, 64, 66, 69, 71, 72, 73, 75]
+Step # :35820, avg score : 2.396
+Step # :35820, avg winning : 0.240
+Step # :35820, avg diff : 0.055
+Step # :35820, avg pie : 0.000
+478
+[1, 2, 6, 7, 8, 12, 13]
+Step # :35880, avg score : 2.347
+Step # :35880, avg winning : 0.235
+Step # :35880, avg diff : 0.045
+Step # :35880, avg pie : 0.000
+479
+[2, 45, 49, 54, 55, 59, 60, 64, 65]
+Step # :35960, avg score : 2.346
+Step # :35960, avg winning : 0.235
+Step # :35960, avg diff : 0.065
+Step # :35960, avg pie : 0.000
+480
+[1, 33, 35, 39, 40]
+Step # :36000, avg score : 2.598
+Step # :36000, avg winning : 0.260
+Step # :36000, avg diff : 0.060
+Step # :36000, avg pie : 0.000
+481
+[1, 17, 18, 19, 22, 23, 24, 28]
+Step # :36070, avg score : 2.397
+Step # :36070, avg winning : 0.240
+Step # :36070, avg diff : 0.050
+Step # :36070, avg pie : 0.000
+482
+[1, 28, 41, 55, 56, 57]
+Step # :36120, avg score : 2.749
+Step # :36120, avg winning : 0.275
+Step # :36120, avg diff : 0.050
+Step # :36120, avg pie : 0.000
+483
+[2, 7, 9, 28, 29, 30, 34, 35, 36, 39, 40, 41, 42, 48, 49, 52, 54, 56, 57, 58, 63, 66, 68, 69]
+Step # :36350, avg score : 2.699
+Step # :36350, avg winning : 0.270
+Step # :36350, avg diff : 0.060
+Step # :36350, avg pie : 0.000
+484
+[1, 30]
+Step # :36360, avg score : 2.599
+Step # :36360, avg winning : 0.260
+Step # :36360, avg diff : 0.065
+Step # :36360, avg pie : 0.000
+485
+[1, 48, 49, 55, 60, 62, 63, 64, 70, 73, 74, 75, 81, 82, 89, 91]
+Step # :36510, avg score : 2.746
+Step # :36510, avg winning : 0.275
+Step # :36510, avg diff : 0.040
+Step # :36510, avg pie : 0.000
+486
+[1, 2]
+Step # :36520, avg score : 2.550
+Step # :36520, avg winning : 0.255
+Step # :36520, avg diff : 0.060
+Step # :36520, avg pie : 0.000
+487
+[1, 20, 23, 25, 42, 47, 48, 49, 55, 57, 60, 61, 64, 68, 69]
+Step # :36660, avg score : 2.700
+Step # :36660, avg winning : 0.270
+Step # :36660, avg diff : 0.030
+Step # :36660, avg pie : 0.000
+488
+[2, 3, 7, 10, 11, 15, 16, 27, 32, 33, 34, 35, 38, 40, 41, 60]
+Step # :36810, avg score : 2.598
+Step # :36810, avg winning : 0.260
+Step # :36810, avg diff : 0.020
+Step # :36810, avg pie : 0.000
+489
+[1, 18, 19, 20, 32, 33, 34, 39, 41, 42, 43]
+Step # :36910, avg score : 2.347
+Step # :36910, avg winning : 0.235
+Step # :36910, avg diff : 0.045
+Step # :36910, avg pie : 0.000
+490
+[1, 2, 18, 19, 20, 21, 26, 31, 32, 36, 37, 41]
+Step # :37020, avg score : 2.697
+Step # :37020, avg winning : 0.270
+Step # :37020, avg diff : 0.045
+Step # :37020, avg pie : 0.000
+491
+[2, 35, 36, 41]
+Step # :37050, avg score : 2.548
+Step # :37050, avg winning : 0.255
+Step # :37050, avg diff : 0.070
+Step # :37050, avg pie : 0.000
+492
+[1, 2, 47, 56, 57, 62, 63, 67, 68, 80]
+Step # :37140, avg score : 2.650
+Step # :37140, avg winning : 0.265
+Step # :37140, avg diff : 0.030
+Step # :37140, avg pie : 0.000
+493
+[2, 34, 35, 45, 46, 53, 54, 55, 65]
+Step # :37220, avg score : 2.849
+Step # :37220, avg winning : 0.285
+Step # :37220, avg diff : 0.045
+Step # :37220, avg pie : 0.000
+494
+[2]
+495
+[1, 7]
+Step # :37230, avg score : 2.748
+Step # :37230, avg winning : 0.275
+Step # :37230, avg diff : 0.060
+Step # :37230, avg pie : 0.000
+496
+[1, 21, 22]
+Step # :37250, avg score : 3.099
+Step # :37250, avg winning : 0.310
+Step # :37250, avg diff : 0.035
+Step # :37250, avg pie : 0.000
+497
+[1, 27, 73, 74, 79, 86, 88, 91, 92, 94, 117]
+Step # :37350, avg score : 2.549
+Step # :37350, avg winning : 0.255
+Step # :37350, avg diff : 0.040
+Step # :37350, avg pie : 0.000
+498
+[2, 23, 27, 28, 29, 30, 31, 34, 35, 42, 62, 63, 64]
+Step # :37470, avg score : 2.546
+Step # :37470, avg winning : 0.255
+Step # :37470, avg diff : 0.055
+Step # :37470, avg pie : 0.000
+499
+[1, 3, 7, 8, 9, 10, 16, 17, 21, 25, 28, 29, 31, 32, 48, 49, 50, 53, 56, 60, 63, 129]
+Step # :37680, avg score : 3.099
+Step # :37680, avg winning : 0.310
+Step # :37680, avg diff : 0.035
+Step # :37680, avg pie : 0.000
+500
+[1, 2, 25, 26, 36, 37]
+Step # :37730, avg score : 2.698
+Step # :37730, avg winning : 0.270
+Step # :37730, avg diff : 0.060
+Step # :37730, avg pie : 0.000
+501
+[3, 7, 8, 9, 12, 13, 14, 15]
+Step # :37800, avg score : 2.449
+Step # :37800, avg winning : 0.245
+Step # :37800, avg diff : 0.055
+Step # :37800, avg pie : 0.000
+502
+[1, 2]
+Step # :37810, avg score : 2.848
+Step # :37810, avg winning : 0.285
+Step # :37810, avg diff : 0.045
+Step # :37810, avg pie : 0.000
+503
+[1, 35, 39, 40, 43, 44, 55, 59, 60, 63, 68, 69, 73, 74, 75]
+Step # :37950, avg score : 2.796
+Step # :37950, avg winning : 0.280
+Step # :37950, avg diff : 0.050
+Step # :37950, avg pie : 0.000
+504
+[1]
+505
+[1, 18, 20, 26, 27, 28, 29, 34, 35, 39, 40, 41, 44, 48, 49, 58, 69, 70, 71, 75, 77, 81, 82, 83, 86, 94, 98, 105, 108, 113]
+Step # :38240, avg score : 2.850
+Step # :38240, avg winning : 0.285
+Step # :38240, avg diff : 0.055
+Step # :38240, avg pie : 0.000
+506
+[1, 3]
+Step # :38250, avg score : 2.299
+Step # :38250, avg winning : 0.230
+Step # :38250, avg diff : 0.065
+Step # :38250, avg pie : 0.000
+507
+[3, 7, 8, 13, 18, 19, 48]
+Step # :38310, avg score : 2.800
+Step # :38310, avg winning : 0.280
+Step # :38310, avg diff : 0.055
+Step # :38310, avg pie : 0.000
+508
+[1, 42]
+Step # :38320, avg score : 3.203
+Step # :38320, avg winning : 0.320
+Step # :38320, avg diff : 0.035
+Step # :38320, avg pie : 0.000
+509
+[2, 24, 29, 30, 31, 32, 35, 37, 42, 52, 54, 85, 87, 90, 91, 92, 98]
+Step # :38480, avg score : 2.749
+Step # :38480, avg winning : 0.275
+Step # :38480, avg diff : 0.030
+Step # :38480, avg pie : 0.000
+510
+[2, 5]
+Step # :38490, avg score : 2.949
+Step # :38490, avg winning : 0.295
+Step # :38490, avg diff : 0.060
+Step # :38490, avg pie : 0.000
+511
+[1, 2, 3, 4, 59, 62, 63, 68, 72, 73, 74]
+Step # :38590, avg score : 2.754
+Step # :38590, avg winning : 0.275
+Step # :38590, avg diff : 0.040
+Step # :38590, avg pie : 0.000
+512
+[1, 46, 48, 65, 66, 67, 108]
+Step # :38650, avg score : 2.500
+Step # :38650, avg winning : 0.250
+Step # :38650, avg diff : 0.060
+Step # :38650, avg pie : 0.000
+513
+[1, 29, 31, 32]
+Step # :38680, avg score : 2.749
+Step # :38680, avg winning : 0.275
+Step # :38680, avg diff : 0.055
+Step # :38680, avg pie : 0.000
+514
+[1, 2, 11, 12, 13, 31, 33, 45, 48, 50, 51, 57, 59, 73, 74, 81, 83, 88, 89, 92]
+Step # :38870, avg score : 3.051
+Step # :38870, avg winning : 0.305
+Step # :38870, avg diff : 0.045
+Step # :38870, avg pie : 0.000
+515
+[1, 40, 41, 45, 46]
+Step # :38910, avg score : 2.803
+Step # :38910, avg winning : 0.280
+Step # :38910, avg diff : 0.030
+Step # :38910, avg pie : 0.000
+516
+[1, 7, 8]
+Step # :38930, avg score : 2.751
+Step # :38930, avg winning : 0.275
+Step # :38930, avg diff : 0.055
+Step # :38930, avg pie : 0.000
+517
+[2, 6, 7]
+Step # :38950, avg score : 2.752
+Step # :38950, avg winning : 0.275
+Step # :38950, avg diff : 0.060
+Step # :38950, avg pie : 0.000
+518
+[2, 3, 8, 9, 33, 34, 35, 56, 57, 61, 63]
+Step # :39050, avg score : 3.504
+Step # :39050, avg winning : 0.350
+Step # :39050, avg diff : 0.085
+Step # :39050, avg pie : 0.000
+519
+[1, 22, 23, 24, 27, 28, 29, 39, 40, 41, 49, 62, 63, 64]
+Step # :39180, avg score : 2.804
+Step # :39180, avg winning : 0.280
+Step # :39180, avg diff : 0.070
+Step # :39180, avg pie : 0.000
+520
+[1]
+521
+[1, 48, 49, 53, 79]
+Step # :39220, avg score : 2.500
+Step # :39220, avg winning : 0.250
+Step # :39220, avg diff : 0.045
+Step # :39220, avg pie : 0.000
+522
+[1, 3, 7, 8, 12, 17]
+Step # :39270, avg score : 3.301
+Step # :39270, avg winning : 0.330
+Step # :39270, avg diff : 0.060
+Step # :39270, avg pie : 0.000
+523
+[2, 3, 4, 9, 12, 13, 17]
+Step # :39330, avg score : 3.653
+Step # :39330, avg winning : 0.365
+Step # :39330, avg diff : 0.030
+Step # :39330, avg pie : 0.000
+524
+[2, 6, 7, 11, 12, 13, 17, 18, 22, 23, 26, 27, 28, 33, 34, 37, 38]
+Step # :39490, avg score : 2.703
+Step # :39490, avg winning : 0.270
+Step # :39490, avg diff : 0.065
+Step # :39490, avg pie : 0.000
+525
+[1, 31, 33]
+Step # :39510, avg score : 3.404
+Step # :39510, avg winning : 0.340
+Step # :39510, avg diff : 0.050
+Step # :39510, avg pie : 0.000
+526
+[1]
+527
+[1, 2, 17, 18, 19, 22, 23, 24, 46, 47, 50, 54, 58, 59, 60, 67, 74]
+Step # :39670, avg score : 3.555
+Step # :39670, avg winning : 0.355
+Step # :39670, avg diff : 0.055
+Step # :39670, avg pie : 0.000
+528
+[1]
+529
+[1, 2, 31, 32, 36, 43, 44, 63, 65]
+Step # :39750, avg score : 3.153
+Step # :39750, avg winning : 0.315
+Step # :39750, avg diff : 0.025
+Step # :39750, avg pie : 0.000
+530
+[1, 2, 8, 9, 13, 18, 23, 24, 25, 26, 27, 31, 38, 39, 40]
+Step # :39890, avg score : 3.309
+Step # :39890, avg winning : 0.330
+Step # :39890, avg diff : 0.040
+Step # :39890, avg pie : 0.000
+531
+[2, 3, 5, 29, 30, 46, 53, 58, 62, 66, 67, 68, 72, 73, 77, 78]
+Step # :40040, avg score : 2.904
+Step # :40040, avg winning : 0.290
+Step # :40040, avg diff : 0.055
+Step # :40040, avg pie : 0.000
+532
+[1, 17, 19]
+Step # :40060, avg score : 2.956
+Step # :40060, avg winning : 0.295
+Step # :40060, avg diff : 0.050
+Step # :40060, avg pie : 0.000
+533
+[1, 2, 21, 30, 31, 35, 36, 39, 41]
+Step # :40140, avg score : 3.208
+Step # :40140, avg winning : 0.320
+Step # :40140, avg diff : 0.060
+Step # :40140, avg pie : 0.000
+534
+[2, 22, 23]
+Step # :40160, avg score : 3.254
+Step # :40160, avg winning : 0.325
+Step # :40160, avg diff : 0.025
+Step # :40160, avg pie : 0.000
+535
+[1, 2, 23, 24, 25, 26, 36, 37]
+Step # :40230, avg score : 2.857
+Step # :40230, avg winning : 0.285
+Step # :40230, avg diff : 0.055
+Step # :40230, avg pie : 0.000
+536
+[1]
+537
+[2, 6, 11, 12, 13, 16, 17, 18, 19, 28, 31, 34, 40, 43, 44]
+Step # :40370, avg score : 3.658
+Step # :40370, avg winning : 0.365
+Step # :40370, avg diff : 0.055
+Step # :40370, avg pie : 0.000
+538
+[1, 2]
+Step # :40380, avg score : 3.208
+Step # :40380, avg winning : 0.320
+Step # :40380, avg diff : 0.050
+Step # :40380, avg pie : 0.000
+539
+[1]
+540
+[2, 3, 56, 59, 60, 61]
+Step # :40430, avg score : 3.457
+Step # :40430, avg winning : 0.345
+Step # :40430, avg diff : 0.045
+Step # :40430, avg pie : 0.000
+541
+[1, 2]
+Step # :40440, avg score : 3.105
+Step # :40440, avg winning : 0.310
+Step # :40440, avg diff : 0.050
+Step # :40440, avg pie : 0.000
+542
+[2, 3, 7, 8, 11, 12, 18, 19, 22, 23, 24, 25, 29, 30, 31, 34, 36, 39, 45, 62, 63, 64, 70, 74]
+Step # :40670, avg score : 3.359
+Step # :40670, avg winning : 0.335
+Step # :40670, avg diff : 0.050
+Step # :40670, avg pie : 0.000
+543
+[1, 52, 53, 56, 57, 58, 62, 63]
+Step # :40740, avg score : 3.508
+Step # :40740, avg winning : 0.350
+Step # :40740, avg diff : 0.030
+Step # :40740, avg pie : 0.000
+544
+[1, 2, 3, 32, 35, 44, 71, 72, 73]
+Step # :40820, avg score : 3.607
+Step # :40820, avg winning : 0.360
+Step # :40820, avg diff : 0.055
+Step # :40820, avg pie : 0.000
+545
+[1, 2, 3, 8]
+Step # :40850, avg score : 3.807
+Step # :40850, avg winning : 0.380
+Step # :40850, avg diff : 0.060
+Step # :40850, avg pie : 0.000
+546
+[1, 2]
+Step # :40860, avg score : 3.407
+Step # :40860, avg winning : 0.340
+Step # :40860, avg diff : 0.030
+Step # :40860, avg pie : 0.000
+547
+[1, 2, 75]
+Step # :40880, avg score : 3.656
+Step # :40880, avg winning : 0.365
+Step # :40880, avg diff : 0.045
+Step # :40880, avg pie : 0.000
+548
+[1, 28, 29, 30, 62, 63]
+Step # :40930, avg score : 3.556
+Step # :40930, avg winning : 0.355
+Step # :40930, avg diff : 0.060
+Step # :40930, avg pie : 0.000
+549
+[1, 2]
+Step # :40940, avg score : 2.856
+Step # :40940, avg winning : 0.285
+Step # :40940, avg diff : 0.055
+Step # :40940, avg pie : 0.000
+550
+[1, 2]
+Step # :40950, avg score : 3.054
+Step # :40950, avg winning : 0.305
+Step # :40950, avg diff : 0.050
+Step # :40950, avg pie : 0.000
+551
+[1, 3, 6]
+Step # :40970, avg score : 3.006
+Step # :40970, avg winning : 0.300
+Step # :40970, avg diff : 0.030
+Step # :40970, avg pie : 0.000
+552
+[1, 2, 5, 31, 32, 33]
+Step # :41020, avg score : 3.506
+Step # :41020, avg winning : 0.350
+Step # :41020, avg diff : 0.055
+Step # :41020, avg pie : 0.000
+553
+[1, 29, 30, 33, 36, 38, 60, 61, 62, 65, 69, 71]
+Step # :41130, avg score : 3.455
+Step # :41130, avg winning : 0.345
+Step # :41130, avg diff : 0.045
+Step # :41130, avg pie : 0.000
+554
+[2, 47, 49]
+Step # :41150, avg score : 3.405
+Step # :41150, avg winning : 0.340
+Step # :41150, avg diff : 0.030
+Step # :41150, avg pie : 0.000
+555
+[2, 6, 7, 12, 13, 14, 18, 22, 28, 29, 33, 37, 38, 44, 48, 61, 62]
+Step # :41310, avg score : 3.758
+Step # :41310, avg winning : 0.375
+Step # :41310, avg diff : 0.040
+Step # :41310, avg pie : 0.000
+556
+[1, 2, 5, 6, 69, 70, 71, 75, 77, 84, 88, 89, 90, 131, 135, 136]
+Step # :41460, avg score : 3.253
+Step # :41460, avg winning : 0.325
+Step # :41460, avg diff : 0.040
+Step # :41460, avg pie : 0.000
+557
+[2, 3, 6, 7, 8, 12, 16, 17, 21, 22, 60]
+Traceback (most recent call last):
+  File "online_test.py", line 307, in <module>
+    hyp.online_testing()
+  File "online_test.py", line 204, in online_testing
+    #Update the agent
+  File "online_test.py", line 285, in offline_testing
+    seed=self.seed)
+  File "/media/becky/GNOME-p3/monopoly_simulator_background/evaluate_a2c.py", line 75, in test_v2
+    prob = model.actor(s)
+  File "/media/becky/GNOME-p3/monopoly_simulator_background/vanilla_A2C.py", line 37, in actor
+    x = F.relu(self.fc_1(x))
+  File "/home/becky/.local/lib/python3.7/site-packages/torch/nn/modules/module.py", line 541, in __call__
+    result = self.forward(*input, **kwargs)
+  File "/home/becky/.local/lib/python3.7/site-packages/torch/nn/modules/linear.py", line 87, in forward
+    return F.linear(input, self.weight, self.bias)
+  File "/home/becky/.local/lib/python3.7/site-packages/torch/nn/functional.py", line 1370, in linear
+    ret = torch.addmm(bias, input, weight.t())
+KeyboardInterrupt
