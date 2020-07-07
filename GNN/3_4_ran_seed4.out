@@ -1,0 +1,1106 @@
+None
+Remove monopoly_simple-v1 from registry
+Step # :1000, avg score : 0.213
+Step # :1000, avg winning : 0.193
+Step # :1000, avg diff : 0.025
+0.21346 0.193 0.025
+Step # :2000, avg score : 0.258
+Step # :2000, avg winning : 0.242
+Step # :2000, avg diff : 0.012
+0.25783 0.242 0.012
+Step # :3000, avg score : 0.295
+Step # :3000, avg winning : 0.278
+Step # :3000, avg diff : 0.017
+0.29541 0.278 0.017
+Step # :4000, avg score : 0.235
+Step # :4000, avg winning : 0.216
+Step # :4000, avg diff : 0.028
+0.23546 0.216 0.028
+Step # :5000, avg score : 0.291
+Step # :5000, avg winning : 0.271
+Step # :5000, avg diff : 0.024
+0.29118 0.271 0.024
+Step # :6000, avg score : 0.294
+Step # :6000, avg winning : 0.272
+Step # :6000, avg diff : 0.025
+0.29431 0.272 0.025
+Step # :7000, avg score : 0.335
+Step # :7000, avg winning : 0.313
+Step # :7000, avg diff : 0.019
+0.3351 0.313 0.019
+Step # :8000, avg score : 0.302
+Step # :8000, avg winning : 0.277
+Step # :8000, avg diff : 0.028
+0.30227 0.277 0.028
+Step # :9000, avg score : 0.309
+Step # :9000, avg winning : 0.284
+Step # :9000, avg diff : 0.019
+0.30943 0.284 0.019
+Step # :10000, avg score : 0.324
+Step # :10000, avg winning : 0.300
+Step # :10000, avg diff : 0.017
+0.32415 0.3 0.017
+Step # :11000, avg score : 0.346
+Step # :11000, avg winning : 0.317
+Step # :11000, avg diff : 0.029
+0.34627 0.317 0.029
+Step # :12000, avg score : 0.346
+Step # :12000, avg winning : 0.316
+Step # :12000, avg diff : 0.018
+0.34568 0.316 0.018
+Step # :13000, avg score : 0.357
+Step # :13000, avg winning : 0.326
+Step # :13000, avg diff : 0.020
+0.35713 0.326 0.02
+Step # :14000, avg score : 0.375
+Step # :14000, avg winning : 0.346
+Step # :14000, avg diff : 0.022
+0.37481 0.346 0.022
+Step # :15000, avg score : 0.377
+Step # :15000, avg winning : 0.355
+Step # :15000, avg diff : 0.012
+0.37725 0.355 0.012
+Step # :16000, avg score : 0.431
+Step # :16000, avg winning : 0.401
+Step # :16000, avg diff : 0.020
+0.4308 0.401 0.02
+Step # :17000, avg score : 0.414
+Step # :17000, avg winning : 0.383
+Step # :17000, avg diff : 0.014
+0.41421 0.383 0.014
+Step # :18000, avg score : 0.458
+Step # :18000, avg winning : 0.424
+Step # :18000, avg diff : 0.028
+0.45822 0.424 0.028
+Step # :19000, avg score : 0.449
+Step # :19000, avg winning : 0.418
+Step # :19000, avg diff : 0.018
+0.44944 0.418 0.018
+Step # :20000, avg score : 0.461
+Step # :20000, avg winning : 0.428
+Step # :20000, avg diff : 0.022
+0.46078 0.428 0.022
+Step # :21000, avg score : 0.465
+Step # :21000, avg winning : 0.430
+Step # :21000, avg diff : 0.020
+0.46475 0.43 0.02
+Step # :22000, avg score : 0.507
+Step # :22000, avg winning : 0.475
+Step # :22000, avg diff : 0.019
+0.5072 0.475 0.019
+Step # :23000, avg score : 0.468
+Step # :23000, avg winning : 0.432
+Step # :23000, avg diff : 0.004
+0.46825 0.432 0.004
+Step # :24000, avg score : 0.465
+Step # :24000, avg winning : 0.442
+Step # :24000, avg diff : 0.017
+0.4648 0.442 0.017
+Step # :25000, avg score : 0.505
+Step # :25000, avg winning : 0.469
+Step # :25000, avg diff : 0.028
+0.50546 0.469 0.028
+Step # :26000, avg score : 0.494
+Step # :26000, avg winning : 0.465
+Step # :26000, avg diff : 0.019
+0.49431 0.465 0.019
+Step # :27000, avg score : 0.468
+Step # :27000, avg winning : 0.449
+Step # :27000, avg diff : 0.013
+0.46811 0.449 0.013
+Step # :28000, avg score : 0.500
+Step # :28000, avg winning : 0.464
+Step # :28000, avg diff : 0.018
+0.50002 0.464 0.018
+Step # :29000, avg score : 0.482
+Step # :29000, avg winning : 0.447
+Step # :29000, avg diff : 0.020
+0.482 0.447 0.02
+Step # :30000, avg score : 0.500
+Step # :30000, avg winning : 0.466
+Step # :30000, avg diff : 0.022
+0.49992 0.466 0.022
+Step # :31000, avg score : 0.487
+Step # :31000, avg winning : 0.452
+Step # :31000, avg diff : 0.012
+0.48744 0.452 0.012
+Step # :32000, avg score : 0.492
+Step # :32000, avg winning : 0.454
+Step # :32000, avg diff : 0.029
+0.49198 0.454 0.029
+Step # :33000, avg score : 0.480
+Step # :33000, avg winning : 0.441
+Step # :33000, avg diff : 0.020
+0.47979 0.441 0.02
+Step # :34000, avg score : 0.503
+Step # :34000, avg winning : 0.474
+Step # :34000, avg diff : 0.014
+0.50332 0.474 0.014
+Step # :35000, avg score : 0.495
+Step # :35000, avg winning : 0.455
+Step # :35000, avg diff : 0.030
+0.49471 0.455 0.03
+Step # :36000, avg score : 0.508
+Step # :36000, avg winning : 0.471
+Step # :36000, avg diff : 0.018
+0.50761 0.471 0.018
+Step # :37000, avg score : 0.359
+Step # :37000, avg winning : 0.358
+Step # :37000, avg diff : 0.015
+0.35865 0.358 0.015
+Step # :38000, avg score : 0.497
+Step # :38000, avg winning : 0.461
+Step # :38000, avg diff : 0.016
+0.49704 0.461 0.016
+Step # :39000, avg score : 0.481
+Step # :39000, avg winning : 0.453
+Step # :39000, avg diff : 0.008
+0.48062 0.453 0.008
+Step # :40000, avg score : 0.508
+Step # :40000, avg winning : 0.469
+Step # :40000, avg diff : 0.017
+0.50782 0.469 0.017
+Step # :41000, avg score : 0.506
+Step # :41000, avg winning : 0.470
+Step # :41000, avg diff : 0.024
+0.50551 0.47 0.024
+Step # :42000, avg score : 0.509
+Step # :42000, avg winning : 0.467
+Step # :42000, avg diff : 0.015
+0.50863 0.467 0.015
+Step # :43000, avg score : 0.505
+Step # :43000, avg winning : 0.466
+Step # :43000, avg diff : 0.020
+0.50489 0.466 0.02
+Step # :44000, avg score : 0.496
+Step # :44000, avg winning : 0.463
+Step # :44000, avg diff : 0.024
+0.49614 0.463 0.024
+Step # :45000, avg score : 0.516
+Step # :45000, avg winning : 0.476
+Step # :45000, avg diff : 0.024
+0.51573 0.476 0.024
+Step # :46000, avg score : 0.507
+Step # :46000, avg winning : 0.468
+Step # :46000, avg diff : 0.021
+0.50677 0.468 0.021
+Step # :47000, avg score : 0.512
+Step # :47000, avg winning : 0.472
+Step # :47000, avg diff : 0.012
+0.51169 0.472 0.012
+Step # :48000, avg score : 0.498
+Step # :48000, avg winning : 0.464
+Step # :48000, avg diff : 0.016
+0.4982 0.464 0.016
+Step # :49000, avg score : 0.495
+Step # :49000, avg winning : 0.456
+Step # :49000, avg diff : 0.029
+0.49527 0.456 0.029
+Step # :50000, avg score : 0.488
+Step # :50000, avg winning : 0.453
+Step # :50000, avg diff : 0.024
+0.48759 0.453 0.024
+Step # :51000, avg score : 0.495
+Step # :51000, avg winning : 0.455
+Step # :51000, avg diff : 0.030
+0.49497 0.455 0.03
+Step # :52000, avg score : 0.506
+Step # :52000, avg winning : 0.471
+Step # :52000, avg diff : 0.016
+0.50597 0.471 0.016
+Step # :53000, avg score : 0.506
+Step # :53000, avg winning : 0.469
+Step # :53000, avg diff : 0.013
+0.5061 0.469 0.013
+Step # :54000, avg score : 0.490
+Step # :54000, avg winning : 0.452
+Step # :54000, avg diff : 0.026
+0.4898 0.452 0.026
+Step # :55000, avg score : 0.499
+Step # :55000, avg winning : 0.460
+Step # :55000, avg diff : 0.022
+0.49944 0.46 0.022
+Step # :56000, avg score : 0.503
+Step # :56000, avg winning : 0.464
+Step # :56000, avg diff : 0.030
+0.50333 0.464 0.03
+Step # :57000, avg score : 0.491
+Step # :57000, avg winning : 0.450
+Step # :57000, avg diff : 0.022
+0.49117 0.45 0.022
+Step # :58000, avg score : 0.483
+Step # :58000, avg winning : 0.443
+Step # :58000, avg diff : 0.038
+0.48326 0.443 0.038
+Step # :59000, avg score : 0.504
+Step # :59000, avg winning : 0.464
+Step # :59000, avg diff : 0.030
+0.5039 0.464 0.03
+Step # :60000, avg score : 0.502
+Step # :60000, avg winning : 0.462
+Step # :60000, avg diff : 0.023
+0.50241 0.462 0.023
+Step # :61000, avg score : 0.494
+Step # :61000, avg winning : 0.460
+Step # :61000, avg diff : 0.022
+0.49406 0.46 0.022
+Step # :62000, avg score : 0.493
+Step # :62000, avg winning : 0.453
+Step # :62000, avg diff : 0.026
+0.49335 0.453 0.026
+Step # :63000, avg score : 0.482
+Step # :63000, avg winning : 0.445
+Step # :63000, avg diff : 0.021
+0.4822 0.445 0.021
+Step # :64000, avg score : 0.471
+Step # :64000, avg winning : 0.435
+Step # :64000, avg diff : 0.025
+0.47061 0.435 0.025
+Step # :65000, avg score : 0.490
+Step # :65000, avg winning : 0.451
+Step # :65000, avg diff : 0.029
+0.48988 0.451 0.029
+Step # :66000, avg score : 0.476
+Step # :66000, avg winning : 0.437
+Step # :66000, avg diff : 0.032
+0.47646 0.437 0.032
+Step # :67000, avg score : 0.481
+Step # :67000, avg winning : 0.442
+Step # :67000, avg diff : 0.016
+0.48149 0.442 0.016
+Step # :68000, avg score : 0.483
+Step # :68000, avg winning : 0.442
+Step # :68000, avg diff : 0.038
+0.48267 0.442 0.038
+Step # :69000, avg score : 0.494
+Step # :69000, avg winning : 0.459
+Step # :69000, avg diff : 0.021
+0.49423 0.459 0.021
+Step # :70000, avg score : 0.483
+Step # :70000, avg winning : 0.449
+Step # :70000, avg diff : 0.019
+0.48254 0.449 0.019
+Step # :71000, avg score : 0.498
+Step # :71000, avg winning : 0.457
+Step # :71000, avg diff : 0.026
+0.49766 0.457 0.026
+Step # :72000, avg score : 0.500
+Step # :72000, avg winning : 0.459
+Step # :72000, avg diff : 0.028
+0.49997 0.459 0.028
+Step # :73000, avg score : 0.486
+Step # :73000, avg winning : 0.445
+Step # :73000, avg diff : 0.017
+0.48592 0.445 0.017
+Step # :74000, avg score : 0.466
+Step # :74000, avg winning : 0.426
+Step # :74000, avg diff : 0.015
+0.46635 0.426 0.015
+Step # :75000, avg score : 0.458
+Step # :75000, avg winning : 0.418
+Step # :75000, avg diff : 0.018
+0.45845 0.418 0.018
+Step # :76000, avg score : 0.490
+Step # :76000, avg winning : 0.451
+Step # :76000, avg diff : 0.019
+0.49019 0.451 0.019
+Step # :77000, avg score : 0.485
+Step # :77000, avg winning : 0.444
+Step # :77000, avg diff : 0.009
+0.48539 0.444 0.009
+Step # :78000, avg score : 0.483
+Step # :78000, avg winning : 0.444
+Step # :78000, avg diff : 0.024
+0.48261 0.444 0.024
+Step # :79000, avg score : 0.487
+Step # :79000, avg winning : 0.449
+Step # :79000, avg diff : 0.020
+0.48671 0.449 0.02
+Step # :80000, avg score : 0.494
+Step # :80000, avg winning : 0.456
+Step # :80000, avg diff : 0.013
+0.49366 0.456 0.013
+Step # :81000, avg score : 0.484
+Step # :81000, avg winning : 0.444
+Step # :81000, avg diff : 0.029
+0.48354 0.444 0.029
+Step # :82000, avg score : 0.487
+Step # :82000, avg winning : 0.447
+Step # :82000, avg diff : 0.018
+0.48687 0.447 0.018
+Step # :83000, avg score : 0.477
+Step # :83000, avg winning : 0.440
+Step # :83000, avg diff : 0.016
+0.47673 0.44 0.016
+Step # :84000, avg score : 0.492
+Step # :84000, avg winning : 0.454
+Step # :84000, avg diff : 0.014
+0.49249 0.454 0.014
+Step # :85000, avg score : 0.494
+Step # :85000, avg winning : 0.453
+Step # :85000, avg diff : 0.016
+0.49394 0.453 0.016
+Step # :86000, avg score : 0.485
+Step # :86000, avg winning : 0.452
+Step # :86000, avg diff : 0.022
+0.48479 0.452 0.022
+Step # :87000, avg score : 0.484
+Step # :87000, avg winning : 0.444
+Step # :87000, avg diff : 0.011
+0.48447 0.444 0.011
+Step # :88000, avg score : 0.500
+Step # :88000, avg winning : 0.464
+Step # :88000, avg diff : 0.012
+0.50006 0.464 0.012
+Step # :89000, avg score : 0.502
+Step # :89000, avg winning : 0.464
+Step # :89000, avg diff : 0.018
+0.50167 0.464 0.018
+Step # :90000, avg score : 0.512
+Step # :90000, avg winning : 0.471
+Step # :90000, avg diff : 0.019
+0.51191 0.471 0.019
+Step # :91000, avg score : 0.516
+Step # :91000, avg winning : 0.474
+Step # :91000, avg diff : 0.025
+0.51573 0.474 0.025
+Step # :92000, avg score : 0.509
+Step # :92000, avg winning : 0.476
+Step # :92000, avg diff : 0.015
+0.50913 0.476 0.015
+Step # :93000, avg score : 0.494
+Step # :93000, avg winning : 0.455
+Step # :93000, avg diff : 0.014
+0.49417 0.455 0.014
+Step # :94000, avg score : 0.517
+Step # :94000, avg winning : 0.478
+Step # :94000, avg diff : 0.024
+0.51654 0.478 0.024
+Step # :95000, avg score : 0.507
+Step # :95000, avg winning : 0.466
+Step # :95000, avg diff : 0.017
+0.50739 0.466 0.017
+Step # :96000, avg score : 0.512
+Step # :96000, avg winning : 0.470
+Step # :96000, avg diff : 0.021
+0.5122 0.47 0.021
+Step # :97000, avg score : 0.489
+Step # :97000, avg winning : 0.449
+Step # :97000, avg diff : 0.028
+0.48855 0.449 0.028
+Step # :98000, avg score : 0.485
+Step # :98000, avg winning : 0.443
+Step # :98000, avg diff : 0.021
+0.4847 0.443 0.021
+Step # :99000, avg score : 0.490
+Step # :99000, avg winning : 0.456
+Step # :99000, avg diff : 0.015
+0.48993 0.456 0.015
+Step # :100000, avg score : 0.480
+Step # :100000, avg winning : 0.439
+Step # :100000, avg diff : 0.017
+0.48014 0.439 0.017
+Step # :101000, avg score : 0.507
+Step # :101000, avg winning : 0.464
+Step # :101000, avg diff : 0.024
+0.50661 0.464 0.024
+Step # :102000, avg score : 0.493
+Step # :102000, avg winning : 0.451
+Step # :102000, avg diff : 0.020
+0.49313 0.451 0.02
+Step # :103000, avg score : 0.492
+Step # :103000, avg winning : 0.450
+Step # :103000, avg diff : 0.018
+0.49226 0.45 0.018
+Step # :104000, avg score : 0.491
+Step # :104000, avg winning : 0.448
+Step # :104000, avg diff : 0.032
+0.4911 0.448 0.032
+Step # :105000, avg score : 0.490
+Step # :105000, avg winning : 0.447
+Step # :105000, avg diff : 0.013
+0.49041 0.447 0.013
+Step # :106000, avg score : 0.484
+Step # :106000, avg winning : 0.443
+Step # :106000, avg diff : 0.027
+0.48384 0.443 0.027
+Step # :107000, avg score : 0.514
+Step # :107000, avg winning : 0.471
+Step # :107000, avg diff : 0.023
+0.51378 0.471 0.023
+Step # :108000, avg score : 0.488
+Step # :108000, avg winning : 0.446
+Step # :108000, avg diff : 0.022
+0.48843 0.446 0.022
+Step # :109000, avg score : 0.499
+Step # :109000, avg winning : 0.456
+Step # :109000, avg diff : 0.020
+0.49944 0.456 0.02
+Step # :110000, avg score : 0.486
+Step # :110000, avg winning : 0.444
+Step # :110000, avg diff : 0.020
+0.48609 0.444 0.02
+Step # :111000, avg score : 0.466
+Step # :111000, avg winning : 0.424
+Step # :111000, avg diff : 0.039
+0.46628 0.424 0.039
+Step # :112000, avg score : 0.475
+Step # :112000, avg winning : 0.433
+Step # :112000, avg diff : 0.025
+0.47512 0.433 0.025
+Step # :113000, avg score : 0.487
+Step # :113000, avg winning : 0.443
+Step # :113000, avg diff : 0.019
+0.48704 0.443 0.019
+Step # :114000, avg score : 0.503
+Step # :114000, avg winning : 0.460
+Step # :114000, avg diff : 0.030
+0.50349 0.46 0.03
+Step # :115000, avg score : 0.494
+Step # :115000, avg winning : 0.450
+Step # :115000, avg diff : 0.029
+0.49424 0.45 0.029
+Step # :116000, avg score : 0.500
+Step # :116000, avg winning : 0.459
+Step # :116000, avg diff : 0.025
+0.49988 0.459 0.025
+Step # :117000, avg score : 0.529
+Step # :117000, avg winning : 0.485
+Step # :117000, avg diff : 0.024
+0.52906 0.485 0.024
+Step # :118000, avg score : 0.489
+Step # :118000, avg winning : 0.445
+Step # :118000, avg diff : 0.024
+0.48907 0.445 0.024
+Step # :119000, avg score : 0.498
+Step # :119000, avg winning : 0.453
+Step # :119000, avg diff : 0.015
+0.49791 0.453 0.015
+Step # :120000, avg score : 0.479
+Step # :120000, avg winning : 0.435
+Step # :120000, avg diff : 0.027
+0.4787 0.435 0.027
+Step # :121000, avg score : 0.489
+Step # :121000, avg winning : 0.445
+Step # :121000, avg diff : 0.026
+0.48896 0.445 0.026
+Step # :122000, avg score : 0.479
+Step # :122000, avg winning : 0.434
+Step # :122000, avg diff : 0.024
+0.47874 0.434 0.024
+Step # :123000, avg score : 0.510
+Step # :123000, avg winning : 0.468
+Step # :123000, avg diff : 0.018
+0.51044 0.468 0.018
+Step # :124000, avg score : 0.518
+Step # :124000, avg winning : 0.477
+Step # :124000, avg diff : 0.016
+0.51788 0.477 0.016
+Step # :125000, avg score : 0.492
+Step # :125000, avg winning : 0.451
+Step # :125000, avg diff : 0.021
+0.49246 0.451 0.021
+Step # :126000, avg score : 0.501
+Step # :126000, avg winning : 0.458
+Step # :126000, avg diff : 0.020
+0.5014 0.458 0.02
+Step # :127000, avg score : 0.503
+Step # :127000, avg winning : 0.459
+Step # :127000, avg diff : 0.031
+0.50343 0.459 0.031
+Step # :128000, avg score : 0.503
+Step # :128000, avg winning : 0.459
+Step # :128000, avg diff : 0.018
+0.50311 0.459 0.018
+Step # :129000, avg score : 0.489
+Step # :129000, avg winning : 0.445
+Step # :129000, avg diff : 0.026
+0.48867 0.445 0.026
+Step # :130000, avg score : 0.486
+Step # :130000, avg winning : 0.442
+Step # :130000, avg diff : 0.019
+0.48576 0.442 0.019
+Step # :131000, avg score : 0.503
+Step # :131000, avg winning : 0.458
+Step # :131000, avg diff : 0.028
+0.50296 0.458 0.028
+Step # :132000, avg score : 0.481
+Step # :132000, avg winning : 0.437
+Step # :132000, avg diff : 0.017
+0.48067 0.437 0.017
+Step # :133000, avg score : 0.506
+Step # :133000, avg winning : 0.462
+Step # :133000, avg diff : 0.020
+0.50583 0.462 0.02
+Step # :134000, avg score : 0.493
+Step # :134000, avg winning : 0.450
+Step # :134000, avg diff : 0.022
+0.49327 0.45 0.022
+Step # :135000, avg score : 0.502
+Step # :135000, avg winning : 0.458
+Step # :135000, avg diff : 0.010
+0.50189 0.458 0.01
+Step # :136000, avg score : 0.474
+Step # :136000, avg winning : 0.431
+Step # :136000, avg diff : 0.020
+0.47407 0.431 0.02
+Step # :137000, avg score : 0.498
+Step # :137000, avg winning : 0.455
+Step # :137000, avg diff : 0.015
+0.49847 0.455 0.015
+Step # :138000, avg score : 0.509
+Step # :138000, avg winning : 0.466
+Step # :138000, avg diff : 0.022
+0.50925 0.466 0.022
+Step # :139000, avg score : 0.490
+Step # :139000, avg winning : 0.447
+Step # :139000, avg diff : 0.017
+0.48994 0.447 0.017
+Step # :140000, avg score : 0.499
+Step # :140000, avg winning : 0.454
+Step # :140000, avg diff : 0.016
+0.49852 0.454 0.016
+Step # :141000, avg score : 0.479
+Step # :141000, avg winning : 0.435
+Step # :141000, avg diff : 0.013
+0.47897 0.435 0.013
+Step # :142000, avg score : 0.484
+Step # :142000, avg winning : 0.440
+Step # :142000, avg diff : 0.022
+0.48411 0.44 0.022
+Step # :143000, avg score : 0.480
+Step # :143000, avg winning : 0.436
+Step # :143000, avg diff : 0.016
+0.47972 0.436 0.016
+Step # :144000, avg score : 0.478
+Step # :144000, avg winning : 0.434
+Step # :144000, avg diff : 0.011
+0.4785 0.434 0.011
+Step # :145000, avg score : 0.482
+Step # :145000, avg winning : 0.437
+Step # :145000, avg diff : 0.007
+0.48241 0.437 0.007
+Step # :146000, avg score : 0.489
+Step # :146000, avg winning : 0.444
+Step # :146000, avg diff : 0.022
+0.48902 0.444 0.022
+Step # :147000, avg score : 0.484
+Step # :147000, avg winning : 0.439
+Step # :147000, avg diff : 0.028
+0.48392 0.439 0.028
+Step # :148000, avg score : 0.492
+Step # :148000, avg winning : 0.447
+Step # :148000, avg diff : 0.026
+0.49167 0.447 0.026
+Step # :149000, avg score : 0.500
+Step # :149000, avg winning : 0.455
+Step # :149000, avg diff : 0.019
+0.50042 0.455 0.019
+Step # :150000, avg score : 0.487
+Step # :150000, avg winning : 0.442
+Step # :150000, avg diff : 0.018
+0.48662 0.442 0.018
+Step # :151000, avg score : 0.509
+Step # :151000, avg winning : 0.464
+Step # :151000, avg diff : 0.021
+0.50896 0.464 0.021
+Step # :152000, avg score : 0.506
+Step # :152000, avg winning : 0.462
+Step # :152000, avg diff : 0.018
+0.50617 0.462 0.018
+Step # :153000, avg score : 0.473
+Step # :153000, avg winning : 0.429
+Step # :153000, avg diff : 0.024
+0.47307 0.429 0.024
+Step # :154000, avg score : 0.499
+Step # :154000, avg winning : 0.454
+Step # :154000, avg diff : 0.023
+0.49902 0.454 0.023
+Step # :155000, avg score : 0.500
+Step # :155000, avg winning : 0.455
+Step # :155000, avg diff : 0.017
+0.49988 0.455 0.017
+Step # :156000, avg score : 0.504
+Step # :156000, avg winning : 0.458
+Step # :156000, avg diff : 0.010
+0.50371 0.458 0.01
+Step # :157000, avg score : 0.493
+Step # :157000, avg winning : 0.447
+Step # :157000, avg diff : 0.027
+0.49317 0.447 0.027
+Step # :158000, avg score : 0.502
+Step # :158000, avg winning : 0.457
+Step # :158000, avg diff : 0.019
+0.5023 0.457 0.019
+Step # :159000, avg score : 0.492
+Step # :159000, avg winning : 0.447
+Step # :159000, avg diff : 0.024
+0.49206 0.447 0.024
+Step # :160000, avg score : 0.524
+Step # :160000, avg winning : 0.479
+Step # :160000, avg diff : 0.009
+0.52366 0.479 0.009
+Step # :161000, avg score : 0.499
+Step # :161000, avg winning : 0.457
+Step # :161000, avg diff : 0.017
+0.4986 0.457 0.017
+Step # :162000, avg score : 0.491
+Step # :162000, avg winning : 0.448
+Step # :162000, avg diff : 0.017
+0.49081 0.448 0.017
+Step # :163000, avg score : 0.481
+Step # :163000, avg winning : 0.443
+Step # :163000, avg diff : 0.020
+0.48133 0.443 0.02
+Step # :164000, avg score : 0.492
+Step # :164000, avg winning : 0.447
+Step # :164000, avg diff : 0.015
+0.49188 0.447 0.015
+Step # :165000, avg score : 0.502
+Step # :165000, avg winning : 0.463
+Step # :165000, avg diff : 0.016
+0.50244 0.463 0.016
+Step # :166000, avg score : 0.499
+Step # :166000, avg winning : 0.453
+Step # :166000, avg diff : 0.014
+0.49857 0.453 0.014
+Step # :167000, avg score : 0.496
+Step # :167000, avg winning : 0.451
+Step # :167000, avg diff : 0.018
+0.49627 0.451 0.018
+Step # :168000, avg score : 0.505
+Step # :168000, avg winning : 0.459
+Step # :168000, avg diff : 0.026
+0.50499 0.459 0.026
+Step # :169000, avg score : 0.481
+Step # :169000, avg winning : 0.435
+Step # :169000, avg diff : 0.023
+0.48059 0.435 0.023
+Step # :170000, avg score : 0.497
+Step # :170000, avg winning : 0.451
+Step # :170000, avg diff : 0.022
+0.49734 0.451 0.022
+Step # :171000, avg score : 0.511
+Step # :171000, avg winning : 0.465
+Step # :171000, avg diff : 0.021
+0.51138 0.465 0.021
+Step # :172000, avg score : 0.493
+Step # :172000, avg winning : 0.447
+Step # :172000, avg diff : 0.027
+0.49274 0.447 0.027
+Step # :173000, avg score : 0.507
+Step # :173000, avg winning : 0.461
+Step # :173000, avg diff : 0.024
+0.50748 0.461 0.024
+Step # :174000, avg score : 0.500
+Step # :174000, avg winning : 0.454
+Step # :174000, avg diff : 0.017
+0.49989 0.454 0.017
+Step # :175000, avg score : 0.503
+Step # :175000, avg winning : 0.457
+Step # :175000, avg diff : 0.020
+0.50304 0.457 0.02
+Step # :176000, avg score : 0.477
+Step # :176000, avg winning : 0.432
+Step # :176000, avg diff : 0.026
+0.47722 0.432 0.026
+Step # :177000, avg score : 0.483
+Step # :177000, avg winning : 0.438
+Step # :177000, avg diff : 0.016
+0.48317 0.438 0.016
+Step # :178000, avg score : 0.511
+Step # :178000, avg winning : 0.464
+Step # :178000, avg diff : 0.016
+0.51065 0.464 0.016
+Step # :179000, avg score : 0.490
+Step # :179000, avg winning : 0.444
+Step # :179000, avg diff : 0.021
+0.48979 0.444 0.021
+Step # :180000, avg score : 0.503
+Step # :180000, avg winning : 0.457
+Step # :180000, avg diff : 0.019
+0.50308 0.457 0.019
+Step # :181000, avg score : 0.494
+Step # :181000, avg winning : 0.447
+Step # :181000, avg diff : 0.029
+0.49373 0.447 0.029
+Step # :182000, avg score : 0.491
+Step # :182000, avg winning : 0.446
+Step # :182000, avg diff : 0.020
+0.49091 0.446 0.02
+Step # :183000, avg score : 0.500
+Step # :183000, avg winning : 0.454
+Step # :183000, avg diff : 0.027
+0.50005 0.454 0.027
+Step # :184000, avg score : 0.488
+Step # :184000, avg winning : 0.442
+Step # :184000, avg diff : 0.026
+0.48805 0.442 0.026
+Step # :185000, avg score : 0.501
+Step # :185000, avg winning : 0.456
+Step # :185000, avg diff : 0.018
+0.50123 0.456 0.018
+Step # :186000, avg score : 0.506
+Step # :186000, avg winning : 0.460
+Step # :186000, avg diff : 0.018
+0.50563 0.46 0.018
+Step # :187000, avg score : 0.493
+Step # :187000, avg winning : 0.447
+Step # :187000, avg diff : 0.024
+0.49254 0.447 0.024
+Step # :188000, avg score : 0.483
+Step # :188000, avg winning : 0.438
+Step # :188000, avg diff : 0.014
+0.48318 0.438 0.014
+Step # :189000, avg score : 0.486
+Step # :189000, avg winning : 0.442
+Step # :189000, avg diff : 0.016
+0.48616 0.442 0.016
+Step # :190000, avg score : 0.483
+Step # :190000, avg winning : 0.440
+Step # :190000, avg diff : 0.020
+0.4834 0.44 0.02
+Step # :191000, avg score : 0.486
+Step # :191000, avg winning : 0.443
+Step # :191000, avg diff : 0.015
+0.48628 0.443 0.015
+Step # :192000, avg score : 0.483
+Step # :192000, avg winning : 0.442
+Step # :192000, avg diff : 0.022
+0.48282 0.442 0.022
+Step # :193000, avg score : 0.484
+Step # :193000, avg winning : 0.439
+Step # :193000, avg diff : 0.024
+0.48352 0.439 0.024
+Step # :194000, avg score : 0.495
+Step # :194000, avg winning : 0.452
+Step # :194000, avg diff : 0.017
+0.49496 0.452 0.017
+Step # :195000, avg score : 0.494
+Step # :195000, avg winning : 0.450
+Step # :195000, avg diff : 0.012
+0.49411 0.45 0.012
+Step # :196000, avg score : 0.496
+Step # :196000, avg winning : 0.451
+Step # :196000, avg diff : 0.022
+0.49586 0.451 0.022
+Step # :197000, avg score : 0.503
+Step # :197000, avg winning : 0.457
+Step # :197000, avg diff : 0.013
+0.50319 0.457 0.013
+Step # :198000, avg score : 0.501
+Step # :198000, avg winning : 0.455
+Step # :198000, avg diff : 0.020
+0.50056 0.455 0.02
+Step # :199000, avg score : 0.516
+Step # :199000, avg winning : 0.473
+Step # :199000, avg diff : 0.012
+0.51603 0.473 0.012
+Step # :200000, avg score : 0.459
+Step # :200000, avg winning : 0.414
+Step # :200000, avg diff : 0.016
+0.45881 0.414 0.016
+Step # :201000, avg score : 0.494
+Step # :201000, avg winning : 0.452
+Step # :201000, avg diff : 0.015
+0.49437 0.452 0.015
+Step # :202000, avg score : 0.478
+Step # :202000, avg winning : 0.434
+Step # :202000, avg diff : 0.022
+0.47813 0.434 0.022
+Step # :203000, avg score : 0.493
+Step # :203000, avg winning : 0.449
+Step # :203000, avg diff : 0.022
+0.49313 0.449 0.022
+Step # :204000, avg score : 0.477
+Step # :204000, avg winning : 0.437
+Step # :204000, avg diff : 0.026
+0.47715 0.437 0.026
+Step # :205000, avg score : 0.477
+Step # :205000, avg winning : 0.435
+Step # :205000, avg diff : 0.015
+0.47744 0.435 0.015
+Step # :206000, avg score : 0.491
+Step # :206000, avg winning : 0.451
+Step # :206000, avg diff : 0.030
+0.49128 0.451 0.03
+Step # :207000, avg score : 0.439
+Step # :207000, avg winning : 0.396
+Step # :207000, avg diff : 0.019
+0.43914 0.396 0.019
+Step # :208000, avg score : 0.477
+Step # :208000, avg winning : 0.432
+Step # :208000, avg diff : 0.020
+0.47666 0.432 0.02
+Step # :209000, avg score : 0.487
+Step # :209000, avg winning : 0.442
+Step # :209000, avg diff : 0.032
+0.48662 0.442 0.032
+Step # :210000, avg score : 0.477
+Step # :210000, avg winning : 0.432
+Step # :210000, avg diff : 0.026
+0.47693 0.432 0.026
+Step # :211000, avg score : 0.493
+Step # :211000, avg winning : 0.448
+Step # :211000, avg diff : 0.024
+0.49308 0.448 0.024
+Step # :212000, avg score : 0.489
+Step # :212000, avg winning : 0.444
+Step # :212000, avg diff : 0.020
+0.4893 0.444 0.02
+Step # :213000, avg score : 0.467
+Step # :213000, avg winning : 0.423
+Step # :213000, avg diff : 0.026
+0.46736 0.423 0.026
+Step # :214000, avg score : 0.503
+Step # :214000, avg winning : 0.458
+Step # :214000, avg diff : 0.028
+0.50334 0.458 0.028
+Step # :215000, avg score : 0.461
+Step # :215000, avg winning : 0.416
+Step # :215000, avg diff : 0.013
+0.46081 0.416 0.013
+Step # :216000, avg score : 0.457
+Step # :216000, avg winning : 0.412
+Step # :216000, avg diff : 0.019
+0.45678 0.412 0.019
+Step # :217000, avg score : 0.494
+Step # :217000, avg winning : 0.451
+Step # :217000, avg diff : 0.026
+0.49445 0.451 0.026
+Step # :218000, avg score : 0.506
+Step # :218000, avg winning : 0.461
+Step # :218000, avg diff : 0.026
+0.50623 0.461 0.026
+Step # :219000, avg score : 0.506
+Step # :219000, avg winning : 0.462
+Step # :219000, avg diff : 0.018
+0.50629 0.462 0.018
+Step # :220000, avg score : 0.506
+Step # :220000, avg winning : 0.461
+Step # :220000, avg diff : 0.026
+0.50573 0.461 0.026
+Step # :221000, avg score : 0.526
+Step # :221000, avg winning : 0.480
+Step # :221000, avg diff : 0.024
+0.52557 0.48 0.024
+Step # :222000, avg score : 0.506
+Step # :222000, avg winning : 0.461
+Step # :222000, avg diff : 0.021
+0.50627 0.461 0.021
+Step # :223000, avg score : 0.489
+Step # :223000, avg winning : 0.445
+Step # :223000, avg diff : 0.024
+0.48936 0.445 0.024
+Step # :224000, avg score : 0.497
+Step # :224000, avg winning : 0.451
+Step # :224000, avg diff : 0.023
+0.49704 0.451 0.023
+Step # :225000, avg score : 0.499
+Step # :225000, avg winning : 0.453
+Step # :225000, avg diff : 0.020
+0.49925 0.453 0.02
+Step # :226000, avg score : 0.497
+Step # :226000, avg winning : 0.452
+Step # :226000, avg diff : 0.022
+0.49688 0.452 0.022
+Step # :227000, avg score : 0.482
+Step # :227000, avg winning : 0.436
+Step # :227000, avg diff : 0.020
+0.48197 0.436 0.02
+Step # :228000, avg score : 0.494
+Step # :228000, avg winning : 0.450
+Step # :228000, avg diff : 0.026
+0.49385 0.45 0.026
+Step # :229000, avg score : 0.493
+Step # :229000, avg winning : 0.450
+Step # :229000, avg diff : 0.018
+0.49278 0.45 0.018
+Step # :230000, avg score : 0.502
+Step # :230000, avg winning : 0.458
+Step # :230000, avg diff : 0.026
+0.50184 0.458 0.026
+Step # :231000, avg score : 0.493
+Step # :231000, avg winning : 0.450
+Step # :231000, avg diff : 0.026
+0.49292 0.45 0.026
+Step # :232000, avg score : 0.489
+Step # :232000, avg winning : 0.444
+Step # :232000, avg diff : 0.026
+0.48877 0.444 0.026
+Step # :233000, avg score : 0.487
+Step # :233000, avg winning : 0.444
+Step # :233000, avg diff : 0.022
+0.48678 0.444 0.022
+Step # :234000, avg score : 0.473
+Step # :234000, avg winning : 0.428
+Step # :234000, avg diff : 0.025
+0.47255 0.428 0.025
+Step # :235000, avg score : 0.497
+Step # :235000, avg winning : 0.456
+Step # :235000, avg diff : 0.016
+0.49711 0.456 0.016
+Step # :236000, avg score : 0.480
+Step # :236000, avg winning : 0.436
+Step # :236000, avg diff : 0.017
+0.48047 0.436 0.017
+Step # :237000, avg score : 0.488
+Step # :237000, avg winning : 0.443
+Step # :237000, avg diff : 0.015
+0.48787 0.443 0.015
+Step # :238000, avg score : 0.511
+Step # :238000, avg winning : 0.467
+Step # :238000, avg diff : 0.024
+0.51149 0.467 0.024
+Step # :239000, avg score : 0.486
+Step # :239000, avg winning : 0.440
+Step # :239000, avg diff : 0.026
+0.4857 0.44 0.026
+Step # :240000, avg score : 0.484
+Step # :240000, avg winning : 0.438
+Step # :240000, avg diff : 0.017
+0.48367 0.438 0.017
+Step # :241000, avg score : 0.501
+Step # :241000, avg winning : 0.461
+Step # :241000, avg diff : 0.026
+0.50059 0.461 0.026
+Step # :242000, avg score : 0.477
+Step # :242000, avg winning : 0.436
+Step # :242000, avg diff : 0.025
+0.47702 0.436 0.025
+Step # :243000, avg score : 0.492
+Step # :243000, avg winning : 0.450
+Step # :243000, avg diff : 0.017
+0.49233 0.45 0.017
+Step # :244000, avg score : 0.489
+Step # :244000, avg winning : 0.448
+Step # :244000, avg diff : 0.016
+0.48937 0.448 0.016
+Step # :245000, avg score : 0.509
+Step # :245000, avg winning : 0.467
+Step # :245000, avg diff : 0.021
+0.50899 0.467 0.021
+Step # :246000, avg score : 0.474
+Step # :246000, avg winning : 0.429
+Step # :246000, avg diff : 0.029
+0.47403 0.429 0.029
+Step # :247000, avg score : 0.511
+Step # :247000, avg winning : 0.467
+Step # :247000, avg diff : 0.018
+0.5108 0.467 0.018
+Step # :248000, avg score : 0.479
+Step # :248000, avg winning : 0.434
+Step # :248000, avg diff : 0.015
+0.47861 0.434 0.015
+Step # :249000, avg score : 0.474
+Step # :249000, avg winning : 0.430
+Step # :249000, avg diff : 0.018
+0.47427 0.43 0.018
+Step # :250000, avg score : 0.460
+Step # :250000, avg winning : 0.416
+Step # :250000, avg diff : 0.020
+0.46004 0.416 0.02
+Step # :251000, avg score : 0.486
+Step # :251000, avg winning : 0.441
+Step # :251000, avg diff : 0.012
+0.4865 0.441 0.012
+Step # :252000, avg score : 0.491
+Step # :252000, avg winning : 0.446
+Step # :252000, avg diff : 0.027
+0.49112 0.446 0.027
+Step # :253000, avg score : 0.480
+Step # :253000, avg winning : 0.436
+Step # :253000, avg diff : 0.024
+0.48016 0.436 0.024
+Step # :254000, avg score : 0.476
+Step # :254000, avg winning : 0.433
+Step # :254000, avg diff : 0.021
+0.47602 0.433 0.021
+Step # :255000, avg score : 0.483
+Step # :255000, avg winning : 0.439
+Step # :255000, avg diff : 0.014
+0.48293 0.439 0.014
+Step # :256000, avg score : 0.493
+Step # :256000, avg winning : 0.448
+Step # :256000, avg diff : 0.017
+0.49344 0.448 0.017
+Process Process-2:
+Traceback (most recent call last):
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/media/becky/GNOME-p3/monopoly_simulator_background/vanilla_A2C.py", line 96, in worker
+    ob, reward, done, info = env.step_nochange(data)
+  File "/media/becky/GNOME-p3/env/simulator_env/gym_simulator_env/envs/simple_monopoly.py", line 60, in step_nochange
+    observation_space, reward, terminal, info = self.MonopolyWorld.next_nochange(action)
+  File "/media/becky/GNOME-p3/env/monopoly_world.py", line 523, in next_nochange
+    game_elements_ori = copy.deepcopy(self.game_elements)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 150, in deepcopy
+    y = copier(x, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 240, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 180, in deepcopy
+    y = _reconstruct(x, memo, *rv)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 274, in _reconstruct
+    y = func(*args)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 273, in <genexpr>
+    args = (deepcopy(arg, memo) for arg in args)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 150, in deepcopy
+    y = copier(x, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 215, in _deepcopy_list
+    append(deepcopy(a, memo))
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 180, in deepcopy
+    y = _reconstruct(x, memo, *rv)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 280, in _reconstruct
+    state = deepcopy(state, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 150, in deepcopy
+    y = copier(x, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 240, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+KeyboardInterrupt
+Process Process-1:
+Traceback (most recent call last):
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/multiprocessing/process.py", line 297, in _bootstrap
+    self.run()
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/multiprocessing/process.py", line 99, in run
+    self._target(*self._args, **self._kwargs)
+  File "/media/becky/GNOME-p3/monopoly_simulator_background/vanilla_A2C.py", line 96, in worker
+    ob, reward, done, info = env.step_nochange(data)
+  File "/media/becky/GNOME-p3/env/simulator_env/gym_simulator_env/envs/simple_monopoly.py", line 60, in step_nochange
+    observation_space, reward, terminal, info = self.MonopolyWorld.next_nochange(action)
+  File "/media/becky/GNOME-p3/env/monopoly_world.py", line 523, in next_nochange
+    game_elements_ori = copy.deepcopy(self.game_elements)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 150, in deepcopy
+    y = copier(x, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 240, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 150, in deepcopy
+    y = copier(x, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 240, in _deepcopy_dict
+    y[deepcopy(key, memo)] = deepcopy(value, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 150, in deepcopy
+    y = copier(x, memo)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 215, in _deepcopy_list
+    append(deepcopy(a, memo))
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/copy.py", line 142, in deepcopy
+    y = memo.get(d, _nil)
+KeyboardInterrupt
+Traceback (most recent call last):
+  File "GAT.py", line 469, in <module>
+    trainer.train()
+  File "GAT.py", line 299, in train
+    s_prime_cal, r, done, info = self.envs.step_nochange(a)
+  File "/media/becky/GNOME-p3/monopoly_simulator_background/vanilla_A2C.py", line 166, in step_nochange
+    return self.step_wait()
+  File "/media/becky/GNOME-p3/monopoly_simulator_background/vanilla_A2C.py", line 150, in step_wait
+    results = [master_end.recv() for master_end in self.master_ends] #receive from worker_end #format???
+  File "/media/becky/GNOME-p3/monopoly_simulator_background/vanilla_A2C.py", line 150, in <listcomp>
+    results = [master_end.recv() for master_end in self.master_ends] #receive from worker_end #format???
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/multiprocessing/connection.py", line 250, in recv
+    buf = self._recv_bytes()
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/multiprocessing/connection.py", line 407, in _recv_bytes
+    buf = self._recv(4)
+  File "/home/becky/.conda/envs/KG-A2C/lib/python3.7/multiprocessing/connection.py", line 379, in _recv
+    chunk = read(handle, remaining)
+KeyboardInterrupt
