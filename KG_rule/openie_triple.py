@@ -1,3 +1,5 @@
+#TODO: consider adding more nodes for novelty injection
+
 #####Evaluation#####
 import sys, os
 upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
@@ -69,8 +71,11 @@ class History_Record(object):
 
 
 class KG_OpenIE(History_Record):
-    def __init__(self, gameboard,\
-                 core_nlp_version: str = '2018-10-05', config_file=None):
+    def __init__(self, gameboard,
+                 matrix_file_name,
+                 entity_file_name,
+                 core_nlp_version: str = '2018-10-05',
+                 config_file=None):
         self.upper_path = '/media/becky/GNOME-p3'
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
         self.remote_url = 'https://nlp.stanford.edu/software/stanford-corenlp-full-{}.zip'.format(core_nlp_version)
@@ -103,6 +108,7 @@ class KG_OpenIE(History_Record):
         self.kg_set = set()   # the set recording the kg rule for searching if the rule exists quickly
         self.kg_rel_diff = dict()  # the dict() to record the rule change
         self.kg_sub_diff = dict()
+        self.kg_change_bool = False
 
         self.kg_introduced = False
         self.new_kg_tuple = dict()
@@ -135,6 +141,8 @@ class KG_OpenIE(History_Record):
         self.node_number = 0
         self.sparse_matrix_dict = self.build_empty_matrix_dict()
         self.matrix_folder = self.upper_path + self.matrix_params['matrix_folder']
+        self.matrix_file_path = self.matrix_folder + matrix_file_name
+        self.entity_file_path = self.matrix_folder + entity_file_name
         self.kg_vector = np.zeros([len(self.relations_matrix), len(self.board_name)])
         self.vector_file = self.upper_path + self.matrix_params['vector_file']
 
@@ -175,6 +183,7 @@ class KG_OpenIE(History_Record):
         sparse_matrix_dict['in'] = dict()
         sparse_matrix_dict['number_rel'] = dict()
         sparse_matrix_dict['rel_number'] = dict()
+        sparse_matrix_dict['all_rel'] = dict()
 
         # Define the relation/edge number
         for i,rel in enumerate(self.relations_matrix):
@@ -186,7 +195,15 @@ class KG_OpenIE(History_Record):
 
         for i, node in enumerate(self.board_name):
             sparse_matrix_dict['number_nodes'][i] = node
-            sparse_matrix_dict['nodes_number'][node] = i
+            if node in sparse_matrix_dict['nodes_number']:
+                id_value = sparse_matrix_dict['nodes_number'][node]
+                if type(id_value) == list:
+                    id_value.append(i)
+                else:
+                    id_value = [id_value] + [i]
+                sparse_matrix_dict['nodes_number'][node] = id_value
+            else:
+                sparse_matrix_dict['nodes_number'][node] = i
 
         # Price: 0 - 250 -> i + 1; 250 - 5-- -> i + 2 ... [0 - 1500]
         # [40] = 0; [41] = 250
@@ -200,17 +217,17 @@ class KG_OpenIE(History_Record):
 
         self.node_number = len(sparse_matrix_dict['number_nodes'].keys())
 
-        # Define 'in' column names
-        for rel in self.relations_matrix:
-            sparse_matrix_dict['in'][rel] = dict()
-            for node in range(self.node_number):
-                sparse_matrix_dict['in'][rel][node] = 0
+        # # Define 'in' column names
+        # for rel in self.relations_matrix:
+        #     sparse_matrix_dict['in'][rel] = dict()
+        #     for node in range(self.node_number):
+        #         sparse_matrix_dict['in'][rel][node] = None
 
         # Define 'out' column names
         for rel in self.relations_matrix:
             sparse_matrix_dict['out'][rel] = dict()
             for node in range(self.node_number):
-                sparse_matrix_dict['out'][rel][node] = 0
+                sparse_matrix_dict['out'][rel][node] = None
 
         # for rel in self.action_name:
         #     sparse_matrix_dict[rel] = dict()
@@ -240,14 +257,17 @@ class KG_OpenIE(History_Record):
                 for triple in sentence['openie']:
 
                     for rel in self.relations:
-                        if rel in triple['relation']:
+                        length_sub = len(triple['subject'].split(' '))
+                        length_obj = len(triple['object'].split(' '))
+                        if rel in triple['relation'] and length_sub == 1 and length_obj == 1:
 
                             #map B&0-Railroad
                             if 'B-' in triple['subject']:
                                 triple['subject'] = 'B&O-Railroad'
                             if 'B-' in triple['object']:
                                 triple['object'] = 'B&O-Railroad'
-
+                            if triple['subject'] == 'GO':
+                                triple['subject'] = 'Go'
                             triples.append({
                                 'subject': triple['subject'],
                                 'relation': triple['relation'],
@@ -259,7 +279,6 @@ class KG_OpenIE(History_Record):
                     #     'relation': triple['relation'],
                     #     'object': triple['object']
                     # })
-
             return triples
         else:
             return core_nlp_output
@@ -327,12 +346,11 @@ class KG_OpenIE(History_Record):
                         return True if self.kg_rel[triple['relation']][triple['subject']] != triple['object'] else False
                     # True here means there is a change in the rule, False means stay the same.
 
-
-                else:
+                else:  # never see this rule, need update kg
                     self.kg_rel[triple['relation']][triple['subject']] = triple['object']
                     self.update_new_kg_tuple(triple)
 
-            else:
+            else:  # never see this rel, update kg
                 self.kg_rel[triple['relation']] = dict()
                 self.kg_rel[triple['relation']][triple['subject']] = triple['object']
                 self.update_new_kg_tuple(triple)
@@ -350,8 +368,7 @@ class KG_OpenIE(History_Record):
         file = open(file_name, 'r')
 
         for line in file:
-            kg_change = self.build_kg_text(line, level=level, use_hash=use_hash)
-
+            kg_change = self.build_kg_text(line, level=level, use_hash=use_hash)  # difference -> tuple
             # Check dice novelty
             if self.text_dice_num == self.detection_num:
                 self.dice.dice = self.dice.add_new_to_total_dice(self.dice.new_dice, self.dice.dice)
@@ -364,9 +381,9 @@ class KG_OpenIE(History_Record):
             if kg_change:
                 if kg_change not in self.kg_change:
                     self.kg_change += kg_change
+                    self.kg_change_bool = True
 
         self.update_num += 1
-
 
         # If there is any update or new relationships in kg, will update in the matrix
 
@@ -377,7 +394,7 @@ class KG_OpenIE(History_Record):
                 self.kg_rel['is located at'] = dict()
             else:
                 diff = self.compare_loc_record(self.kg_rel['is located at'], self.location_record)
-                if diff:
+                if diff and self.kg_change:
                     for d in diff:
                         exist_bool = False
                         for i, cha in enumerate(self.kg_change):
@@ -395,11 +412,11 @@ class KG_OpenIE(History_Record):
 
             self.kg_rel['is located at'] = self.location_record.copy()
             self.location_record.clear()
-            if self.new_kg_tuple:
+            if self.kg_change_bool or self.update_num == self.update_interval:
                 self.build_matrix_dict()
-                self.dict_to_matrix()
-                # self.build_vector()
-                self.new_kg_tuple = dict()  # Reset new_kg_tuple
+                self.sparse_matrix = self.dict_to_matrix()
+                self.save_matrix()
+                self.kg_change_bool = False  # Reset new_kg_tuple
                  # Update history while only detect rule change after simulating 100 games
 
         if self.dice.novelty != self.dice_novelty:
@@ -444,20 +461,20 @@ class KG_OpenIE(History_Record):
             triple_hash = hash(text)
             if triple_hash in self.kg_set and 'locate' not in text:  # Record this rule previously, just skip
                 return diff
-            else:
+            elif triple_hash not in self.kg_set and 'locate' not in text:
                 self.kg_set.add(triple_hash)  # Add to set for checking faster later on
 
         entity_relations = self.annotate(text, simple_format=True)
 
         for er in entity_relations:  # er is a dict() containing sub, rel and obj
-            if 'locate' in text:
-                kg_change_once = self.add_loc_history(er)
-                return diff
-            else:
+            if 'locate' in text:  # about location
+                self.add_loc_history(er)  # after some rounds, we will compare the loc history in build_file
+                return diff  # return no diff
+            else:  # other rules
                 kg_change_once = self.kg_add(er,level=level, use_hash=use_hash)  # kg_change_once is a bool, True means rule change
 
-            if kg_change_once:
-                diff_once = self.kg_update(er, level=level)
+            if kg_change_once:  # Bool
+                diff_once = self.kg_update(er, level=level) # find difference
                 if diff_once:
                     diff.append(diff_once)
         return diff
@@ -581,56 +598,88 @@ class KG_OpenIE(History_Record):
         '''
         build a dict for building sparse matrix
         '''
-        for i , rel in enumerate(self.relations_matrix):
-            if rel in self.new_kg_tuple.keys():
-                for sub in self.new_kg_tuple[rel].keys():
-                    number_sub = self.sparse_matrix_dict['nodes_number'][sub]
+        for i , rel in enumerate(self.relations_matrix):  # ['is priced at', 'is located at']
+            if rel in self.kg_rel.keys():
+                for sub in self.kg_rel[rel].keys():
+                    if sub in self.sparse_matrix_dict['nodes_number']:
+                        sub_id = self.sparse_matrix_dict['nodes_number'][sub]
+                        if type(sub_id) == int:
+                            sub_id = [sub_id]
+                        for number_sub in sub_id:
+                            # Adjust for more rel/edges: TODO
+                            if i == 0:
+                                number_obj = self.sparse_matrix_dict['nodes_number'][
+                                    self.relations_node[i] + self.hash_money(int(self.kg_rel[rel][sub]))]
+                            else:
+                                if len(self.kg_rel[rel][sub]) > 1:
+                                    number_obj = []
+                                    for location in self.kg_rel[rel][sub]:
+                                        number_obj.append(int(self.sparse_matrix_dict['nodes_number'][self.relations_node[i] + str(location)]))
+                                else:
+                                    number_obj = int(self.sparse_matrix_dict['nodes_number'][
+                                        self.relations_node[i] + str(self.kg_rel[rel][sub][0])])
 
+                            self.sparse_matrix_dict['out'][rel][number_sub] = number_obj if type(number_obj) == list else [number_obj]
 
-                    # Adjust for more rel/edges: TODO
-                    if i == 0:
-                        number_obj = self.sparse_matrix_dict['nodes_number'][self.relations_node[i] + self.hash_money(int(self.new_kg_tuple[rel][sub]))]
-                    else:
-                        number_obj = self.sparse_matrix_dict['nodes_number'][self.relations_node[i] + str(self.new_kg_tuple[rel][sub])]
-
-                    self.sparse_matrix_dict['out'][rel][number_sub] = number_obj
-                    self.sparse_matrix_dict['in'][rel][number_obj] = number_sub
-                    # self.sparse_matrix_dict[rel]['row'].append(index_sub)
-                    # self.sparse_matrix_dict[rel]['col'].append(index_obj)
-                    # self.sparse_matrix_dict[rel]['data'].append(1)
+                            # if type(number_obj) == list:
+                            #     for location in number_obj:
+                            #         self.sparse_matrix_dict['in'][rel][location] = [int(number_sub)]
+                            # else:
+                            #     self.sparse_matrix_dict['in'][rel][number_obj] = [int(number_sub)]
 
     def dict_to_matrix(self):
         self.sparse_matrix = []
-        for i in range(self.node_number):
+        for i in range(self.node_number):  # node_id
             self.sparse_matrix.append([])
-            for type in ['out', 'in']:
+            for type in ['out']:
                 for rel in self.relations_matrix:
-                    node_1 = self.sparse_matrix_dict[type][rel][i] if i in self.sparse_matrix_dict[type][rel] else -1
+
+                    node_1 = self.sparse_matrix_dict[type][rel][i] if i in self.sparse_matrix_dict[type][rel] else None
                     matrix_1 = [0 for j in range(self.node_number)]
-                    matrix_1[node_1] = 1 if node_1 > 0 else 0
+                    if node_1:
+
+                        if len(node_1) == 1:
+                            matrix_1[node_1[0]] = 1 if node_1[0] > 0 else 0
+                        else:
+                            for loc in node_1:
+                                matrix_1[loc] = 1
+
                     self.sparse_matrix[-1] += matrix_1
         self.sparse_matrix = np.array(self.sparse_matrix)  # save as np array
         # for rel in self.action_name:
         #     self.sparse_matrix.append(csr_matrix((self.sparse_matrix_dict[rel]['data'], (self.sparse_matrix_dict[rel]['row'], self.sparse_matrix_dict[rel]['col'])), shape=(self.entity_num, self.entity_num)))
+        return self.sparse_matrix
 
     def update_new_kg_tuple(self, triple):
         '''
         Update self.new_kg_tuple when there is new rule in kg
         :param triple: new kg rule tuple
         '''
-        if triple['relation'] in self.new_kg_tuple.keys():
-            pass
-        else:
-            self.new_kg_tuple[triple['relation']] = dict()
-
-        self.new_kg_tuple[triple['relation']][triple['subject']] = triple['object']
+        # if triple['relation'] in self.new_kg_tuple.keys():
+        #     pass
+        # else:
+        #     self.new_kg_tuple[triple['relation']] = dict()
+        #
+        # self.new_kg_tuple[triple['relation']][triple['subject']] = triple['object']
+        pass
 
     def save_matrix(self):
         '''
         Save sparse matrix of kg
         :return:
         '''
-        np.save(self.matrix_folder + 'kg_matrix.npz', self.sparse_matrix)
+        np.save(self.matrix_file_path, self.sparse_matrix)
+        node_id = dict()
+        for node in self.sparse_matrix_dict['nodes_number']:
+            if type(self.sparse_matrix_dict['nodes_number'][node]) == list:
+                for i in range(len(self.sparse_matrix_dict['nodes_number'][node])):
+                    node_id[node + '_' + str(i)] = self.sparse_matrix_dict['nodes_number'][node][i]
+            else:
+                node_id[node] = self.sparse_matrix_dict['nodes_number'][node]
+
+
+        self.save_json(node_id, self.entity_file_path)
+
 
     def save_vector(self):
         np.save(self.vector_file, self.kg_vector)
@@ -860,11 +909,6 @@ class Novelty_Detection_Card(History_Record):
             self.new_card[pack][card_name] = 1
         else:
             self.new_card[pack][card_name] += 1
-
-
-
-
-
 
 if __name__ == '__main__':
 

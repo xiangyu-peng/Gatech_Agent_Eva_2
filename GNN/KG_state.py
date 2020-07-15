@@ -4,7 +4,7 @@ upper_path = os.path.abspath('..')
 sys.path.append(upper_path + '/KG_rule')
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
-from KG_rule.openie_triple import KG_OpenIE
+from KG_rule.openie_triple import KG_OpenIE, History_Record
 
 class KGState():
 
@@ -44,8 +44,13 @@ class KGState():
         # Define the number of nodes
         # name of location
         sparse_matrix_dict['number_nodes'][0] = 'player'
+        sparse_matrix_dict['nodes_number']['player'] = 0
+
         sparse_matrix_dict['number_nodes'][1] = 'player_1'
+        sparse_matrix_dict['nodes_number']['player_1'] = 1
+
         sparse_matrix_dict['number_nodes'][2] = 'player_2'
+        sparse_matrix_dict['nodes_number']['player_2'] = 2
 
         for i, node in enumerate(self.board_name):
             sparse_matrix_dict['number_nodes'][i+3] = node
@@ -130,7 +135,7 @@ from monopoly_simulator.action_choices import *
 from monopoly_simulator import location
 from monopoly_simulator_background.agent_helper_functions import identify_free_mortgage
 
-class Interface(object):
+class KG_Interface(History_Record):
 
     def __init__(self):
         self.board_owned = []
@@ -232,6 +237,16 @@ class Interface(object):
         file.write('GO is located at ' + str(game_elements['go_position']) + '\n')
 
         file.close()
+
+        # Save entity_id file
+        node_id = dict()
+        for node in self.kg_state.sparse_matrix_dict['nodes_number']:
+            if type(self.kg_state.sparse_matrix_dict['nodes_number'][node]) == list:
+                for i in range(len(self.kg_state.sparse_matrix_dict['nodes_number'][node])):
+                    node_id[node + '_' + str(i)] = self.kg_state.sparse_matrix_dict['nodes_number'][node][i]
+            else:
+                node_id[node] = self.kg_state.sparse_matrix_dict['nodes_number'][node]
+        self.save_json(node_id, file_path.replace('game_log', 'entity_id').replace('txt', 'json'))
 
     def set_board(self, gameboard):
         self.kg_state = KGState(gameboard)

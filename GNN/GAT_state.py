@@ -89,7 +89,7 @@ class MonopolyTrainer:
         self.exp_dict = exp_dict
         self.logger_use = logger_use
         self.test_result = {'step': [], 'loss': [],
-                     'winning_rate': [], 'avg_score': [], 'avg_diff': []}
+                     'winning_rate': [], 'avg_score': []}
         self.spend_time = 0
         self.test_required = test_required
 
@@ -143,11 +143,12 @@ class MonopolyTrainer:
             self.config_model.state_output_size = self.params['state_output_size']
             self.config_model.entity_id_file_path = self.params['entity_id_file_path'] + '/entity_id_' + \
                                                     str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_kg.json'
-
+            self.config_model.entity_id_file_path_state = self.params['entity_id_file_path_state'] + '/entity_id_' + \
+                                                    str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_state.json'
 
             if self.gameboard:
                 self.config_model.state_num = len(self.interface.board_to_state(self.gameboard))
-            self.model = ActorCritic(self.config_model, gat_use='kg')  # A2C model
+            self.model = ActorCritic(self.config_model, gat_use)  # A2C model
 
         self.model.to(self.device)
         self.loss = 0
@@ -170,10 +171,27 @@ class MonopolyTrainer:
             state_return.append(new_state[0])
         return torch.tensor(state_return, device=device).float()
 
-    def generate_kg(self):
+    def load_adj(self):
+        """
+        load the relationship matrix
+        :param path:
+        :return:
+        """
         if os.path.exists(self.adj_path):
-            print('File exist!')
-            return True
+            self.adj = np.load(self.adj_path)
+            for i in range(self.adj.shape[1] // self.adj.shape[0] - 1):
+                self.adj = self.adj[:, self.adj.shape[0] * i:self.adj.shape[0] * (i + 1)] + self.adj[:,self.adj.shape[0] * (i + 1):                                                                                           self.adj.shape[0] * (i + 2)]
+            print('Successful load game rule!')
+        else:
+            print(self.adj_path)
+            raise FileNotFoundError
+        # print('adj-shape', self.adj.shape)
+        # print((self.adj[:,:86] + self.adj[:,86:86*2]).shape)
+
+    def generate_kg(self):
+        # if os.path.exists(self.adj_path):
+        #     print('File exist!')
+        #     return True
         env = gym.make('monopoly_simple-v1')
         env.set_config_file(self.config_file)
         env.set_exp(self.exp_dict)
@@ -190,23 +208,6 @@ class MonopolyTrainer:
         print('kg generate')
         return True
 
-    def load_adj(self):
-        """
-        load the relationship matrix
-        :param path:
-        :return:
-        """
-        if os.path.exists(self.adj_path):
-            self.adj = np.load(self.adj_path)
-            for i in range(self.adj.shape[1] // self.adj.shape[0] - 1):
-                self.adj = self.adj[:,self.adj.shape[0] * i:self.adj.shape[0] * (i+1)] + self.adj[:,self.adj.shape[0]* (i+1):self.adj.shape[0] * (i+2)]
-            print('Successful load game rule!')
-        else:
-            print(self.adj_path)
-            raise FileNotFoundError
-        # print('adj-shape', self.adj.shape)
-        # print((self.adj[:,:86] + self.adj[:,86:86*2]).shape)
-
     def test_v2(self, step_idx, seed, config_file=None, num_test=1000):
         # Set the env for testing
         env = gym.make('monopoly_simple-v1')
@@ -218,7 +219,6 @@ class MonopolyTrainer:
         score = 0.0
         done = False
         win_num = 0
-        avg_diff = 0
 
         with HiddenPrints():
             s, masked_actions = env.reset()
@@ -226,14 +226,13 @@ class MonopolyTrainer:
         for _ in range(num_test):
             num_game = 0
             score_game = 0
-            # print('reset', s, masked_actions)
             done_type = True
             while not done:
                 # print(s, masked_actions)
                 num_game += 1
-                s = s.reshape(1, -1)
+                s = s.reshape(1, s.shape[0], -1)
                 # s = torch.tensor(s, device=self.device).float()
-                s = self.model.forward(s, self.adj, self.device)
+                s = self.model.forward_state(s, self.adj, self.device)
                 prob = self.model.actor(s)
                 a = Categorical(prob).sample().cpu().numpy()  # substitute
                 # print(a[0])
@@ -249,7 +248,6 @@ class MonopolyTrainer:
 
                 score_game += r
 
-            avg_diff += s[-2] - s[-1]
             score += score_game/num_game  + 1 * abs(abs(int(done) - 2) - 1)
             win_num += abs(abs(int(done) - 2) - 1)
             done = 0
@@ -257,14 +255,14 @@ class MonopolyTrainer:
         if self.logger_use:
             print(f"Step # :{step_idx}, avg score : {score/num_test:.3f}")
             print(f"Step # :{step_idx}, avg winning : {win_num / num_test:.3f}")
-            print(f"Step # :{step_idx}, avg diff : {avg_diff / num_test:.3f}")
+            # print(f"Step # :{step_idx}, avg diff : {avg_diff / num_test:.3f}")
 
             end_time = datetime.datetime.now()
             self.spend_time = (end_time - self.start_time).seconds / 60 / 60  # hr
 
         env.close()
 
-        return round(score/num_test, 5), round(win_num/num_test, 5), round(avg_diff/num_test, 5)
+        return round(score/num_test, 5), round(win_num/num_test, 5)
 
     def save(self, step_idx):
         save_name = self.save_path + '/gat_ran_'+ str(self.exp_dict['novelty_num'][0]) + '_' + str(self.exp_dict['novelty_num'][1]) +'_v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
@@ -306,7 +304,6 @@ class MonopolyTrainer:
             s, masked_actions, background_actions = [reset_array[i][0] for i in range(len(reset_array))], \
                                 [reset_array[i][1][0] for i in range(len(reset_array))],\
                                 [reset_array[i][1][1] for i in range(len(reset_array))]
-
         loss_train = torch.tensor(0, device=self.device).float()
         self.load_adj()
         while step_idx < self.max_train_steps and self.spend_time < 300:
@@ -317,7 +314,7 @@ class MonopolyTrainer:
 
                 log_probs, masks, rewards, values = [], [], [], []
 
-                s = self.model.forward(s, self.adj, self.device)
+                s = self.model.forward_state(s, self.adj, self.device)
                 prob = self.model.actor(s)  # s => tensor #output = prob for actions
 
                 a = []
@@ -366,7 +363,7 @@ class MonopolyTrainer:
                 background_actions = [info_[1] for info_ in info]
 
                 ##########
-                s_prime_cal = self.model.forward(s_prime_cal, self.adj, self.device)
+                s_prime_cal = self.model.forward_state(s_prime_cal, self.adj, self.device)
 
                 # loss cal
                 log_probs = torch.cat(log_probs)
@@ -400,7 +397,7 @@ class MonopolyTrainer:
                 self.optimizer.step()
                 # print(self.optimizer.step())
 
-            avg_score, avg_winning, avg_diff = 0, 0, 0
+            avg_score, avg_winning = 0, 0
             if step_idx % self.PRINT_INTERVAL == 0:
                 # save weights of A2C
                 self.save(step_idx)
@@ -409,14 +406,13 @@ class MonopolyTrainer:
                 loss_train = torch.tensor(0, device=self.device).float()
 
                 if self.test_required:
-                    avg_score, avg_winning, avg_diff = self.test_v2(step_idx, seed=0, config_file=self.config_file)
-                    print(avg_score, avg_winning, avg_diff)
+                    avg_score, avg_winning = self.test_v2(step_idx, seed=0, config_file=self.config_file)
                     # Add test result to storage and then plot
                     self.test_result['step'].append(step_idx // self.PRINT_INTERVAL)
                     self.test_result['loss'].append(round(float(loss_return)) / self.PRINT_INTERVAL)
                     self.test_result['winning_rate'].append(avg_winning)
                     self.test_result['avg_score'].append(avg_score)
-                    self.test_result['avg_diff'].append(avg_diff)
+                    # self.test_result['avg_diff'].append(avg_diff)
 
                 if self.logger_use:
                     self.TB.logkv('step_idx', step_idx)
@@ -424,7 +420,7 @@ class MonopolyTrainer:
                     if self.test_required:
                         self.TB.logkv('avg_score', avg_score)
                         self.TB.logkv('avg_winning', avg_winning)
-                        self.TB.logkv('avg_diff', avg_diff)
+                        # self.TB.logkv('avg_diff', avg_diff)
                     self.TB.dumpkvs()
 
                     # plot the results
@@ -450,7 +446,7 @@ class MonopolyTrainer:
 
         self.envs.close()
 
-        return loss_return, avg_score, avg_winning, avg_diff
+        return loss_return, avg_score, avg_winning
 
 
 if __name__ == '__main__':
@@ -475,8 +471,9 @@ if __name__ == '__main__':
                         default='/media/becky/GNOME-p3', required=False,
                         help="Novelty price change begin number")
     parser.add_argument('--exp_type', type=str,
-                        default='kg', required=False,
-                        help="Novelty price change begin number")
+                        default='state', required=False,
+                        help="Use state kg or not. Choose from state and kg")
+
 
     args = parser.parse_args()
 
@@ -484,6 +481,7 @@ if __name__ == '__main__':
     exp_dict['novelty_num'] = (args.novelty_change_num, args.novelty_change_begin)
     exp_dict['novelty_inject_num'] = args.novelty_introduce_begin
     exp_dict['exp_type'] = args.exp_type
+
     # read the config file and set the hyper-param
     config_data = ConfigParser()
     config_data.read(args.upper_path + args.config_file)
@@ -518,7 +516,7 @@ if __name__ == '__main__':
                                   test_required=True,
                                   tf_use=False,
                                   pretrain_model=None,
-                                  gat_use='kg',
+                                  gat_use='state',
                                   seed=args.seed,
                                   exp_dict=exp_dict) #'/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
         trainer.train()
