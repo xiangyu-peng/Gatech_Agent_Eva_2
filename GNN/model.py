@@ -226,22 +226,23 @@ class GAT(nn.Module):
 #
 
 class GraphNN(nn.Module):
-    def __init__(self, gat_emb_size, embedding_size, dropout_ratio, json_file, gat_output_size):
+    def __init__(self, gat_emb_size, embedding_size, dropout_ratio, json_file, gat_output_size, type):
         super(GraphNN, self).__init__()
         self.embedding_size = embedding_size
         self.dropout_ratio = dropout_ratio
         self.gat_emb_size = gat_emb_size
         self.gat_output_size = gat_output_size
+        self.type = type
 
         self.gat = GAT(gat_emb_size, 3, dropout_ratio, 0.2, 1)
+        if os.path.exists(json_file):
+            self.vocab_kge = self.load_vocab_kge(json_file)  # node -> id
+        else:
+            print('Did not find ', json_file)
+            raise FileNotFoundError
 
-        self.vocab_kge = self.load_vocab_kge(json_file)  # node -> id
-
-        self.state_ent_emb = nn.Embedding.from_pretrained(torch.zeros((len(self.vocab_kge), self.embedding_size)),
-                                                          freeze=False)  # empty embedding all 0s => 362 * 50
-
+        self.state_ent_emb = nn.Embedding.from_pretrained(torch.zeros((len(self.vocab_kge), self.embedding_size)),freeze=False)  # empty embedding all 0s => 362 * 50
         self.fc1 = nn.Linear(self.state_ent_emb.weight.size()[0] * 3 * 1, self.gat_output_size)  # what is 3?
-
 
     # def init_state_ent_emb(self, emb_size):
     #     embeddings = torch.zeros((len(self.vocab_kge), emb_size))
@@ -279,7 +280,11 @@ class GraphNN(nn.Module):
         # print(self.state_ent_emb.weight)
         out = []
         adj = torch.IntTensor(adj).cuda()
-        x = self.gat.forward(self.state_ent_emb.weight, adj).view(-1)
+        x = self.gat.forward(self.state_ent_emb.weight, adj)
+        if self.type == 'state':
+            x = x.view(x.shape[0],-1)
+        else:
+            x = x.view(1,-1)
         out.append(x.unsqueeze_(0))
         out = torch.cat(out)
         ret = self.fc1(out)
@@ -324,7 +329,5 @@ class StateNN(nn.Module):
         :type obs: np.ndarray of shape (Batch_Size x 4 x 300)
 
         '''
-
         x = F.relu(self.fcx(obs))
-
         return x

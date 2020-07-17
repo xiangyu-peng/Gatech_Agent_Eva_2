@@ -3,6 +3,7 @@
 # Only take one action each time
 # log name + save name
 # add kg gat into the model
+# python GAT.py --novelty_change_num 5 --novelty_change_begin 3 --novelty_introduce_begin 0 --seed 10 > 5_3_seed10_kg.out
 
 import numpy as np
 from model import *
@@ -516,7 +517,7 @@ if __name__ == '__main__':
                                   logger_use=True,
                                   config_file=args.config_file,
                                   test_required=True,
-                                  tf_use=False,
+                                  tf_use=True,
                                   pretrain_model=None,
                                   gat_use='kg',
                                   seed=args.seed,

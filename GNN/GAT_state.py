@@ -3,6 +3,7 @@
 # Only take one action each time
 # log name + save name
 # add kg gat into the model
+# nohup python GAT_state.py --novelty_change_num 18 --novelty_change_begin 1 --novelty_introduce_begin 0 --seed 10 > 18_1_seed10_state.out
 
 import numpy as np
 from model import *
@@ -265,7 +266,7 @@ class MonopolyTrainer:
         return round(score/num_test, 5), round(win_num/num_test, 5)
 
     def save(self, step_idx):
-        save_name = self.save_path + '/gat_ran_'+ str(self.exp_dict['novelty_num'][0]) + '_' + str(self.exp_dict['novelty_num'][1]) +'_v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
+        save_name = self.save_path + '/gat_state_ran_'+ str(self.exp_dict['novelty_num'][0]) + '_' + str(self.exp_dict['novelty_num'][1]) +'_v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
         torch.save(self.model, save_name)
 
     def set_gameboard(self, gameboard=None,
@@ -307,16 +308,12 @@ class MonopolyTrainer:
         loss_train = torch.tensor(0, device=self.device).float()
         self.load_adj()
         while step_idx < self.max_train_steps and self.spend_time < 300:
-
             loss = torch.tensor(0, device=self.device).float()
             for _ in range(self.update_interval):
                 entropy = 0
-
                 log_probs, masks, rewards, values = [], [], [], []
-
                 s = self.model.forward_state(s, self.adj, self.device)
                 prob = self.model.actor(s)  # s => tensor #output = prob for actions
-
                 a = []
                 for i in range(self.n_train_processes):
                     a_once = Categorical(prob).sample().cpu().numpy()[i]  # substitute
