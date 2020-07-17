@@ -9,6 +9,7 @@ import time
 import numpy as np
 import os, sys
 from random import randint
+from GNN.model import *
 
 
 class HiddenPrints:
@@ -22,15 +23,42 @@ class HiddenPrints:
 
 #A2C Model
 class ActorCritic(nn.Module):
-    def __init__(self, config):
+    def __init__(self, config, gat_use=False):
         super(ActorCritic, self).__init__()
         self.config = config
-        self.fc_1 = nn.Linear(config.state_num, config.hidden_state) #config.state_num = 4; config.hidden_state) = 256
+        self.gat_use = gat_use
         self.fc_actor = nn.Linear(config.hidden_state, config.action_space) #config.action_space= 2; hidden_size = 256
         self.fc_critic = nn.Linear(config.hidden_state, 1)
-
-        #add rnn herenvidia-smi
-
+        if gat_use:
+            if gat_use == 'state':
+                self.fc_1 = nn.Linear(config.gat_output_size + config.state_output_size,
+                                      config.hidden_state)  # config.state_num = 4; config.hidden_state) = 256
+                self.state_gat = GraphNN(config.gat_emb_size,
+                                               config.embedding_size,
+                                               config.dropout_ratio,
+                                               config.entity_id_file_path_state,
+                                               config.state_output_size,
+                                               'state').cuda()
+                self.graph_gat = GraphNN(config.gat_emb_size,
+                                         config.embedding_size,
+                                         config.dropout_ratio,
+                                         config.entity_id_file_path,
+                                         config.gat_output_size,
+                                         'kg').cuda()
+                # self.state_nn = StateNN(config.state_num, config.state_output_size)
+            else:
+                self.fc_1 = nn.Linear(config.state_output_size + config.gat_output_size,
+                                      config.hidden_state)  # config.state_num = 4; config.hidden_state) = 256
+                self.graph_gat = GraphNN(config.gat_emb_size,
+                                              config.embedding_size,
+                                              config.dropout_ratio,
+                                              config.entity_id_file_path,
+                                              config.gat_output_size,
+                                              'kg').cuda()
+                self.state_nn = StateNN(config.state_num, config.state_output_size)
+        else:
+            self.fc_1 = nn.Linear(config.state_num,
+                                  config.hidden_state)  # config.state_num = 4; config.hidden_state) = 256
 
     #Actor model
     def actor(self, x, softmax_dim=1): #actions' probability
@@ -44,13 +72,35 @@ class ActorCritic(nn.Module):
         v = self.fc_critic(x)
         return v
 
+    def forward(self, state, adj, device):
+        state = torch.tensor(state, device=device).float()
+        state = self.state_nn.forward(state)
+        g_t = self.graph_gat.forward(adj).reshape(1, -1)
+        g_t_cat = g_t
+        for i in range(state.shape[0] - 1):
+            g_t_cat = torch.cat((g_t_cat, g_t), dim=0)
+        return torch.cat((g_t_cat, state), dim=1)
 
-def worker(worker_id, master_end, worker_end, gameboard=None, kg_use=True):
+    def forward_state(self, state, adj, device):
+        # state = torch.tensor(state, device=device).float()
+        # state = self.state_nn.forward(state)
+        o_t = self.state_gat.forward(state)
+        o_t = o_t.reshape(len(state), -1)
+        g_t = self.graph_gat.forward(adj).reshape(1, -1)
+        g_t_cat = g_t
+        for i in range(len(state) -  1):
+            g_t_cat = torch.cat((g_t_cat, g_t), dim=0)
+        return torch.cat((g_t_cat, o_t), dim=1)
+
+def worker(worker_id, master_end, worker_end, gameboard=None, kg_use=True, config_file=None, seed=0, exp_dict=None):
     master_end.close()  # Forbid worker to use the master end for messaging
     env = gym.make('monopoly_simple-v1')
+    print('config_file',config_file)
+    env.set_config_file(config_file)
+    env.set_exp(exp_dict)
     env.set_kg(kg_use)
     env.set_board(gameboard)
-    env.seed(worker_id)
+    env.seed(seed + worker_id)
     # env.seed(randint(0,sys.maxsize))
 
     while True:
@@ -82,7 +132,7 @@ def worker(worker_id, master_end, worker_end, gameboard=None, kg_use=True):
             raise NotImplementedError
 
 class ParallelEnv:
-    def __init__(self, n_train_processes, gameboard=None, kg_use=True):
+    def __init__(self, n_train_processes, gameboard=None, kg_use=True, config_file=None, seed=0, exp_dict=None):
         self.nenvs = n_train_processes
         self.waiting = False
         self.closed = False
@@ -94,7 +144,7 @@ class ParallelEnv:
 
         for worker_id, (master_end, worker_end) in enumerate(zip(master_ends, worker_ends)):
             p = mp.Process(target=worker,
-                           args=(worker_id, master_end, worker_end,gameboard, kg_use))
+                           args=(worker_id, master_end, worker_end,gameboard, kg_use, config_file, seed, exp_dict))
             p.daemon = True
             p.start()
             self.workers.append(p)
@@ -160,8 +210,10 @@ class ParallelEnv:
             worker.join()
             self.closed = True
 
-def test(step_idx, model, device, num_test, gameboard=None,kg_use=False):
+def test(step_idx, model, device, num_test, gameboard=None,kg_use=False, config_file=None, exp_dict=None):
     env = gym.make('monopoly_simple-v1')
+    env.set_config_file(config_file)
+    env.set_dict(exp_dict)
     env.set_kg(kg_use)
     env.set_board(gameboard)
 

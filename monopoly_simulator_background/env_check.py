@@ -22,124 +22,102 @@ class HiddenPrints:
         sys.stdout.close()
         sys.stdout = self._original_stdout
 
-# n = 8
-# sum_win = 0
-# while n < 9:
-#     done_num = 0
-#     env = gym.make('monopoly_simple-v1')
-#     env.seed(seed=n)
-#     with HiddenPrints():
-#         s,mask = env.reset()
-#     done = 0
-#     while done_num < 3:
-#         # s, rew, done, info = env.step_nochange(0)
-#         # s, rew, done, info = env.step_after_nochange(0)
-#
-#         with HiddenPrints():
-#             s, rew, done, info = env.step_nochange(0)
-#         # print('s', s, rew)
-#         # print('info',info)
-#         # break
-#         with HiddenPrints():
-#             s_later, rew_later, _, info = env.step_after_nochange(0)
-#         # print('s =>', s)
-#         # print('s_later', s_later)
-#         if done_num ==1:
-#             done_num+=1
-#             print('s =>',s,rew)
-#             print('s_later', s_later,rew_later)
-#             print('info=>',info)
-#             break
-#         if done:
-#             done_num += 1
-#             print(s_later)
-#
-#
-#     n += 1
-#     sum_win += done - 1
-# print(sum_win)
-start = time.time()
-n = 1
-env = gym.make('monopoly_simple-v1')
+i = 40
+while i < 50:
+    i += 1
+    env = gym.make('monopoly_simple-v1')
+    env.set_config_file('/monopoly_simulator_background/config.ini')
 
-####set up board####
-player_decision_agents = dict()
-player_decision_agents['player_1'] = P1Agent()
+    exp_dict = dict()
+    exp_dict['novelty_num'] = (30,1)
+    exp_dict['novelty_inject_num'] = 0
+    exp_dict['exp_type'] = 'kg'
+    env.set_exp(exp_dict)
+    env.set_kg(True)
 
-# Assign the beckground agents to the players
-name_num = 1
-num_player = 3
-while name_num < num_player:
-    name_num += 1
-    player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
-
-gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-1.json',
-                                 player_decision_agents,
-                                 num_player)
-############
-
-# env.set_board(gameboard_initial)
-env.set_kg(True)
-env.set_board('/media/becky/GNOME-p3/KG_rule/current_gameboard_state.json')
-env.seed(seed=n)
-# with HiddenPrints():
-s,mask = env.reset()
-print('reset',s,mask, len(s))
-done_num = 0
-done_num_total = 5000
-# i = 0
-# while i < 30000:
-#     i += 1
-#     s, rew, done_after, info = env.step_after_nochange(0)
-
-bool = False
-while done_num < done_num_total:
+    env.set_board()
+    env.seed(seed=i)
 
     # with HiddenPrints():
-    #     s, rew, done, info = env.step_nochange(1)
-    # print('s-nochange',s, rew, info)
+    s,mask = env.reset()
+    # print('reset',s)
+    done_num = 0
+    done_num_total = 10
+    # i = 0
+    # while i < 30000:
+    #     i += 1
+    #     s, rew, done_after, info = env.step_after_nochange(0)
 
-    with HiddenPrints():
+    bool = False
+    num = 0
+    while done_num < done_num_total:
+        num += 1
+
+        # with HiddenPrints():
+        #     s, rew, done, info = env.step_nochange(1)
+        # print('s-nochange',s, rew, info, len(s))
+        #
+        # with HiddenPrints():
+        #     s, rew, done, info = env.step_nochange(0)
+        # print('s-nochange', s, rew, info, len(s))
+
+        # print('money', s.tolist()[-12:-6].index(1), s.tolist()[-12:-6])
+        # loc = s.tolist()[-52:-12].index(1)
+        # print('loc', loc)
+        # print('who owned?',s.tolist()[loc])
+        # print('=====')
+
+        # with HiddenPrints():
         s, rew, done, info = env.step(1)
-    # print('s-step',s, rew, info)
-    if bool:
-
-        bool = False
-    if done > 0:
-        done_num += 1
-        bool = True
-        print('done', s)
-
-        # print('s', s, rew, len(s), done)
-
-    # if done_num == done_num_total:
-    #     break
+        # print('reward =>', rew)
+        # loc = s.tolist()[-52:-12].index(1)
+        # print('s-step', rew, 'loc =>', loc)
+        # print('s',s)
 
 
-    # done_after = False
-    # while done_after == False:
-    #     with HiddenPrints():
-    #         s, rew, done_after, info = env.step_hyp(0)
-    #     print('s-hyp0', s, rew, info, done_after)
+
+        if bool:
+            # print('reset', s.tolist().index(1))
+
+            bool = False
+
+
+            # print('reset', s, len(s), len(s))
+
+        # if done_num == done_num_total:
+        #     break
+
+
+        # done_after = False
+        # while done_after == False:
+        #     with HiddenPrints():
+        #         s, rew, done_after, info = env.step_hyp(0)
+        #     print('s-hyp0', s, rew, info, done_after)
 
         # with HiddenPrints():
         #     s, rew, done, info = env.step_nochange(0)
         # print('s-nochange', s, rew, info)
 
+            # with HiddenPrints():
+            #     s, rew, done_after, info = env.step_hyp(0)
+            # print('s-hyp0', s, rew, info, done_after)
+            #
+            # with HiddenPrints():
+            #     s, rew, done_after, info = env.step_hyp(1)
+            # print('s-hyp1', s, rew, info, done_after)
+
         # with HiddenPrints():
-        #     s, rew, done_after, info = env.step_hyp(0)
-        # print('s-hyp0', s, rew, info, done_after)
+        #     s, rew, done_after, info = env.step_after_nochange(0)
         #
-        # with HiddenPrints():
-        #     s, rew, done_after, info = env.step_hyp(1)
-        # print('s-hyp1', s, rew, info, done_after)
+        # print(info)
 
-    # with HiddenPrints():
-    #     s, rew, done_after, info = env.step_after_nochange(1)
-    # print('s_after', s, rew, info)
-    # print('===========')
 
-    done_num += 1
-    # print('s',s,rew)
-end = time.time()
-# print('Run %d environments need %f' % (done_num_total, float(str(end-start))))
+        if done > 0:
+            done_num += 1
+            bool = True
+            # print('===========')
+            # print('done', s)
+
+        # print('s',s,rew)
+    end = time.time()
+    # print('Run %d environments need %f' % (done_num_total, float(str(end-start))))

@@ -2,6 +2,7 @@
 # Only consider 2 actions
 # Only take one action each time
 # log name + save name
+# python vanilla_A2C_main_v3.py --novelty_change_num 18 --novelty_change_begin 1 --novelty_introduce_begin 0 --seed 8 --gat_use False
 
 import sys, os
 upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
@@ -52,20 +53,21 @@ class HiddenPrints:
 #         largest_num -= 1
 #     return a
 class MonopolyTrainer:
-    def __init__(self, params,
-                 device_id,
+    def __init__(self,
+                 params,
                  gameboard=None,
-                 kg_use=True,
-                 logger_use=True,
-                 config_file=None,
-                 test_required=True,
-                 tf_use=True,
-                 pretrain_model=None,
-                 seed=0):
-        self.seed = seed
-        self.tf_use = tf_use
-        self.config_file = config_file
-        self._device_id = device_id
+                 exp_dict=None):
+
+        self.exp_dict = exp_dict
+        self.gat_use = args.gat_use
+        self.seed = args.seed
+
+        #tf use
+        self.tf_use = args.tf_use
+        self.tf_stop_num = args.tf_stop_num
+
+        self.config_file = args.config_file
+        self._device_id = 'cuda:' + args.device_id
         self.params = params
         self.PRINT_INTERVAL = self.params['print_interval']
         self.n_train_processes = self.params['n_train_processes']  # batch size
@@ -82,12 +84,12 @@ class MonopolyTrainer:
         self.save_path = self.params['save_path']
         self.num_test = self.params['num_test']
         self.gameboard = gameboard
-        self.kg_use = kg_use
-        self.logger_use = logger_use
+        self.kg_use = args.kg_use
+        self.logger_use = args.logger_use
         self.test_result = {'step': [], 'loss': [],
                      'winning_rate': [], 'avg_score': [], 'avg_diff': []}
         self.spend_time = 0
-        self.test_required = test_required
+        self.test_required = args.test_required
 
 
         # config logger
@@ -95,57 +97,45 @@ class MonopolyTrainer:
             hyper_config_str = '_n' + str(self.n_train_processes) + '_lr' + str(self.learning_rate) + '_ui' + str(
                 self.update_interval) \
                                + '_y' + str(self.gamma) + '_s' + str(self.max_train_steps) + '_hs' + str(self.hidden_state) \
-                               + '_as' + str(self.action_space) + '_sn'  \
-                               + '_ac' + str(self.actor_loss_coefficient) + '_seed' + str(self.seed) + '_novelty_4_4_pre_delete'
+                               + '_as' + str(self.action_space) + '_sn' \
+                               + '_ac' + str(self.actor_loss_coefficient) + '_seed' + str(self.seed) + '_novelty_' + \
+                               str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_ran'
             self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/', log_suffix=hyper_config_str)])
 
         self.start_time = datetime.datetime.now()
-        if not self._device_id:  # use all available devices
-            use_cuda = torch.cuda.is_available()
-            self.device = torch.device("cuda" if use_cuda else "cpu")
-        else:
-            os.environ["CUDA_VISIBLE_DEVICES"] = str(self._device_id)
-            self.device = torch.device('cuda:1')
 
         ###set to cpu for evaluation
-        self.device = torch.device('cuda:1')
-        os.environ["CUDA_VISIBLE_DEVICES"] = '1'
+        self.device = torch.device(self._device_id)
+        os.environ["CUDA_VISIBLE_DEVICES"] = args.device_id
             #######################################
 
         with HiddenPrints():
-            self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed)
+            self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed, self.exp_dict)
 
         if self.gameboard:
             self.interface.set_board(self.gameboard)
         else:
             self.interface.set_board('/monopoly_simulator_background/baseline_interface.json')
 
-        if pretrain_model:
-            self.model = torch.load(pretrain_model, map_location={"cuda:2" : "cuda:1"})
+        if args.pretrain_model:
+            self.model = torch.load(args.pretrain_model, map_location={"cuda:2" : "cuda:1"})
         else:
 
             self.config_model = ConfigParser()
             self.config_model.hidden_state = self.params['hidden_state']
             self.config_model.action_space = self.params['action_space']
             self.config_model.state_num = self.params['state_num']
+            # self.config_model.state_output_size = self.params['state_output_size']
 
             if self.gameboard:
                 self.config_model.state_num = len(self.interface.board_to_state(self.gameboard))
-            self.model = ActorCritic(self.config_model)  # A2C model
+            self.model = ActorCritic(self.config_model, args.gat_use)  # A2C model
 
         self.model.to(self.device)
         self.loss = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
 
         self.memory = Memory()
-
-        self.novelty_spaces = set()
-        for (i, name) in enumerate(
-                ["Mediterranean Avenue", "Baltic Avenue", "Reading Railroad", "Oriental Avenue", "Vermont Avenue",
-                 "Connecticut Avenue", "St. Charles Place", "Electric Company"]):
-            if i + 1 >= 7 and i + 1 <= 7:
-                self.novelty_spaces.add(name)
-
 
     def add_vector_to_state(self, states, vector, device):
         state_return = []
@@ -162,8 +152,9 @@ class MonopolyTrainer:
         # Set the env for testing
         env = gym.make('monopoly_simple-v1')
         env.set_config_file(config_file)
+        env.set_exp(self.exp_dict)
         env.set_kg(self.kg_use)
-        env.set_board() # self.gameboard
+        env.set_board()  # self.gameboard
         env.seed(seed)
         score = 0.0
         done = False
@@ -218,7 +209,7 @@ class MonopolyTrainer:
         return round(score/num_test, 5), round(win_num/num_test, 5), round(avg_diff/num_test, 5)
 
     def save(self, step_idx):
-        save_name = self.save_path + '/delete_pre_4_4_v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
+        save_name = self.save_path + '/del_ran_19_1_v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
         torch.save(self.model, save_name)
 
         # for i, (name, param) in enumerate(self.model.named_parameters()):
@@ -258,8 +249,8 @@ class MonopolyTrainer:
             self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/', log_suffix=hyper_config_str)])
 
     def train(self):
-        with HiddenPrints():
-            self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed)
+        # with HiddenPrints():
+        #     self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed)
 
         step_idx = 1
         with HiddenPrints():
@@ -275,7 +266,6 @@ class MonopolyTrainer:
             loss = torch.tensor(0, device=self.device).float()
             for _ in range(self.update_interval):
                 entropy = 0
-
                 log_probs, masks, rewards, values = [], [], [], []
 
                 # s = s.reshape(n_train_processes, -1)
@@ -326,7 +316,7 @@ class MonopolyTrainer:
                 #         a_tf.append(1)
                 if self.tf_use:
                     a_tf = [1 for i in range(self.n_train_processes)]
-                    if step_idx < 20000: #background_actions
+                    if step_idx < self.tf_stop_num: #background_actions
                         s_prime, _, _, info = self.envs.step_after_nochange(background_actions)  # background_actions
                     else:
                         s_prime, _, _, info = self.envs.step_after_nochange(a)
@@ -435,14 +425,74 @@ class MonopolyTrainer:
 
         return loss_return, avg_score, avg_winning, avg_diff
 
-
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--config_file',
+                        default='/monopoly_simulator_background/config.ini',
+                        required=False,
+                        help="config_file for env")
+    parser.add_argument('--novelty_change_num', type=int,
+                        default=None, required=True,
+                        help="Novelty price change number")
+    parser.add_argument('--novelty_change_begin', type=int,
+                        default=None, required=True,
+                        help="Novelty price change begin number")
+    parser.add_argument('--novelty_introduce_begin', type=int,
+                        default=0, required=False,
+                        help="Novelty price change begin number")
+    parser.add_argument('--seed', type=int,
+                        default=0, required=True,
+                        help="Env seed")
+    parser.add_argument('--upper_path', type=str,
+                        default='/media/becky/GNOME-p3', required=False,
+                        help="Novelty price change begin number")
+    parser.add_argument('--exp_type', type=str,
+                        default='kg', required=False,
+                        help="Novelty price change begin number")
+    parser.add_argument('--device_id',
+                        default='1', type=str,
+                        required=False,
+                        help="GPU id we use")
+    parser.add_argument('--tf_use',
+                        default=True, type=bool,
+                        required=False,
+                        help="Use tf or not")
+    parser.add_argument('--tf_stop_num',
+                        default=20000, type=int,
+                        required=False,
+                        help="When to stop using tf")
+    parser.add_argument('--test_required',
+                        default=True, type=bool,
+                        required=False,
+                        help="We need to run tests or not")
+    parser.add_argument('--kg_use',
+                        default=False, type=bool,
+                        required=False,
+                        help="Use kg to learn the game rule change or not")
+    parser.add_argument('--logger_use',
+                        default=True, type=bool,
+                        required=False,
+                        help="Use csv file to record the test results or not")
+    parser.add_argument('--pretrain_model',
+                        default=None,
+                        required=False,
+                        help="pretrain model path")
+    parser.add_argument('--gat_use',
+                        default=False, type=bool,
+                        required=True,
+                        help="Whether use the kg graph attention. Yes: 'kg'; No: False")
 
+    args = parser.parse_args()
+    args.gat_use = False if args.gat_use != 'kg' else args.gat_use
+
+    exp_dict = dict()
+    exp_dict['novelty_num'] = (args.novelty_change_num, args.novelty_change_begin)
+    exp_dict['novelty_inject_num'] = args.novelty_introduce_begin
+    exp_dict['exp_type'] = args.exp_type
 
     # read the config file and set the hyper-param
-    config_file = '/monopoly_simulator_background/config.ini'
     config_data = ConfigParser()
-    config_data.read('/media/becky/GNOME-p3/monopoly_simulator_background/config.ini')
+    config_data.read(args.upper_path + args.config_file)
 
     # set param_list: a list of dictionary
     all_params = {}
@@ -454,7 +504,6 @@ if __name__ == '__main__':
         else:
             all_params[key] = v
 
-
     def dict_product(d):
         param_list = []
         keys = d.keys()
@@ -462,45 +511,12 @@ if __name__ == '__main__':
             param_list.append(dict(zip(keys, element)))
         return param_list
 
-
     param_list = dict_product(all_params)
-
-    # specify device
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--device", type=int)
-    args = parser.parse_args()
-    device_id = args.device
-    print(device_id)
-
-#set board for debug
-    ####set up board####
-    # player_decision_agents = dict()
-    # player_decision_agents['player_1'] = P1Agent()
-    #
-    # # Assign the beckground agents to the players
-    # name_num = 1
-    # num_player = 4
-    # while name_num < num_player:
-    #     name_num += 1
-    #     player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
-    #
-    # gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-1.json',
-    #                                  player_decision_agents) #, num_player)
-    ########
-    # gameboard_initial = '/Hypothetical_simulator/game_board/current_gameboard_state33.json'
-    # config_file = '/Hypothetical_simulator/config_baseline.ini'
-    config_file = '/monopoly_simulator_background/config.ini'
     for params in param_list:  # run different hyper parameters in sequence
-        trainer = MonopolyTrainer(params, device_id,
+        trainer = MonopolyTrainer(params,
                                   gameboard=None,
-                                  kg_use=True,
-                                  logger_use=True,
-                                  config_file=config_file,
-                                  test_required=True,
-                                  tf_use=False,
-                                  pretrain_model='/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl',
-                                  seed=8) #'/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
-        trainer.train()
+                                  exp_dict=exp_dict)  # '/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
+    trainer.train()
 
 # if __name__ == '__main__':
 #     config_file = '/media/becky/Novelty-Generation-Space-A2C/Vanilla-A2C/config.ini'
