@@ -98,3 +98,6 @@ class Sim_Monopoly(gym.Env):
             self.MonopolyWorld = Monopoly_world(config_data)
         else:
             self.MonopolyWorld = Monopoly_world()
+            
+    def set_exp(self, exp_dict):
+        self.MonopolyWorld.set_exp(exp_dict)

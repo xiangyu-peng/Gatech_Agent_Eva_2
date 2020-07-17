@@ -9,6 +9,7 @@ sys.path.append(upper_path_eva)
 from monopoly_simulator_background.gameplay_step import *
 from monopoly_simulator_background.gameplay_tf import *
 from monopoly_simulator_background.interface import Interface
+from GNN.KG_state import KG_Interface
 from monopoly_simulator_background.simple_background_agent_becky_p1 import P1Agent
 from monopoly_simulator_background.simple_background_agent_becky_p2 import P2Agent
 from monopoly_simulator import background_agent_v3
@@ -35,6 +36,12 @@ from monopoly_simulator_background.agent_helper_functions import identify_improv
 class Monopoly_world():
     def __init__(self, config_file=None):
         # Get config data
+        # exp related
+        self.novelty_num = None
+        self.matrix_name = None
+        self.entity_name = None
+        self.novelty_inject_num = 0
+
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
         self.upper_path = '/media/becky/GNOME-p3'
         self.config_file = self.upper_path + config_file
@@ -48,7 +55,8 @@ class Monopoly_world():
         self.num_active_players = 0
         self.num_die_rolls = 0
         self.current_player_index = 0
-        self.interface = Interface()
+        self.interface = None
+        self.exp_type = None
         self.params = dict()
         self.player_decision_agents = dict()
         self.reward = 0
@@ -73,14 +81,28 @@ class Monopoly_world():
         self.game_num = 0
         self.kg_change = []
         self.kg_save_interval = self.hyperparams['kg_save_interval']
-        self.log_path = self.upper_path + self.hyperparams['log_path']
-        self.novelty_inject_num = self.hyperparams['novelty_inject_num']
+        self.log_path = None
         self.rule_change_path = self.upper_path + self.hyperparams['rule_change_path']
         self.kg_rel_path = self.upper_path + self.hyperparams['kg_rel_path']
 
         #hypothetical simulator
         self.saved_gameboard_path = None
         self.running_hyp = False
+
+    def set_exp(self, exp_dict):
+        if exp_dict:
+            self.novelty_num = exp_dict['novelty_num']  # (5,1) (a,b): 1,2,3,4,5 => range(a, a+b)
+            self.matrix_name = '/kg_matrix_' + str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.npy'
+            self.entity_name = '/entity_id_' + str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.json'
+            self.novelty_inject_num = exp_dict['novelty_inject_num']
+            self.log_path = self.upper_path + '/KG_rule/log_file/game_log_' + str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.txt'
+            self.exp_type = exp_dict['exp_type']
+            if exp_dict['exp_type'] == 'state':
+                self.interface = KG_Interface()
+            else:
+                self.interface = Interface()
+        else:
+            self.interface = Interface()
 
     def set_initial_gameboard(self, gameboard=None):
         # If we run the hypothetical simulator, the gameboard is written to a file
@@ -150,7 +172,7 @@ class Monopoly_world():
 
         # KG for rule learning
         if self.kg_use:
-            self.kg = KG_OpenIE(self.gameboard_initial, config_file=self.config_file)
+            self.kg = KG_OpenIE(self.gameboard_initial, self.matrix_name, self.entity_name, config_file=self.config_file)
 
         return self.gameboard_initial
 
@@ -171,7 +193,7 @@ class Monopoly_world():
         self.num_active_players = self.num_players  # Reset the active players number to players number
         self.num_die_rolls = 0
         self.current_player_index = 0
-        self.interface = Interface()
+        self.interface = KG_Interface() if self.exp_type == 'state' else Interface()
         self.params = dict()
         self.reward = 0
         self.terminal = False
@@ -195,7 +217,7 @@ class Monopoly_world():
 
         # Inject novelty here
         if self.game_num > self.novelty_inject_num:
-            inject_novelty(self.game_elements)
+            inject_novelty(self.game_elements, self.novelty_num)
 
         if self.running_hyp:
             current_player = self.game_elements['players'][0]
@@ -591,10 +613,11 @@ class Monopoly_world():
         self.kg.build_kg_file(self.log_path, level='rel', use_hash=True)
         self.kg_save_num += 1
         #save knowledge graph when simulating num of games is self.kg_save_interval
-        if self.kg_save_num % self.kg_save_interval == 0:
-            self.kg.save_json(self.kg.kg_rel, self.kg_rel_path)
-            self.kg.dict_to_matrix()
-            self.kg.save_matrix()
+        # if self.kg_save_num % self.kg_save_interval == 0:
+        #     self.kg.save_json(self.kg.kg_rel, self.kg_rel_path)
+        #     self.kg.build_matrix_dict()
+        #     self.kg.sparse_matrix = self.kg.dict_to_matrix()
+        #     self.kg.save_matrix()
             # self.kg.save_vector()
 
         # Visulalize the novelty change in the network
