@@ -1,95 +1,149 @@
 # This file is used to plot the results of off line retraining
-# python evaluate_hyp.py --novelty 5,20,5,20_4,1,4,1 --interval 10 --type ran,gat
+# python evaluate_hyp.py --interval 10 --novelty 3,19,1,18,5,12_4,2,4,2,3,2,3,2 --type pre
 
 import csv
 import matplotlib.pyplot as plt
 import argparse
 import sys
 
-def plot_result(name, type_list):
+def plot_result(name, type_list, interval):
+    if 'all' in type_list:
+        type_list = ['hyp_gat_pre', 'gat_pre', 'baseline_pre', 'hyp_pre', 'baseline_ran', 'gat_ran', 'hyp_gat_ran', 'hyp_ran']
+    if 'ran' in type_list:
+        type_list = ['baseline_ran', 'gat_ran', 'hyp_gat_ran','hyp_ran']
+    if 'pre' in type_list:
+        type_list = ['hyp_gat_pre', 'gat_pre', 'baseline_pre', 'hyp_pre']
     min_length = sys.maxsize
 
-    if 'hyp' in type_list:
+    if 'hyp_gat_pre' in type_list:
         """
         Not use gat
         retrain from pre
         w/ hyp sim
         """
-        hyp_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp.csv', newline='') as csvfile:
+        hyp_gat_pre_list = []
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp_gat_pre.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
                     num = row.index('avg_winning')
                 else:
-                    hyp_list.append(100 * float(row[num]))
-        min_length = min(len(hyp_list), min_length)
+                    hyp_gat_pre_list.append(100 * float(row[num]))
+        min_length = min(len(hyp_gat_pre_list), min_length)
 
-    if 'baseline' in type_list:
+    if 'gat_pre' in type_list:
         """
         Not use gat
         retrain from pre
         w/ hyp sim
         """
-        pre_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_baseline.csv', newline='') as csvfile:
+        gat_pre_list = []
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_gat_pre.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
                     num = row.index('avg_winning')
                 else:
-                    pre_list.append(100 * float(row[num]))
-        min_length = min(len(pre_list), min_length)
+                    gat_pre_list.append(100 * float(row[num]))
+        min_length = min(len(gat_pre_list), min_length)
 
-    if 'ran' in type_list:
+    if 'baseline_pre' in type_list:
         """
         Not use gat
         retrain from scratch
         w/o hyp sim
         """
-        ran_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_baseline.csv', newline='') as csvfile:
+        baseline_pre_list = []
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_baseline_pre.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
                     num = row.index('avg_winning')
                 else:
-                    ran_list.append(100 * float(row[num]))
-        min_length = min(len(ran_list), min_length)
+                    baseline_pre_list.append(100 * float(row[num]))
+        min_length = min(len(baseline_pre_list), min_length)
 
-    if 'gat_hyp' in type_list:
+    if 'hyp_pre' in type_list:
         """
         Use gat
         retrain from pre
         w/ hyp sim
         """
-        gat_hyp_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_kg_hyp_stop_5k.csv', newline='') as csvfile:
+        hyp_pre_list = []
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp_pre.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
                     num = row.index('avg_winning')
                 else:
-                    gat_hyp_list.append(100 * float(row[num]))
-        min_length = min(len(gat_hyp_list), min_length)
+                    hyp_pre_list.append(100 * float(row[num]))
+        min_length = min(len(hyp_pre_list), min_length)
 
-    if 'gat' in type_list:
+    if 'baseline_ran' in type_list:
         """
         Use gat
         retrain from scratch
         w/o hyp sim
         """
-        gat_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_gat.csv', newline='') as csvfile:
+        baseline_ran_list = []
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_baseline_ran.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
                     num = row.index('avg_winning')
                 else:
-                    gat_list.append(100 * float(row[num]))
-        min_length = min(len(gat_list), min_length)
+                    baseline_ran_list.append(100 * float(row[num]))
+        min_length = min(len(baseline_ran_list), min_length)
 
-    x = [50 * i for i in range(1, min_length + 1)]  # , len(pre_list), len(hyp_list)
+    if 'gat_ran' in type_list:
+        """
+        Use gat
+        retrain from scratch
+        w/o hyp sim
+        """
+        gat_ran_list = []
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_gat_ran.csv', newline='') as csvfile:
+            logreader = csv.reader(csvfile)
+            for row in logreader:
+                if 'avg_winning' in row:
+                    num = row.index('avg_winning')
+                else:
+                    gat_ran_list.append(100 * float(row[num]))
+        min_length = min(len(gat_ran_list), min_length)
+
+    if 'hyp_gat_ran' in type_list:
+        """
+        Use gat
+        retrain from scratch
+        w/o hyp sim
+        """
+        hyp_gat_ran_list = []
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp_gat_ran.csv', newline='') as csvfile:
+            logreader = csv.reader(csvfile)
+            for row in logreader:
+                if 'avg_winning' in row:
+                    num = row.index('avg_winning')
+                else:
+                    hyp_gat_ran_list.append(100 * float(row[num]))
+        min_length = min(len(hyp_gat_ran_list), min_length)
+
+    if 'hyp_ran' in type_list:
+        """
+        Use gat
+        retrain from scratch
+        w/o hyp sim
+        """
+        hyp_ran_list = []
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp_ran.csv', newline='') as csvfile:
+            logreader = csv.reader(csvfile)
+            for row in logreader:
+                if 'avg_winning' in row:
+                    num = row.index('avg_winning')
+                else:
+                    hyp_ran_list.append(100 * float(row[num]))
+        min_length = min(len(hyp_ran_list), min_length)
+
+    x = [interval  * i for i in range(1, min_length + 1)]  # , len(pre_list), len(hyp_list)
 
     fig,ax = plt.subplots()
     plt.xlabel('training steps)')
@@ -102,16 +156,23 @@ def plot_result(name, type_list):
 
     plt.ylim([0, 65])
 
-    if 'hyp' in type_list:
-        plt.plot(x, hyp_list[:len(x)], color='green', label='hyp')
-    if 'baseline' in type_list:
-        plt.plot(x, pre_list[:len(x)], color='blue', label='pre')
-    if 'ran' in type_list:
-        plt.plot(x, ran_list[:len(x)], color='black', label='ran')
-    if 'gat_hyp' in type_list:
-        plt.plot(x, gat_hyp_list[:len(x)], color='red', label='gat_hyp')
-    if 'gat' in type_list:
-        plt.plot(x, gat_list[:len(x)], color='salmon', label='gat')
+    if 'hyp_gat_pre' in type_list:
+        plt.plot(x, hyp_gat_pre_list[:len(x)], color='red', label='hyp_gat_pre')
+    if 'gat_pre' in type_list:
+        plt.plot(x, gat_pre_list[:len(x)], color='blue', label='gat_pre')
+    if 'baseline_pre' in type_list:
+        plt.plot(x, baseline_pre_list[:len(x)], color='black', label='baseline_pre')
+    if 'hyp_pre' in type_list:
+        plt.plot(x, hyp_pre_list[:len(x)], color='green', label='hyp_pre')
+    if 'baseline_ran' in type_list:
+        plt.plot(x, baseline_ran_list[:len(x)], color='darkslategray', label='baseline_ran')
+    if 'gat_ran' in type_list:
+        plt.plot(x, gat_ran_list[:len(x)], color='cadetblue', label='gat_ran')
+    if 'hyp_gat_ran' in type_list:
+        plt.plot(x, hyp_gat_ran_list[:len(x)], color='orange', label='hyp_gat_ran')
+    if 'hyp_ran' in type_list:
+        plt.plot(x, hyp_ran_list[:len(x)], color='palegreen', label='hyp_ran')
+
 
     plt.grid(True)
     plt.legend()
@@ -131,7 +192,10 @@ if __name__ == '__main__':
     parser.add_argument('--type', type=str,
                         default=None, required=True,
                         help="add multiple plot type, use comma to split, i.e. hyp,ran")
+    parser.add_argument('--plot_interval', type=int,
+                       default=1, required=False,
+                       help="add multiple plot type, use comma to split, i.e. hyp,ran")
     args = parser.parse_args()
     novelty_name = str(list(map(lambda x : int(x), args.novelty.split('_')[0].split(',')))) + '_' + str(list(map(lambda x : int(x),args.novelty.split('_')[1].split(','))))
     name = novelty_name + '_rt_' + args.interval
-    plot_result(name, args.type.split(','))
+    plot_result(name, args.type.split(','), args.plot_interval)
