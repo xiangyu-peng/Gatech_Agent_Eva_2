@@ -21,6 +21,7 @@ from monopoly_simulator.location import *
 from gym import error, spaces
 import copy
 import logging
+import re
 from monopoly_simulator_background.log_setting import set_log_level, ini_log_level
 from KG_rule.openie_triple import KG_OpenIE
 from configparser import ConfigParser
@@ -79,6 +80,7 @@ class Monopoly_world():
         self.kg = None  # kg class
         self.kg_save_num = 0
         self.game_num = 0
+        self.game_num_round = 0
         self.kg_change = []
         self.kg_save_interval = self.hyperparams['kg_save_interval']
         self.log_path = None
@@ -91,18 +93,42 @@ class Monopoly_world():
 
     def set_exp(self, exp_dict):
         if exp_dict:
-            self.novelty_num = exp_dict['novelty_num']  # (5,1) (a,b): 1,2,3,4,5 => range(a, a+b)
-            self.matrix_name = '/kg_matrix_' + str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.npy'
-            self.entity_name = '/entity_id_' + str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.json'
-            self.novelty_inject_num = exp_dict['novelty_inject_num']
-            self.log_path = self.upper_path + '/KG_rule/log_file/game_log_' + str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.txt'
+            if type(exp_dict['novelty_num']) == tuple:
+                self.novelty_num = exp_dict['novelty_num']  # (5,1) (a,b): 1,2,3,4,5 => range(a, a+b)
+                self.novelty_inject_num = exp_dict['novelty_inject_num']
+
+            if bool(re.search(r'\d', exp_dict['exp_type'])):
+                # a number in the string means we do not need to use different name
+
+                self.matrix_name = '/kg_matrix_' + exp_dict['exp_type'] + '.npy'
+                self.entity_name = '/entity_id_' + exp_dict['exp_type'] + '.json'
+                self.log_path = self.upper_path + '/KG_rule/log_file/game_log_' + exp_dict['exp_type'] + '.txt'
+            else:
+                self.matrix_name = '/kg_matrix_' + str(exp_dict['novelty_num'][0]) + '_' + str(
+                    exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.npy'
+                self.entity_name = '/entity_id_' + str(exp_dict['novelty_num'][0]) + '_' + str(
+                    exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.json'
+
+            if self.kg:
+                self.kg.matrix_file_path = self.kg.matrix_folder + self.matrix_name
+                self.kg.entity_file_path = self.kg.matrix_folder + self.entity_name
+
+            if self.log_path:
+                pass
+            else:
+                self.log_path = self.upper_path + '/KG_rule/log_file/game_log_' + str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_' + exp_dict['exp_type'] + '.txt'
+
             self.exp_type = exp_dict['exp_type']
+
             if exp_dict['exp_type'] == 'state':
                 self.interface = KG_Interface()
             else:
                 self.interface = Interface()
         else:
             self.interface = Interface()
+
+        self.game_num = 0
+        self.game_num_round = 0
 
     def set_initial_gameboard(self, gameboard=None):
         # If we run the hypothetical simulator, the gameboard is written to a file
@@ -203,7 +229,6 @@ class Monopoly_world():
         # self.value_total = 2 * self.hyperparams['initial_cash']
         self.game_elements = copy.deepcopy(self.gameboard_initial)
         self.reward_diff = 0
-
 
     def reset(self):
         """
@@ -444,9 +469,11 @@ class Monopoly_world():
 
 
     def next_after_nochange(self, action):
-        masked_actions = [1, 1]
+        print('action', action)
+        masked_actions = [1] + [1]
         action_num = action
         masked_actions_reward = self.interface.masked_actions.copy()
+        print('masked_actions_reward', masked_actions_reward)
         # When the action is not valid, the state won't change and the reward will be negative
         # if masked_actions_reward[action_num] == 0:
             # state_space = self.interface.board_to_state(self.game_elements)
@@ -457,7 +484,9 @@ class Monopoly_world():
 
         # In tf part, even though the action is invalid, we will still go to next step, because we cannot
         # be obstructed in one state
+
         action = self.interface.action_num2vec(action)
+        print('action', action)
         self.game_elements, self.num_active_players, self.num_die_rolls, self.current_player_index, self.done_indicator, self.win_indicator = \
             after_agent_tf_step(self.game_elements, self.num_active_players, self.num_die_rolls,
                                 self.current_player_index, action, self.interface, self.params)
@@ -494,6 +523,7 @@ class Monopoly_world():
         if self.terminal > 0:
             if self.kg_use:
                 self.interface.get_logging_info(self.game_elements, current_player_index=0, file_path=self.log_path)
+                print('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!', self.log_path)
                 self.save_kg()
                 self.interface.clear_history(file_path=self.log_path)
             state_space, (masked_actions, action_background) = self.reset()
@@ -538,6 +568,7 @@ class Monopoly_world():
         return state_space, reward, (done_hyp, done_indicator), self.masked_actions  # can put KG in in
 
     def next_nochange(self, action):
+        self.game_num_round += 1
         # if self.terminal == 1:
         #     self.reset()
 
@@ -550,7 +581,7 @@ class Monopoly_world():
         win_indicator_ori = self.win_indicator
         ######
 
-        masked_actions = [1, 1]
+        masked_actions = [1] + [1]
         action_num = action
         masked_actions_reward = self.masked_actions
 
