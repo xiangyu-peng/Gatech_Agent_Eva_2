@@ -160,14 +160,16 @@ def before_agent(game_elements, num_active_players, num_die_rolls, current_playe
     if current_player.current_cash < 0:
         game_elements, num_active_players, a, win_indicator = \
             cash_negative(game_elements, current_player, num_active_players, a, win_indicator)
-        masked_actions = [0, 1]
+        masked_actions = [0] + [1] ##becky
     else:
         # post-roll for current player. No out-of-turn moves allowed at this point.
         #####becky######action space got#####################################
         a.board_to_state(game_elements)  # get state space
         allowable_actions = current_player.compute_allowable_post_roll_actions(game_elements)
         params_mask = identify_improvement_opportunity_all(current_player, game_elements)
+        print('allowable_actions', allowable_actions)
         masked_actions = a.get_masked_actions(allowable_actions, params_mask, current_player)
+        print('masked_actions', masked_actions)
         logger.debug('Set player_1 to jail ' + str(current_player.currently_in_jail))
 
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, win_indicator, masked_actions
@@ -205,7 +207,7 @@ def after_agent(game_elements, num_active_players, num_die_rolls, current_player
     current_player_index = (current_player_index+1)%len(game_elements['players'])
 
     done_indicator = 0
-    if diagnostics.max_cash_balance(game_elements) > 300000: # this is our limit for runaway cash for testing purposes only.
+    if diagnostics.max_cash_balance(game_elements) > 12000: # this is our limit for runaway cash for testing purposes only.
                                                              # We print some diagnostics and return if any player exceeds this.
         diagnostics.print_asset_owners(game_elements)
         diagnostics.print_player_cash_balances(game_elements)
@@ -322,7 +324,7 @@ def simulate_game_step(game_elements, num_active_players, num_die_rolls, current
 
     done_indicator = 0
     if diagnostics.max_cash_balance(
-            game_elements) > 300000:  # this is our limit for runaway cash for testing purposes only.
+            game_elements) > 12000:  # this is our limit for runaway cash for testing purposes only.
         # We print some diagnostics and return if any player exceeds this.
         diagnostics.print_asset_owners(game_elements)
         diagnostics.print_player_cash_balances(game_elements)
@@ -510,7 +512,7 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
         #
         # current_player_index = (current_player_index+1)%len(game_elements['players'])
         #
-        # if diagnostics.max_cash_balance(game_elements) > 300000: # this is our limit for runaway cash for testing purposes only.
+        # if diagnostics.max_cash_balance(game_elements) > 12000: # this is our limit for runaway cash for testing purposes only.
         #                                                          # We print some diagnostics and return if any player exceeds this.
         #     diagnostics.print_asset_owners(game_elements)
         #     diagnostics.print_player_cash_balances(game_elements)

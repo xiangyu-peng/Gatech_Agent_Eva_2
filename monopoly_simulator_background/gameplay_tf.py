@@ -171,14 +171,16 @@ def before_agent_tf_step(game_elements, num_active_players, num_die_rolls, curre
     if current_player.current_cash < 0:
         game_elements, num_active_players, a, win_indicator = \
             cash_negative(game_elements, current_player, num_active_players, a, win_indicator)
-        masked_actions = [0, 1]
+        masked_actions = [0] + [1] ##becky
     else:
         # post-roll for current player. No out-of-turn moves allowed at this point.
         #####becky######action space got#####################################
         a.board_to_state(game_elements)  # get state space
         allowable_actions = current_player.compute_allowable_post_roll_actions(game_elements)
         params_mask = identify_improvement_opportunity_all(current_player, game_elements)
+        print('allowable_actions', allowable_actions)
         masked_actions = a.get_masked_actions(allowable_actions, params_mask, current_player)
+        # print('masked_actions', masked_actions)
         logger.debug('Set player_1 to jail ' + str(current_player.currently_in_jail))
 
     return game_elements, num_active_players, num_die_rolls, current_player_index, a, params, win_indicator, masked_actions
@@ -193,6 +195,7 @@ def after_agent_tf_step(game_elements, num_active_players, num_die_rolls, curren
     #action vector => actions
     move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
     logger.debug('move_actions =====>'+ str(move_actions))
+    print('move_actions =====>'+ str(move_actions))
     current_player.agent.set_move_actions(move_actions)
     current_player.make_post_roll_moves(game_elements)
     #####################################################################
@@ -387,7 +390,7 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
             before_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, current_player_index, a, die_roll)
         logger.info(a.state_space)        # game_elements, num_active_players, num_die_rolls, current_player_index, a, params, win_indicator, masked_actions = \
         #     before_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, a, die_roll)
-        print('before=>',current_player_index)
+        # print('before=>',current_player_index)
 
         # for i, his in enumerate(game_elements['history']['param']):
         #     if 'card' in his:
@@ -408,7 +411,7 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
                 after_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params)
             # game_elements, num_active_players, num_die_rolls, current_player_index, done_indicator, win_indicator = \
             #     after_agent_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, actions_vector, a, params)
-            print('after',current_player_index)
+            # print('after',current_player_index)
 
         loop_num = 1
         die_roll = []
@@ -420,7 +423,7 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
                 # game_elements, num_active_players, num_die_rolls, current_player_index, done_indicator, win_indicator = \
                 #     simulate_game_step_tf_step(game_elements, num_active_players, num_die_rolls, current_player_index, die_roll, done_indicator,
                 #                                win_indicator, a)
-                print('loop',current_player_index)
+                # print('loop',current_player_index)
 
         a.save_history(game_elements)
 
@@ -430,7 +433,7 @@ def simulate_game_instance(game_elements, num_active_players, np_seed=6):
         #             print(i['card'].name)
 
     # let's print some numbers
-    print(a.loc_history)
+    # print(a.loc_history)
     a.get_logging_info(game_elements, 0, num_active_players)
     logger.debug('printing final asset owners: ')
     diagnostics.print_asset_owners(game_elements)
@@ -549,7 +552,7 @@ def before_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, c
 
         game_elements, num_active_players, a, win_indicator = \
             cash_negative(game_elements, current_player, num_active_players, a, win_indicator)
-        masked_actions = [0, 1]
+        masked_actions = [0] + [1]
     else:
         # post-roll for current player. No out-of-turn moves allowed at this point.
         #####becky######action space got#####################################
@@ -567,7 +570,7 @@ def after_agent_hyp(game_elements, num_active_players, num_die_rolls, current_pl
     current_player = game_elements['players'][current_player_index]
     move_actions = a.vector_to_actions(game_elements, current_player,actions_vector)
     logger.debug('move_actions =====>'+ str(move_actions))
-    # print('move_actions =====>' + str(move_actions))
+    print('move_actions =====>' + str(move_actions))
     current_player.agent.set_move_actions(move_actions)
     code = current_player.make_post_roll_moves(game_elements) #-1 means doesnot work and 1 means successful
     #####################################################################
@@ -614,7 +617,7 @@ def after_agent_tf_nochange(game_elements, num_active_players, num_die_rolls, cu
     a.board_to_state(game_elements)
     # print('state_space', a.state_space)
     current_player = game_elements['players'][current_player_index]
-    print(current_player.assets)
+    # print(current_player.assets)
     # if not current_player.currently_in_jail:
     #got state and masked actions => agent => output actions and move
     #action vector => actions
@@ -755,7 +758,7 @@ def simulate_game_step_tf_nochange(game_elements, num_active_players, num_die_ro
 
     win_indicator = 0
     a.set_board(game_elements)
-    print('cash', current_player.player_name)
+    # print('cash', current_player.player_name)
     if current_player.current_cash < 0:
         game_elements, num_active_players, a, win_indicator = \
             cash_negative(game_elements, current_player, num_active_players, a, win_indicator)
@@ -776,7 +779,7 @@ def simulate_game_step_tf_nochange(game_elements, num_active_players, num_die_ro
 
 
 
-def inject_novelty(current_gameboard, novelty_schema=None):
+def inject_novelty(current_gameboard, novelty_range=None):
     """
     Function for illustrating how we inject novelty
     ONLY FOR ILLUSTRATIVE PURPOSES
@@ -823,23 +826,23 @@ def inject_novelty(current_gameboard, novelty_schema=None):
     # inanimateNovelty.map_property_to_color(current_gameboard, current_gameboard['location_objects']['Baltic-Avenue'], 'Orchid')
     # #setting new rents for Indiana Avenue
     # inanimateNovelty.rent_novelty(current_gameboard['location_objects']['Indiana Avenue'], {'rent': 50, 'rent_1_house': 150})
+    if novelty_range:
+        asset_lists = ["Mediterranean Avenue", "Baltic Avenue", "Reading Railroad", "Oriental Avenue", "Vermont Avenue", "Connecticut Avenue", "St. Charles Place", "Electric Company", "States Avenue", "Virginia Avenue", "Pennsylvania Railroad", "St. James Place", "Tennessee Avenue", "New York Avenue", "Kentucky Avenue", "Indiana Avenue", "Illinois Avenue", "B&O Railroad", "Atlantic Avenue", "Ventnor Avenue", "Water Works", "Marvin Gardens", "Pacific Avenue", "North Carolina Avenue", "Pennsylvania Avenue", "Short Line", "Park Place", "Boardwalk"]
+        num = 0
+        # asset_lists.reverse()
+        for asset in asset_lists:
+            num += 1
+            if num >= novelty_range[1] and num < (novelty_range[1] + novelty_range[0]):
+                inanimateNovelty.price_novelty(current_gameboard['location_objects'][asset], 1499)
+            # rent_dict = {"rent_1_house": 2500, "rent_hotel": 4000, "rent_3_houses": 3500, "rent": 2000, "rent_4_houses": 3800, "rent_2_houses": 3000}
+            # rent_dict = {"rent_1_house": 0, "rent_hotel": 0, "rent_3_houses": 0, "rent": 0,
+            #              "rent_4_houses": 0, "rent_2_houses": 0}
+            # inanimateNovelty.rent_novelty(current_gameboard['location_objects'][asset], rent_dict)
 
-    asset_lists = ["Mediterranean Avenue", "Baltic Avenue", "Reading Railroad", "Oriental Avenue", "Vermont Avenue", "Connecticut Avenue", "St. Charles Place", "Electric Company", "States Avenue", "Virginia Avenue", "Pennsylvania Railroad", "St. James Place", "Tennessee Avenue", "New York Avenue", "Kentucky Avenue", "Indiana Avenue", "Illinois Avenue", "B&O Railroad", "Atlantic Avenue", "Ventnor Avenue", "Water Works", "Marvin Gardens", "Pacific Avenue", "North Carolina Avenue", "Pennsylvania Avenue", "Short Line", "Park Place", "Boardwalk"]
-    num = 0
-    # asset_lists.reverse()
-    for asset in asset_lists:
-        num += 1
-        if num >= 4 and num <= 8:
-            inanimateNovelty.price_novelty(current_gameboard['location_objects'][asset], 1499)
-        # rent_dict = {"rent_1_house": 2500, "rent_hotel": 4000, "rent_3_houses": 3500, "rent": 2000, "rent_4_houses": 3800, "rent_2_houses": 3000}
-        # rent_dict = {"rent_1_house": 0, "rent_hotel": 0, "rent_3_houses": 0, "rent": 0,
-        #              "rent_4_houses": 0, "rent_2_houses": 0}
-        # inanimateNovelty.rent_novelty(current_gameboard['location_objects'][asset], rent_dict)
+            # if num > 0.25 * len(asset_lists):
+            #     break
 
-        # if num > 0.25 * len(asset_lists):
-        #     break
-
-    # inanimateNovelty.price_novelty(current_gameboard['location_objects']['Baltic Avenue'], 1400)
+        # inanimateNovelty.price_novelty(current_gameboard['location_objects']['Baltic Avenue'], 1400)
 
 
     # Level 3 Novelty

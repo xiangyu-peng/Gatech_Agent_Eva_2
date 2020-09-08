@@ -84,24 +84,24 @@ class P1Agent():
 
         #####becky#####
         #move improve property to post_roll_die and only use jail card here
-        '''
+
         if player.current_cash >= current_gameboard['go_increment']: # if we don't have enough money, best to stay put.
             param = dict()
             param['player'] = player
             param['current_gameboard'] = current_gameboard
     
             #consider go out of jail
-            if monopoly_simulator_background.action_choices.use_get_out_of_jail_card in allowable_moves:
-                print player.player_name,': I am using get out of jail card.'
-                player._agent_memory['previous_action'] = monopoly_simulator_background.action_choices.use_get_out_of_jail_card
-                return (monopoly_simulator_background.action_choices.use_get_out_of_jail_card, param)
-            elif monopoly_simulator_background.action_choices.pay_jail_fine in allowable_moves:
-                print player.player_name, ': I am going to pay jail fine.'
-                player._agent_memory['previous_action'] = monopoly_simulator_background.action_choices.pay_jail_fine
-                return (monopoly_simulator_background.action_choices.pay_jail_fine, param)
+            if action_choices.use_get_out_of_jail_card in allowable_moves:
+                # print player.player_name,': I am using get out of jail card.'
+                player.agent._agent_memory['previous_action'] = action_choices.use_get_out_of_jail_card
+                return (action_choices.use_get_out_of_jail_card, param)
+            elif action_choices.pay_jail_fine in allowable_moves:
+                # print player.player_name, ': I am going to pay jail fine.'
+                player.agent._agent_memory['previous_action'] = action_choices.pay_jail_fine
+                return (action_choices.pay_jail_fine, param)
     
         # if we ran the gamut, and did not return, then it's time to skip turn or conclude actions
-        if monopoly_simulator_background.action_choices.skip_turn in allowable_moves:
+        if action_choices.skip_turn in allowable_moves:
             # testing hypothetical simulator (will comment when done testing)
             # player_decision_agents = dict()
             # import simple_decision_agent_1
@@ -114,41 +114,41 @@ class P1Agent():
             # hypothetical_winner = hypothetical_simulator.simulate_hypothetical_game(hypothetical_gameboard=alternate_univ,
             #                         die_roll_substitute=hypothetical_simulator.die_roll_substitute,num_total_die_rolls=15) # we will only run for fifteen die rolls.
             # if hypothetical_winner is None:
-            #     print monopoly_simulator_background.diagnostics.print_player_cash_balances(alternate_univ)
+            #     print diagnostics.print_player_cash_balances(alternate_univ)
             # else:
             #     print hypothetical_winner.player_name
-            print player.player_name, ': I am skipping turn'
-            player._agent_memory['previous_action'] = monopoly_simulator_background.action_choices.skip_turn
-            return (monopoly_simulator_background.action_choices.skip_turn, dict())
-        elif monopoly_simulator_background.action_choices.concluded_actions in allowable_moves:
-            # player._agent_memory['previous_action'] = monopoly_simulator_background.action_choices.concluded_actions
-            print player.player_name, ': I am concluding actions'
-            return (monopoly_simulator_background.action_choices.concluded_actions, dict())
+            # print player.player_name, ': I am skipping turn'
+            player.agent._agent_memory['previous_action'] = action_choices.skip_turn
+            return (action_choices.skip_turn, dict())
+        elif action_choices.concluded_actions in allowable_moves:
+            # player._agent_memory['previous_action'] = action_choices.concluded_actions
+            # print player.player_name, ': I am concluding actions'
+            return (action_choices.concluded_actions, dict())
         else:
             raise Exception
-        '''
+
 
         #####becky########################################################################
-        if action_choices.use_get_out_of_jail_card in allowable_moves:
-            param = dict()
-            param['player'] = player
-            param['current_gameboard'] = current_gameboard
-            logger.info(player.player_name + ': I am using get out of jail card.')
-            player.agent._agent_memory['previous_action'] = action_choices.use_get_out_of_jail_card
-            return (action_choices.use_get_out_of_jail_card, param)
-        # elif action_choices.pay_jail_fine in allowable_moves:
-        #     print player.player_name, ': I am going to pay jail fine.'
-        #     player._agent_memory['previous_action'] = action_choices.pay_jail_fine
-        #     return (action_choices.pay_jail_fine, param)
-        else:
-            if action_choices.skip_turn in allowable_moves:
-                logger.debug(player.player_name + ': I am skipping turn')
-                player.agent._agent_memory['previous_action'] = action_choices.skip_turn
-                return (action_choices.skip_turn, dict())
-            else:
-                # player.agent._agent_memory['previous_action'] = action_choices.concluded_actions
-                logger.debug(player.player_name + ': I am concluding actions')
-                return (action_choices.concluded_actions, dict())
+        # if action_choices.use_get_out_of_jail_card in allowable_moves:
+        #     param = dict()
+        #     param['player'] = player
+        #     param['current_gameboard'] = current_gameboard
+        #     logger.info(player.player_name + ': I am using get out of jail card.')
+        #     player.agent._agent_memory['previous_action'] = action_choices.use_get_out_of_jail_card
+        #     return (action_choices.use_get_out_of_jail_card, param)
+        # # elif action_choices.pay_jail_fine in allowable_moves:
+        # #     print player.player_name, ': I am going to pay jail fine.'
+        # #     player._agent_memory['previous_action'] = action_choices.pay_jail_fine
+        # #     return (action_choices.pay_jail_fine, param)
+        # else:
+        #     if action_choices.skip_turn in allowable_moves:
+        #         logger.debug(player.player_name + ': I am skipping turn')
+        #         player.agent._agent_memory['previous_action'] = action_choices.skip_turn
+        #         return (action_choices.skip_turn, dict())
+        #     else:
+        #         # player.agent._agent_memory['previous_action'] = action_choices.concluded_actions
+        #         logger.debug(player.player_name + ': I am concluding actions')
+        #         return (action_choices.concluded_actions, dict())
         ##################################################################################
 
     def make_out_of_turn_move(self, player, current_gameboard, allowable_moves, code):
