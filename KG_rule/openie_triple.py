@@ -7,7 +7,7 @@ upper_path_eva = upper_path + '/Evaluation/monopoly_simulator'
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
 #####################################
-
+import copy
 import tempfile
 from pathlib import Path
 from subprocess import Popen
@@ -17,7 +17,7 @@ from configparser import ConfigParser
 import sys
 import os
 from monopoly_simulator_background.gameplay_tf import set_up_board
-
+from stanfordnlp.server import CoreNLPClient
 import wget
 import numpy as np
 from monopoly_simulator_background.interface import Interface
@@ -76,8 +76,11 @@ class KG_OpenIE(History_Record):
                  entity_file_name,
                  core_nlp_version: str = '2018-10-05',
                  config_file=None):
+
         self.upper_path = '/media/becky/GNOME-p3'
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
+
+        # nlp server env
         self.remote_url = 'https://nlp.stanford.edu/software/stanford-corenlp-full-{}.zip'.format(core_nlp_version)
         self.install_dir = Path('~/.stanfordnlp_resources/').expanduser()
         self.install_dir.mkdir(exist_ok=True)
@@ -88,21 +91,64 @@ class KG_OpenIE(History_Record):
             zf = ZipFile(output_filename)
             zf.extractall(path=self.install_dir)
             zf.close()
-
         os.environ['CORENLP_HOME'] = str(self.install_dir / 'stanford-corenlp-full-2018-10-05')
-        from stanfordnlp.server import CoreNLPClient
+        self.client = CoreNLPClient(annotators=['openie'], memory='8G')
 
-        # For generating kg
-        # if config_file == None:
-        #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
         config_data = ConfigParser()
         config_data.read(config_file)
         self.params = self.params_read(config_data, keys='kg')
         self.jsonfile = self.upper_path + self.params['jsonfile']
-        self.client = CoreNLPClient(annotators=['openie'], memory='8G')
-        self.relations = ['priced', 'rented', 'located', 'colored', 'classified', 'away', 'type', 'cost', 'direct', 'mortgaged', 'increment']
-        self.relations_matrix = ['is priced at', 'is located at'] #, 'is colored as', 'is classified as']
-        self.relations_node = ['Price_', 'Location_']
+        self.relations = ['price', 'rent', 'located', 'colored', 'classified', 'away', 'type', 'cost', 'direct', 'mortgaged', 'increment']
+        self.relations_matrix = ['is priced at', 'is price-1-house at', 'is rented-0-house at', 'is rented-1-house at', \
+                                 'is rented-2-house at', 'is rented-3-house at', 'is rented-4-house at', 'is rented-1-hotel at'] #, 'is colored as', 'is classified as']
+        self.relations_node = ['Price_', 'Price_1_house_', 'Rent_0_house_', 'Rent_1_house_', 'Rent_2_house_', 'Rent_3_house_',\
+                               'Rent_4_house_', 'Rent_1_hotel_']
+        self.under_list = []
+        self.upper_list = []
+        #####################
+        self.price_list_under = [0, 100, 150, 200, 300, 400, 1000]
+        self.under_list.append(self.price_list_under)
+        self.price_list_upper = [99, 149, 199, 299, 399, 999, sys.maxsize]
+        self.upper_list.append(self.price_list_upper)
+        #####################
+        self.price_1_house_list_under = [0, 50, 100, 150, 200]
+        self.under_list.append(self.price_1_house_list_under )
+        self.price_1_house_list_upper = [49, 99, 149, 199, sys.maxsize]
+        self.upper_list.append(self.price_1_house_list_upper)
+        #####################
+        self.rent_0_house_list_under = [0, 5, 10, 15, 20, 30, 50]
+        self.under_list.append(self.rent_0_house_list_under)
+        self.rent_0_house_list_upper = [4, 9, 14, 19, 29, 49, sys.maxsize]
+        self.upper_list.append(self.rent_0_house_list_upper)
+        #####################
+        self.rent_1_house_list_under = [0, 50, 100, 150, 200]
+        self.under_list.append(self.rent_1_house_list_under)
+        self.rent_1_house_list_upper = [49, 99, 149, 199, sys.maxsize]
+        self.upper_list.append(self.rent_1_house_list_upper)
+        #####################
+        self.rent_2_house_list_under = [0, 50, 100, 200, 300, 400, 500, 600]
+        self.under_list.append(self.rent_2_house_list_under)
+        self.rent_2_house_list_upper = [49, 99, 199, 299, 399, 499, 599, sys.maxsize]
+        self.upper_list.append(self.rent_2_house_list_upper)
+        #####################
+        self.rent_3_house_list_under = [0, 100, 300, 500, 800, 1000, 1200, 1400]
+        self.under_list.append(self.rent_3_house_list_under)
+        self.rent_3_house_list_upper = [99, 299, 499, 799, 999, 1199, 1399, sys.maxsize]
+        self.upper_list.append(self.rent_3_house_list_upper)
+        #####################
+        self.rent_4_house_list_under = [0, 200, 500, 800, 1200, 1700]
+        self.under_list.append(self.rent_4_house_list_under)
+        self.rent_4_house_list_upper = [199, 499, 799, 1199, 1699, sys.maxsize]
+        self.upper_list.append(self.rent_4_house_list_upper)
+        #####################
+        self.rent_1_hotel_list_under = [0, 300, 600, 1000, 1500, 2000]
+        self.under_list.append(self.rent_1_hotel_list_under)
+        self.rent_1_hotel_list_upper = [299, 599, 999, 1499, 1999, sys.maxsize]
+        self.upper_list.append(self.rent_1_hotel_list_upper)
+        #####################
+
+
+
         self.kg_rel = dict()  # the total kg rule for "rel" KG
         self.kg_sub = dict()  # the total kg rule for "sub" KG
         self.kg_set = set()   # the set recording the kg rule for searching if the rule exists quickly
@@ -168,8 +214,14 @@ class KG_OpenIE(History_Record):
     #         sparse_matrix_dict[rel]['data'] = []
     #     return sparse_matrix_dict
 
-    def hash_money(self, money):
-        return str(min(money // 250 * 250, 1250))
+    def hash_money(self, money, index):
+        under_list = self.under_list[index]
+        upper_list = self.upper_list[index]
+        for i, under_limit in enumerate(under_list):
+            if money >= under_limit and money <= upper_list[i]:
+                return under_limit
+
+        return -1
 
     def build_empty_matrix_dict(self):
         """
@@ -204,24 +256,66 @@ class KG_OpenIE(History_Record):
                 sparse_matrix_dict['nodes_number'][node] = id_value
             else:
                 sparse_matrix_dict['nodes_number'][node] = i
+        index_now = i + 1
 
-        # Price: 0 - 250 -> i + 1; 250 - 5-- -> i + 2 ... [0 - 1500]
-        # [40] = 0; [41] = 250
-        for j, price in enumerate((range(0,1500,250))):
-            sparse_matrix_dict['number_nodes'][i + j + 1] = 'Price_' + str(price)
-            sparse_matrix_dict['nodes_number']['Price_' + str(price)] = i + j + 1
-        #location
-        for k, loc in enumerate(range(40)):
-            sparse_matrix_dict['number_nodes'][i + j + k + 2] = 'Location_' + str(k)
-            sparse_matrix_dict['nodes_number']['Location_' + str(k)] = i + j + k + 2
+        # [7]Price: 0-99; 100-149;150-199;200-299;300-399;400-999; 1000+
+        for i, price in enumerate(self.price_list_under):
+            sparse_matrix_dict['number_nodes'][i + index_now] = 'Price_' + str(price)
+            sparse_matrix_dict['nodes_number']['Price_' + str(price)] = i + index_now
+        index_now += i + 1
 
-        self.node_number = len(sparse_matrix_dict['number_nodes'].keys())
+        #[5]Price: 1 - house: 0-49; 50-99; 100-149; 150-199; 200+
+        for i, price in enumerate(self.price_1_house_list_under):
+            sparse_matrix_dict['number_nodes'][i + index_now] = 'Price_1_house_' + str(price)
+            sparse_matrix_dict['nodes_number']['Price_1_house_' + str(price)] = i + index_now
+        index_now += i + 1
+        # #location
+        # for k, loc in enumerate(range(40)):
+        #     sparse_matrix_dict['number_nodes'][i + j + k + 2] = 'Location_' + str(k)
+        #     sparse_matrix_dict['nodes_number']['Location_' + str(k)] = i + j + k + 2
+
+        # [7] Rent_0_house: 0-4, 5-9, 10-14, 15-19, 20-29, 30-49, 50+
+        for i, rent in enumerate(self.rent_0_house_list_under):
+            sparse_matrix_dict['number_nodes'][i + index_now] = 'Rent_0_house_' + str(rent)
+            sparse_matrix_dict['nodes_number']['Rent_0_house_' + str(rent)] = i + index_now
+        index_now += i + 1  # update the index for next node
+
+        # [5] Rent_1_house: 0-49, 50-99, 100-149, 150-199, 200+
+        for i, rent in enumerate(self.rent_1_house_list_under):
+            sparse_matrix_dict['number_nodes'][i + index_now] = 'Rent_1_house_' + str(rent)
+            sparse_matrix_dict['nodes_number']['Rent_1_house_' + str(rent)] = i + index_now
+        index_now += i + 1  # update the index for next node
+
+        # [8] Rent_2_house: 0-49, 50-99, 100-199, 200-299, 300-399,400-499,500-599,600+
+        for i, rent in enumerate(self.rent_2_house_list_under):
+            sparse_matrix_dict['number_nodes'][i + index_now] = 'Rent_2_house_' + str(rent)
+            sparse_matrix_dict['nodes_number']['Rent_2_house_' + str(rent)] = i + index_now
+        index_now += i + 1  # update the index for next node
+
+        # [8] Rent_3_house: 0-99, 100-299, 300-499, 500-799, 800-999,1000-1199,1200-1399,1400+
+        for i, rent in enumerate(self.rent_3_house_list_under):
+            sparse_matrix_dict['number_nodes'][i + index_now] = 'Rent_3_house_' + str(rent)
+            sparse_matrix_dict['nodes_number']['Rent_3_house_' + str(rent)] = i + index_now
+        index_now += i + 1  # update the index for next node
+
+        # [6] Rent_4_house: 0-199, 200-499, 500-799, 800-1199,1200-1699,1700+
+        for i, rent in enumerate(self.rent_4_house_list_under):
+            sparse_matrix_dict['number_nodes'][i + index_now] = 'Rent_4_house_' + str(rent)
+            sparse_matrix_dict['nodes_number']['Rent_4_house_' + str(rent)] = i + index_now
+        index_now += i + 1
+
+        # [6] Rent_1_hotel: 0-299, 300-599, 600-999, 1000-1499,1500-1999,2000+
+        for i, rent in enumerate(self.rent_1_hotel_list_under):
+            sparse_matrix_dict['number_nodes'][i + index_now] = 'Rent_1_hotel_' + str(rent)
+            sparse_matrix_dict['nodes_number']['Rent_1_hotel_' + str(rent)] = i + index_now
 
         # # Define 'in' column names
         # for rel in self.relations_matrix:
         #     sparse_matrix_dict['in'][rel] = dict()
         #     for node in range(self.node_number):
         #         sparse_matrix_dict['in'][rel][node] = None
+
+        self.node_number = len(list(sparse_matrix_dict['number_nodes'].keys()))
 
         # Define 'out' column names
         for rel in self.relations_matrix:
@@ -259,7 +353,8 @@ class KG_OpenIE(History_Record):
                     for rel in self.relations:
                         length_sub = len(triple['subject'].split(' '))
                         length_obj = len(triple['object'].split(' '))
-                        if rel in triple['relation'] and length_sub == 1 and length_obj == 1:
+                        if rel in triple['relation'] and length_sub == 1 and length_obj == 1 and \
+                                triple['subject'] in self.board_name:
 
                             #map B&0-Railroad
                             if 'B-' in triple['subject']:
@@ -283,9 +378,16 @@ class KG_OpenIE(History_Record):
         else:
             return core_nlp_output
 
-    def kg_update(self, triple, level='sub'):
+    def kg_update(self, triple, level='sub', type=None):
         """
         After detecting rule change, update kg and also return the diff of kg
+        * When adding the game rule, if we see contradiction, we will call ***self.kg_update()*** to update the knowledge
+          graph and return difference. PS: we did not update the game rule when there is contradiction in *self.kg_add()*.
+                    * Update **self.kg_rel_diff** to record the difference.
+                    * Update knowledge graph, **self.kg_rel**
+                    * Call *self.update_new_kg_tuple()* to put this new rule in another dict, **self.new_kg_tuple**.
+                    * return the difference: [sub, rel, old-obj, new-obj]
+
         :param triple (dict): triple is a dict with three keys: subject, relation and object
         :param level (string): level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
         :return: A tuple (sub, rel, diff)
@@ -299,25 +401,36 @@ class KG_OpenIE(History_Record):
             return [triple['subject'],triple['relation'],self.kg_sub_diff[triple['subject']][triple['relation']]]
 
         else:
-
             if triple['relation'] not in self.kg_rel_diff.keys():
                 self.kg_rel_diff[triple['relation']] = dict()
-                self.kg_rel_diff[triple['relation']][triple['subject']] = [self.kg_rel[triple['relation']][triple['subject']]]
 
             if triple['subject'] not in self.kg_rel_diff[triple['relation']].keys():
-                self.kg_rel_diff[triple['relation']][triple['subject']] = [self.kg_rel[triple['relation']][triple['subject']]]
+                if type == 'change':
+                    self.kg_rel_diff[triple['relation']][triple['subject']] = [self.kg_rel[triple['relation']][triple['subject']]]
+                else:
+                    self.kg_rel_diff[triple['relation']][triple['subject']] = [None]
+
+            if type == 'change':
+                self.update_new_kg_tuple(triple)
+                old_text = ' '.join([triple['subject'], triple['relation'], self.kg_rel[triple['relation']][triple['subject']]]).strip()
+                if hash(old_text) in self.kg_set:
+                    self.kg_set.remove(hash(old_text))  # in case the novelty changed back!
 
             self.kg_rel[triple['relation']][triple['subject']] = triple['object']  # update kg
-            self.update_new_kg_tuple(triple)
-
             self.kg_rel_diff[triple['relation']][triple['subject']].append(triple['object'])
+
 
             return [triple['subject'], triple['relation'], self.kg_rel_diff[triple['relation']][triple['subject']]]
 
 
     def kg_add(self, triple, level='sub', use_hash=False):
         """
-        Add new triple (sub, rel, obj) to knowledge graph
+        * Add game rule to KG by ***self.kg_add()***
+            * If we have this sub in this rel before, means kg changed, return True!
+            * If not, just add this to the kg graph. After adding the new game rule (no contradiction) to the big
+              **self.kg_rel**, we also call *self.update_new_kg_tuple()* to put this new rule in another dict,
+              **self.new_kg_tuple**.
+
         :param triple (dict): triple is a dict with three keys: subject, relation and object
         :param level (string): level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
         :return: bool. True indicates the rule is changed, False means not changed or no existing rule, and add a rule
@@ -326,24 +439,25 @@ class KG_OpenIE(History_Record):
             if triple['subject'] in self.kg_sub.keys():
                 if triple['relation'] in self.kg_sub[triple['subject']].keys():
 
-                    return True if self.kg_sub[triple['subject']][triple['relation']] != triple['object'] else False
+                    return (True, 'change') if self.kg_sub[triple['subject']][triple['relation']] != triple['object'] else (False, None)
                 else:
                     self.kg_sub[triple['subject']][triple['relation']] = triple['object']
 
             else:
                 self.kg_sub[triple['subject']] = dict()
                 self.kg_sub[triple['subject']][triple['relation']] = triple['object']
-            return False
+            return (False, None)
 
         else:  # level = 'rel'
             if triple['relation'] in self.kg_rel.keys():
                 if triple['subject'] in self.kg_rel[triple['relation']].keys():
                     if use_hash:  # If we use hash, there is no need to check here, return True directly is ok
                         if type(self.kg_rel[triple['relation']][triple['subject']]) == list:  # location
-                            return True if triple['object'] not in self.kg_rel[triple['relation']][triple['subject']] else False
-                        return True
+                            # TODO: change the diff record way!!!
+                            return (True, 'change') if triple['object'] not in self.kg_rel[triple['relation']][triple['subject']] else (False, None)
+                        return (True, 'change')
                     else:
-                        return True if self.kg_rel[triple['relation']][triple['subject']] != triple['object'] else False
+                        return (True, 'change') if self.kg_rel[triple['relation']][triple['subject']] != triple['object'] else (False, None)
                     # True here means there is a change in the rule, False means stay the same.
 
                 else:  # never see this rule, need update kg
@@ -354,11 +468,14 @@ class KG_OpenIE(History_Record):
                 self.kg_rel[triple['relation']] = dict()
                 self.kg_rel[triple['relation']][triple['subject']] = triple['object']
                 self.update_new_kg_tuple(triple)
-            return False
+
+            return (False, None) if self.update_num <= 4 * self.update_interval else (True, 'new')
 
     def build_kg_file(self, file_name, level='sub', use_hash=False):
         """
         Give the logging file and add kg to the existing kg
+        1. put every sentence in *self.build_kg_text*
+        2.
         :param file_name: logger info file path
         :param level: 'sub' or 'rel'
         :param use_hash: bool. Make the check of existing rule much faster
@@ -366,9 +483,9 @@ class KG_OpenIE(History_Record):
         """
 
         file = open(file_name, 'r')
-
         for line in file:
             kg_change = self.build_kg_text(line, level=level, use_hash=use_hash)  # difference -> tuple
+
             # Check dice novelty
             if self.text_dice_num == self.detection_num:
                 self.dice.dice = self.dice.add_new_to_total_dice(self.dice.new_dice, self.dice.dice)
@@ -376,11 +493,11 @@ class KG_OpenIE(History_Record):
                 self.dice.run()
                 self.text_dice_num = 1 + self.detection_num
 
-            # Check card novelty
-
             if kg_change:
-                if kg_change not in self.kg_change:
-                    self.kg_change += kg_change
+                print('kg_change', kg_change)
+                print('self.kg_change:', self.kg_change)
+                if kg_change[0] not in self.kg_change:
+                    self.kg_change += copy.deepcopy(kg_change)
                     self.kg_change_bool = True
 
         self.update_num += 1
@@ -389,36 +506,44 @@ class KG_OpenIE(History_Record):
 
         if self.update_num % self.update_interval == 0:
 
-            #solve differnce of locations
+            #solve difference of locations
             if 'is located at' not in self.kg_rel.keys():
                 self.kg_rel['is located at'] = dict()
             else:
                 diff = self.compare_loc_record(self.kg_rel['is located at'], self.location_record)
+                print('diff ', diff )
+                print('self.kg_change',self.kg_change)
                 if diff and self.kg_change:
                     for d in diff:
                         exist_bool = False
-                        for i, cha in enumerate(self.kg_change):
+                        i = 0
+                        while i < len(self.kg_change):
+
+                            cha = self.kg_change[i]
                             if cha[0] == d[0] and cha[1] == d[1]:
                                 self.kg_change[i][-1][-1] = d[-1][-1]
 
                                 if self.kg_change[i][-1][0] == self.kg_change[i][-1][-1]:
                                     self.kg_change.pop(i)  # The novelty change back~ No need now
+                                else:
+                                    i += 1
 
                                 exist_bool = True
+
                         if exist_bool == False:
                             self.kg_change.append(d)
+
             # for loc in self.location_record:
             #     self.kg_rel['is located at'][loc] = self.location_record[loc]
 
             self.kg_rel['is located at'] = self.location_record.copy()
             self.location_record.clear()
-            if self.kg_change_bool or self.update_num == self.update_interval:
-                self.build_matrix_dict()
-                self.sparse_matrix = self.dict_to_matrix()
-                self.save_matrix()
-                self.kg_change_bool = False  # Reset new_kg_tuple
-                 # Update history while only detect rule change after simulating 100 games
-
+        if self.kg_change_bool or self.update_num == self.update_interval or self.update_num == self.update_interval in [1,2,3,4,5]:
+            self.build_matrix_dict()
+            self.sparse_matrix = self.dict_to_matrix()
+            self.save_matrix()
+            self.kg_change_bool = False  # Reset new_kg_tuple
+             # Update history while only detect rule change after simulating 100 games
         if self.dice.novelty != self.dice_novelty:
             self.kg_change += self.dice.novelty
             self.dice_novelty = self.dice.novelty[:]
@@ -430,15 +555,33 @@ class KG_OpenIE(History_Record):
 
     def build_kg_text(self, text, level='sub',use_hash=False):
         """
-        Use a logging sentence to build or add to kg
-        :param text (string): One sentence from logging info
-        :param level (string): level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
-        :return: bool. True indicates the rule is changed
+        Use a logging sentence to build or add or update kg
+        * _Check_
+                * Check if the game rule **exists**, if yes, just ignore it.
+                * Check if the game rule is about **location**.
+                * Otherwise, add the game rule hash value to kg_set, so it will be easy to detect it in the future.
+        * _Add_
+            * Annotate the text with nlp server and get a tuple (sub, rel, obj).
+            * If location related, add location record to self.location_record, a dict.
+            * Add game rule to KG by ***self.kg_add()***
+                * If we have this sub in this rel before, means kg changed, return True! If not, just add this to the kg graph.
+                * After adding the new game rule to the big **self.kg_rel**, we also call *self.update_new_kg_tuple()* to put this new rule in another dict, **self.new_kg_tuple**.
+            * When adding the game rule, if we see contradiction, we will call ***self.kg_update()*** to update the knowledge graph and return difference. PS: we did not update the game rule when there is contradiction in *self.kg_add()*.
+                * Update **self.kg_rel_diff** to record the difference.
+                * Update knowledge graph, **self.kg_rel**
+                * Call *self.update_new_kg_tuple()* to put this new rule in another dict, **self.new_kg_tuple**.
+                * return the difference: [sub, rel, old-obj, new-obj]
+        * _Return_
+            * Return the difference with a list of lists, [[sub, rel, old-obj, new-obj], [sub, rel, old-obj, new-obj],...]
+
+        :param text: string. One sentence from logging info
+        :param level: string. 'sub' or 'rel'. level indicates the kg dict's keys. i.e. level='rel' means kg_rel.keys are relations
+        :return: list. Return the difference with a list of lists, [[sub, rel, old-obj, new-obj], [sub, rel, old-obj, new-obj],...]
         """
 
         diff = []
         diff_set = set()
-
+        text = text.strip()
         # Add history of dice => Novelty 1 - Dice
         if 'Dice' in text and '[' in text:
             self.text_dice_num += 1
@@ -455,8 +598,14 @@ class KG_OpenIE(History_Record):
         #     self.card.record_history_new_card(card_name, pack)
         #     return diff
 
+        '''
+        Except dice, then record and check game rule => Novelty 1 - Card and Novelty 2
+        * _Check_
+            * Check if the game rule **exists**, if yes, just ignore it.
+            * Check if the game rule is about **location**.
+            * Otherwise, add the game rule hash value to kg_set, so it will be easy to detect it in the future.
+        '''
 
-        # Except dice, then record and check game rule => Novelty 1 - Card and Novelty 2
         if use_hash:
             triple_hash = hash(text)
             if triple_hash in self.kg_set and 'locate' not in text:  # Record this rule previously, just skip
@@ -464,6 +613,7 @@ class KG_OpenIE(History_Record):
             elif triple_hash not in self.kg_set and 'locate' not in text:
                 self.kg_set.add(triple_hash)  # Add to set for checking faster later on
 
+        # Annotate the text with nlp server and get a tuple (sub, rel, obj)
         entity_relations = self.annotate(text, simple_format=True)
 
         for er in entity_relations:  # er is a dict() containing sub, rel and obj
@@ -471,10 +621,9 @@ class KG_OpenIE(History_Record):
                 self.add_loc_history(er)  # after some rounds, we will compare the loc history in build_file
                 return diff  # return no diff
             else:  # other rules
-                kg_change_once = self.kg_add(er,level=level, use_hash=use_hash)  # kg_change_once is a bool, True means rule change
-
+                kg_change_once, type_update = self.kg_add(er,level=level, use_hash=use_hash)  # kg_change_once is a bool, True means rule change
             if kg_change_once:  # Bool
-                diff_once = self.kg_update(er, level=level) # find difference
+                diff_once = self.kg_update(er, level=level, type=type_update) # find difference
                 if diff_once:
                     diff.append(diff_once)
         return diff
@@ -525,7 +674,7 @@ class KG_OpenIE(History_Record):
             graph = list()
             graph.append('digraph {')
             for er in entity_relations:
-                kg_change = self.kg_add(er)
+                kg_change, type_update = self.kg_add(er)
                 graph.append('"{}" -> "{}" [ label="{}" ];'.format(er['subject'], er['object'], er['relation']))
             graph.append('}')
         else:
@@ -597,8 +746,9 @@ class KG_OpenIE(History_Record):
     def build_matrix_dict(self):
         '''
         build a dict for building sparse matrix
+        names - price - price_1_house - rents....
         '''
-        for i , rel in enumerate(self.relations_matrix):  # ['is priced at', 'is located at']
+        for i , rel in enumerate(self.relations_matrix):  # ['is priced at', ...]
             if rel in self.kg_rel.keys():
                 for sub in self.kg_rel[rel].keys():
                     if sub in self.sparse_matrix_dict['nodes_number']:
@@ -607,17 +757,18 @@ class KG_OpenIE(History_Record):
                             sub_id = [sub_id]
                         for number_sub in sub_id:
                             # Adjust for more rel/edges: TODO
-                            if i == 0:
-                                number_obj = self.sparse_matrix_dict['nodes_number'][
-                                    self.relations_node[i] + self.hash_money(int(self.kg_rel[rel][sub]))]
-                            else:
-                                if len(self.kg_rel[rel][sub]) > 1:
-                                    number_obj = []
-                                    for location in self.kg_rel[rel][sub]:
-                                        number_obj.append(int(self.sparse_matrix_dict['nodes_number'][self.relations_node[i] + str(location)]))
-                                else:
-                                    number_obj = int(self.sparse_matrix_dict['nodes_number'][
-                                        self.relations_node[i] + str(self.kg_rel[rel][sub][0])])
+                            # if i == 0:
+                            number_obj = self.sparse_matrix_dict['nodes_number'][
+                                self.relations_node[i] + str(self.hash_money(int(self.kg_rel[rel][sub]),i))]
+                            # else:
+                            #     if len(self.kg_rel[rel][sub]) > 1:
+                            #         number_obj = []
+                            #         for location in self.kg_rel[rel][sub]:
+                            #             if self.relations_node[i] + str(location) in self.sparse_matrix_dict['nodes_number']:
+                            #                 number_obj.append(int(self.sparse_matrix_dict['nodes_number'][self.relations_node[i] + str(location)]))
+                            #     else:
+                            #         number_obj = int(self.sparse_matrix_dict['nodes_number'][
+                            #             self.relations_node[i] + str(self.kg_rel[rel][sub][0])])
 
                             self.sparse_matrix_dict['out'][rel][number_sub] = number_obj if type(number_obj) == list else [number_obj]
 
@@ -626,7 +777,7 @@ class KG_OpenIE(History_Record):
                             #         self.sparse_matrix_dict['in'][rel][location] = [int(number_sub)]
                             # else:
                             #     self.sparse_matrix_dict['in'][rel][number_obj] = [int(number_sub)]
-
+        print(self.sparse_matrix_dict['out'])
     def dict_to_matrix(self):
         self.sparse_matrix = []
         for i in range(self.node_number):  # node_id
@@ -645,6 +796,19 @@ class KG_OpenIE(History_Record):
                                 matrix_1[loc] = 1
 
                     self.sparse_matrix[-1] += matrix_1
+
+            # add color relationship like a and b share the same color so they will have a relationship
+            name_i = self.sparse_matrix_dict['number_nodes'][i]
+            matrix_1 = [0 for j in range(self.node_number)]
+            if name_i in self.kg_rel['is colored as']:
+                color_i = self.kg_rel['is colored as'][name_i]
+                for sub, obj in self.kg_rel['is colored as'].items():
+                    if obj == color_i and sub != name_i:
+                        sub_number = self.sparse_matrix_dict['nodes_number'][sub]
+                        matrix_1[sub_number] = 1
+            self.sparse_matrix[-1] += matrix_1
+
+
         self.sparse_matrix = np.array(self.sparse_matrix)  # save as np array
         # for rel in self.action_name:
         #     self.sparse_matrix.append(csr_matrix((self.sparse_matrix_dict[rel]['data'], (self.sparse_matrix_dict[rel]['row'], self.sparse_matrix_dict[rel]['col'])), shape=(self.entity_num, self.entity_num)))
@@ -655,19 +819,19 @@ class KG_OpenIE(History_Record):
         Update self.new_kg_tuple when there is new rule in kg
         :param triple: new kg rule tuple
         '''
-        # if triple['relation'] in self.new_kg_tuple.keys():
-        #     pass
-        # else:
-        #     self.new_kg_tuple[triple['relation']] = dict()
-        #
-        # self.new_kg_tuple[triple['relation']][triple['subject']] = triple['object']
-        pass
+        if triple['relation'] in self.new_kg_tuple.keys():
+            pass
+        else:
+            self.new_kg_tuple[triple['relation']] = dict()
+
+        self.new_kg_tuple[triple['relation']][triple['subject']] = triple['object']
 
     def save_matrix(self):
         '''
         Save sparse matrix of kg
         :return:
         '''
+        print('self.matrix_file_path', self.matrix_file_path)
         np.save(self.matrix_file_path, self.sparse_matrix)
         node_id = dict()
         for node in self.sparse_matrix_dict['nodes_number']:
@@ -696,10 +860,6 @@ class KG_OpenIE(History_Record):
                     obj = self.new_kg_tuple[rel][sub]
                     self.kg_vector[num][index_sub] = int(obj)
             num += 1
-
-
-
-
 
     # def record_history(self, name, history_dict):
     #     if name in history_dict.keys():
