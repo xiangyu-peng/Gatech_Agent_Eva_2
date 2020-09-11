@@ -833,16 +833,17 @@ class KG_OpenIE(History_Record):
         '''
         print('self.matrix_file_path', self.matrix_file_path)
         np.save(self.matrix_file_path, self.sparse_matrix)
-        node_id = dict()
-        for node in self.sparse_matrix_dict['nodes_number']:
-            if type(self.sparse_matrix_dict['nodes_number'][node]) == list:
-                for i in range(len(self.sparse_matrix_dict['nodes_number'][node])):
-                    node_id[node + '_' + str(i)] = self.sparse_matrix_dict['nodes_number'][node][i]
-            else:
-                node_id[node] = self.sparse_matrix_dict['nodes_number'][node]
-
-
-        self.save_json(node_id, self.entity_file_path)
+        # node_id = dict()
+        # for node in self.sparse_matrix_dict['nodes_number']:
+        #     if type(self.sparse_matrix_dict['nodes_number'][node]) == list:
+        #         for i in range(len(self.sparse_matrix_dict['nodes_number'][node])):
+        #             node_id[node + '_' + str(i)] = self.sparse_matrix_dict['nodes_number'][node][i]
+        #     else:
+        #         node_id[node] = self.sparse_matrix_dict['nodes_number'][node]
+        #
+        #
+        # self.save_json(node_id, self.entity_file_path)
+        self.save_json(self.sparse_matrix_dict['number_nodes'], self.entity_file_path)
 
 
     def save_vector(self):
