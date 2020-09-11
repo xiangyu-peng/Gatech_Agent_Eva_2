@@ -85,7 +85,7 @@ class Sim_Monopoly(gym.Env):
     #     pass
 
     def output_kg_change(self):
-        return self.MonopolyWorld.kg_change
+        return self.MonopolyWorld.kg_change[:]
 
     def output_interface(self):
         return self.MonopolyWorld.interface
@@ -101,3 +101,6 @@ class Sim_Monopoly(gym.Env):
             
     def set_exp(self, exp_dict):
         self.MonopolyWorld.set_exp(exp_dict)
+
+    def output_kg(self):
+        return self.MonopolyWorld.kg.kg_rel

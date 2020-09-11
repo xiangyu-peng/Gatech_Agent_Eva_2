@@ -1,3 +1,8 @@
+import sys, os
+upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
+sys.path.append(upper_path)
+sys.path.append(upper_path + '/Evaluation')
+sys.path.append(upper_path + '/KG_rule')
 import gym
 import torch
 import torch.nn as nn
@@ -10,7 +15,11 @@ import numpy as np
 import os, sys
 from random import randint
 from GNN.model import *
-
+from KG_rule.kg_GAT import RGCNetwork
+from GNN.RGCN.model import RGCN
+from KG_rule.partially_kg import Adj_Gen
+from torch import FloatTensor
+import copy
 
 class HiddenPrints:
     def __enter__(self):
@@ -23,8 +32,10 @@ class HiddenPrints:
 
 #A2C Model
 class ActorCritic(nn.Module):
-    def __init__(self, config, gat_use=False):
+    def __init__(self, config, device, gat_use=False):
         super(ActorCritic, self).__init__()
+        torch.cuda.set_device(device)
+        self.device=device
         self.config = config
         self.gat_use = gat_use
         self.fc_actor = nn.Linear(config.hidden_state, config.action_space) #config.action_space= 2; hidden_size = 256
@@ -38,14 +49,45 @@ class ActorCritic(nn.Module):
                                                config.dropout_ratio,
                                                config.entity_id_file_path_state,
                                                config.state_output_size,
-                                               'state').cuda()
+                                               'state',
+                                               device).to(device)
                 self.graph_gat = GraphNN(config.gat_emb_size,
                                          config.embedding_size,
                                          config.dropout_ratio,
                                          config.entity_id_file_path,
                                          config.gat_output_size,
-                                         'kg').cuda()
+                                         'kg',
+                                         device).to(device)
                 # self.state_nn = StateNN(config.state_num, config.state_output_size)
+
+            elif gat_use == 'gcn':
+                self.graph_gat = GraphNN(config.gat_emb_size,
+                                         config.embedding_size,
+                                         config.dropout_ratio,
+                                         config.entity_id_file_path,
+                                         config.gat_output_size,
+                                         'kg',
+                                         device).to(device)
+                self.fc_1 = nn.Linear(config.gat_output_size + config.state_num,
+                                      config.hidden_state)
+                with open(config.entity_id_file_path_state, 'rb')as f:
+                    feature_dict = pickle.load(f)
+
+                # self.state_graph = RGCNetwork(config.state_num,
+                #                               config.hidden_dim_gcn,
+                #                               config.dropout_ratio,
+                #                               support=1,
+                #                               num_bases=-1,
+                #                               device=device,
+                #                               output_size=1,
+                #                               feature_dict=feature_dict).cuda()
+
+                self.state_graph = RGCN(i_dim=config.state_num,
+                                        h_dim=config.hidden_dim_gcn,
+                                        drop_prob=0,
+                                        support=4,
+                                        num_bases=1,
+                                        device=device).to(device)
             else:
                 self.fc_1 = nn.Linear(config.state_output_size + config.gat_output_size,
                                       config.hidden_state)  # config.state_num = 4; config.hidden_state) = 256
@@ -54,11 +96,13 @@ class ActorCritic(nn.Module):
                                               config.dropout_ratio,
                                               config.entity_id_file_path,
                                               config.gat_output_size,
-                                              'kg').cuda()
+                                              'kg').to(device) #.cuda()
                 self.state_nn = StateNN(config.state_num, config.state_output_size)
+                self.adj_gen = Adj_Gen()
         else:
             self.fc_1 = nn.Linear(config.state_num,
                                   config.hidden_state)  # config.state_num = 4; config.hidden_state) = 256
+            # self.state_nn = StateNN(config.state_num, config.state_output_size)
 
     #Actor model
     def actor(self, x, softmax_dim=1): #actions' probability
@@ -72,33 +116,66 @@ class ActorCritic(nn.Module):
         v = self.fc_critic(x)
         return v
 
-    def forward(self, state, adj, device):
-        state = torch.tensor(state, device=device).float()
+    def novelty_detect(self, statewitha):
+        x = F.relu(self.fc_2(statewitha))
+        label = self.detector(x)
+        return label
+
+    def forward_baseline(self, state):
+        return state
+        # return self.state_nn.forward(state)
+        # state = self.state_nn.forward(state)
+        # dtype = torch.cuda.FloatTensor if torch.cuda.is_available() else torch.FloatTensor
+        # g_t = torch.tensor(np.ones([1,20]) * 0.01, device=self.device).type(dtype)
+        # g_t_cat = g_t
+        # for i in range(state.shape[0] - 1):
+        #     g_t_cat = torch.cat((g_t_cat, g_t), dim=0)
+        # return torch.cat((g_t_cat, state), dim=1)
+
+    def forward(self, state, adj):
+        position = self.adj_gen.get_pos(state)  # state -> position
         state = self.state_nn.forward(state)
-        g_t = self.graph_gat.forward(adj).reshape(1, -1)
-        g_t_cat = g_t
-        for i in range(state.shape[0] - 1):
+        g_t_cat = FloatTensor().to(self.device)
+        for n in range(len(position)):
+            adj_part = self.adj_gen.output_part_adj(adj, position[n])  # adj -> partial adj
+            adj_part = torch.IntTensor(adj_part).to(self.device)
+            g_t = self.graph_gat.forward(adj_part).reshape(1, -1)
             g_t_cat = torch.cat((g_t_cat, g_t), dim=0)
         return torch.cat((g_t_cat, state), dim=1)
 
-    def forward_state(self, state, adj, device):
-        # state = torch.tensor(state, device=device).float()
-        # state = self.state_nn.forward(state)
+    def forward_state(self, state, adj):
         o_t = self.state_gat.forward(state)
-        o_t = o_t.reshape(len(state), -1)
+        o_t = o_t.reshape(len(state), -1) * 100
         g_t = self.graph_gat.forward(adj).reshape(1, -1)
         g_t_cat = g_t
         for i in range(len(state) -  1):
             g_t_cat = torch.cat((g_t_cat, g_t), dim=0)
         return torch.cat((g_t_cat, o_t), dim=1)
 
+    def forward_gcn(self, state, adj):
+        # print('weight', self.graph_gat.fc1.weight[0])
+        # print(self.state_graph.gc2.W)
+        # print(self.graph_gat.fc1.grad)
+        o_t = self.state_graph.forward(state)
+        # o_t = o_t.reshape(len(state), -1)
+        g_t = self.graph_gat.forward(adj).reshape(1, -1)
+        g_t_cat = g_t
+        o_t_cat = o_t[0].reshape(1, -1) * 10
+        for i in range(1, len(state)):
+            g_t_cat = torch.cat((g_t_cat, g_t), dim=0)
+            o_t_cat = torch.cat((o_t_cat, o_t[i].reshape(1, -1) * 10), dim=0)
+        return torch.cat((g_t_cat, o_t_cat), dim=1)
+
+
 def worker(worker_id, master_end, worker_end, gameboard=None, kg_use=True, config_file=None, seed=0, exp_dict=None):
     master_end.close()  # Forbid worker to use the master end for messaging
     env = gym.make('monopoly_simple-v1')
-    print('config_file',config_file)
     env.set_config_file(config_file)
     env.set_exp(exp_dict)
-    env.set_kg(kg_use)
+    if worker_id > 0:
+        env.set_kg(False)
+    else:
+        env.set_kg(kg_use)
     env.set_board(gameboard)
     env.seed(seed + worker_id)
     # env.seed(randint(0,sys.maxsize))
@@ -128,6 +205,15 @@ def worker(worker_id, master_end, worker_end, gameboard=None, kg_use=True, confi
         elif cmd == 'step_hyp':
             ob, reward, done, info = env.step_hyp(data)
             worker_end.send((ob, reward, done, info))
+        elif cmd == 'output_novelty':
+            if worker_id > 0:
+                worker_end.send(None)
+            else:
+                kg_change = copy.deepcopy(env.output_kg_change())
+                worker_end.send(kg_change)
+                # worker_end.send(env.output_kg())
+        elif cmd == 'set_exp':
+            env.set_exp(data)
         else:
             raise NotImplementedError
 
@@ -152,6 +238,10 @@ class ParallelEnv:
         # Forbid master to use the worker end for messaging
         for worker_end in worker_ends:
             worker_end.close()
+
+    def set_exp(self, exp_dict):
+        for master_end in self.master_ends:
+            master_end.send(('set_exp', exp_dict))
 
     def step_async(self, actions):
         for master_end, action in zip(self.master_ends, actions):
@@ -198,6 +288,11 @@ class ParallelEnv:
     def step_hyp(self, actions):  #update actions => return np.stack(obs), np.stack(rews), np.stack(dones), infos
         self.step_async_hyp(actions)
         return self.step_wait()
+
+    def output_novelty(self):
+        for master_end in self.master_ends:
+            master_end.send(('output_novelty', None))
+            return master_end.recv()
 
     def close(self):  # For clean up resources
         if self.closed:
@@ -597,3 +692,17 @@ class Memory():
 #     #         test(step_idx, model)
 #     # # print('s_lst', s_lst)
 #     # envs.close()
+
+class Novelty_detect(nn.Module):
+    def __init__(self, config, device):
+        super(Novelty_detect, self).__init__()
+        torch.cuda.set_device(device)
+        self.device=device
+        self.config = config
+        self.fc_2 = nn.Linear(config.state_num + 1 - 40, config.hidden_state)
+        self.detector = nn.Linear(config.hidden_state, 1)
+
+    def forward(self, statewitha):
+        x = F.relu(self.fc_2(statewitha))
+        label = self.detector(x)
+        return label
