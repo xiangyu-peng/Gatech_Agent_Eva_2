@@ -149,7 +149,7 @@ class MonopolyTrainer:
 
             if self.gameboard:
                 self.config_model.state_num = len(self.interface.board_to_state(self.gameboard))
-            self.model = ActorCritic(self.config_model, gat_use)  # A2C model
+            self.model = ActorCritic(self.config_model, self.device, gat_use)  # A2C model
 
         self.model.to(self.device)
         self.loss = 0
@@ -233,7 +233,7 @@ class MonopolyTrainer:
                 num_game += 1
                 s = s.reshape(1, s.shape[0], -1)
                 # s = torch.tensor(s, device=self.device).float()
-                s = self.model.forward_state(s, self.adj, self.device)
+                s = self.model.forward_state(s, self.adj)
                 prob = self.model.actor(s)
                 a = Categorical(prob).sample().cpu().numpy()  # substitute
                 # print(a[0])
@@ -312,7 +312,13 @@ class MonopolyTrainer:
             for _ in range(self.update_interval):
                 entropy = 0
                 log_probs, masks, rewards, values = [], [], [], []
-                s = self.model.forward_state(s, self.adj, self.device)
+                import pickle
+                filehandler = open("/media/becky/GNOME-p3/R-GCN/relation-gcn-pytorch/try.pickle", "wb")
+                pickle.dump(s, filehandler)
+
+                s = self.model.forward_state(s, self.adj)
+                print(s[0][-5:])
+
                 prob = self.model.actor(s)  # s => tensor #output = prob for actions
                 a = []
                 for i in range(self.n_train_processes):
@@ -360,7 +366,7 @@ class MonopolyTrainer:
                 background_actions = [info_[1] for info_ in info]
 
                 ##########
-                s_prime_cal = self.model.forward_state(s_prime_cal, self.adj, self.device)
+                s_prime_cal = self.model.forward_state(s_prime_cal, self.adj)
 
                 # loss cal
                 log_probs = torch.cat(log_probs)
@@ -392,7 +398,8 @@ class MonopolyTrainer:
                 self.optimizer.zero_grad()
                 self.loss.backward()
                 self.optimizer.step()
-                # print(self.optimizer.step())
+                # print(self.model.state_gat.fc1.weight.grad)
+                # print(self.model.fc_actor.weight.grad)
 
             avg_score, avg_winning = 0, 0
             if step_idx % self.PRINT_INTERVAL == 0:

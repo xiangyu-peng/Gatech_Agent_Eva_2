@@ -11,11 +11,9 @@ import torch.nn.functional as F
 import spacy
 import numpy as np
 import pickle
-
+import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = '2,3'
 from GNN.layers import *
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
 
 class GAT(nn.Module):
     def __init__(self, nfeat, nhid, dropout, alpha, nheads):
@@ -240,8 +238,7 @@ class GraphNN(nn.Module):
         else:
             print('Did not find ', json_file)
             raise FileNotFoundError
-
-        self.state_ent_emb = nn.Embedding.from_pretrained(torch.zeros((len(self.vocab_kge), self.embedding_size)),freeze=False)  # empty embedding all 0s => 362 * 50
+        self.state_ent_emb = nn.Embedding.from_pretrained(torch.randn((len(self.vocab_kge), self.embedding_size)),freeze=True)  # empty embedding all 0s => 362 * 50
         self.fc1 = nn.Linear(self.state_ent_emb.weight.size()[0] * 3 * 1, self.gat_output_size)  # what is 3?
 
     # def init_state_ent_emb(self, emb_size):
@@ -277,9 +274,7 @@ class GraphNN(nn.Module):
         return ent
 
     def forward(self, adj):
-        # print(self.state_ent_emb.weight)
         out = []
-        adj = torch.IntTensor(adj).cuda()
         x = self.gat.forward(self.state_ent_emb.weight, adj)
         if self.type == 'state':
             x = x.view(x.shape[0],-1)

@@ -6,8 +6,9 @@ import numpy as np
 
 import networkx as nx
 import random
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+import os
+# os.environ["CUDA_VISIBLE_DEVICES"] = '2,3'
+# device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 class EncoderRNN(nn.Module):
     def __init__(self, input_size, hidden_size):
@@ -190,8 +191,9 @@ class GraphAttentionLayer(nn.Module):
         e = self.leakyrelu(torch.matmul(a_input, self.a).squeeze(2))
 
         zero_vec = torch.zeros_like(e)
-        zero_vec = zero_vec.fill_(9e-15)
+        zero_vec = zero_vec.fill_(9e-99)
         attention = torch.where(adj > 0, e, zero_vec)
+        # print('attention', attention[9][40:])
 
         attention = F.softmax(attention, dim=1)
 
