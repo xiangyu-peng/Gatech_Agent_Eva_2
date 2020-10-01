@@ -25,12 +25,18 @@
 ### How to run the experiments - online-training
 - The only you need to use. `GNOME-p3/Hypothetical_simulator/online_test.py`
 - How to run it?
-    `nohup python online_test.py --interval 1 --retrain_nums 100 --device_id 1 --novelty_introduce_begin 50 --num_test 10000 --novelty_change_num 5 --novelty_change_begin 3 --retrain_type gat_pre --seed 10`
+    `nohup python online_test.py --retrain_nums 100 --exp_name 5_3 --device_id 2 --novelty_introduce_begin 50 --num_test 10000 --novelty_change_num 5 --novelty_change_begin 3 --retrain_type gat_pre --seed 10`
+- The pre-trained model path is written in the codes (args parser): pls edit the address there. 
+    - default in `--model_path` is the baseline pre-trained model path (add ur own path pls)
+    - default in `--model_path_gat` is the kg-a2c pre-trained model path
+- log file name is defined in `self.result_csv_str`, feel free to edit it, now it has novelty and seed info in its name.
+- Now the winning rate calculation has 1 as the window. It means it calculate game 1-50 as the winning rate of game 50, and
+  then calculate 2-51 as the winning rate of game 51, .... Feel free to change it in your plots.
 - Which you need to tune?
-    - interval: 1/5/10/20/50/100
-    - retrain_nums: 50/100/300/500/1000
-    - novelty_introduce_begin: fixed 50
-    - retrain_type baseline/ gat_pre
+    - interval: nothing to do, just ignore it.
+    - retrain_nums: 50/100/300/500/1000, begin from `100`
+    - novelty_introduce_begin: fixed: `50`
+    - retrain_type `baseline_pre` / `gat_pre`
     - seed: at least 5 seeds for one novelty.
 - What we want?
     - Find the best hyper-parameters
