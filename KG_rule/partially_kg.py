@@ -25,8 +25,6 @@ class Adj_Gen(object):
                 if output_adj[i][j] != 0:
                     output_adj[j][i] = output_adj[i][j]
 
-        print(output_adj[position])
-
         return output_adj
 
     def get_pos(self, state):

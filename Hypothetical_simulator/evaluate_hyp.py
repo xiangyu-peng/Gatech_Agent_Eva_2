@@ -1,12 +1,12 @@
 # This file is used to plot the results of off line retraining
-# python evaluate_hyp.py --interval 10 --novelty 3,19,1,18,5,12_4,2,4,2,3,2,3,2 --type pre
+# python evaluate_hyp.py --interval 10 --novelty 4,19_5,3 --type pre --seed 10
 
 import csv
 import matplotlib.pyplot as plt
 import argparse
 import sys
 
-def plot_result(name, type_list, interval):
+def plot_result(name, type_list, interval, seed):
     if 'all' in type_list:
         type_list = ['hyp_gat_pre', 'gat_pre', 'baseline_pre', 'hyp_pre', 'baseline_ran', 'gat_ran', 'hyp_gat_ran', 'hyp_ran']
     if 'ran' in type_list:
@@ -22,7 +22,7 @@ def plot_result(name, type_list, interval):
         w/ hyp sim
         """
         hyp_gat_pre_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp_gat_pre.csv', newline='') as csvfile:
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_' + seed + '_nov_' + name + '_hyp_gat_pre.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
@@ -38,7 +38,7 @@ def plot_result(name, type_list, interval):
         w/ hyp sim
         """
         gat_pre_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_gat_pre.csv', newline='') as csvfile:
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_' + seed + '_nov_' + name + '_gat_pre.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
@@ -54,7 +54,7 @@ def plot_result(name, type_list, interval):
         w/o hyp sim
         """
         baseline_pre_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_baseline_pre.csv', newline='') as csvfile:
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_' + seed + '_nov_' + name + '_baseline_pre.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
@@ -70,7 +70,7 @@ def plot_result(name, type_list, interval):
         w/ hyp sim
         """
         hyp_pre_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp_pre.csv', newline='') as csvfile:
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_' + seed + '_nov_' + name + '_hyp_pre.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
@@ -86,7 +86,7 @@ def plot_result(name, type_list, interval):
         w/o hyp sim
         """
         baseline_ran_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_baseline_ran.csv', newline='') as csvfile:
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_' + seed + '_nov_' + name + '_baseline_ran.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
@@ -102,7 +102,7 @@ def plot_result(name, type_list, interval):
         w/o hyp sim
         """
         gat_ran_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_gat_ran.csv', newline='') as csvfile:
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_' + seed + '_nov_' + name + '_gat_ran.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
@@ -118,7 +118,7 @@ def plot_result(name, type_list, interval):
         w/o hyp sim
         """
         hyp_gat_ran_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp_gat_ran.csv', newline='') as csvfile:
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_' + seed + '_nov_' + name + '_hyp_gat_ran.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
@@ -134,7 +134,7 @@ def plot_result(name, type_list, interval):
         w/o hyp sim
         """
         hyp_ran_list = []
-        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_10_nov_' + name + '_hyp_ran.csv', newline='') as csvfile:
+        with open('/media/becky/GNOME-p3/Hypothetical_simulator/log_test/progress_seed_' + seed + '_nov_' + name + '_hyp_ran.csv', newline='') as csvfile:
             logreader = csv.reader(csvfile)
             for row in logreader:
                 if 'avg_winning' in row:
@@ -177,7 +177,7 @@ def plot_result(name, type_list, interval):
     plt.grid(True)
     plt.legend()
     plt.show()
-    plt.savefig('hyp_result/' + name + '.png')
+    plt.savefig('hyp_result/' + name + '_' + seed + '.png')
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -193,9 +193,13 @@ if __name__ == '__main__':
                         default=None, required=True,
                         help="add multiple plot type, use comma to split, i.e. hyp,ran")
     parser.add_argument('--plot_interval', type=int,
-                       default=1, required=False,
-                       help="add multiple plot type, use comma to split, i.e. hyp,ran")
+                        default=1, required=False,
+                        help="add multiple plot type, use comma to split, i.e. hyp,ran")
+    parser.add_argument('--seed',
+                        default='10', type=str,
+                        required=False,
+                        help="retraining step, i.g. 10")
     args = parser.parse_args()
     novelty_name = str(list(map(lambda x : int(x), args.novelty.split('_')[0].split(',')))) + '_' + str(list(map(lambda x : int(x),args.novelty.split('_')[1].split(','))))
     name = novelty_name + '_rt_' + args.interval
-    plot_result(name, args.type.split(','), args.plot_interval)
+    plot_result(name, args.type.split(','), args.plot_interval, args.seed)

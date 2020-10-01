@@ -6,13 +6,14 @@
 # nohup python GAT_part.py --pretrain_model /media/becky/GNOME-p3/monopoly_simulator_background/weights0_0_gat_part_seed_1048000.pkl --device_id 2 --novelty_change_num 18 --novelty_change_begin 1 --novelty_introduce_begin 0 --retrain_type gat_part --exp_name 18_1_v --seed 10
 
 import numpy as np
-from model import *
+# from GNN.model import *
 # adj = np.load('/media/becky/GNOME-p3/KG_rule/kg_matrix.npy')
 import sys, os
 upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
 sys.path.append(upper_path + '/KG_rule')
+sys.path.append(upper_path + '/GNN')
 ####################
 from monopoly_simulator_background.vanilla_A2C import *
 from monopoly_simulator_background.interface import Interface
@@ -47,6 +48,7 @@ class HiddenPrints:
 class MonopolyTrainer_GAT:
     def __init__(self,
                  params,
+                 device_id=0,
                  gameboard=None,
                  kg_use=True,
                  logger_use=True,
@@ -57,42 +59,38 @@ class MonopolyTrainer_GAT:
                  tf_stop_num=0,
                  exp_name=None,
                  retrain_type='baseline',
-                 args=None):  # unique exp name with number!
+                 exp_dict=None,
+                 adj_path=None,
+                 seed=0):  # unique exp name with number!
 
         # set up the novelty and the file name/ matrix path
         self.exp_name = exp_name
         self.retrain_type = retrain_type
         self.novelty = [[]]
         self.novelty_newest = []
-        self.novelty_change_num = list(map(lambda x: int(x), args.novelty_change_num.split(',')))
-        self.novelty_change_begin = list(map(lambda x: int(x), args.novelty_change_begin.split(',')))
-        self.novelty_introduce_begin = list(map(lambda x: int(x), args.novelty_introduce_begin.split(',')))
-        self.exp_dict_list, self.exp_dict_change_position = self.set_up_dict_list(self.novelty_change_num,
-                                                                                  self.novelty_change_begin,
-                                                                                  self.novelty_introduce_begin,
-                                                                                  retrain_type=exp_name+'_'+self.retrain_type+'_seed_'+ str(args.seed))
-        self.exp_dict = self.exp_dict_list[0]
+        self.exp_dict = exp_dict
+        # self.novelty_change_num = list(map(lambda x: int(x), args.novelty_change_num.split(',')))
+        # self.novelty_change_begin = list(map(lambda x: int(x), args.novelty_change_begin.split(',')))
+        # self.novelty_introduce_begin = list(map(lambda x: int(x), args.novelty_introduce_begin.split(',')))
+        # self.exp_dict_list, self.exp_dict_change_position = self.set_up_dict_list(self.novelty_change_num,
+        #                                                                           self.novelty_change_begin,
+        #                                                                           self.novelty_introduce_begin,
+        #                                                                           retrain_type=exp_name+'_'+self.retrain_type+'_seed_'+ str(args.seed))
+        # self.exp_dict = self.exp_dict_list[0]
+        self.adj_path = None
         if 'gat' in retrain_type:
             self.adj = None
-            self.adj_path_default = args.adj_path_folder + '_no.npy'
-            self.adj_path = args.adj_path_folder + '_' + exp_name + '_' + self.retrain_type + '_seed_' + str(args.seed) + '.npy'
+            self.adj_path = adj_path
             print('self.adj_path', self.adj_path)
-            # delete old file
-            # if os.path.exists(self.adj_path):
-            #     os.remove(self.adj_path)
-            #     print('delete old adj file!')
-            # else:
-            #     print('no old adj file to delete')
-            self.load_adj()
 
         self.params = params
         self.input_vocab_size = self.params['input_vocab_size']
         self.gat_output_size = self.params['gat_output_size']
-        self.seed = args.seed
+        self.seed = seed
         self.tf_use = tf_use
         self.tf_stop_num = tf_stop_num
         self.config_file = config_file
-        self._device_id = 'cuda:' + args.device_id # if 'baseline' == retrain_type else 'cuda:0'  # out of some reason, we need cuda:0 to run gat
+        self._device_id = 'cuda:' + device_id # if 'baseline' == retrain_type else 'cuda:0'  # out of some reason, we need cuda:0 to run gat
 
         self.PRINT_INTERVAL = self.params['print_interval']
         self.n_train_processes = self.params['n_train_processes']  # batch size
@@ -135,7 +133,7 @@ class MonopolyTrainer_GAT:
 
         # Set the env for training
         with HiddenPrints():
-            self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed, self.exp_dict_list[0])
+            self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed, self.exp_dict)
 
         if self.gameboard:
             self.interface.set_board(self.gameboard)
@@ -331,7 +329,7 @@ class MonopolyTrainer_GAT:
         return round(score/num_test, 5), round(win_num/num_test, 5), round(avg_diff/num_test, 5), round(score_no/num_test, 5)
 
     def save(self, step_idx):
-        save_name = self.save_path + self.exp_name + '_' + self.retrain_type + '_seed_' + str(self.seed) + str(step_idx) + '.pkl'
+        save_name = self.save_path + '_' + str(step_idx) + '.pkl'
         torch.save(self.model, save_name)
         return save_name
 
@@ -403,9 +401,9 @@ class MonopolyTrainer_GAT:
 
     def train(self):
         # prepare for reset game env
-        env_set_num = 0  # use which exp_dict to reset the game env
-        env_stop_change_bool = True if len(self.exp_dict_change_position) == 0 else False  # indicates whether to reset the game env
-        exp_dict_change_position = self.exp_dict_change_position  # we will pop the used ones, so we make a copy
+        # env_set_num = 0  # use which exp_dict to reset the game env
+        # env_stop_change_bool = True if len(self.exp_dict_change_position) == 0 else False  # indicates whether to reset the game env
+        # exp_dict_change_position = self.exp_dict_change_position  # we will pop the used ones, so we make a copy
 
         step_idx = 1
         save_name = None
@@ -518,9 +516,9 @@ class MonopolyTrainer_GAT:
             # print(torch.norm(self.model.graph_gat.gat.attentions[0].W))
             # print(torch.norm(self.model.fc_1.weight))
             avg_score, avg_winning, avg_diff, avg_score_no = 0, 0, 0, 0
-            self.check_novelty()
+            # self.check_novelty()
             if step_idx % self.PRINT_INTERVAL == 0:
-                self.check_novelty()
+                # self.check_novelty()
                 # save weights of A2C
                 save_name = self.save(step_idx)
 
@@ -569,24 +567,24 @@ class MonopolyTrainer_GAT:
 
             # check the time for novelty
             # reset the game env
-            if not env_stop_change_bool and step_idx == int(self.exp_dict_change_position[0]):
-                env_set_num += 1
-                self.exp_dict = self.exp_dict_list[env_set_num]
-
-                print('self.exp_dict', self.exp_dict)
-                with HiddenPrints():
-                    self.envs.set_exp(self.exp_dict_list[env_set_num])
-
-                exp_dict_change_position.pop(0)
-                env_stop_change_bool = True if len(exp_dict_change_position) == 0 else False
-
-                # reset the game
-                with HiddenPrints():
-                    reset_array = self.envs.reset()
-                    s, masked_actions, background_actions = [reset_array[i][0] for i in range(len(reset_array))], \
-                                                            [reset_array[i][1][0] for i in range(len(reset_array))], \
-                                                            [reset_array[i][1][1] for i in range(len(reset_array))]
-                loss_train = torch.tensor(0, device=self.device).float()
+            # if not env_stop_change_bool and step_idx == int(self.exp_dict_change_position[0]):
+            #     env_set_num += 1
+            #     self.exp_dict = self.exp_dict_list[env_set_num]
+            #
+            #     print('self.exp_dict', self.exp_dict)
+            #     with HiddenPrints():
+            #         self.envs.set_exp(self.exp_dict_list[env_set_num])
+            #
+            #     exp_dict_change_position.pop(0)
+            #     env_stop_change_bool = True if len(exp_dict_change_position) == 0 else False
+            #
+            #     # reset the game
+            #     with HiddenPrints():
+            #         reset_array = self.envs.reset()
+            #         s, masked_actions, background_actions = [reset_array[i][0] for i in range(len(reset_array))], \
+            #                                                 [reset_array[i][1][0] for i in range(len(reset_array))], \
+            #                                                 [reset_array[i][1][1] for i in range(len(reset_array))]
+            #     loss_train = torch.tensor(0, device=self.device).float()
 
         self.envs.close()
         # print(self.model.fc_1.weight)
@@ -661,11 +659,6 @@ if __name__ == '__main__':
                         help="use kg or not")
     args = parser.parse_args()
 
-    # exp_dict = dict()
-    # exp_dict['novelty_num'] = (args.novelty_change_num, args.novelty_change_begin)
-    # exp_dict['novelty_inject_num'] = args.novelty_introduce_begin
-    # exp_dict['exp_type'] = args.exp_type
-    # read the config file and set the hyper-param
     config_data = ConfigParser()
     config_data.read(args.upper_path + args.config_file)
 
@@ -689,11 +682,16 @@ if __name__ == '__main__':
 
 
     param_list = dict_product(all_params)
+    exp_dict = dict()
+    exp_dict['novelty_num'] = (5, 3)
+    exp_dict['novelty_inject_num'] = sys.maxsize
+    # exp_dict['exp_type'] = 'kg' if retrain_type != 'baseline' else 'None'
+    exp_dict['exp_type'] = args.retrain_type
     for params in param_list:  # run different hyper parameters in sequence
         trainer = MonopolyTrainer_GAT(params,
                                   gameboard=None,
                                   kg_use=args.kg_use,
-                                  logger_use=True,
+                                  logger_use=False,
                                   config_file=args.config_file,
                                   test_required=True,
                                   tf_use=True,
@@ -701,7 +699,10 @@ if __name__ == '__main__':
                                   tf_stop_num=args.tf_stop_num,
                                   exp_name=args.exp_name,
                                   retrain_type=args.retrain_type,
-                                  args=args) #'/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
+                                  device_id=args.device_id,
+                                  seed=0,
+                                  adj_path='/media/becky/GNOME-p3/KG_rule/matrix_rule/kg_matrix_no.npy',
+                                  exp_dict=exp_dict) #'/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
         trainer.train()
 
 

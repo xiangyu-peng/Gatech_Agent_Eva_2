@@ -1,4 +1,4 @@
-# nohup python online_test.py --interval 1 --retrain_nums 10 --device_id 0 --novelty_introduce_begin 50,500,1000,1500,2000,2500,3000,3500 --num_test 4000 --novelty_change_num ¸¸¸ --novelty_change_begin 5,3,5,3,5,3,5,3 --retrain_type gat_pre --seed 9
+# nohup python online_test.py --interval 1 --retrain_nums 100 --device_id 1 --novelty_introduce_begin 50,2000 --num_test 4000 --novelty_change_num 4,19 --novelty_change_begin 4,2 --retrain_type gat_pre --seed 10
 import sys
 import os
 upper_path = os.path.abspath('..')
@@ -18,33 +18,13 @@ import logging
 import shutil
 import datetime
 from Hypothetical_simulator.logging_info import log_file_create
-from monopoly_simulator_background.vanilla_A2C_main_v3 import MonopolyTrainer
-from GNN.GAT import MonopolyTrainer_GAT
-from monopoly_simulator_background.evaluate_a2c import test_v2
+# from monopoly_simulator_background.vanilla_A2C_main_v3 import MonopolyTrainer
+from GAT_part import MonopolyTrainer_GAT
+# from monopoly_simulator_background.evaluate_a2c import test_v2
 import csv
 import copy
 logger = logging.getLogger('logging_info.online_testing')
 from monopoly_simulator_background import logger
-
-# def parse_args():
-#     parser = argparse.ArgumentParser()
-#     parser.add_argument('--seed', default=0, type=int)
-#     parser.add_argument('--model_path', default=upper_path + '/monopoly_simulator_background/weights/baseline.pkl', type=str)
-#     parser.add_argument('--device_name', default='cuda:2', type=str)
-#     parser.add_argument('--num_test', default=60000000, type=int)
-#     parser.add_argument('--performance_count', default=100, type=int)
-#     parser.add_argument('--retrain_type', default=None, type=str) # or hyp or baseline
-#     parser.add_argument('--config_file_offline_baseline', default='/Hypothetical_simulator/config_offline_baseline.ini', type=str)
-#     parser.add_argument('--config_file_offline_hyp', default='/Hypothetical_simulator/config_offline_hyp_1.ini', type=str)
-#     parser.add_argument('--config_file_online_baseline', default='/Hypothetical_simulator/config_online_baseline.ini', type=str)
-#     parser.add_argument('--config_file_online_hyp', default='/Hypothetical_simulator/config_online_hyp_1.ini', type=str)
-#     parser.add_argument('--config_file_online', default='/Hypothetical_simulator/config_online.ini', type=str)
-#     parser.add_argument('--upper_path', default='/media/becky/GNOME-p3', type=str)
-#     parser.add_argument('--result_csv_path', default='/Hypothetical_simulator/result_int_1.csv', type=str)
-#     args = parser.parse_args()
-#     params = vars(args)
-#     return params
-
 
 class HiddenPrints:
     def __enter__(self):
@@ -72,6 +52,7 @@ class Hyp_Learner(object):
         # self.config_file_online_baseline = args['config_file_online_baseline']
         # self.config_file_online_hyp = args['config_file_online_hyp']
         # self.config_file_online = args['config_file_online']
+        self.exp_name = args.exp_name
         self.novelty_change_num = list(map(lambda x: int(x), args.novelty_change_num.split(',')))
         self.novelty_change_begin = list(map(lambda x: int(x), args.novelty_change_begin.split(',')))
         self.novelty_introduce_begin = list(map(lambda x: int(x), args.novelty_introduce_begin.split(',')))
@@ -86,17 +67,21 @@ class Hyp_Learner(object):
         self.exp_dict_list, self.exp_dict_change_position = self.set_up_dict_list(self.novelty_change_num,
                                                                                   self.novelty_change_begin,
                                                                                   self.novelty_introduce_begin,
-                                                                                  args.retrain_type)
+                                                                                  retrain_type=args.exp_name+'_'+ args.retrain_type+'_seed_'+ str(args.seed))
 
         self.device = torch.device('cuda:' + args.device_id)
         self.device_id = args.device_id
-        self.model_path = args.model_path
+        self.model_path = args.model_path if 'gat' not in args.retrain_type else args.model_path_gat
+        print('self.model_path', self.model_path)
         self.model = torch.load(self.model_path, map_location={"cuda:1" : "cuda:" + self.device_id})
         self.seed = args.seed
+        self.adj_path = None
         if args.retrain_type and 'gat' in args.retrain_type:
+            self.adj_path_default = args.adj_path_folder + '_no.npy'
             self.adj = None
-            self.adj_path = args.adj_path_folder + '_' + str(self.exp_dict_list[0]['novelty_num'][0]) + '_' + str(self.exp_dict_list[0]['novelty_num'][1])+ '_' + args.retrain_type + '.npy'
-            self.adj_path_new = args.adj_path_folder + '_' + str(self.exp_dict_list[0]['novelty_num'][0]) + '_' + str(self.exp_dict_list[0]['novelty_num'][1])+ '_' + args.retrain_type + '.npy'
+            self.adj_path = args.adj_path_folder + '_' + args.exp_name + '_' + args.retrain_type + '_seed_' + str(
+                args.seed) + '.npy'
+            self.load_adj()
 
         #performance of agents
         self.num_test = args.num_test
@@ -109,7 +94,7 @@ class Hyp_Learner(object):
         self.retrain_type = args.retrain_type
         self.retrain_signal = False  # denotes if we will retrain the agent during next game
         if args.retrain_type:
-            self.generate_adj_first()
+            # self.generate_adj_first()
             self.trainer = self.set_offline_train_setting()
         self.retrain_nums = args.retrain_nums
         self.retrain_steps = self.novelty_introduce_begin[0] * self.retrain_nums
@@ -125,12 +110,12 @@ class Hyp_Learner(object):
             '_wo_rt.log')
 
         if self.retrain_type:
-            self.result_csv_str = '_seed_' + str(self.seed) + '_nov_' + str(self.novelty_change_num) +\
-                                   '_' + str(self.novelty_change_begin) + '_rt_' + str(self.retrain_nums)+ \
-                                   '_' + self.retrain_type  # save the retraining results to the csv
+            self.result_csv_str = '_seed_' + str(self.seed) + '_name_' + args.exp_name + '_rt_' + str(self.retrain_nums)+ \
+                                   '_' + self.retrain_type + '_seed_' + str(args.seed)  # save the retraining results to the csv
         else:
             self.result_csv_str = '_seed_' + str(self.seed) + '_nov_' + str(self.novelty_change_num) + \
                                   '_' + str(self.novelty_change_begin) + '_rt_' + str(self.retrain_nums)
+
         self.TB = logger.Logger(None, [logger.make_output_format('csv', 'log_test/', log_suffix=self.result_csv_str)])
 
     def set_up_dict_list(self, novelty_change_num_list, novelty_change_begin_list, novelty_introduce_begin_list, retrain_type):
@@ -163,14 +148,13 @@ class Hyp_Learner(object):
         """
         if os.path.exists(self.adj_path):
             self.adj = np.load(self.adj_path)
-            for i in range(self.adj.shape[1] // self.adj.shape[0] - 1):
-                self.adj = self.adj[:, self.adj.shape[0] * i:self.adj.shape[0] * (i + 1)] + self.adj[:,
-                                                                                            self.adj.shape[0] * (i + 1):
-                                                                                            self.adj.shape[0] * (i + 2)]
-            # print('Successful load game rule!')
+            adj_return = np.zeros((self.adj.shape[0], self.adj.shape[0]))
+            for i in range(self.adj.shape[1] // self.adj.shape[0]):
+                adj_return += self.adj[:,self.adj.shape[0] * i:self.adj.shape[0] * (i+1)]
+            self.adj = adj_return
+
         else:
-            print(self.adj_path)
-            raise FileNotFoundError
+            self.adj = np.zeros((92,92))
 
     def generate_adj_first(self):
         # Set the env for testing
@@ -208,7 +192,7 @@ class Hyp_Learner(object):
         env.set_kg(True)  # we need to use knowledge graph to detect the game rule change
         env.set_board()  # we use the original game-board in the beginning
         env.seed(self.seed)
-
+        print('self.exp_dict_change_position', self.exp_dict_change_position)
         # prepare for reset game env
         env_set_num = 0  # use which exp_dict to reset the game env
         env_stop_change_bool = True if len(self.exp_dict_change_position) == 0 else False  # indicates whether to reset the game env
@@ -220,6 +204,7 @@ class Hyp_Learner(object):
         done = False
         win_num = []
         avg_diff = 0
+        retrain_steps_total = 0
 
         with HiddenPrints():  # reset the env
             s, masked_actions = env.reset()
@@ -250,6 +235,7 @@ class Hyp_Learner(object):
                                      reinitialize_signal=self.reinitialize_signal,
                                      game_board=path_name,
                                      )
+                retrain_steps_total += self.retrain_nums
                 self.reinitialize_signal = False
                 # Update the agent
                 self.model = self.trainer.model
@@ -266,9 +252,11 @@ class Hyp_Learner(object):
                 s = s.reshape(1, -1)
                 s = torch.tensor(s, device=self.device).float()
 
-                if args.retrain_type and 'gat' in args.retrain_type and retrained_bool:
+                if args.retrain_type and 'gat' in args.retrain_type:
+                    self.load_adj()
                     s = self.model.forward(s, self.adj)
-
+                else:
+                    s = self.model.forward_baseline(s)
                 # check the novelty in the state
                 # TODO: save all the game board before the novelty injection as well
                 # # TODO: Evaluation!
@@ -318,17 +306,18 @@ class Hyp_Learner(object):
             win_num.append(abs(abs(int(done) - 2) - 1))
 
             # Record the performance of the agent
-            if num_test >= self.performance_count :
+            if num_test >= self.performance_count:
                 # self.performance_before_inject[0].append(round(score / self.performance_count, 3))     # score/ rewards
                 # self.performance_before_inject[0].append(round(win_num / self.performance_count, 3))   # winning rate
                 # self.performance_before_inject[0].append(round(avg_diff / self.performance_count, 3))  # difference of the cash at the end of game
                 # self.logger.debug("Step # :" + str(num_test) + ' avg score : ' + str(round(score / num_test, 3)))
                 self.logger.debug("Step # :" + str(num_test) + ' avg winning : ' + str(round(sum(win_num) / self.performance_count, 3)))
                 # self.logger.debug("Step # :" + str(num_test) + ' avg diff : ' + str(round(avg_diff / num_test, 3)))
-                self.TB.logkv('step_idx', num_test)
+                self.TB.logkv('game_num', num_test)
                 self.TB.logkv('avg_winning', round(sum(win_num) / self.performance_count, 3))
+                self.TB.logkv('training_steps', retrain_steps_total)
                 if 'hyp' in self.retrain_type:
-                    self.TB.logkv('retrain_steps', self.retrain_steps)
+                    self.TB.logkv('retrain_steps', retrain_steps)
                 self.TB.dumpkvs()
                 print(num_test, round(sum(win_num) / self.performance_count, 3),'retrain_step', self.retrain_steps)
 
@@ -374,10 +363,6 @@ class Hyp_Learner(object):
 
                 if self.retrain_type and 'hyp' not in self.retrain_type:
                     retrain_signal_per_game = True
-                if self.retrain_type and 'gat' in self.retrain_type:
-                    self.adj_path = self.adj_path_new
-
-
 
             # reset the game env
             if not env_stop_change_bool and num_test == int(self.exp_dict_change_position[0]):
@@ -386,10 +371,6 @@ class Hyp_Learner(object):
                 env.seed(self.seed + env_set_num)
                 exp_dict_change_position.pop(0)
                 env_stop_change_bool = True if len(exp_dict_change_position) == 0 else False
-                if self.retrain_type and 'gat' in self.retrain_type:
-                    self.adj_path_new = args.adj_path_folder + '_' + str(self.exp_dict_list[env_set_num]['novelty_num'][0]) + \
-                                        '_' + str(self.exp_dict_list[env_set_num]['novelty_num'][1]) + '_' + self.retrain_type + '.npy'
-                print(num_test, self.exp_dict_list[env_set_num])
 
         env.close()
 
@@ -413,37 +394,51 @@ class Hyp_Learner(object):
         config_data.read(self.upper_path + self.config_file)
         params = self.params_read(config_data, 'hyper')
 
-        if 'gat' not in self.retrain_type:
-            print('SET BASEline')
-            # Set trainer:
-            trainer = MonopolyTrainer(params=params,
-                                      device_id=self.device_id,
+        # if 'gat' not in self.retrain_type:
+        #     print('SET BASEline')
+        #     # Set trainer:
+        #     trainer = MonopolyTrainer_GAT(params=params,
+        #                                   device_id=self.device_id,
+        #                                   gameboard=None,
+        #                                   kg_use=False,
+        #                                   logger_use=False,
+        #                                   config_file=args.config_file,
+        #                                   test_required=False,
+        #                                   pretrain_model=self.model_path,
+        #                                   tf_use=True,
+        #                                   tf_stop_num=20000,
+        #                                   seed=self.seed + 1,
+        #                                   exp_dict=exp_dict,
+        #                                   retrain_type='baseline')
+        # else:
+        #     # Set trainer:
+        #     print('SET GAT')
+        #     trainer = MonopolyTrainer_GAT(params,
+        #                                   device_id=self.device_id,
+        #                                   gameboard=None,
+        #                                   kg_use=False,
+        #                                   logger_use=False,
+        #                                   config_file=args.config_file,
+        #                                   test_required=False,
+        #                                   tf_use=False,
+        #                                   pretrain_model=self.model_path,
+        #                                   gat_use='kg',
+        #                                   seed=args.seed,
+        #                                   exp_dict=exp_dict,
+        #                                   tf_stop_num=20000)
+        trainer = MonopolyTrainer_GAT(params,
                                       gameboard=None,
                                       kg_use=False,
                                       logger_use=False,
                                       config_file=args.config_file,
                                       test_required=False,
-                                      pretrain_model=None,
-                                      tf_use=True,
-                                      tf_stop_num=20000,
-                                      seed=self.seed + 1,
+                                      tf_use=False,
+                                      pretrain_model=self.model_path,
+                                      retrain_type=self.retrain_type,
+                                      device_id=self.device_id,
+                                      seed=self.seed+1,
+                                      adj_path=self.adj_path,
                                       exp_dict=exp_dict)
-        else:
-            # Set trainer:
-            print('SET GAT')
-            trainer = MonopolyTrainer_GAT(params,
-                                          device_id=self.device_id,
-                                          gameboard=None,
-                                          kg_use=False,
-                                          logger_use=False,
-                                          config_file=args.config_file,
-                                          test_required=False,
-                                          tf_use=False,
-                                          pretrain_model=None,
-                                          gat_use='kg',
-                                          seed=args.seed,
-                                          exp_dict=exp_dict,
-                                          tf_stop_num=20000)
 
         return trainer
 
@@ -459,7 +454,7 @@ class Hyp_Learner(object):
         # save_path = '/media/becky/GNOME-p3/Hypothetical_simulator/weights' + \
         #             '/' + self.retrain_type + '/' + str(num_test)
         save_path = '/media/becky/GNOME-p3/Hypothetical_simulator/weights' + \
-                    '/' + self.retrain_type + '/' + self.result_csv_str
+                    '/' + self.retrain_type + '/' + self.exp_name + '_seed_' + str(self.seed)
         if os.path.exists(save_path):
             shutil.rmtree(save_path)
             os.makedirs(save_path)
@@ -474,8 +469,7 @@ class Hyp_Learner(object):
             self.trainer.reinitialize_agent(gameboard=game_board)
 
         if 'hyp' not in self.retrain_type:
-            self.trainer.set_gameboard(gameboard=game_board,
-                                       save_path=save_path,
+            self.trainer.set_gameboard(save_path=save_path,
                                        print_interval=self.retrain_nums,
                                        max_train_steps=self.retrain_nums + 1,
                                        seed=num_test)
@@ -485,30 +479,46 @@ class Hyp_Learner(object):
             save_name = self.trainer.train()
 
         else:
-        # Begin retraining
+            # deal with too many novelty
+            novelty_set = [i for i in novelty_set if i < 50]
+            if novelty_set:
+                            
+                # if len(novelty_set) >= self.retrain_nums:
+                i = 1
+                while i < len(novelty_set):
+                    if abs(novelty_set[i] - novelty_set[i - 1]) < 5:
+                        novelty_set.pop(i)
+                    else:
+                        i += 1
+
+                if len(novelty_set) >= self.retrain_nums:
+                    novelty_set = novelty_set[:self.retrain_nums]
+
+                novelty_retrain_assign = [min((num_test * self.retrain_nums - self.retrain_steps) // len(novelty_set),1) for i in range(len(novelty_set))]
+                left_num = num_test * self.retrain_nums - self.retrain_steps - sum(novelty_retrain_assign)
+                # i = 0
+                # while left_num > 0:
+                #     left_num -= 1
+                #     novelty_retrain_assign[i] += 1
+                #     i += 1
+            #######################
+
+
             if 'gat' in self.retrain_type:
-                round_hyp = 0
+                # print('novelty_set', novelty_set, sum(novelty_retrain_assign))
                 if novelty_set:
-                    while self.retrain_steps < num_test * self.retrain_nums:
-                        for i, num in enumerate(novelty_set):
-                            if self.retrain_steps < num_test * self.retrain_nums:
-                                # print(num, novelty_set)
-                                game_board = '/Hypothetical_simulator/game_board/gameboard_round_' + str(num) + self.interval + self.result_csv_str + '.json'
-                                # if not self.stop_sign:
-                                self.trainer.set_gameboard(gameboard=game_board,
-                                                           save_path=save_path,
-                                                           print_interval=self.retrain_hyp_interval,
-                                                           max_train_steps=self.retrain_hyp_interval + 1,
-                                                           adj_path=self.adj_path,
-                                                           seed=num_test + round_hyp)
-                                save_name = self.trainer.train()
-    
-                                self.retrain_steps += self.retrain_hyp_interval
-                            else:
-                                break
-                        round_hyp += 1
-                        if round_hyp > 1:
-                            break
+                    for i, num in enumerate(novelty_set):
+                        # print('num', num, novelty_retrain_assign[i])
+                        game_board = '/Hypothetical_simulator/game_board/gameboard_round_' + str(num) + self.interval + self.result_csv_str + '.json'
+                        self.trainer.set_gameboard(gameboard=game_board,
+                                                   save_path=save_path,
+                                                   print_interval=novelty_retrain_assign[i],
+                                                   max_train_steps=novelty_retrain_assign[i] + 1,
+                                                   adj_path=self.adj_path,
+                                                   seed=num_test)
+                        save_name = self.trainer.train()
+
+                        self.retrain_steps += novelty_retrain_assign[i]
                 # keep training until reach the retrain interval
                 if self.retrain_steps < num_test * self.retrain_nums:
                     # print('retrain more',num_test * self.retrain_nums - self.retrain_steps)
@@ -517,7 +527,7 @@ class Hyp_Learner(object):
                                                print_interval=num_test * self.retrain_nums - self.retrain_steps,
                                                max_train_steps=num_test * self.retrain_nums - self.retrain_steps + 1,
                                                adj_path=self.adj_path,
-                                               seed=num_test + round_hyp)
+                                               seed=num_test)
                     save_name = self.trainer.train()
 
                     self.retrain_steps = num_test * self.retrain_nums
@@ -655,7 +665,12 @@ if __name__ == '__main__':
                         required=False,
                         help="GPU id we use")
     parser.add_argument('--model_path',
-                        default='/media/becky/GNOME-p3/monopoly_simulator_background/weights/del_ran_19_1_v3_lr_0.001_#_100.pkl',
+                        default='/media/becky/GNOME-p3/monopoly_simulator_background/weights19_1_baseline_seed_9147000.pkl',
+                        type=str,
+                        required=False,
+                        help="Pre-trained model")
+    parser.add_argument('--model_path_gat',
+                        default='/media/becky/GNOME-p3/monopoly_simulator_background/weights0_0_gat_part_seed_1048000.pkl',
                         type=str,
                         required=False,
                         help="Pre-trained model")
@@ -681,8 +696,8 @@ if __name__ == '__main__':
     parser.add_argument('--interval',
                         default=1,
                         type=int,
-                        required=True,
-                        help="interval?")
+                        required=False,
+                        help="interval only for hyp, neglect it without hyp")
     parser.add_argument('--retrain_nums',
                         default=10,
                         type=int,
@@ -698,6 +713,11 @@ if __name__ == '__main__':
                         type=int,
                         required=False,
                         help="retrain update interval in ini file")
+    parser.add_argument('--exp_name',
+                        default='5_3',
+                        type=str,
+                        required=True,
+                        help="name of adj and log name")
     args = parser.parse_args()
 
     hyp = Hyp_Learner(args)

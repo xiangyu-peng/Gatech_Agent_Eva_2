@@ -16,7 +16,7 @@ import os, sys
 from random import randint
 from GNN.model import *
 from KG_rule.kg_GAT import RGCNetwork
-from GNN.RGCN.model import RGCN
+# from GNN.RGCN.model import RGCN
 from KG_rule.partially_kg import Adj_Gen
 from torch import FloatTensor
 import copy
@@ -82,12 +82,12 @@ class ActorCritic(nn.Module):
                 #                               output_size=1,
                 #                               feature_dict=feature_dict).cuda()
 
-                self.state_graph = RGCN(i_dim=config.state_num,
-                                        h_dim=config.hidden_dim_gcn,
-                                        drop_prob=0,
-                                        support=4,
-                                        num_bases=1,
-                                        device=device).to(device)
+                # self.state_graph = RGCN(i_dim=config.state_num,
+                #                         h_dim=config.hidden_dim_gcn,
+                #                         drop_prob=0,
+                #                         support=4,
+                #                         num_bases=1,
+                #                         device=device).to(device)
             else:
                 self.fc_1 = nn.Linear(config.state_output_size + config.gat_output_size,
                                       config.hidden_state)  # config.state_num = 4; config.hidden_state) = 256
@@ -171,11 +171,12 @@ def worker(worker_id, master_end, worker_end, gameboard=None, kg_use=True, confi
     master_end.close()  # Forbid worker to use the master end for messaging
     env = gym.make('monopoly_simple-v1')
     env.set_config_file(config_file)
-    env.set_exp(exp_dict)
     if worker_id > 0:
         env.set_kg(False)
     else:
         env.set_kg(kg_use)
+    env.set_exp(exp_dict)
+
     env.set_board(gameboard)
     env.seed(seed + worker_id)
     # env.seed(randint(0,sys.maxsize))
