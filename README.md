@@ -1,3 +1,17 @@
+## Paper Experiements Design
+### TODO
+#### Offline 
+- 10/01 - 10/10
+- scarecrow
+- run offline exps with different novelty and different seeds
+- plot figures with mean and std
+
+#### Online
+- 10/10-10/20
+- nesssarose or scarecrow
+- run online exps with different novelty and different seeds
+- plot figures with mean and std
+
 ## Evaluation
 ### RL_agent
 All the agent path is relative, and located at `~/Evaluation/monopoly_simulator/A2C_agent`. 
@@ -18,6 +32,7 @@ All the agent path is relative, and located at `~/Evaluation/monopoly_simulator/
     1. Find the folder you install gym env package, then run `pip show gym`
     2. In the **~/envs/__init__.py** add the registeration line: 
 ```
+sys.path.append('/media/becky/GNOME-p3/env/simulator_env')
 register(
     id='monopoly_simple-v1',
     entry_point='gym_simulator_env.envs:Sim_Monopoly'
