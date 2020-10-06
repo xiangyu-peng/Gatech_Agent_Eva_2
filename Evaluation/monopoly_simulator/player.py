@@ -634,7 +634,10 @@ class Player(object):
             if self.current_cash > current_gameboard['location_sequence'][self.current_position].price:
                 if type(current_gameboard['location_sequence'][self.current_position].owned_by) == Bank:
                     allowable_actions.add(buy_property)
-
+                    
+        # if len(self.full_color_sets_possessed) > 0:
+        #     allowable_actions.add(
+        #         improve_property)
         return allowable_actions
 
     def make_pre_roll_moves(self, current_gameboard):
@@ -897,6 +900,7 @@ class Player(object):
                 #     for i in self.assets:
                 #         print('lll', i.name, parameters.keys()) #, parameters[0])
                 # print(parameters['player'] == self)
+                print('action_to_execute', action_to_execute)
                 code = self._execute_action(action_to_execute, parameters, current_gameboard)
                 # if self.player_name == 'player_1' and action_to_execute == buy_property:
                 #     for i in self.assets:
