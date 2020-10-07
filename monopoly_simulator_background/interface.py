@@ -27,17 +27,18 @@ class Interface(object):
         self.state_space = []
         self.masked_actions = []
         self.move_actions = []
-        self.action_space_num = 1 + 22 + 28 + 28 + 1
+        self.action_space_num = 2
         self.action_space = []
         self.site_space = []
         self.loc_history = set()
         self.num_players = 0
+        self.upper_path = '/media/becky/GNOME-p3'
 
     def mapping(self, name):
         name = name.replace('&','-')
         return '-'.join(name.split(' '))
 
-    def clear_history(self, file_path=upper_path + '/KG_rule/game_log.txt'):
+    def clear_history(self, file_path=None):  # file_path is full path
         file = open(file_path, "w")
         file.write('Game start! \n')
         file.close()
@@ -49,7 +50,7 @@ class Interface(object):
             if p.current_position:
                 self.loc_history.add(p.current_position)
 
-    def get_logging_info(self, game_elements, current_player_index, file_path=upper_path+'/KG_rule/game_log.txt'):
+    def get_logging_info(self, game_elements, current_player_index, file_path=None):
         file = open(file_path, "w")
         current_player = game_elements['players'][current_player_index]
 
@@ -89,7 +90,8 @@ class Interface(object):
                 #         file.write(his['card'].name + ' is cost at ' + str(game_elements['history']['param'][i-1]['amount']) + '\n')
 
         # Add to kg
-        for loc in self.loc_history:
+        # for loc in self.loc_history:
+        for loc in range(len(self.board_state)):
             space = game_elements['location_sequence'][int(loc)]
             file.write(self.mapping(space.name) + ' is located at ' + str(loc) + '\n')
             loc_class = space.loc_class
@@ -119,25 +121,43 @@ class Interface(object):
         file.close()
 
     def set_board(self, gameboard):
-        # Set the full board
-        self.board_state = [i.name for i in gameboard['location_sequence']]
+        if isinstance(gameboard, str):
+            gameboard_path = gameboard
+            with open(self.upper_path+gameboard_path, 'r') as load_f:
+                gameboard_load = json.load(load_f)
+                self.board_state = gameboard_load['locations']['location_sequence']
 
-        # Set the property which can build property
-        board_building = []
-        for k, v in gameboard['location_objects'].items():
-            if type(v) ==  location.RealEstateLocation:
-                board_building.append(k)
-        self.board_building = board_building
+                board_building, board_owned = [], []
+                for loc in gameboard_load['locations']['location_objects']:
+                    if loc["loc_class"] == "real_estate":
+                        board_building.append(loc["name"])
+                    if loc["loc_class"] != "do_nothing" and loc["loc_class"] != "action"\
+                            and loc["loc_class"] != "tax":
+                        board_owned.append(loc["name"])
+                self.board_building, self.board_owned = board_building, board_owned
 
-        # Set the property can be owned
-        board_owned = []
-        for k, v in gameboard['location_objects'].items():
-            if type(v) !=  location.DoNothingLocation and type(v) !=  location.ActionLocation and type(v) !=  location.TaxLocation:
-                board_owned.append(k)
-        self.board_owned = board_owned
+                self.num_players = len(gameboard_load['players'])
 
-        #Set the players number
-        self.num_players = len(gameboard['players'])
+        else:
+            # Set the full board
+            self.board_state = [i.name for i in gameboard['location_sequence']]
+
+            # Set the property which can build property
+            board_building = []
+            for k, v in gameboard['location_objects'].items():
+                if type(v) ==  location.RealEstateLocation:
+                    board_building.append(k)
+            self.board_building = board_building
+
+            # Set the property can be owned
+            board_owned = []
+            for k, v in gameboard['location_objects'].items():
+                if type(v) !=  location.DoNothingLocation and type(v) !=  location.ActionLocation and type(v) !=  location.TaxLocation:
+                    board_owned.append(k)
+            self.board_owned = board_owned
+
+            #Set the players number
+            self.num_players = len(gameboard['players'])
 
     #state_space = 28+22+n+n+2 = 56
     def board_to_state(self, current_board):
@@ -146,6 +166,8 @@ class Interface(object):
         :param current_board: a dict, current game board
         :return: state_space: a numpy array
         """
+        if isinstance(current_board, str):
+            return [0 for i in range(2 * len(self.board_state) + 2 + 2 * self.num_players)]
         state_space = []
         # Ownership of property => # of board states
         # -1 means other players, 0 means bank, and 1 means agent/ player 1
@@ -164,43 +186,50 @@ class Interface(object):
                 state_space_owned.append(0)
         state_space += state_space_owned
 
-        # Number of house in the property => # of houses in the space: 0,1,2,3,4,5
-        state_space_building = []
-        for space in self.board_state:
-            if type(current_board['location_objects'][space]) == location.RealEstateLocation:
-                if current_board['location_objects'][space].num_hotels == 0:
-                    state_space_building.append(current_board['location_objects'][space].num_houses)
-                else:
-                    state_space_building.append(5) # 5 denotes hotel
-            else:
-                state_space_building.append(0)
-        state_space += state_space_building
+        # # Number of house in the property => # of houses in the space: 0,1,2,3,4,5
+        # state_space_building = []
+        # for space in self.board_state:
+        #     if type(current_board['location_objects'][space]) == location.RealEstateLocation:
+        #         if current_board['location_objects'][space].num_hotels == 0:
+        #             state_space_building.append(current_board['location_objects'][space].num_houses)
+        #         else:
+        #             state_space_building.append(5) # 5 denotes hotel
+        #     else:
+        #         state_space_building.append(0)
+        # state_space += state_space_building
 
         # Position => n positions of players n = # of players
         sorted_player = sorted(current_board['players'], key=lambda player: int(player.player_name[-1]))
-        state_space_position = [p.current_position for p in sorted_player]
-        for i, pos in enumerate(state_space_position):
-            state_space_position[i] = int(pos) if pos else 0
-
+        # state_space_position = [p.current_position for p in sorted_player]
+        # for i, pos in enumerate(state_space_position):
+        #     state_space_position[i] = int(pos) if pos else 0
+        state_space_position = [0 for i in range(len(self.board_state))]
+        if sorted_player[0].current_position:
+            state_space_position[sorted_player[0].current_position] = 1
         state_space += state_space_position
 
         # Card Ownership
         #2 # of get-out_of_jail_card of players
-        state_space_card = []
-        com_card = [p.has_get_out_of_jail_community_chest_card for p in sorted_player]
-        chance_card = [p.has_get_out_of_jail_chance_card for p in sorted_player]
-        # first num denotes the # of card agent has
-        num_card_agent = int(com_card[0] + chance_card[0])
-        state_space_card.append(num_card_agent)
-        # second num denotes the cards other players have
-        num_card_others = sum(com_card) + sum(chance_card) - num_card_agent
-        state_space_card.append(num_card_others)
-        state_space += state_space_card
+        # state_space_card = []
+        # com_card = [p.has_get_out_of_jail_community_chest_card for p in sorted_player]
+        # chance_card = [p.has_get_out_of_jail_chance_card for p in sorted_player]
+        # # first num denotes the # of card agent has
+        # num_card_agent = int(com_card[0] + chance_card[0])
+        # state_space_card.append(num_card_agent)
+        # # second num denotes the cards other players have
+        # num_card_others = sum(com_card) + sum(chance_card) - num_card_agent
+        # state_space_card.append(num_card_others)
+        # state_space += state_space_card
 
         # Cash
         # n cash ratio for all the players n = # of players
-
-        state_space_cash = [int(p.current_cash) / 1000 for p in sorted_player]
+        state_space_cash = [0 for i in range(6 * len(sorted_player))]
+        for i, p in enumerate(sorted_player):
+            if p.current_cash // 500 < 5:
+                state_space_cash[int(i * 6 + p.current_cash // 500)] = 1
+            else:
+                state_space_cash[i * 6 + 5] = 1
+        # state_space_cash = [int(p.current_cash) for p in sorted_player]
         # print('cash',state_space_cash)
         state_space += state_space_cash
 
@@ -279,7 +308,7 @@ class Interface(object):
 
             # 1 first denotes the action -> buy or not buy
             self.action_space.append(buy_property)
-            print('current_player.current_position',current_player.current_position)
+            # print('current_player.current_position',current_player.current_position)
             self.site_space.append(current_board['location_objects'][self.board_state[current_player.current_position]])
 
             # # Improve property =>  # of game states
@@ -341,9 +370,10 @@ class Interface(object):
         """
         for space in spaces_set:
             index_space = self.board_state.index(space)
-            if state_space[index_space] != 0:
-                return True
-            if index_space in state_space[-2 * self.num_players - 2 : -self.num_players - 2]:
+            # if state_space[index_space] != 0:
+            #     return True
+            # if index_space in state_space[-2 * self.num_players - 2 : -self.num_players - 2]:
+            if state_space[40:-12][index_space] == 1:
                 return True
 
         return False
