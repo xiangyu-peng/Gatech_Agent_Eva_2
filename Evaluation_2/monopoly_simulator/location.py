@@ -1,5 +1,5 @@
-from monopoly_simulator.flag_config import flag_config_dict
-from monopoly_simulator.bank import Bank
+from flag_config import flag_config_dict
+from bank import Bank
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info.location')
 
@@ -113,7 +113,6 @@ class Location(object):
         If the asset is non-purchaseable, we will raise an exception. A more elegant way (we'll make this change
         in a close future edition) is to have a PurchaseableLocation class sitting between the purchaseable sub-classes
         like real estate and Location, and to add update_asset_owner as a method of PurchaseableLocation.
-
         Note that we remove the asset from the previous owner's portfolio if it is not owned by the bank.
         :param player: Player instance. The player who now owns this asset (self)
         :param current_gameboard: A dict. The global gameboard data structure
@@ -171,6 +170,15 @@ class DoNothingLocation(Location):
         """
         super().__init__(loc_class, name, start_position, end_position, color)
 
+    def serialize(self):
+        loc_dict = dict()
+        loc_dict['loc_class'] = self.loc_class
+        loc_dict['name'] = self.name
+        loc_dict['start_position'] = self.start_position
+        loc_dict['end_position'] = self.end_position
+        loc_dict['color'] = self.color
+        return loc_dict
+
 
 class ActionLocation(Location):
     def __init__(self, loc_class, name, start_position, end_position, color, perform_action):
@@ -190,6 +198,16 @@ class ActionLocation(Location):
         """
         super().__init__(loc_class, name, start_position, end_position, color)
         self.perform_action = perform_action
+
+    def serialize(self):
+        loc_dict = dict()
+        loc_dict['loc_class'] = self.loc_class
+        loc_dict['name'] = self.name
+        loc_dict['start_position'] = self.start_position
+        loc_dict['end_position'] = self.end_position
+        loc_dict['color'] = self.color
+        loc_dict['perform_actiom'] = self.perform_action.__name__
+        return loc_dict
 
 
 class RealEstateLocation(Location):
@@ -253,7 +271,6 @@ class RealEstateLocation(Location):
         :param current_gameboard: The global gameboard data structure
         :return: An integer. The rent due.
         """
-
         logger.debug('calculating rent for '+asset.name)
         ans = asset.rent # unimproved-non-monopolized rent (the default)
         if asset.num_hotels == 1:
@@ -267,6 +284,32 @@ class RealEstateLocation(Location):
             logger.debug('property has color '+ asset.color+ ' which is monopolized by '+asset.owned_by.player_name+'. Updating rent.')
         logger.debug('rent is calculated to be '+str(ans))
         return ans
+
+    def serialize(self):
+        loc_dict = dict()
+        loc_dict['loc_class'] = self.loc_class
+        loc_dict['name'] = self.name
+        loc_dict['start_position'] = self.start_position
+        loc_dict['end_position'] = self.end_position
+        loc_dict['color'] = self.color
+        loc_dict['rent_1_house'] = self.rent_1_house
+        loc_dict['rent_2_houses'] = self.rent_2_houses
+        loc_dict['rent_3_houses'] = self.rent_3_houses
+        loc_dict['rent_4_houses'] = self.rent_4_houses
+        loc_dict['rent_hotel'] = self.rent_hotel
+        loc_dict['rent'] = self.rent
+        loc_dict['price'] = self.price
+        loc_dict['price_per_house'] = self.price_per_house
+        loc_dict['mortgage'] = self.mortgage
+        if isinstance(self.owned_by, Bank):
+            loc_dict['owned_by'] = 'bank'
+        else:
+            loc_dict['owned_by'] = self.owned_by.player_name
+        loc_dict['num_houses'] = self.num_houses
+        loc_dict['num_hotels'] = self.num_hotels
+        loc_dict['is_mortgaged'] = self.is_mortgaged
+        loc_dict['house_rent_dict'] = self._house_rent_dict
+        return loc_dict
 
 
 class TaxLocation(Location):
@@ -286,10 +329,19 @@ class TaxLocation(Location):
         super().__init__(loc_class, name, start_position, end_position, color)
         self.amount_due = float(amount_due)
 
+    def serialize(self):
+        loc_dict = dict()
+        loc_dict['loc_class'] = self.loc_class
+        loc_dict['name'] = self.name
+        loc_dict['start_position'] = self.start_position
+        loc_dict['end_position'] = self.end_position
+        loc_dict['color'] = self.color
+        loc_dict['amount_due'] = self.amount_due
+        return loc_dict
+
     @staticmethod
     def calculate_tax(location, player, current_gameboard):
         return location.amount_due
-
 
 class RailroadLocation(Location):
     def __init__(self, loc_class, name, start_position, end_position, color, price, mortgage, owned_by):
@@ -338,6 +390,23 @@ class RailroadLocation(Location):
         logger.debug('railroad dues are '+str(dues))
         return dues
 
+    def serialize(self):
+        loc_dict = dict()
+        loc_dict['loc_class'] = self.loc_class
+        loc_dict['name'] = self.name
+        loc_dict['start_position'] = self.start_position
+        loc_dict['end_position'] = self.end_position
+        loc_dict['color'] = self.color
+        loc_dict['price'] = self.price
+        loc_dict['mortgage'] = self.mortgage
+        if isinstance(self.owned_by, Bank):
+            loc_dict['owned_by'] = 'bank'
+        else:
+            loc_dict['owned_by'] = self.owned_by.player_name
+        loc_dict['is_mortgaged'] = self.is_mortgaged
+        loc_dict['railroad_dues'] = self._railroad_dues
+        return loc_dict
+
 
 class UtilityLocation(Location):
     def __init__(self, loc_class, name, start_position, end_position, color, price, mortgage, owned_by):
@@ -384,3 +453,20 @@ class UtilityLocation(Location):
         dues = die_total*asset._die_multiples[asset.owned_by.num_utilities_possessed]
         logger.debug('utility dues are '+ str(dues))
         return dues
+
+    def serialize(self):
+        loc_dict = dict()
+        loc_dict['loc_class'] = self.loc_class
+        loc_dict['name'] = self.name
+        loc_dict['start_position'] = self.start_position
+        loc_dict['end_position'] = self.end_position
+        loc_dict['color'] = self.color
+        loc_dict['price'] = self.price
+        loc_dict['mortgage'] = self.mortgage
+        if isinstance(self.owned_by, Bank):
+            loc_dict['owned_by'] = 'bank'
+        else:
+            loc_dict['owned_by'] = self.owned_by.player_name
+        loc_dict['is_mortgaged'] = self.is_mortgaged
+        loc_dict['die_multiples'] = self._die_multiples
+        return loc_dict

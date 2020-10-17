@@ -1,7 +1,7 @@
 import numpy as np
-from monopoly_simulator.location import RailroadLocation
-from monopoly_simulator.flag_config import flag_config_dict
-from monopoly_simulator import diagnostics
+from location import RailroadLocation
+from flag_config import flag_config_dict
+import diagnostics
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info.card_utility_actions')
 

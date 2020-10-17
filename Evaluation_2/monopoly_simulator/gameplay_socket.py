@@ -1,18 +1,26 @@
 import initialize_game_elements
 from action_choices import roll_die
 import numpy as np
-import card_utility_actions
+import background_agent_v1
+import background_agent_v1_deprecated
+import background_agent_v2
+import background_agent_v3
 import background_agent_v3_1
+import baseline_agent
 import read_write_current_state
+import simple_decision_agent_1
+import card_utility_actions
 import json
-import novelty_generator
 import diagnostics
+import novelty_generator
 from agent import Agent
 import xlsxwriter
 from flag_config import flag_config_dict
 from logging_info import log_file_create
 import os
 import time
+from server_agent_serial import ServerAgent
+
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info')
 
@@ -52,7 +60,7 @@ def disable_history(game_elements):
     game_elements['history']['return'] = list()
 
 
-def simulate_game_instance(game_elements, history_log_file=None, np_seed=2):
+def simulate_game_instance(game_elements, history_log_file=None, np_seed=55):
     """
     Simulate a game instance.
     :param game_elements: The dict output by set_up_board
@@ -83,8 +91,8 @@ def simulate_game_instance(game_elements, history_log_file=None, np_seed=2):
         workbook = xlsxwriter.Workbook(history_log_file)
     game_elements['start_time'] = time.time()
     while num_active_players > 1:
-        disable_history(
-            game_elements)  # comment this out when you want history to stay. Currently, it has high memory consumption, we are working to solve the problem (most likely due to deep copy run-off).
+        # disable_history(
+        #     game_elements)  # comment this out when you want history to stay. Currently, it has high memory consumption, we are working to solve the problem (most likely due to deep copy run-off).
         current_player = game_elements['players'][current_player_index]
         while current_player.status == 'lost':
             current_player_index += 1
@@ -109,6 +117,12 @@ def simulate_game_instance(game_elements, history_log_file=None, np_seed=2):
                 continue
 
             oot_code = out_of_turn_player.make_out_of_turn_moves(game_elements)
+
+            # disable history after every round if out of turn player == player_1 (i.e. TA2 player),
+            # else TA2 wont be able to capture entire history of every game round
+            if out_of_turn_player.player_name == 'player_1':
+                disable_history(game_elements)
+
             # add to game history
             game_elements['history']['function'].append(out_of_turn_player.make_out_of_turn_moves)
             params = dict()
@@ -128,7 +142,20 @@ def simulate_game_instance(game_elements, history_log_file=None, np_seed=2):
         # but only if we're not in jail.
 
         logger.debug("Printing cash balance and net worth of each player: ")
-        diagnostics.print_player_net_worths_and_cash_bal(game_elements)
+        for pl in game_elements['players']:
+            networth_p1ayer = 0
+            networth_p1ayer += pl.current_cash
+            if pl.assets:
+                for prop in pl.assets:
+                    if prop.loc_class == 'real_estate':
+                        networth_p1ayer += prop.price
+                        networth_p1ayer += prop.num_houses*prop.price_per_house
+                        networth_p1ayer += prop.num_hotels*prop.price_per_house*(game_elements['bank'].house_limit_before_hotel + 1)
+                    elif prop.loc_class == 'railroad':
+                        networth_p1ayer += prop.price
+                    elif prop.loc_class == 'utility':
+                        networth_p1ayer += prop.price
+            logger.debug(pl.player_name + ' has a cash balance of $' + str(pl.current_cash) + ' and a net worth of $' + str(networth_p1ayer))
 
         r = roll_die(game_elements['dies'], np.random.choice)
         for i in range(len(r)):
@@ -223,6 +250,7 @@ def simulate_game_instance(game_elements, history_log_file=None, np_seed=2):
             diagnostics.print_asset_owners(game_elements)
             diagnostics.print_player_cash_balances(game_elements)
             logger.debug("Game ran for " + str(tot_time) + " seconds.")
+            logger.debug("Game terminated since max cash balance exceeded limit.")
             break
 
         #This is an example of how you may want to write out gameboard state to file.
@@ -255,8 +283,6 @@ def simulate_game_instance(game_elements, history_log_file=None, np_seed=2):
     logger.debug('number of dice rolls: ' + str(num_die_rolls))
     logger.debug('printing final cash balances: ')
     diagnostics.print_player_cash_balances(game_elements)
-    logger.debug("printing net worth of each player: ")
-    diagnostics.print_player_net_worths(game_elements)
     logger.debug("Game ran for " + str(tot_time) + " seconds.")
 
     if winner:
@@ -294,6 +320,7 @@ def inject_novelty(current_gameboard, novelty_schema=None):
 
     '''
     #Level 1 Novelty
+
     numberDieNovelty = novelty_generator.NumberClassNovelty()
     numberDieNovelty.die_novelty(current_gameboard, 4, die_state_vector=[[1,2,3,4,5],[1,2,3,4],[5,6,7],[2,3,4]])
     
@@ -312,6 +339,7 @@ def inject_novelty(current_gameboard, novelty_schema=None):
 
     '''
     #Level 2 Novelty
+
     #The below combination reassigns property groups and individual properties to different colors.
     #On playing the game it is verified that the newly added property to the color group is taken into account for monopolizing a color group,
     # i,e the orchid color group now has Baltic Avenue besides St. Charles Place, States Avenue and Virginia Avenue. The player acquires a monopoly
@@ -320,18 +348,22 @@ def inject_novelty(current_gameboard, novelty_schema=None):
     inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
     inanimateNovelty.map_property_set_to_color(current_gameboard, [current_gameboard['location_objects']['Park Place'], current_gameboard['location_objects']['Boardwalk']], 'Brown')
     inanimateNovelty.map_property_to_color(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 'Orchid')
+
     #setting new rents for Indiana Avenue
     inanimateNovelty.rent_novelty(current_gameboard['location_objects']['Indiana Avenue'], {'rent': 50, 'rent_1_house': 150})
     '''
 
     '''
     #Level 3 Novelty
+
     granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
     granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 6)
     granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States Avenue'], 20)
     granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee Avenue'], 27)
+
     spatialNovelty = novelty_generator.SpatialRepresentationNovelty()
     spatialNovelty.color_reordering(current_gameboard, ['Boardwalk', 'Park Place'], 'Blue')
+
     granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
     '''
 
@@ -340,6 +372,7 @@ def play_game():
     """
     Use this function if you want to test a single game instance and control lots of things. For experiments, we will directly
     call some of the functions in gameplay from test_harness.py.
+
     This is where everything begins. Assign decision agents to your players, set up the board and start simulating! You can
     control any number of players you like, and assign the rest to the simple agent. We plan to release a more sophisticated
     but still relatively simple agent soon.
@@ -357,7 +390,16 @@ def play_game():
     # for p in ['player_1','player_3']:
     #     player_decision_agents[p] = simple_decision_agent_1.decision_agent_methods
 
-    player_decision_agents['player_1'] = Agent(**background_agent_v3_1.decision_agent_methods)
+    agent = ServerAgent()
+    f_name = 'play game without novelty'
+    if not agent.start_tournament(f_name):
+        print("Unable to start tournament")
+        exit(0)
+    else:
+        pass
+
+    # player_decision_agents['player_1'] = Agent(**background_agent_v3_1.decision_agent_methods)
+    player_decision_agents['player_1'] = agent
     player_decision_agents['player_2'] = Agent(**background_agent_v3_1.decision_agent_methods)
     player_decision_agents['player_3'] = Agent(**background_agent_v3_1.decision_agent_methods)
     player_decision_agents['player_4'] = Agent(**background_agent_v3_1.decision_agent_methods)
@@ -404,6 +446,7 @@ def play_game():
                 logger.removeHandler(handler)
                 handler.close()
                 handler.flush()
+            agent.end_tournament()
             return winner
 
 
@@ -412,14 +455,14 @@ def play_game_in_tournament(game_seed, inject_novelty_function=None):
     player_decision_agents = dict()
     # for p in ['player_1','player_3']:
     #     player_decision_agents[p] = simple_decision_agent_1.decision_agent_methods
-    player_decision_agents['player_1'] = Agent(**background_agent_v3_1.decision_agent_methods)
-    player_decision_agents['player_2'] = Agent(**background_agent_v3_1.decision_agent_methods)
-    player_decision_agents['player_3'] = Agent(**background_agent_v3_1.decision_agent_methods)
-    player_decision_agents['player_4'] = Agent(**background_agent_v3_1.decision_agent_methods)
+    player_decision_agents['player_1'] = Agent(**background_agent_v3.decision_agent_methods)
+    player_decision_agents['player_2'] = Agent(**background_agent_v3.decision_agent_methods)
+    player_decision_agents['player_3'] = Agent(**background_agent_v3.decision_agent_methods)
+    player_decision_agents['player_4'] = Agent(**background_agent_v3.decision_agent_methods)
 
     game_elements = set_up_board('../monopoly_game_schema_v1-2.json',
                                  player_decision_agents)
-
+    
     #Comment out the above line and uncomment the piece of code to read the gameboard state from an existing json file so that
     #the game starts from a particular game state instead of initializing the gameboard with default start values.
     #Note that the novelties introduced in that particular game which was saved to file will be loaded into this game board as well.
@@ -442,9 +485,9 @@ def play_game_in_tournament(game_seed, inject_novelty_function=None):
         logger.debug("Sucessfully initialized all player agents.")
         winner = simulate_game_instance(game_elements, history_log_file=None, np_seed=game_seed)
         if player_decision_agents['player_1'].shutdown() == flag_config_dict['failure_code'] or \
-                player_decision_agents['player_2'].shutdown() == flag_config_dict['failure_code'] or \
-                player_decision_agents['player_3'].shutdown() == flag_config_dict['failure_code'] or \
-                player_decision_agents['player_4'].shutdown() == flag_config_dict['failure_code']:
+            player_decision_agents['player_2'].shutdown() == flag_config_dict['failure_code'] or \
+            player_decision_agents['player_3'].shutdown() == flag_config_dict['failure_code'] or \
+            player_decision_agents['player_4'].shutdown() == flag_config_dict['failure_code']:
             logger.error("Error in agent shutdown.")
             return None
         else:

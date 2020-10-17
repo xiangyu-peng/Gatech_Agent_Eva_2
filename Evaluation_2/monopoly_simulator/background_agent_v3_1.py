@@ -1,6 +1,6 @@
-from monopoly_simulator import agent_helper_functions # helper functions are internal to the agent and will not be recorded in the function log.
-from monopoly_simulator import diagnostics
-from monopoly_simulator.flag_config import flag_config_dict
+import agent_helper_functions # helper functions are internal to the agent and will not be recorded in the function log.
+import diagnostics
+from flag_config import flag_config_dict
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info.background_agent')
 
@@ -12,23 +12,19 @@ that, we impose no restrictions (you can make the decision agent as complex as y
 and we use good faith to ensure you do not manipulate the gameboard. We will have mechanisms to check for inadvertent
 changes or inconsistencies that get introduced in the gameboard (due to any reason, including possible subtle errors
 in the simulator itself) a short while later.
-
 If you decision agent does maintain state, or some kind of global data structure, please be careful when assigning the
 same decision agent (as we do) to each player. We do provide some basic state to you already via 'code' in the make_*_move
 functions. Specifically, if code is 1 it means the 'previous' move selected by the player was successful,
 and if -1 it means it was unsuccessful. code of -1 is usually returned when an allowable move is invoked with parameters
 that preempt the action from happening e.g., the player may decide to mortgage property that is already mortgaged,
 which will return the failure code of -1 when the game actually tries to mortgage the property in action_choices.
-
 Be careful to note what each function is supposed to return in addition to adhering to the expected signature. The examples
 here are good guides.
-
 Your functions can be called whatever you like, but the keys in decision_agent_methods should not be changed. The
 respective functions must adhere in their signatures to the examples here. The agent in this file is simple and rule-based,
  rather than adaptive but capable of taking good actions in a number of eventualities.
  We detail the logic behind each decision in a separate document. This is the agent that will serve as the 'background'
  agent for purposes of evaluation.
-
 """
 
 
@@ -476,19 +472,14 @@ def make_post_roll_move(player, current_gameboard, allowable_moves, code):
     """
     The agent is in the post-roll phase and must decide what to do (next). The main decision we make here is singular:
     should we buy the property we landed on, if that option is available?
-
     --If we do buy the property, we end the phase by concluding the turn.
-
     --If we cannot buy a property, we conclude the turn. If we have negative cash balance, we do not handle it here, but
     in the handle_negative_cash_balance function. This means that the background agent never calls any of
     the mortgage or sell properties here UNLESS we need to mortgage or sell a property in order to buy the current
      one and it is well worth our while.
-
     Note that if your agent decides not to buy the property before concluding the turn, the property will move to
     auction before your turn formally concludes.
-
     This background agent never sells a house or hotel in post_roll.
-
     :param player: A Player instance. You should expect this to be the player that is 'making' the decision (i.e. the player
     instantiated with the functions specified by this decision agent).
     :param current_gameboard: A dict. The global data structure representing the current game board.
@@ -589,7 +580,6 @@ def make_buy_property_decision(player, current_gameboard, asset):
     the purchase.
     (ii) we can obtain a full color set through the purchase, and still have positive cash balance afterwards (though
     it may be less than go_increment).
-
     :param player: A Player instance. You should expect this to be the player that is 'making' the decision (i.e. the player
     instantiated with the functions specified by this decision agent).
     :param current_gameboard: A dict. The global data structure representing the current game board.
@@ -646,13 +636,11 @@ def handle_negative_cash_balance(player, current_gameboard):
     You have a negative cash balance at the end of your move (i.e. your post-roll phase is over) and you must handle
     this issue before we move to the next player's pre-roll. If you do not succeed in restoring your cash balance to
     0 or positive, bankruptcy proceeds will begin and you will lost the game.
-
     The background agent tries a number of things to get itself out of a financial hole. First, it checks whether
     mortgaging alone can save it. If not, then it begins selling unimproved properties in ascending order of price, the idea being
     that it might as well get rid of cheap properties. This may not be the most optimal move but it is reasonable.
     If it ends up selling all unimproved properties and is still insolvent, it starts selling improvements, followed
     by a sale of the (now) unimproved properties.
-
     :param player: A Player instance. You should expect this to be the player that is 'making' the decision (i.e. the player
     instantiated with the functions specified by this decision agent).
     :param current_gameboard: A dict. The global data structure representing the current game board.
@@ -921,7 +909,7 @@ def _build_decision_agent_methods_dict():
     ans['handle_negative_cash_balance'] = handle_negative_cash_balance
     ans['make_pre_roll_move'] = make_pre_roll_move
     ans['make_out_of_turn_move'] = make_out_of_turn_move
-    ans['make_post_roll_move'] = make_post_roll_move    
+    ans['make_post_roll_move'] = make_post_roll_move
     ans['make_buy_property_decision'] = make_buy_property_decision
     ans['make_bid'] = make_bid
     ans['type'] = "decision_agent_methods"
@@ -929,5 +917,3 @@ def _build_decision_agent_methods_dict():
 
 
 decision_agent_methods = _build_decision_agent_methods_dict() # this is the main data structure that is needed by gameplay
-
-

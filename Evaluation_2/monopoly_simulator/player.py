@@ -1,7 +1,7 @@
-from monopoly_simulator import action_choices
-from monopoly_simulator import card_utility_actions
-from monopoly_simulator.location import  RealEstateLocation, UtilityLocation, RailroadLocation, TaxLocation
-from monopoly_simulator.bank import Bank
+import action_choices
+import card_utility_actions
+from location import  RealEstateLocation, UtilityLocation, RailroadLocation, TaxLocation
+from bank import Bank
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info.player')
 
@@ -14,7 +14,6 @@ class Player(object):
                  ):
         """
         An object representing a unique player in the game.
-
         :param current_position: An integer. Specifies index in the current gameboard's 'location_sequence' list where the player
         is currently situated.
         :param status: A string. One of 'waiting_for_move', 'current_move', 'won' or 'lost'
@@ -73,6 +72,79 @@ class Player(object):
 
         self._option_to_buy = False # this option will turn true when  the player lands on a property that could be bought.
         # We always set it to false again at the end of the post_roll phase. It is an internal variable.
+
+
+    def serialize(self):
+        player_dict = dict()
+        if self.current_position is not None:
+            player_dict['current_position'] = int(self.current_position)
+        player_dict['status'] = self.status
+        player_dict['has_get_out_of_jail_chance_card'] = self.has_get_out_of_jail_chance_card
+        player_dict['has_get_out_of_jail_community_chest_card'] = self.has_get_out_of_jail_community_chest_card
+        player_dict['current_cash'] = self.current_cash
+        player_dict['num_railroads_possessed'] = self.num_railroads_possessed
+        player_dict['player_name'] = self.player_name
+
+        asset_list = list()
+        if self.assets is not None:
+            for item in self.assets:
+                asset_list.append(item.name)
+        player_dict['assets'] = asset_list
+
+        if self.full_color_sets_possessed is not None:
+            player_dict['full_color_sets_possessed'] = list(self.full_color_sets_possessed)
+        player_dict['currently_in_jail'] = self.currently_in_jail
+        player_dict['num_utilities_possessed'] = self.num_utilities_possessed
+        player_dict['num_total_houses'] = self.num_total_houses
+        player_dict['num_total_hotels'] = self.num_total_hotels
+
+        player_dict['outstanding_property_offer'] = dict()
+        if self.is_property_offer_outstanding:
+            player_dict['is_property_offer_outstanding'] = self.is_property_offer_outstanding
+            player_dict['outstanding_property_offer']['from_player'] = self.outstanding_property_offer['from_player'].player_name
+            player_dict['outstanding_property_offer']['asset'] = self.outstanding_property_offer['asset'].name
+            player_dict['outstanding_property_offer']['price'] = self.outstanding_property_offer['price']
+        else:
+            player_dict['is_property_offer_outstanding'] = self.is_property_offer_outstanding
+            player_dict['outstanding_property_offer']['from_player'] = None
+            player_dict['outstanding_property_offer']['asset'] = None
+            player_dict['outstanding_property_offer']['price'] = -1
+
+
+        player_dict['outstanding_trade_offer'] = dict()
+        if self.is_trade_offer_outstanding:
+            player_dict['is_trade_offer_outstanding'] = self.is_trade_offer_outstanding
+            player_dict['outstanding_trade_offer']['from_player'] = self.outstanding_trade_offer['from_player'].player_name
+
+            property_offered_list = list()
+            for item in self.outstanding_trade_offer['property_set_offered']:
+                property_offered_list.append(item.name)
+            player_dict['outstanding_trade_offer']['property_set_offered'] = property_offered_list
+
+            property_wanted_list = list()
+            for item in self.outstanding_trade_offer['property_set_wanted']:
+                property_wanted_list.append(item.name)
+            player_dict['outstanding_trade_offer']['property_set_wanted'] = property_wanted_list
+
+            player_dict['outstanding_trade_offer']['cash_offered'] = self.outstanding_trade_offer['cash_offered']
+            player_dict['outstanding_trade_offer']['cash_wanted'] = self.outstanding_trade_offer['cash_wanted']
+        else:
+            player_dict['is_trade_offer_outstanding'] = self.is_trade_offer_outstanding
+            player_dict['outstanding_trade_offer']['from_player'] = None
+            player_dict['outstanding_trade_offer']['property_set_offered'] = None
+            player_dict['outstanding_trade_offer']['property_set_wanted'] = None
+            player_dict['outstanding_trade_offer']['cash_offered'] = 0
+            player_dict['outstanding_trade_offer']['cash_wanted'] = 0
+
+        property_mortgage_list = list()
+        if self.mortgaged_assets is not None:
+            for item in self.mortgaged_assets:
+                property_mortgage_list.append(item.name)
+        player_dict['mortgaged_assets'] = property_mortgage_list
+
+        player_dict['option_to_buy'] = self._option_to_buy
+        return player_dict
+
 
     def change_decision_agent(self, agent):
         self.agent = agent
@@ -191,7 +263,6 @@ class Player(object):
         All of the groundwork (exchange of cash) must be done before this function is called. For safe behavior, this should always be
         accompanied by post-processing code, especially if the asset is mortgageable and/or is being sold from one player
         to another.
-
         Improvements are not permitted when removing the asset. We will raise an exception if we detect houses or hotels
         when removing the asset. asset.owned_by is not updated either, make sure to invoke it (e.g., to reflect the new owner
         or to hand it over to the bank) AFTER this function returns
@@ -576,10 +647,8 @@ class Player(object):
         obvious non-allowable actions, and will return allowable actions (as a set of names of functions) that are possible
         in principle. Your decision agent, when picking an action from this set, will also have to decide how to
         parameterize the chosen action. For more details, see simple_decision_agent_1
-
         Note that we pass in current_gameboard, even though it is currently unused. In the near future, we may use it
         to refine allowable_actions.
-
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: The set of allowable actions (each item in the set is a function from action_choices)
         """
@@ -624,10 +693,8 @@ class Player(object):
         obvious non-allowable actions, and will return allowable actions (as a set of names of functions) that are possible
         in principle. Your decision agent, when picking an action from this set, will also have to decide how to
         parameterize the chosen action. For more details, see simple_decision_agent_1
-
         Note that we pass in current_gameboard, even though it is currently unused. In the near future, we may use it
         to refine allowable_actions.
-
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: The set of allowable actions (each item in the set is a function from action_choices)
         """
@@ -667,10 +734,8 @@ class Player(object):
         obvious non-allowable actions, and will return allowable actions (as a set of names of functions) that are possible
         in principle. Your decision agent, when picking an action from this set, will also have to decide how to
         parameterize the chosen action. For more details, see simple_decision_agent_1
-
         Note that we pass in current_gameboard, even though it is currently unused. In the near future, we may use it
         to refine allowable_actions.
-
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: The set of allowable actions (each item in the set is a function from action_choices)
         """
@@ -1146,6 +1211,7 @@ class Player(object):
         self._force_buy_outcome(current_gameboard) # if we got here, we need to conclude actions
         return self._execute_action(action_choices.concluded_actions, dict(), current_gameboard)  # now we can conclude actions
 
+
     def handle_negative_cash_balance(self, current_gameboard):
         """
         This function is called if the player ends up with a negative cash balance. This function prompts the agent's handle_negative_cash_balance()
@@ -1156,7 +1222,6 @@ class Player(object):
         A limit is also set on the number of unsuccessful actions that the agent can take defined by "unsuccessful_tries".
         Beyond this limit, if the player still has a negative cash balance, the function is forced to return with a failure code.
         This also ensures that the game doesnot go on for too long trying to execute unsuccessful actions.
-
         :param current_gameboard: The global gameboard data structure
         :return: 3 return cases:
         - successful action code if the players cash balance > 0
@@ -1224,7 +1289,6 @@ class Player(object):
         If you land on a property owned by the bank, and don't buy it before concluding your turn, this function will do the needful.
         In essence, it will force your decision agent to return a decision on whether you wish to buy the property (the logic for this
         is in the internal function _own_or_auction). Once the matter has been resolved, we reset the option to buy flag.
-
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """

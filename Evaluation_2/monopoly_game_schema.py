@@ -464,7 +464,7 @@ def _build_individual_location_details():
 ans = specify_board_state()
 import json
 
-json.dump(ans, open('/Users/mayankkejriwal/git-projects/GNOME/monopoly_game_schema_v1-2.json', 'w'))
+json.dump(ans, open('monopoly_game_schema_v1-2.json', 'w'))
 
 
 

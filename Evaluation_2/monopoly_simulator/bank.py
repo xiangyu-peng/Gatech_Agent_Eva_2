@@ -38,7 +38,7 @@ class Bank(object):
     def auction(starting_player_index, current_gameboard, asset):
         """
         This function will be called when a player lands on a purchaseable property (real estate, railroad or utility)
-        but decides not to make the purchase. 
+        but decides not to make the purchase.
         :param starting_player_index:  An integer. The index of the player in current_gameboard['players'] who will be starting the auction
         :param current_gameboard: A dict. Specifies the global game board data structure
         :param asset: A purchaseable instance of Location (i.e. RealEstateLocation, UtilityLocation or RailroadLocation)
@@ -112,6 +112,7 @@ class Bank(object):
             winning_player = bidding_player
             bidding_player_index = (bidding_player_index + 1) % len(current_gameboard['players'])
 
+
         if winning_player:
             winning_player.charge_player(current_bid, current_gameboard, bank_flag=True) # if it got here then current_bid is non-zero.
             # add to game history
@@ -172,7 +173,7 @@ class Bank(object):
         :param add_house: flag if True indicates that the type of improvement is setting up a house.
         :param add_hotel: flag if True indicates that the type of improvement is setting up a hotel.
         Note: both add_house and add_hotel params cannot be true simulatneously
-        :return: a bool, true if improvement possible else false
+        :return: bool, True if improvement possible else false
         """
         if add_hotel and add_house:
             logger.debug("Cant build both a house and a hotel on a property at once!! Raising Exception.")
@@ -188,3 +189,17 @@ class Bank(object):
         elif add_house:
             if self.total_houses > 0:
                 return True
+
+    def serialize(self):
+        bank_dict = dict()
+        bank_dict['mortgage_percentage'] = self.mortgage_percentage
+        bank_dict['total_mortgage_rule'] = self.total_mortgage_rule
+        bank_dict['total_houses'] = self.total_houses
+        bank_dict['total_hotels'] = self.total_hotels
+        bank_dict['total_cash_with_bank'] = self.total_cash_with_bank
+        bank_dict['property_sell_percentage'] = self.property_sell_percentage
+        bank_dict['house_sell_percentage'] = self.house_sell_percentage
+        bank_dict['hotel_sell_percentage'] = self.hotel_sell_percentage
+        bank_dict['jail_fine'] = self.jail_fine
+        bank_dict['monopolized_property_rent_factor'] = self.monopolized_property_rent_factor
+        return bank_dict

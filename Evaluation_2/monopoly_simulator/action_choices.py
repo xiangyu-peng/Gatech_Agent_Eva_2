@@ -1,6 +1,6 @@
-from monopoly_simulator.flag_config import flag_config_dict
-from monopoly_simulator.bank import Bank
-from monopoly_simulator.dice import Dice
+from flag_config import flag_config_dict
+from bank import Bank
+from dice import Dice
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info.action_choices')
 
@@ -678,7 +678,6 @@ def make_trade_offer(from_player, offer, to_player):
     :param offer: a dictionary with the trade requirements  - property_set_offered, property_set_wanted, cash_offered, cash_wanted
     :param to_player: Player instance. The player to whom the offer is being made.
     :return: successful action code if the player succeeds in making the offer (doesn't mean the other player has to accept), otherwise failure code
-
     make_trade_offer becomes unsuccessful if:
     - the player to whom the trade offer is being made already has an existing trade offer or
     - if negative cash amounts are involved in the offer or
@@ -753,7 +752,6 @@ def accept_trade_offer(player, current_gameboard):
     we will begin property and cash transfers.
     :param current_gameboard: A dict. The global data structure representing the current game board.
     :return: successful action code if the property offer is accepted and property is successfully transferred, otherwise failure code.
-
     accept_trade_offer becomes unsuccessful if:
     - player has no outstanding_trade_offer
     - if player does not have enough cash required for the transaction
