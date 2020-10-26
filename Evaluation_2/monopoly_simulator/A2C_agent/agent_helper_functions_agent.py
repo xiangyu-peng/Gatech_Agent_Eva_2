@@ -207,7 +207,7 @@ def identify_improvement_opportunity(player, current_gameboard):
             param['current_gameboard'] = "current_gameboard"
             param['add_house'] = True
             param['add_hotel'] = False
-            if param['asset'].num_houses == current_gameboard['bank'].house_limit_before_hotel:
+            if param['asset']['num_houses'] == 4:
                 param['add_hotel'] = True
                 param['add_house'] = False
             return param
@@ -395,18 +395,18 @@ def asset_incremental_improvement_rent(asset):
     :return: Integer representing the additional rent we get if we were to incrementally improve this property. Note that
     we do not check if we 'can' improve it, we return assuming that we can.
     """
-    if asset.num_hotels > 0:
+    if asset['num_hotels'] > 0:
         logger.error("Exception") # there is no incremental improvement possible. how did we get here?
-    if asset.num_houses == 4:
-        return asset.rent_hotel-asset.rent_4_houses
-    elif asset.num_houses == 3:
-        return asset.rent_4_houses - asset.rent_3_houses
-    elif asset.num_houses == 2:
-        return asset.rent_3_houses - asset.rent_2_houses
-    elif asset.num_houses == 1:
-        return asset.rent_2_houses - asset.rent_1_house
+    if asset['num_houses'] == 4:
+        return asset['rent_hotel']-asset['rent_4_houses']
+    elif asset['num_houses'] == 3:
+        return asset['rent_4_houses'] - asset['rent_3_houses']
+    elif asset['num_houses'] == 2:
+        return asset['rent_3_houses'] - asset['rent_2_houses']
+    elif asset['num_houses'] == 1:
+        return asset['rent_2_houses'] - asset['rent_1_house']
     else:
-        return asset.rent_1_house - (asset.rent*2) # remember, if the house can be improved, then it is monopolized, so twice the rent is being charged even without houses.
+        return asset['rent_1_house'] - (asset['rent']*2) # remember, if the house can be improved, then it is monopolized, so twice the rent is being charged even without houses.
 
 
 def _set_to_sorted_list_assets(player_assets):
@@ -749,7 +749,7 @@ def curate_trade_offer_multiple_players(player, potential_offer_list, potential_
                     trade_offer['cash_offered'] = 0
                     trade_offer['cash_wanted'] = 0
 
-                    trade_offer['property_set_offered'].add(item[0]['asset'])
+                    trade_offer['property_set_offered'].add(item[0]['asset']['name'])
                     trade_offer['cash_wanted'] = item[0]['price']
                     param['from_player'] = player
                     param['to_player'] = item[0]['to_player']
@@ -781,9 +781,9 @@ def curate_trade_offer_multiple_players(player, potential_offer_list, potential_
                     trade_offer['cash_offered'] = 0
                     trade_offer['cash_wanted'] = 0
                     cash_to_be_offered_during_trade += item[0]['price']*1.5
-                    if player.current_cash - cash_to_be_offered_during_trade > current_gameboard['go_increment']/2:
+                    if player['current_cash'] - cash_to_be_offered_during_trade > 150 /2:
                         trade_offer['cash_offered'] = item[0]['price']*1.5  #(0.75*1.5=1.125)
-                        trade_offer['property_set_wanted'].add(item[0]['asset'])
+                        trade_offer['property_set_wanted'].add(item[0]['asset']['name'])
                         param['from_player'] = player
                         param['to_player'] = item[0]['from_player']
                         param['offer'] = trade_offer
@@ -844,9 +844,9 @@ def curate_trade_offer_multiple_players(player, potential_offer_list, potential_
                             trade_offer['cash_wanted'] = 0
 
                             found_player_flag = 1
-                            trade_offer['property_set_offered'].add(off[0]['asset'])
+                            trade_offer['property_set_offered'].add(off[0]['asset']['name'])
                             trade_offer['cash_wanted'] = off[0]['price']
-                            trade_offer['property_set_wanted'].add(req[0]['asset'])
+                            trade_offer['property_set_wanted'].add(req[0]['asset']['name'])
                             trade_offer['cash_offered'] = req[0]['price']
                             param['from_player'] = player
                             param['to_player'] = player_2
@@ -873,9 +873,9 @@ def curate_trade_offer_multiple_players(player, potential_offer_list, potential_
                         trade_offer['cash_offered'] = 0
                         trade_offer['cash_wanted'] = 0
                         cash_to_be_offered_during_trade += item[0]['price']*1.5
-                        if player.current_cash - cash_to_be_offered_during_trade > current_gameboard['go_increment']/2:
+                        if player['current_cash'] - cash_to_be_offered_during_trade > 150 /2:
                             trade_offer['cash_offered'] = item[0]['price']*1.5  #(0.75*1.5=1.125)
-                            trade_offer['property_set_wanted'].add(item[0]['asset'])
+                            trade_offer['property_set_wanted'].add(item[0]['asset']['name'])
                             param['from_player'] = player
                             param['to_player'] = item[0]['from_player']
                             param['offer'] = trade_offer
@@ -938,7 +938,7 @@ def curate_trade_offer_multiple_players_aggressive(player, potential_offer_list,
                     trade_offer['cash_offered'] = 0
                     trade_offer['cash_wanted'] = 0
 
-                    trade_offer['property_set_offered'].add(item[0]['asset'])
+                    trade_offer['property_set_offered'].add(item[0]['asset']['name'])
                     if item[0]['price'] < item[0]['to_player'].current_cash*0.7 and item[0]['to_player'].current_cash*0.3 > current_gameboard['go_increment']:
                         item[0]['price'] = item[0]['to_player'].current_cash*0.7   ## trying to sell for an insame premium as the other player has a lot of cash and maybe ready to
                         #accept the offer for a monopoly
@@ -982,7 +982,7 @@ def curate_trade_offer_multiple_players_aggressive(player, potential_offer_list,
                     cash_to_be_offered_during_trade += item[0]['price']
                     if player.current_cash - cash_to_be_offered_during_trade > current_gameboard['go_increment']/2:
                         trade_offer['cash_offered'] = item[0]['price']
-                        trade_offer['property_set_wanted'].add(item[0]['asset'])
+                        trade_offer['property_set_wanted'].add(item[0]['asset']['name'])
                         param['from_player'] = player
                         param['to_player'] = item[0]['from_player']
                         param['offer'] = trade_offer
@@ -1008,7 +1008,7 @@ def curate_trade_offer_multiple_players_aggressive(player, potential_offer_list,
                     trade_offer['cash_offered'] = 0
                     trade_offer['cash_wanted'] = 0
 
-                    trade_offer['property_set_offered'].add(item[0]['asset'])
+                    trade_offer['property_set_offered'].add(item[0]['asset']['name'])
                     if item[0]['price'] < item[0]['to_player'].current_cash*0.7 and item[0]['to_player'].current_cash*0.3 > current_gameboard['go_increment']:
                         item[0]['price'] = item[0]['to_player'].current_cash*0.7   ## trying to sell for an insame premium as the other player has a lot of cash and maybe ready to
                         #accept the offer for a monopoly
@@ -1046,9 +1046,9 @@ def curate_trade_offer_multiple_players_aggressive(player, potential_offer_list,
                             trade_offer['cash_wanted'] = 0
 
                             found_player_flag = 1
-                            trade_offer['property_set_offered'].add(off[0]['asset'])
+                            trade_offer['property_set_offered'].add(off[0]['asset']['name'])
                             trade_offer['cash_wanted'] = off[0]['price']
-                            trade_offer['property_set_wanted'].add(req[0]['asset'])
+                            trade_offer['property_set_wanted'].add(req[0]['asset']['name'])
                             trade_offer['cash_offered'] = req[0]['price']
                             param['from_player'] = player
                             param['to_player'] = player_2
@@ -1084,7 +1084,7 @@ def curate_trade_offer_multiple_players_aggressive(player, potential_offer_list,
                         cash_to_be_offered_during_trade += item[0]['price']
                         if player.current_cash - cash_to_be_offered_during_trade > current_gameboard['go_increment']/2:
                             trade_offer['cash_offered'] = item[0]['price']
-                            trade_offer['property_set_wanted'].add(item[0]['asset'])
+                            trade_offer['property_set_wanted'].add(item[0]['asset']['name'])
                             param['from_player'] = player
                             param['to_player'] = item[0]['from_player']
                             param['offer'] = trade_offer

@@ -2,7 +2,7 @@ import initialize_game_elements
 from action_choices import roll_die
 import numpy as np
 import card_utility_actions
-import background_agent_v3_1
+import background_agent_v3
 import read_write_current_state
 import json
 import novelty_generator

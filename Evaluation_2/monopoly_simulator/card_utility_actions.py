@@ -765,7 +765,7 @@ def check_for_game_termination(current_gameboard, tot_time):
     :param tot_time: total time the game has taken until this function was called
     :return: bool, true if game termination condition is met, else false
     """
-    if diagnostics.max_cash_balance(current_gameboard) > 10000:   # this is our limit for runaway cash for testing purposes only.
+    if diagnostics.max_cash_balance(current_gameboard) > 8000:   # this is our limit for runaway cash for testing purposes only.
         logger.debug("Game terminated since max cash balance exceeded limit.")
         return True
     else:

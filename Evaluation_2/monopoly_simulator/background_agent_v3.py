@@ -419,6 +419,7 @@ def make_out_of_turn_move(player, current_gameboard, allowable_moves, code):
                     player.agent._agent_memory['previous_action'] = "make_trade_offer"
                     return_action_list.append("make_trade_offer")
                     return_param_list.append(param)
+                print('========return_action_list, return_param_list', return_action_list, return_param_list)
                 return (return_action_list, return_param_list)
 
         elif "make_trade_offer" in allowable_moves:
@@ -615,7 +616,6 @@ def make_bid(player, current_gameboard, asset, current_bid):
     will remove you from the auction proceedings. You could also always return 0 to voluntarily exit the auction.
     :return: An integer that indicates what you wish to bid for asset
     """
-
     if current_bid < asset.price:
         new_bid = current_bid + (asset.price-current_bid)/2
         if new_bid < player.current_cash:

@@ -1,14 +1,14 @@
 import initialize_game_elements
 from action_choices import roll_die
 import numpy as np
-import background_agent_v1
-import background_agent_v1_deprecated
-import background_agent_v2
+# import background_agent_v1
+# import background_agent_v1_deprecated
+# import background_agent_v2
 import background_agent_v3
-import background_agent_v3_1
-import baseline_agent
+import background_agent_v3
+# import baseline_agent
 import read_write_current_state
-import simple_decision_agent_1
+# import simple_decision_agent_1
 import card_utility_actions
 import json
 import diagnostics
@@ -398,11 +398,11 @@ def play_game():
     else:
         pass
 
-    # player_decision_agents['player_1'] = Agent(**background_agent_v3_1.decision_agent_methods)
+    # player_decision_agents['player_1'] = Agent(**background_agent_v3.decision_agent_methods)
     player_decision_agents['player_1'] = agent
-    player_decision_agents['player_2'] = Agent(**background_agent_v3_1.decision_agent_methods)
-    player_decision_agents['player_3'] = Agent(**background_agent_v3_1.decision_agent_methods)
-    player_decision_agents['player_4'] = Agent(**background_agent_v3_1.decision_agent_methods)
+    player_decision_agents['player_2'] = Agent(**background_agent_v3.decision_agent_methods)
+    player_decision_agents['player_3'] = Agent(**background_agent_v3.decision_agent_methods)
+    player_decision_agents['player_4'] = Agent(**background_agent_v3.decision_agent_methods)
 
     game_elements = set_up_board('../monopoly_game_schema_v1-2.json',
                                  player_decision_agents)
@@ -450,12 +450,20 @@ def play_game():
             return winner
 
 
-def play_game_in_tournament(game_seed, inject_novelty_function=None):
+def play_game_in_tournament(game_seed, inject_novelty_function=None, agent=None):
     logger.debug('seed used: ' + str(game_seed))
     player_decision_agents = dict()
     # for p in ['player_1','player_3']:
     #     player_decision_agents[p] = simple_decision_agent_1.decision_agent_methods
-    player_decision_agents['player_1'] = Agent(**background_agent_v3.decision_agent_methods)
+    # player_decision_agents['player_1'] = Agent(**background_agent_v3.decision_agent_methods)
+
+    #####GT#####
+    if agent:
+        player_decision_agents['player_1'] = agent
+    else:
+        player_decision_agents['player_1'] = Agent(**background_agent_v3.decision_agent_methods)
+    #####GT#####
+
     player_decision_agents['player_2'] = Agent(**background_agent_v3.decision_agent_methods)
     player_decision_agents['player_3'] = Agent(**background_agent_v3.decision_agent_methods)
     player_decision_agents['player_4'] = Agent(**background_agent_v3.decision_agent_methods)

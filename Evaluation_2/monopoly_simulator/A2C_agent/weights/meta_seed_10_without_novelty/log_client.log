@@ -1,0 +1,13 @@
+2020-10-25 20:17:10,491:A2C_agent.logging_info:DEBUG:Define the folder path as /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator/A2C_agent/weights/meta_seed_10_without_novelty
+2020-10-25 20:17:10,491:A2C_agent.logging_info:INFO:Tournament starts!
+2020-10-25 20:17:10,555:A2C_agent.logging_info:INFO:1 th game starts!
+2020-10-25 20:17:12,305:A2C_agent.logging_info:INFO:1 th game stops!
+2020-10-25 20:17:12,309:A2C_agent.logging_info:INFO:2 th game starts!
+2020-10-25 20:17:14,365:A2C_agent.logging_info:INFO:2 th game stops!
+2020-10-25 20:17:14,369:A2C_agent.logging_info:INFO:3 th game starts!
+2020-10-25 20:17:17,532:A2C_agent.logging_info:INFO:3 th game stops!
+2020-10-25 20:17:17,536:A2C_agent.logging_info:INFO:4 th game starts!
+2020-10-25 20:17:18,878:A2C_agent.logging_info:INFO:4 th game stops!
+2020-10-25 20:17:18,882:A2C_agent.logging_info:INFO:5 th game starts!
+2020-10-25 20:18:24,835:A2C_agent.logging_info:INFO:5 th game stops!
+2020-10-25 20:18:24,836:A2C_agent.logging_info:INFO:Tournament Finished!

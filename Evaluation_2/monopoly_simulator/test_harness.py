@@ -1,6 +1,8 @@
 import numpy as np
-import gameplay
+import gameplay_socket
 import novelty_generator
+from server_agent_serial import ServerAgent
+import location
 from logging_info import log_file_create
 import os
 import shutil
@@ -11,7 +13,7 @@ def play_tournament_without_novelty(tournament_log_folder=None, meta_seed=5, num
     """
     Tournament logging is not currently supported, but will be soon.
     :param tournament_log_folder: String. The path to a folder.
-    :param meta_seed: This is the seed we will use to generate a sequence of seeds, that will (in turn) spawn the games in gameplay/simulate_game_instance
+    :param meta_seed: This is the seed we will use to generate a sequence of seeds, that will (in turn) spawn the games in gameplay_socket/simulate_game_instance
     :param num_games: The number of games to simulate in a tournament
     :return: None. Will print out the win-loss metrics, and will write out game logs
     """
@@ -48,12 +50,19 @@ def play_tournament_without_novelty(tournament_log_folder=None, meta_seed=5, num
     out_file = open(json_filename, "w")
     json.dump(metadata_dict, out_file, indent=4)
     out_file.close()
-
+    #####GT - Call agent here#####
+    agent = ServerAgent()
+    f_name = "meta_seed_" + str(meta_seed) + '_without_novelty'
+    agent.start_tournament(f_name)
+    ##############################
     for t in tournament_seeds:
         print('Logging gameplay for seed: ', str(t), ' ---> Game ' + str(count))
         filename = folder_name + "meta_seed_" + str(meta_seed) + '_num_games_' + str(count) + '.log'
         logger = log_file_create(filename)
-        winners.append(gameplay.play_game_in_tournament(t))
+        #####GT - add agent to parameter#####
+        winners.append(gameplay_socket.play_game_in_tournament(t, agent=agent))
+        #####################################
+        # winners.append(gameplay_socket.play_game_in_tournament(t))
         handlers_copy = logger.handlers[:]
         for handler in handlers_copy:
             logger.removeHandler(handler)
@@ -62,6 +71,7 @@ def play_tournament_without_novelty(tournament_log_folder=None, meta_seed=5, num
         count += 1
 
     print(winners)
+    agent.end_tournament()
 
 
 def play_tournament_with_novelty_1(tournament_log_folder=None, meta_seed=5, num_games=100, novelty_index=23):
@@ -107,12 +117,19 @@ def play_tournament_with_novelty_1(tournament_log_folder=None, meta_seed=5, num_
     out_file = open(json_filename, "w")
     json.dump(metadata_dict, out_file, indent=4)
     out_file.close()
+    agent = ServerAgent()
+    f_name = "meta_seed_" + str(meta_seed) + '_with_novelty'
+    agent.start_tournament(f_name)
+    ##############################
 
     for t in range(0,novelty_index):
         print('Logging gameplay without novelty for seed: ', str(t), ' ---> Game ' + str(count))
         filename = folder_name + "meta_seed_" + str(meta_seed) + '_without_novelty' + '_num_games_' + str(count) + '.log'
         logger = log_file_create(filename)
-        winners.append(gameplay.play_game_in_tournament(tournament_seeds[t]))
+        #####GT - add agent to parameter#####
+        winners.append(gameplay_socket.play_game_in_tournament(tournament_seeds[t],agent=agent))
+        #####################################
+        # winners.append(gameplay_socket.play_game_in_tournament(tournament_seeds[t]))
         handlers_copy = logger.handlers[:]
         for handler in handlers_copy:
             logger.removeHandler(handler)
@@ -125,7 +142,10 @@ def play_tournament_with_novelty_1(tournament_log_folder=None, meta_seed=5, num_
         print('Logging gameplay with novelty for seed: ', str(t), ' ---> Game ' + str(count))
         filename = folder_name + "meta_seed_" + str(meta_seed) + '_with_novelty' + '_num_games_' + str(count) + '.log'
         logger = log_file_create(filename)
-        new_winners.append(gameplay.play_game_in_tournament(tournament_seeds[t], class_novelty_1))
+        # new_winners.append(gameplay_socket.play_game_in_tournament(tournament_seeds[t], class_novelty_1))
+        #####GT - add agent to parameter#####
+        new_winners.append(gameplay_socket.play_game_in_tournament(tournament_seeds[t], class_novelty_1, agent=agent))
+        #####################################
         handlers_copy = logger.handlers[:]
         for handler in handlers_copy:
             logger.removeHandler(handler)
@@ -135,15 +155,23 @@ def play_tournament_with_novelty_1(tournament_log_folder=None, meta_seed=5, num_
 
     print('pre_novelty winners', winners)
     print('post_novelty_winners', new_winners)
+    agent.end_tournament()
 
 
 def class_novelty_1(current_gameboard):
-    classCardNovelty = novelty_generator.TypeClassNovelty()
-    novel_cc = dict()
-    novel_cc["street_repairs"] = "alternate_contingency_function_1"
-    novel_chance = dict()
-    novel_chance["general_repairs"] = "alternate_contingency_function_1"
-    classCardNovelty.card_novelty(current_gameboard, novel_cc, novel_chance)
+
+
+    #Mortgage
+    morNovelty = novelty_generator.InanimateAttributeNovelty()
+    mor_location = current_gameboard['location_objects']["Mediterranean Avenue"]
+    morNovelty.mortgage_novelty(mor_location, 40)
+
+    # classCardNovelty = novelty_generator.TypeClassNovelty()
+    # novel_cc = dict()
+    # novel_cc["street_repairs"] = "alternate_contingency_function_1"
+    # novel_chance = dict()
+    # novel_chance["general_repairs"] = "alternate_contingency_function_1"
+    # classCardNovelty.card_novelty(current_gameboard, novel_cc, novel_chance)
 
 
 #All the tournaments get logged in seperate folders inside ../tournament_logs folder
@@ -153,5 +181,5 @@ except:
     pass
 
 #Specify the name of the folder in which the tournament games has to be logged in the following format: "/name_of_your_folder/"
-play_tournament_without_novelty('/tournament_without_novelty_4/', meta_seed=10, num_games=10)
-#play_tournament_with_novelty_1('/tournament_with_novelty/')
+# play_tournament_without_novelty('/tournament_without_novelty_4/', meta_seed=10, num_games=5)
+play_tournament_with_novelty_1('/tournament_with_novelty/',num_games=10, novelty_index=5)

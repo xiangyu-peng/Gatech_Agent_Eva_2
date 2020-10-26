@@ -1,0 +1,8 @@
+{
+    "function": "play_tournament_with_novelty_1",
+    "parameters": {
+        "meta_seed": 5,
+        "novelty_index": 5,
+        "num_game": 10
+    }
+}
