@@ -1,5 +1,0 @@
-2020-10-25 14:45:43,563:A2C_agent.logging_info:DEBUG:Define the folder path as /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator/A2C_agent/weights/play game without novelty
-2020-10-25 14:45:43,563:A2C_agent.logging_info:INFO:Tournament starts!
-2020-10-25 14:45:43,570:A2C_agent.logging_info:INFO:1 th game starts!
-2020-10-25 14:45:45,977:A2C_agent.logging_info:INFO:1 th game stops!
-2020-10-25 14:45:45,987:A2C_agent.logging_info:INFO:Tournament Finished!
