@@ -1,5 +1,5 @@
 import sys, os
-upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
+upper_path = os.path.abspath('.').replace('/Evaluation_2/monopoly_simulator_2','')
 upper_path_eva = upper_path + '/Evaluation/monopoly_simulator'
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
@@ -38,6 +38,8 @@ class Monopoly_world():
     def __init__(self, config_file=None):
         # Get config data
         # exp related
+
+        print('env-config', config_file)
         self.novelty_num = None
         self.matrix_name = None
         self.entity_name = None
@@ -47,7 +49,9 @@ class Monopoly_world():
         self.upper_path = '/media/becky/GNOME-p3'
         self.config_file = self.upper_path + config_file
         config_data = ConfigParser()
+        print('self.config_file', self.config_file)
         config_data.read(self.config_file)
+
         self.hyperparams = self.params_read(config_data, 'env')
 
         # env parameters
@@ -284,6 +288,8 @@ class Monopoly_world():
         """
         value = 0
         player = self.game_elements['players'][index]
+        if player.status == 'lost':
+            return 0
         if player.assets:
             for asset in player.assets:
                 if asset.is_mortgaged:
@@ -309,7 +315,11 @@ class Monopoly_world():
         player = self.game_elements['players'][player_index]
         opponents = [self.game_elements['players'][i] for i in opponents_index]
         player_money_norm = self.normalize(player.current_cash, x_min=0, x_max=10000, a=0)
-        opps_money_norm = self.normalize(opponents[0].current_cash, x_min=0, x_max=10000, a=0) if len(opponents) == 1 else 0
+        opps_money_norm = 0
+        for index in range(len(opponents_index)):
+            if opponents[index].status != 'lost':
+                opps_money_norm = max(opps_money_norm,
+                                      self.normalize(opponents[index].current_cash, x_min=0, x_max=10000, a=0)) #if len(opponents) == 1 else 0
         return (player_money_norm - opps_money_norm) / max(player_money_norm, opps_money_norm)
 
 
@@ -323,8 +333,9 @@ class Monopoly_world():
         # player = self.game_elements['players'][player_index]
         # opponents = [self.game_elements['players'][i] for i in opponents_index]
         player_income_norm = self.normalize(self.get_income(player_index), x_min=0, x_max=2000, a=0)
-        opps_income_norm = self.normalize(self.get_income(1), x_min=0, x_max=2000, a=0) if len(
-            opponents_index) == 1 else 0
+        opps_income_norm = 0
+        for index in opponents_index:
+            opps_income_norm = max(opps_income_norm, self.normalize(self.get_income(index), x_min=0, x_max=2000, a=0))  #if len(opponents_index) == 1 else 0
         return (player_income_norm - opps_income_norm) / max(player_income_norm, opps_income_norm, 0.000000000001)
 
 
@@ -360,8 +371,10 @@ class Monopoly_world():
         # reward = (value_now - self.value_past) / self.value_total
 
         # Calculating rewards
-        money_diff = self.get_money_diff(0, [1])
-        income_diff = self.get_income_diff(0, [1])
+        money_diff = self.get_money_diff(0, [i for i in range(1, self.num_players)])
+        print('money_diff', money_diff)
+        income_diff = self.get_income_diff(0, [i for i in range(1, self.num_players)])
+        print('income_diff', income_diff)
         reward = money_diff * 0.5 + income_diff * 0.5
 
         if masked_actions_reward == None:

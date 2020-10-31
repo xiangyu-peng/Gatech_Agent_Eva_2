@@ -2,11 +2,15 @@ from monopoly_simulator.action_choices import *
 from monopoly_simulator.location import RealEstateLocation, UtilityLocation, RailroadLocation
 from monopoly_simulator.bank import Bank
 import logging
+
 logger = logging.getLogger('monopoly_simulator.logging_info.player')
 
+
 class Player(object):
-    def __init__(self, current_position, status, has_get_out_of_jail_community_chest_card, has_get_out_of_jail_chance_card,
-                 current_cash, num_railroads_possessed, player_name, assets,full_color_sets_possessed, currently_in_jail,
+    def __init__(self, current_position, status, has_get_out_of_jail_community_chest_card,
+                 has_get_out_of_jail_chance_card,
+                 current_cash, num_railroads_possessed, player_name, assets, full_color_sets_possessed,
+                 currently_in_jail,
                  num_utilities_possessed,
                  agent
                  ):
@@ -30,7 +34,7 @@ class Player(object):
 
 
         """
-        self.current_position = current_position if current_position else 0#this is an integer. Use 'location_sequence' in the game schema to map position into an actual location
+        self.current_position = current_position if current_position else 0  # this is an integer. Use 'location_sequence' in the game schema to map position into an actual location
         self.status = status
         self.has_get_out_of_jail_chance_card = has_get_out_of_jail_chance_card
         self.has_get_out_of_jail_community_chest_card = has_get_out_of_jail_community_chest_card
@@ -43,18 +47,21 @@ class Player(object):
         self.num_utilities_possessed = num_utilities_possessed
 
         # the agent assigned to this player.
-        self.agent=agent
+        self.agent = agent
 
         # all of the variables below are assigned a default initial value, and do not need input arguments/game schema inputs
-        self.num_total_houses = 0 # the total number of houses, across all assets, that the player possesses
-        self.num_total_hotels = 0 # the total number of hotels, across all assets, that the player possesses
+        self.num_total_houses = 0  # the total number of houses, across all assets, that the player possesses
+        self.num_total_hotels = 0  # the total number of hotels, across all assets, that the player possesses
         outstanding_property_offer = dict()
-        outstanding_property_offer['from_player'] = None # when is_property_offer_outstanding is true, the expected value is a Player instance
-        outstanding_property_offer['asset'] = None # when is_property_offer_outstanding is true, the expected value is a purchaseable Location instance
-        outstanding_property_offer['price'] = -1 # when is_property_offer_outstanding is true, the expected value is a non-negative integer
+        outstanding_property_offer[
+            'from_player'] = None  # when is_property_offer_outstanding is true, the expected value is a Player instance
+        outstanding_property_offer[
+            'asset'] = None  # when is_property_offer_outstanding is true, the expected value is a purchaseable Location instance
+        outstanding_property_offer[
+            'price'] = -1  # when is_property_offer_outstanding is true, the expected value is a non-negative integer
 
         self.outstanding_property_offer = outstanding_property_offer
-        self.is_property_offer_outstanding = False # If True, it means that there is a property offer on the table
+        self.is_property_offer_outstanding = False  # If True, it means that there is a property offer on the table
         # from another player. Only one property offer at a time can be considered, so when it's your turn you have to
         # decide whether to accept the offer (if you don't, the offer will get rejected, and the field will get re-set)
         # the details of who is offering what and at what price are in outstanding_property_offer
@@ -69,15 +76,13 @@ class Player(object):
         self.outstanding_trade_offer = outstanding_trade_offer
         self.is_trade_offer_outstanding = False
 
-        self.mortgaged_assets = set() # the set of assets that are currently mortgaged.
+        self.mortgaged_assets = set()  # the set of assets that are currently mortgaged.
 
-        self._option_to_buy = False # this option will turn true when  the player lands on a property that could be bought.
+        self._option_to_buy = False  # this option will turn true when  the player lands on a property that could be bought.
         # We always set it to false again at the end of the post_roll phase. It is an internal variable.
-
 
     def change_decision_agent(self, agent):
         self.agent = agent
-
 
     def begin_bankruptcy_proceedings(self, current_gameboard):
         """
@@ -87,7 +92,7 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """
-        logger.debug('Beginning bankruptcy proceedings for '+self.player_name)
+        logger.debug('Beginning bankruptcy proceedings for ' + self.player_name)
         self.current_position = None
         self.status = 'lost'
         self.current_cash = 0
@@ -117,20 +122,22 @@ class Player(object):
         self.outstanding_trade_offer['from_player'] = None
 
         if self._option_to_buy:
-            logger.debug('Warning! option to buy is set to true for '+self.player_name+' even in bankruptcy proceedings.')
+            logger.debug(
+                'Warning! option to buy is set to true for ' + self.player_name + ' even in bankruptcy proceedings.')
         self._option_to_buy = False
         self.is_property_offer_outstanding = False
         self.is_trade_offer_outstanding = False
 
         if self.has_get_out_of_jail_chance_card:  # we give first preference to chance, then community chest
             self.has_get_out_of_jail_chance_card = False
-            logger.debug('releasing get_out_of_jail_chance_card for '+self.player_name)
+            logger.debug('releasing get_out_of_jail_chance_card for ' + self.player_name)
             current_gameboard['chance_cards'].add(current_gameboard['chance_card_objects']['get_out_of_jail_free'])
 
         if self.has_get_out_of_jail_community_chest_card:
             self.has_get_out_of_jail_community_chest_card = False
-            logger.debug('releasing get_out_of_jail_community_chest_card for '+self.player_name)
-            current_gameboard['community_chest_cards'].add(current_gameboard['community_chest_card_objects']['get_out_of_jail_free'])
+            logger.debug('releasing get_out_of_jail_community_chest_card for ' + self.player_name)
+            current_gameboard['community_chest_cards'].add(
+                current_gameboard['community_chest_card_objects']['get_out_of_jail_free'])
 
     def add_asset(self, asset, current_gameboard):
         """
@@ -142,47 +149,53 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """
-        logger.debug('Looking to add asset '+asset.name+' to portfolio of '+self.player_name)
+        logger.debug('Looking to add asset ' + asset.name + ' to portfolio of ' + self.player_name)
         if asset in self.assets:
             logger.error('Error! Player already owns asset!')
             logger.error("Error")
 
         self.assets.add(asset)
-        logger.debug('total no. of assets now owned by player: '+str(len(self.assets)))
+        logger.debug('total no. of assets now owned by player: ' + str(len(self.assets)))
 
         if type(asset) == UtilityLocation:
             self.num_utilities_possessed += 1
-            logger.debug('incrementing '+self.player_name+ "'s utility count by 1, total utilities owned by player now is "+str(self.num_utilities_possessed))
+            logger.debug(
+                'incrementing ' + self.player_name + "'s utility count by 1, total utilities owned by player now is " + str(
+                    self.num_utilities_possessed))
         elif type(asset) == RailroadLocation:
             self.num_railroads_possessed += 1
-            logger.debug('incrementing '+ self.player_name+ "'s railroad count by 1, total railroads owned by player now is "+ str(self.num_railroads_possessed))
+            logger.debug(
+                'incrementing ' + self.player_name + "'s railroad count by 1, total railroads owned by player now is " + str(
+                    self.num_railroads_possessed))
         elif type(asset) == RealEstateLocation:
             flag = True
             for o in current_gameboard['color_assets'][asset.color]:
                 if o not in self.assets:
                     flag = False
                     break
-            if flag: # if this is still True, then that means we now possess all the properties with this asset's color
+            if flag:  # if this is still True, then that means we now possess all the properties with this asset's color
                 self.full_color_sets_possessed.add(asset.color)
 
             if asset.num_houses > 0:
                 self.num_total_houses += asset.num_houses
-                logger.debug('incrementing '+self.player_name+ "'s num_total_houses count by "+ str(asset.num_houses)+
-                    ". Total houses now owned by player now is "+ str(self.num_total_houses))
+                logger.debug(
+                    'incrementing ' + self.player_name + "'s num_total_houses count by " + str(asset.num_houses) +
+                    ". Total houses now owned by player now is " + str(self.num_total_houses))
                 # note that technically, the property should not have been transferred to player
                 # if there were improvements on it. But we include this code just in case, and to flag errors later.
             elif asset.num_hotels > 0:
                 self.num_total_hotels += asset.num_hotels
-                logger.debug('incrementing '+ self.player_name+ "'s num_total_hotels coadd_assunt by "+str(asset.num_hotels)+
-                    ". Total hotels now owned by player now is "+ str(self.num_total_hotels))
+                logger.debug('incrementing ' + self.player_name + "'s num_total_hotels coadd_assunt by " + str(
+                    asset.num_hotels) +
+                             ". Total hotels now owned by player now is " + str(self.num_total_hotels))
         else:
             logger.error('You are attempting to add non-purchaseable asset to player\'s portfolio!')
             logger.error("Error")
 
         if asset.is_mortgaged:
-            logger.debug('asset ',asset.name," is mortgaged. Adding to player's mortgaged assets.")
+            logger.debug('asset ', asset.name, " is mortgaged. Adding to player's mortgaged assets.")
             self.mortgaged_assets.add(asset)
-            logger.debug('Total number of mortgaged assets owned by player is '+str(len(self.mortgaged_assets)))
+            logger.debug('Total number of mortgaged assets owned by player is ' + str(len(self.mortgaged_assets)))
 
     def remove_asset(self, asset):
         """
@@ -198,42 +211,48 @@ class Player(object):
         :param asset: A purchaseable Location instance (railroad, utility or real estate)
         :return: None
         """
-        logger.debug('Attempting to remove asset '+asset.name+' from ownership of '+self.player_name)
+        logger.debug('Attempting to remove asset ' + asset.name + ' from ownership of ' + self.player_name)
         if asset not in self.assets:
             logger.error('Error! Player does not own asset!')
             logger.error("Error")
 
         self.assets.remove(asset)
-        logger.debug('total no. of assets now owned by player: '+str(len(self.assets)))
+        logger.debug('total no. of assets now owned by player: ' + str(len(self.assets)))
 
         if type(asset) == UtilityLocation:
             self.num_utilities_possessed -= 1
-            logger.debug('Decrementing '+self.player_name+ "'s utility count by 1, total utilities owned by player now is "+str(self.num_utilities_possessed))
+            logger.debug(
+                'Decrementing ' + self.player_name + "'s utility count by 1, total utilities owned by player now is " + str(
+                    self.num_utilities_possessed))
         elif type(asset) == RailroadLocation:
             self.num_railroads_possessed -= 1
-            logger.debug('Decrementing '+ self.player_name+ "'s railroad count by 1, total railroads owned by player now is "+ str(self.num_railroads_possessed))
+            logger.debug(
+                'Decrementing ' + self.player_name + "'s railroad count by 1, total railroads owned by player now is " + str(
+                    self.num_railroads_possessed))
         elif type(asset) == RealEstateLocation:
             if asset.color in self.full_color_sets_possessed:
                 self.full_color_sets_possessed.remove(asset.color)
 
             if asset.num_houses > 0:
                 self.num_total_houses -= asset.num_houses
-                logger.debug('Decrementing '+self.player_name+ "'s num_total_houses count by "+ str(asset.num_houses),
+                logger.debug(
+                    'Decrementing ' + self.player_name + "'s num_total_houses count by " + str(asset.num_houses),
                     ". Total houses now owned by player now is ", str(self.num_total_houses))
                 # note that technically, the property should not have been removed
                 # if there were improvements on it. But we include this code just in case, and to flag errors later.
             elif asset.num_hotels > 0:
                 self.num_total_hotels -= asset.num_hotels
-                logger.debug('Decrementing '+ self.player_name+ "'s num_total_hotels count by "+ str(asset.num_hotels),
+                logger.debug(
+                    'Decrementing ' + self.player_name + "'s num_total_hotels count by " + str(asset.num_hotels),
                     ". Total hotels now owned by player now is ", str(self.num_total_hotels))
         else:
             logger.error('The property to be removed from the portfolio is not purchaseable. How did it get here?')
             logger.error("Error")
 
-        if asset.is_mortgaged: # the asset is still mortgaged after we remove it from the player's portfolio. The next player must free it up.
-            logger.debug('asset '+asset.name+" is mortgaged. Removing from player's mortgaged assets.")
+        if asset.is_mortgaged:  # the asset is still mortgaged after we remove it from the player's portfolio. The next player must free it up.
+            logger.debug('asset ' + asset.name + " is mortgaged. Removing from player's mortgaged assets.")
             self.mortgaged_assets.remove(asset)
-            logger.debug('Total number of mortgaged assets owned by player is '+str(len(self.mortgaged_assets)))
+            logger.debug('Total number of mortgaged assets owned by player is ' + str(len(self.mortgaged_assets)))
 
     def charge_player(self, amount):
         """
@@ -245,38 +264,41 @@ class Player(object):
         if amount < 0:
             logger.error('You cannot charge player negative amount of cash.')
             logger.error("Error")
-        logger.debug(self.player_name+ ' is being charged amount: '+str(amount))
-        logger.debug('Before charge, player has cash '+str(self.current_cash))
+        logger.debug(self.player_name + ' is being charged amount: ' + str(amount))
+        logger.debug('Before charge, player has cash ' + str(self.current_cash))
         self.current_cash -= amount
-        logger.debug(self.player_name+ ' now has cash: '+str(self.current_cash))
+        logger.debug(self.player_name + ' now has cash: ' + str(self.current_cash))
 
-    def discharge_assets_to_bank(self, current_gameboard): # discharge assets to bank
+    def discharge_assets_to_bank(self, current_gameboard):  # discharge assets to bank
         """
         Discharge the player's assets to the bank and set/re-set all variables (including of the asset itself) as
         appropriate.
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """
-        logger.debug('Discharging assets of '+self.player_name+' to bank.')
+        logger.debug('Discharging assets of ' + self.player_name + ' to bank.')
         if self.assets:
-            for asset in self.assets: # since asset is returning to bank, we can set its mortgage status to False regardless.
-                logger.debug('discharging asset '+asset.name)
+            for asset in self.assets:  # since asset is returning to bank, we can set its mortgage status to False regardless.
+                logger.debug('discharging asset ' + asset.name)
                 asset.is_mortgaged = False
                 if asset.loc_class == 'real_estate':
                     asset.owned_by = current_gameboard['bank']
-                    logger.debug("Discharging " + str(asset.num_houses) + " houses and " + str(asset.num_hotels) + " hotels to the bank.")
+                    logger.debug("Discharging " + str(asset.num_houses) + " houses and " + str(
+                        asset.num_hotels) + " hotels to the bank.")
                     current_gameboard['bank'].total_houses += asset.num_houses
                     asset.num_houses = 0
                     current_gameboard['bank'].total_hotels += asset.num_hotels
                     asset.num_hotels = 0
-                    logger.debug('Bank now has ' + str(current_gameboard['bank'].total_houses) + ' houses and ' + str(current_gameboard['bank'].total_hotels) + ' hotels left.')
+                    logger.debug('Bank now has ' + str(current_gameboard['bank'].total_houses) + ' houses and ' + str(
+                        current_gameboard['bank'].total_hotels) + ' hotels left.')
                 elif asset.loc_class == 'utility' or asset.loc_class == 'railroad':
                     asset.owned_by = current_gameboard['bank']
                 else:
-                    logger.error('player owns asset that is not real estate, railroad or utility') # unnecessary, since an
+                    logger.error(
+                        'player owns asset that is not real estate, railroad or utility')  # unnecessary, since an
                     # exception will be raised if is_mortgaged does not exist. But we like an extra check.
                     logger.error("Error")
-        self.num_railroads_possessed = 0 # now we formally discharge assets on the player's side
+        self.num_railroads_possessed = 0  # now we formally discharge assets on the player's side
         self.assets = None
         self.full_color_sets_possessed = None
         self.num_utilities_possessed = 0
@@ -290,24 +312,30 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """
-        current_location = current_gameboard['location_sequence'][self.current_position] # get the Location object corresponding to player's current position
-        if current_location.loc_class == 'do_nothing': # we now look at each location class case by case
-            logger.debug(self.player_name+' is on a do_nothing location, namely '+current_location.name+'. Nothing to process. Returning...')
+        current_location = current_gameboard['location_sequence'][
+            self.current_position]  # get the Location object corresponding to player's current position
+        if current_location.loc_class == 'do_nothing':  # we now look at each location class case by case
+            logger.debug(
+                self.player_name + ' is on a do_nothing location, namely ' + current_location.name + '. Nothing to process. Returning...')
             return
         elif current_location.loc_class == 'real_estate':
-            logger.debug(self.player_name+ ' is on a real estate location, namely '+ current_location.name)
+            logger.debug(self.player_name + ' is on a real estate location, namely ' + current_location.name)
             if 'bank.Bank' in str(type(current_location.owned_by)):
-                logger.debug(current_location.name+' is owned by Bank. Setting _option_to_buy to true for '+self.player_name)
+                logger.debug(
+                    current_location.name + ' is owned by Bank. Setting _option_to_buy to true for ' + self.player_name)
                 self._option_to_buy = True
                 return
             elif current_location.owned_by == self:
-                logger.debug(current_location.name+' is owned by current player. Player does not need to do anything.')
+                logger.debug(
+                    current_location.name + ' is owned by current player. Player does not need to do anything.')
                 return
             elif current_location.is_mortgaged is True:
-                logger.debug(current_location.name+ ' is mortgaged. Player does not have to do or pay anything. Returning...')
+                logger.debug(
+                    current_location.name + ' is mortgaged. Player does not have to do or pay anything. Returning...')
                 return
             else:
-                logger.debug(current_location.name+ ' is owned by '+current_location.owned_by.player_name+' and is not mortgaged. Proceeding to calculate and pay rent.')
+                logger.debug(
+                    current_location.name + ' is owned by ' + current_location.owned_by.player_name + ' and is not mortgaged. Proceeding to calculate and pay rent.')
                 self.calculate_and_pay_rent_dues(current_gameboard)
                 # add to game history
                 current_gameboard['history']['function'].append(self.calculate_and_pay_rent_dues)
@@ -319,7 +347,8 @@ class Player(object):
 
                 return
         elif current_location.loc_class == 'tax':
-            logger.debug(self.player_name+ ' is on a tax location, namely '+ current_location.name+ '. Deducting tax...')
+            logger.debug(
+                self.player_name + ' is on a tax location, namely ' + current_location.name + '. Deducting tax...')
             self.charge_player(current_location.amount_due)
             # add to game history
             current_gameboard['history']['function'].append(self.charge_player)
@@ -331,19 +360,23 @@ class Player(object):
 
             return
         elif current_location.loc_class == 'railroad':
-            logger.debug(self.player_name+ ' is on a railroad location, namely '+ current_location.name)
+            logger.debug(self.player_name + ' is on a railroad location, namely ' + current_location.name)
             if 'bank.Bank' in str(type(current_location.owned_by)):
-                logger.debug(current_location.name+ ' is owned by Bank. Setting _option_to_buy to true for '+ self.player_name)
+                logger.debug(
+                    current_location.name + ' is owned by Bank. Setting _option_to_buy to true for ' + self.player_name)
                 self._option_to_buy = True
                 return
             elif current_location.owned_by == self:
-                logger.debug(current_location.name+' is owned by current player. Player does not need to do anything.')
+                logger.debug(
+                    current_location.name + ' is owned by current player. Player does not need to do anything.')
                 return
             elif current_location.is_mortgaged is True:
-                logger.debug(current_location.name+ ' is mortgaged. Player does not have to do or pay anything. Returning...')
+                logger.debug(
+                    current_location.name + ' is mortgaged. Player does not have to do or pay anything. Returning...')
                 return
             else:
-                logger.debug(current_location.name+ ' is owned by '+ current_location.owned_by.player_name+ ' and is not mortgaged. Proceeding to calculate and pay dues.')
+                logger.debug(
+                    current_location.name + ' is owned by ' + current_location.owned_by.player_name + ' and is not mortgaged. Proceeding to calculate and pay dues.')
                 dues = current_location.calculate_railroad_dues()
                 # add to game history
                 current_gameboard['history']['function'].append(current_location.calculate_railroad_dues)
@@ -373,19 +406,23 @@ class Player(object):
 
                 return
         elif current_location.loc_class == 'utility':
-            logger.debug(self.player_name+ ' is on a utility location, namely '+ current_location.name)
+            logger.debug(self.player_name + ' is on a utility location, namely ' + current_location.name)
             if 'bank.Bank' in str(type(current_location.owned_by)):
-                logger.debug(current_location.name+ ' is owned by Bank. Setting _option_to_buy to true for '+ self.player_name)
+                logger.debug(
+                    current_location.name + ' is owned by Bank. Setting _option_to_buy to true for ' + self.player_name)
                 self._option_to_buy = True
                 return
             elif current_location.owned_by == self:
-                logger.debug(current_location.name+' is owned by current player. Player does not need to do anything.')
+                logger.debug(
+                    current_location.name + ' is owned by current player. Player does not need to do anything.')
                 return
             elif current_location.is_mortgaged is True:
-                logger.debug(current_location.name+ ' is mortgaged. Player does not have to do or pay anything. Returning...')
+                logger.debug(
+                    current_location.name + ' is mortgaged. Player does not have to do or pay anything. Returning...')
                 return
             else:
-                logger.debug(current_location.name+ ' is owned by '+ current_location.owned_by.player_name+ ' and is not mortgaged. Proceeding to calculate and pay dues.')
+                logger.debug(
+                    current_location.name + ' is owned by ' + current_location.owned_by.player_name + ' and is not mortgaged. Proceeding to calculate and pay dues.')
                 dues = current_location.calculate_utility_dues(current_gameboard['current_die_total'])
                 # add to game history
                 current_gameboard['history']['function'].append(current_location.calculate_utility_dues)
@@ -416,7 +453,8 @@ class Player(object):
 
                 return
         elif current_location.loc_class == 'action':
-            logger.debug(self.player_name+ ' is on an action location, namely '+ current_location.name+ '. Performing action...')
+            logger.debug(
+                self.player_name + ' is on an action location, namely ' + current_location.name + '. Performing action...')
             current_location.perform_action(self, current_gameboard)
             # add to game history
             current_gameboard['history']['function'].append(current_location.perform_action)
@@ -428,7 +466,7 @@ class Player(object):
 
             return
         else:
-            logger.error(self.player_name+' is on an unidentified location type. Raising exception.')
+            logger.error(self.player_name + ' is on an unidentified location type. Raising exception.')
             logger.error("Error")
 
     def update_player_position(self, new_position, current_gameboard):
@@ -438,8 +476,9 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """
-        logger.debug('Player is currently in position '+current_gameboard['location_sequence'][self.current_position].name)
-        logger.debug(' and is moving to position '+current_gameboard['location_sequence'][new_position].name)
+        logger.debug(
+            'Player is currently in position ' + current_gameboard['location_sequence'][self.current_position].name)
+        logger.debug(' and is moving to position ' + current_gameboard['location_sequence'][new_position].name)
         self.current_position = new_position
 
     def send_to_jail(self, current_gameboard):
@@ -448,7 +487,7 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """
-        logger.debug(self.player_name+' is being sent to jail.')
+        logger.debug(self.player_name + ' is being sent to jail.')
         jail_position = current_gameboard['jail_position']
         self.currently_in_jail = True
         self.current_position = jail_position
@@ -460,7 +499,8 @@ class Player(object):
         :return: None
         """
         current_loc = current_gameboard['location_sequence'][self.current_position]
-        logger.debug('calculating and paying rent dues for '+ self.player_name+ ' who is in property '+current_loc.name+' which is owned by '+current_loc.owned_by.player_name)
+        logger.debug(
+            'calculating and paying rent dues for ' + self.player_name + ' who is in property ' + current_loc.name + ' which is owned by ' + current_loc.owned_by.player_name)
         rent = current_loc.calculate_rent()
         # add to game history
         current_gameboard['history']['function'].append(current_loc.calculate_rent)
@@ -495,20 +535,21 @@ class Player(object):
         :return: None
         """
         if amount < 0:
-            logger.error(self.player_name+' is receiving negative cash: '+str(amount)+'. This is an unintended use of this function')
+            logger.error(self.player_name + ' is receiving negative cash: ' + str(
+                amount) + '. This is an unintended use of this function')
             logger.error("Error")
 
-        logger.debug(self.player_name+ ' is receiving amount: '+ str(amount))
-        logger.debug('Before receipt, player has cash '+ str(self.current_cash))
+        logger.debug(self.player_name + ' is receiving amount: ' + str(amount))
+        logger.debug('Before receipt, player has cash ' + str(self.current_cash))
         self.current_cash += amount
-        logger.debug(self.player_name+ ' now has cash: '+ str(self.current_cash))
+        logger.debug(self.player_name + ' now has cash: ' + str(self.current_cash))
 
     def reset_option_to_buy(self):
         """
         Sets the _option_to_buy attribute back to False
         :return: None
         """
-        logger.debug('Executing reset_option_to_buy for '+ self.player_name)
+        logger.debug('Executing reset_option_to_buy for ' + self.player_name)
         self._option_to_buy = False
 
     def compute_allowable_pre_roll_actions(self, current_gameboard):
@@ -524,7 +565,7 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: The set of allowable actions (each item in the set is a function from action_choices)
         """
-        logger.debug('computing allowable pre-roll actions for '+self.player_name)
+        logger.debug('computing allowable pre-roll actions for ' + self.player_name)
         allowable_actions = set()
         allowable_actions.add(concluded_actions)
 
@@ -546,14 +587,16 @@ class Player(object):
         if len(self.mortgaged_assets) > 0:
             allowable_actions.add(free_mortgage)
 
-        if (self.has_get_out_of_jail_chance_card or self.has_get_out_of_jail_community_chest_card) and self.currently_in_jail:
+        if (
+                self.has_get_out_of_jail_chance_card or self.has_get_out_of_jail_community_chest_card) and self.currently_in_jail:
             allowable_actions.add(use_get_out_of_jail_card)
 
         if self.currently_in_jail and self.current_cash >= 50:
             allowable_actions.add(pay_jail_fine)
 
-        if len(self.full_color_sets_possessed) > 0 :
-            allowable_actions.add(improve_property) # there is a chance this is not dynamically allowable because you've improved a property to its maximum.
+        if len(self.full_color_sets_possessed) > 0:
+            allowable_actions.add(
+                improve_property)  # there is a chance this is not dynamically allowable because you've improved a property to its maximum.
             # However, you have to make this check in your decision agent.
 
         allowable_actions.add(make_trade_offer)
@@ -572,7 +615,7 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: The set of allowable actions (each item in the set is a function from action_choices)
         """
-        logger.debug('computing allowable out-of-turn actions for '+ self.player_name)
+        logger.debug('computing allowable out-of-turn actions for ' + self.player_name)
         allowable_actions = set()
         allowable_actions.add(concluded_actions)
 
@@ -615,7 +658,7 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: The set of allowable actions (each item in the set is a function from action_choices)
         """
-        logger.debug('computing allowable post-roll actions for '+ self.player_name)
+        logger.debug('computing allowable post-roll actions for ' + self.player_name)
         allowable_actions = set()
         allowable_actions.add(concluded_actions)
 
@@ -629,12 +672,13 @@ class Player(object):
 
         # if self._option_to_buy is True:
         #     allowable_actions.add(buy_property)
-        #becky#
-        if type(current_gameboard['location_sequence'][self.current_position]) in [RealEstateLocation, UtilityLocation, RailroadLocation]:
+        # becky#
+        if type(current_gameboard['location_sequence'][self.current_position]) in [RealEstateLocation, UtilityLocation,
+                                                                                   RailroadLocation]:
             if self.current_cash > current_gameboard['location_sequence'][self.current_position].price:
                 if type(current_gameboard['location_sequence'][self.current_position].owned_by) == Bank:
                     allowable_actions.add(buy_property)
-                    
+
         # if len(self.full_color_sets_possessed) > 0:
         #     allowable_actions.add(
         #         improve_property)
@@ -649,7 +693,7 @@ class Player(object):
         :return: An integer. 2 if the turn is skipped or 1 for concluded actions. No other code should safely
         be returned.
         """
-        logger.debug('We are in the pre-roll phase for '+self.player_name)
+        logger.debug('We are in the pre-roll phase for ' + self.player_name)
         allowable_actions = self.compute_allowable_pre_roll_actions(current_gameboard)
         allowable_actions.remove(concluded_actions)
         allowable_actions.add(skip_turn)
@@ -684,11 +728,11 @@ class Player(object):
 
             return self._execute_action(action_to_execute, parameters, current_gameboard)
 
-
         allowable_actions.add(concluded_actions)
-        allowable_actions.remove(skip_turn) # from this time on, skip turn is not allowed.current_gameboard['bank'].total_houses += asset.num_houses
+        allowable_actions.remove(
+            skip_turn)  # from this time on, skip turn is not allowed.current_gameboard['bank'].total_houses += asset.num_houses
         count = 0
-        while count < 50: # the player is allowed up to 50 actions before we force conclude actions.
+        while count < 50:  # the player is allowed up to 50 actions before we force conclude actions.
             count += 1
             if action_to_execute == concluded_actions:
                 if self.is_property_offer_outstanding:
@@ -708,10 +752,11 @@ class Player(object):
                 return self._execute_action(action_to_execute, parameters, current_gameboard)
             else:
                 code = self._execute_action(action_to_execute, parameters, current_gameboard)
-                logger.debug('Received code '+ str(code)+ '. Continuing iteration...')
+                logger.debug('Received code ' + str(code) + '. Continuing iteration...')
                 allowable_actions = self.compute_allowable_pre_roll_actions(current_gameboard)
 
-                action_to_execute, parameters = self.agent.make_pre_roll_move(self, current_gameboard, allowable_actions, code)
+                action_to_execute, parameters = self.agent.make_pre_roll_move(self, current_gameboard,
+                                                                              allowable_actions, code)
                 t = (action_to_execute, parameters)
                 # add to game history
                 current_gameboard['history']['function'].append(self.agent.make_pre_roll_move)
@@ -749,12 +794,13 @@ class Player(object):
         :return: An integer. 2 if the turn is skipped or 1 for concluded actions. No other code should safely
         be returned.
         """
-        logger.debug('We are in the out-of-turn phase for '+ self.player_name)
+        logger.debug('We are in the out-of-turn phase for ' + self.player_name)
         allowable_actions = self.compute_allowable_out_of_turn_actions(current_gameboard)
         allowable_actions.remove(concluded_actions)
         allowable_actions.add(skip_turn)
         code = 0
-        action_to_execute, parameters = self.agent.make_out_of_turn_move(self, current_gameboard, allowable_actions, code)
+        action_to_execute, parameters = self.agent.make_out_of_turn_move(self, current_gameboard, allowable_actions,
+                                                                         code)
         t = (action_to_execute, parameters)
         # add to game history
         current_gameboard['history']['function'].append(self.agent.make_out_of_turn_move)
@@ -768,7 +814,7 @@ class Player(object):
         if isinstance(action_to_execute, list):
             for i in range(len(action_to_execute)):
                 code = self._execute_action(action_to_execute[i], parameters[i], current_gameboard)
-                logger.debug('Received code '+ str(code)+ '. Continuing iteration...')
+                logger.debug('Received code ' + str(code) + '. Continuing iteration...')
             return 1
 
         if action_to_execute == skip_turn:
@@ -814,12 +860,13 @@ class Player(object):
                 if isinstance(action_to_execute, list):
                     for i in range(len(action_to_execute)):
                         code = self._execute_action(action_to_execute[i], parameters[i], current_gameboard)
-                        logger.debug('Received code '+ str(code)+ '. Continuing iteration...')
+                        logger.debug('Received code ' + str(code) + '. Continuing iteration...')
                 else:
                     code = self._execute_action(action_to_execute, parameters, current_gameboard)
-                logger.debug('Received code '+ str(code)+ '. Continuing iteration...')
+                logger.debug('Received code ' + str(code) + '. Continuing iteration...')
                 allowable_actions = self.compute_allowable_out_of_turn_actions(current_gameboard)
-                action_to_execute, parameters = self.agent.make_out_of_turn_move(self, current_gameboard, allowable_actions, code)
+                action_to_execute, parameters = self.agent.make_out_of_turn_move(self, current_gameboard,
+                                                                                 allowable_actions, code)
                 t = (action_to_execute, parameters)
                 # add to game history
                 current_gameboard['history']['function'].append(self.agent.make_out_of_turn_move)
@@ -848,7 +895,6 @@ class Player(object):
             self.outstanding_trade_offer['from_player'] = None
         return self._execute_action(concluded_actions, dict(), current_gameboard)  # now we can conclude actions
 
-
     def make_post_roll_moves(self, current_gameboard):
         """
         The player's post-roll phase. The function will only return when the player returns concluded_actions as the action. Otherwise, it keeps prompting
@@ -863,7 +909,7 @@ class Player(object):
         :return: An integer. Only 1 (for concluded actions) should be safely returned.
 
         """
-        logger.debug('We are in the post-roll phase for '+ self.player_name)
+        logger.debug('We are in the post-roll phase for ' + self.player_name)
         allowable_actions = self.compute_allowable_post_roll_actions(current_gameboard)
         code = 0
         # for i in current_gameboard['players']:
@@ -886,14 +932,15 @@ class Player(object):
         current_gameboard['history']['return'].append(t)
 
         if action_to_execute == concluded_actions:
-            self._force_buy_outcome(current_gameboard) # if option to buy is not set, this will make no difference.
-            return self._execute_action(action_to_execute, parameters, current_gameboard) # now we can conclude actions
+            self._force_buy_outcome(current_gameboard)  # if option to buy is not set, this will make no difference.
+            return self._execute_action(action_to_execute, parameters, current_gameboard)  # now we can conclude actions
         count = 0
         while count < 50:  # the player is allowed up to 50 actions before we force conclude actions.
             count += 1
             if action_to_execute == concluded_actions:
                 self._force_buy_outcome(current_gameboard)
-                return self._execute_action(action_to_execute, parameters, current_gameboard)  # now we can conclude actions
+                return self._execute_action(action_to_execute, parameters,
+                                            current_gameboard)  # now we can conclude actions
 
             else:
                 # if self.player_name == 'player_1' and action_to_execute == buy_property:
@@ -906,9 +953,10 @@ class Player(object):
                 #     for i in self.assets:
                 #         print('hhh', i.name)  # , parameters[0])
 
-                logger.debug('Received code '+ str(code)+ '. Continuing iteration...')
+                logger.debug('Received code ' + str(code) + '. Continuing iteration...')
                 allowable_actions = self.compute_allowable_post_roll_actions(current_gameboard)
-                action_to_execute, parameters = self.agent.make_post_roll_move(self, current_gameboard, allowable_actions, code)
+                action_to_execute, parameters = self.agent.make_post_roll_move(self, current_gameboard,
+                                                                               allowable_actions, code)
                 t = (action_to_execute, parameters)
                 # add to game history
                 current_gameboard['history']['function'].append(self.agent.make_post_roll_move)
@@ -921,9 +969,8 @@ class Player(object):
                 current_gameboard['history']['return'].append(t)
                 # logger.debug(action_to_execute)
 
-        self._force_buy_outcome(current_gameboard) # if we got here, we need to conclude actions
+        self._force_buy_outcome(current_gameboard)  # if we got here, we need to conclude actions
         return self._execute_action(concluded_actions, dict(), current_gameboard)  # now we can conclude actions
-
 
     def _force_buy_outcome(self, current_gameboard):
         """
@@ -934,7 +981,7 @@ class Player(object):
         :param current_gameboard: A dict. The global data structure representing the current game board.
         :return: None
         """
-        logger.debug('Executing _force_buy_outcome for '+self.player_name)
+        logger.debug('Executing _force_buy_outcome for ' + self.player_name)
         if self._option_to_buy is True:
             self._own_or_auction(current_gameboard, current_gameboard['location_sequence'][self.current_position])
 
@@ -956,49 +1003,49 @@ class Player(object):
         :param asset: A purchaseable Location instance. If the player does not buy it, we will invoke auction proceedings.
         :return: None
         """
-        # logger.debug('Executing _own_or_auction for '+self.player_name)
-        #
-        # dec = self.agent.make_buy_property_decision(self, current_gameboard, asset) # your agent has to make a decision here
-        # # add to game history
-        # current_gameboard['history']['function'].append(self.agent.make_buy_property_decision)
-        # params = dict()
-        # params['asset'] = asset
-        # params['player'] = self
-        # params['current_gameboard'] = current_gameboard
-        # current_gameboard['history']['param'].append(params)
-        # current_gameboard['history']['return'].append(dec)
-        #
-        # logger.debug(self.player_name+' decides to purchase? '+str(dec))
-        # if dec is True:
-        #     asset.update_asset_owner(self, current_gameboard)
-        #     # add to game history
-        #     current_gameboard['history']['function'].append(asset.update_asset_owner)
-        #     params = dict()
-        #     params['self'] = asset
-        #     params['player'] = self
-        #     params['current_gameboard'] = current_gameboard
-        #     current_gameboard['history']['param'].append(params)
-        #     current_gameboard['history']['return'].append(None)
-        #
-        #     return
-        # else:
-        #     logger.debug('Since '+self.player_name+' decided not to purchase, we are invoking auction proceedings for asset '+asset.name)
-        #     index_current_player = current_gameboard['players'].index(self)  # in players, find the index of the current player
-        #     starting_player_index = (index_current_player + 1) % len(current_gameboard['players'])  # the next player's index. this player will start the auction
-        #     # the auction function will automatically check whether the player is still active or not etc. We don't need to
-        #     # worry about conducting a valid auction in this function.
-        #     current_gameboard['bank'].auction(starting_player_index, current_gameboard, asset)
-        #     # add to game history
-        #     current_gameboard['history']['function'].append(current_gameboard['bank'].auction)
-        #     params = dict()
-        #     params['self'] = current_gameboard['bank']
-        #     params['starting_player_index'] = starting_player_index
-        #     params['current_gameboard'] = current_gameboard
-        #     params['asset'] = asset
-        #     current_gameboard['history']['param'].append(params)
-        #     current_gameboard['history']['return'].append(None)
-        #
-        #     return
+        logger.debug('Executing _own_or_auction for '+self.player_name)
+
+        dec = self.agent.make_buy_property_decision(self, current_gameboard, asset) # your agent has to make a decision here
+        # add to game history
+        current_gameboard['history']['function'].append(self.agent.make_buy_property_decision)
+        params = dict()
+        params['asset'] = asset
+        params['player'] = self
+        params['current_gameboard'] = current_gameboard
+        current_gameboard['history']['param'].append(params)
+        current_gameboard['history']['return'].append(dec)
+
+        logger.debug(self.player_name+' decides to purchase? '+str(dec))
+        if dec is True:
+            asset.update_asset_owner(self, current_gameboard)
+            # add to game history
+            current_gameboard['history']['function'].append(asset.update_asset_owner)
+            params = dict()
+            params['self'] = asset
+            params['player'] = self
+            params['current_gameboard'] = current_gameboard
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(None)
+
+            return
+        else:
+            logger.debug('Since '+self.player_name+' decided not to purchase, we are invoking auction proceedings for asset '+asset.name)
+            index_current_player = current_gameboard['players'].index(self)  # in players, find the index of the current player
+            starting_player_index = (index_current_player + 1) % len(current_gameboard['players'])  # the next player's index. this player will start the auction
+            # the auction function will automatically check whether the player is still active or not etc. We don't need to
+            # worry about conducting a valid auction in this function.
+            current_gameboard['bank'].auction(starting_player_index, current_gameboard, asset)
+            # add to game history
+            current_gameboard['history']['function'].append(current_gameboard['bank'].auction)
+            params = dict()
+            params['self'] = current_gameboard['bank']
+            params['starting_player_index'] = starting_player_index
+            params['current_gameboard'] = current_gameboard
+            params['asset'] = asset
+            current_gameboard['history']['param'].append(params)
+            current_gameboard['history']['return'].append(None)
+
+            return
         return
 
     def _execute_action(self, action_to_execute, parameters, current_gameboard):
@@ -1013,7 +1060,7 @@ class Player(object):
         :param parameters: a dictionary of parameters. These will be unrolled inside the action to execute.
         :return: An integer code that is returned by the executed action.
         """
-        logger.debug('Executing _execute_action for '+ self.player_name)
+        logger.debug('Executing _execute_action for ' + self.player_name)
         if parameters:
             p = action_to_execute(**parameters)
             # add to game history
@@ -1032,7 +1079,6 @@ class Player(object):
             current_gameboard['history']['return'].append(p)
 
             return p
-
 
 
 

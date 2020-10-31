@@ -2,7 +2,7 @@
 import os, sys
 curr_path = os.getcwd()
 sys.path.append(curr_path + '/A2C_agent')
-import RL_agent_v1
+# import RL_agent_v1
 #####################
 
 from monopoly_simulator import initialize_game_elements

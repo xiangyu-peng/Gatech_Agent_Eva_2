@@ -17,7 +17,7 @@ import torch
 from monopoly_simulator_background.vanilla_A2C import *
 from monopoly_simulator import action_choices
 from configparser import ConfigParser
-from monopoly_simulator_background.vanilla_A2C_main_v3 import MonopolyTrainer
+from A2C_agent.KG_A2C import MonopolyTrainer
 import random
 import shutil, copy
 import logging
@@ -72,6 +72,7 @@ class ClientAgent(Agent):
         model_path = self.upper_path_eva + '/A2C_agent/weights/Original_cpu_2.pkl'
         self.model = torch.load(model_path)
         self.logger = None
+        self.adj_path = self.upper_path_eva + '/A2C_agent/kg_matrix_no.npy'
 
 
     def define_path(self, path):
@@ -191,7 +192,24 @@ class ClientAgent(Agent):
         # Retrain the network
         params = self.params_read(self.config_data, 'hyper')
         params['save_path'] = self.folder_path
-        trainer = MonopolyTrainer(params=params, device_id=None, gameboard=gameboard, kg_use=False, logger_use=True)
+        # set exp dict
+        exp_dict = dict()
+        exp_dict['novelty_num'] = (0, 0)
+        exp_dict['novelty_inject_num'] = sys.maxsize
+        exp_dict['exp_type'] = '0_0'
+
+        trainer = MonopolyTrainer_GAT(params,
+                                      gameboard=gameboard,
+                                      kg_use=True,
+                                      logger_use=False,
+                                      config_file='config.ini',
+                                      test_required=False,
+                                      tf_use=False,
+                                      retrain_type='gat_part',
+                                      device_id='-1',
+                                      adj_path=self.adj_path,
+                                      exp_dict=exp_dict)
+
         trainer.train()
         self.logger.info('Retrain results => ' + str(trainer.test_result))
 
@@ -206,7 +224,7 @@ class ClientAgent(Agent):
         self.logger.info('The ' + str(opt) + 'steps is the best, we will use ' + model_retrained_path)
         self.kg_change_wait = 0
 
-        return model_retrained_path
+        return model_retrained_path, trainer.adj_path
 
 
 
@@ -263,13 +281,14 @@ class ClientAgent(Agent):
                 # if board size changed, before the game, we need to retrain the NN
                 if self.state_num != len(s) or self.retrain_signal:
                     ini_current_gameboard = self.initialize_gameboard(args[0])
-                    model_retrained_path = self.retrain_from_scratch(ini_current_gameboard)
+                    model_retrained_path, adj_path = self.retrain_from_scratch(ini_current_gameboard)
 
                     self.model = torch.load(model_retrained_path)
                     self.state_num = len(self.interface.board_to_state(args[0]))  # reset the state_num size
                     self.kg_change_bool = True
                     self.retrain_signal = False
                     self.kg_change_wait = 0
+                    self.adj_path = adj_path
 
                 result = getattr(self, func_name)(*args)
 

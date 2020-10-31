@@ -9,3 +9,92 @@
 2020-10-30 20:08:47,219:A2C_agent_2.logging_info:INFO:3 th game starts!
 2020-10-30 20:08:47,220:A2C_agent_2.logging_info:INFO:detect the novelty as the board size change
 2020-10-30 20:08:47,301:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_10_with_novelty
+2020-10-30 20:14:54,845:A2C_agent_2.logging_info:INFO:Retrain results => {'step': [1, 2, 3, 4, 5], 'loss': [0.02666666666666667, 0.02666666666666667, 0.02666666666666667, 0.0, 0.013333333333333334], 'winning_rate': [0.52, 0.505, 0.505, 0.5, 0.505], 'avg_score': [0.55438, 0.53623, 0.53381, 0.52611, 0.53409], 'avg_diff': [-0.045, -0.05, -0.05, -0.045, -0.035], 'avg_score_no': [0.03438, 0.03123, 0.02881, 0.02611, 0.02909]}
+2020-10-30 20:14:54,845:A2C_agent_2.logging_info:INFO:Retrain use 6.116666666666666mins
+2020-10-30 20:14:54,845:A2C_agent_2.logging_info:INFO:The 1steps is the best, we will use /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_10_with_novelty/3/1.pkl
+2020-10-30 20:14:55,582:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:14:59,387:A2C_agent_2.logging_info:INFO:3 th game stops!
+2020-10-30 20:14:59,393:A2C_agent_2.logging_info:INFO:4 th game starts!
+2020-10-30 20:15:00,304:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:04,007:A2C_agent_2.logging_info:INFO:4 th game stops!
+2020-10-30 20:15:04,012:A2C_agent_2.logging_info:INFO:5 th game starts!
+2020-10-30 20:15:05,606:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:09,904:A2C_agent_2.logging_info:INFO:5 th game stops!
+2020-10-30 20:15:09,910:A2C_agent_2.logging_info:INFO:6 th game starts!
+2020-10-30 20:15:10,632:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:14,138:A2C_agent_2.logging_info:INFO:6 th game stops!
+2020-10-30 20:15:14,142:A2C_agent_2.logging_info:INFO:7 th game starts!
+2020-10-30 20:15:14,994:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:18,166:A2C_agent_2.logging_info:INFO:7 th game stops!
+2020-10-30 20:15:18,170:A2C_agent_2.logging_info:INFO:8 th game starts!
+2020-10-30 20:15:18,935:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:22,248:A2C_agent_2.logging_info:INFO:8 th game stops!
+2020-10-30 20:15:22,253:A2C_agent_2.logging_info:INFO:9 th game starts!
+2020-10-30 20:15:25,580:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:31,628:A2C_agent_2.logging_info:INFO:9 th game stops!
+2020-10-30 20:15:31,631:A2C_agent_2.logging_info:INFO:10 th game starts!
+2020-10-30 20:15:32,975:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:37,657:A2C_agent_2.logging_info:INFO:10 th game stops!
+2020-10-30 20:15:37,661:A2C_agent_2.logging_info:INFO:11 th game starts!
+2020-10-30 20:15:38,905:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:43,036:A2C_agent_2.logging_info:INFO:11 th game stops!
+2020-10-30 20:15:43,040:A2C_agent_2.logging_info:INFO:12 th game starts!
+2020-10-30 20:15:43,669:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:47,451:A2C_agent_2.logging_info:INFO:12 th game stops!
+2020-10-30 20:15:47,456:A2C_agent_2.logging_info:INFO:13 th game starts!
+2020-10-30 20:15:48,550:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:52,207:A2C_agent_2.logging_info:INFO:13 th game stops!
+2020-10-30 20:15:52,212:A2C_agent_2.logging_info:INFO:14 th game starts!
+2020-10-30 20:15:52,977:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:15:56,432:A2C_agent_2.logging_info:INFO:14 th game stops!
+2020-10-30 20:15:56,436:A2C_agent_2.logging_info:INFO:15 th game starts!
+2020-10-30 20:15:58,711:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:03,803:A2C_agent_2.logging_info:INFO:15 th game stops!
+2020-10-30 20:16:03,807:A2C_agent_2.logging_info:INFO:16 th game starts!
+2020-10-30 20:16:05,545:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:09,671:A2C_agent_2.logging_info:INFO:16 th game stops!
+2020-10-30 20:16:09,674:A2C_agent_2.logging_info:INFO:17 th game starts!
+2020-10-30 20:16:12,404:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:17,231:A2C_agent_2.logging_info:INFO:17 th game stops!
+2020-10-30 20:16:17,235:A2C_agent_2.logging_info:INFO:18 th game starts!
+2020-10-30 20:16:18,785:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:23,432:A2C_agent_2.logging_info:INFO:18 th game stops!
+2020-10-30 20:16:23,437:A2C_agent_2.logging_info:INFO:19 th game starts!
+2020-10-30 20:16:23,979:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:27,218:A2C_agent_2.logging_info:INFO:19 th game stops!
+2020-10-30 20:16:27,222:A2C_agent_2.logging_info:INFO:20 th game starts!
+2020-10-30 20:16:28,653:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:32,405:A2C_agent_2.logging_info:INFO:20 th game stops!
+2020-10-30 20:16:32,411:A2C_agent_2.logging_info:INFO:21 th game starts!
+2020-10-30 20:16:33,052:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:36,653:A2C_agent_2.logging_info:INFO:21 th game stops!
+2020-10-30 20:16:36,660:A2C_agent_2.logging_info:INFO:22 th game starts!
+2020-10-30 20:16:37,481:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:41,133:A2C_agent_2.logging_info:INFO:22 th game stops!
+2020-10-30 20:16:41,138:A2C_agent_2.logging_info:INFO:23 th game starts!
+2020-10-30 20:16:43,518:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:48,393:A2C_agent_2.logging_info:INFO:23 th game stops!
+2020-10-30 20:16:48,399:A2C_agent_2.logging_info:INFO:24 th game starts!
+2020-10-30 20:16:49,288:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:53,626:A2C_agent_2.logging_info:INFO:24 th game stops!
+2020-10-30 20:16:53,631:A2C_agent_2.logging_info:INFO:25 th game starts!
+2020-10-30 20:16:54,425:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:16:58,231:A2C_agent_2.logging_info:INFO:25 th game stops!
+2020-10-30 20:16:58,235:A2C_agent_2.logging_info:INFO:26 th game starts!
+2020-10-30 20:16:59,113:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:17:02,642:A2C_agent_2.logging_info:INFO:26 th game stops!
+2020-10-30 20:17:02,647:A2C_agent_2.logging_info:INFO:27 th game starts!
+2020-10-30 20:17:05,521:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:17:09,534:A2C_agent_2.logging_info:INFO:27 th game stops!
+2020-10-30 20:17:09,539:A2C_agent_2.logging_info:INFO:28 th game starts!
+2020-10-30 20:17:09,960:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:17:13,232:A2C_agent_2.logging_info:INFO:28 th game stops!
+2020-10-30 20:17:13,236:A2C_agent_2.logging_info:INFO:29 th game starts!
+2020-10-30 20:17:13,985:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:17:17,674:A2C_agent_2.logging_info:INFO:29 th game stops!
+2020-10-30 20:17:17,678:A2C_agent_2.logging_info:INFO:30 th game starts!
+2020-10-30 20:17:19,024:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:17:23,181:A2C_agent_2.logging_info:INFO:30 th game stops!
+2020-10-30 20:17:23,185:A2C_agent_2.logging_info:INFO:31 th game starts!
+2020-10-30 20:17:23,185:A2C_agent_2.logging_info:INFO:detect the novelty as the board size change
+2020-10-30 20:17:23,194:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_10_with_novelty

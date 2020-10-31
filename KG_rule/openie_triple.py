@@ -2,7 +2,7 @@
 
 #####Evaluation#####
 import sys, os
-upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
+upper_path = os.path.abspath('..').replace('/Evaluation_2/monopoly_simulator_2','')
 upper_path_eva = upper_path + '/Evaluation/monopoly_simulator'
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
@@ -538,11 +538,12 @@ class KG_OpenIE(History_Record):
 
             self.kg_rel['is located at'] = self.location_record.copy()
             self.location_record.clear()
-        if self.kg_change_bool or self.update_num == self.update_interval or self.update_num == self.update_interval in [1,2,3,4,5]:
+        if self.kg_change_bool or self.update_num == self.update_interval or self.update_num in [1,2,3,4,5]:
+
             self.build_matrix_dict()
             self.sparse_matrix = self.dict_to_matrix()
-            self.save_matrix()
             self.kg_change_bool = False  # Reset new_kg_tuple
+            self.save_matrix()
              # Update history while only detect rule change after simulating 100 games
         if self.dice.novelty != self.dice_novelty:
             self.kg_change += self.dice.novelty

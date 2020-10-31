@@ -224,7 +224,7 @@ class GAT(nn.Module):
 #
 
 class GraphNN(nn.Module):
-    def __init__(self, gat_emb_size, embedding_size, dropout_ratio, json_file, gat_output_size, type):
+    def __init__(self, gat_emb_size, embedding_size, dropout_ratio, len_vocab, gat_output_size, type):
         super(GraphNN, self).__init__()
         self.embedding_size = embedding_size
         self.dropout_ratio = dropout_ratio
@@ -233,12 +233,13 @@ class GraphNN(nn.Module):
         self.type = type
 
         self.gat = GAT(gat_emb_size, 3, dropout_ratio, 0.2, 1)
-        if os.path.exists(json_file):
-            self.vocab_kge = self.load_vocab_kge(json_file)  # node -> id
-        else:
-            print('Did not find ', json_file)
-            raise FileNotFoundError
-        self.state_ent_emb = nn.Embedding.from_pretrained(torch.randn((len(self.vocab_kge), self.embedding_size)),freeze=True)  # empty embedding all 0s => 362 * 50
+        # if os.path.exists(json_file):
+        #     self.vocab_kge = self.load_vocab_kge(json_file)  # node -> id
+        # else:
+        #     print('Did not find ', json_file)
+        #     raise FileNotFoundError
+        print('len_vocab', len_vocab)
+        self.state_ent_emb = nn.Embedding.from_pretrained(torch.randn((len_vocab, self.embedding_size)),freeze=True)  # empty embedding all 0s => 362 * 50
         self.fc1 = nn.Linear(self.state_ent_emb.weight.size()[0] * 3 * 1, self.gat_output_size)  # what is 3?
 
     # def init_state_ent_emb(self, emb_size):

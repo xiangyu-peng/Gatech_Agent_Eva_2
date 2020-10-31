@@ -1,5 +1,5 @@
 import sys, os
-upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
+upper_path = os.path.abspath('.').replace('/Evaluation_2/monopoly_simulator','')
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
 sys.path.append(upper_path + '/KG_rule')
@@ -34,7 +34,8 @@ class HiddenPrints:
 class ActorCritic(nn.Module):
     def __init__(self, config, device, gat_use=False):
         super(ActorCritic, self).__init__()
-        torch.cuda.set_device(device)
+        if device != torch.device('cpu'):
+            torch.cuda.set_device(device)
         self.device=device
         self.config = config
         self.gat_use = gat_use
@@ -47,14 +48,14 @@ class ActorCritic(nn.Module):
                 self.state_gat = GraphNN(config.gat_emb_size,
                                                config.embedding_size,
                                                config.dropout_ratio,
-                                               config.entity_id_file_path_state,
+                                               config.len_vocab,
                                                config.state_output_size,
                                                'state',
                                                device).to(device)
                 self.graph_gat = GraphNN(config.gat_emb_size,
                                          config.embedding_size,
                                          config.dropout_ratio,
-                                         config.entity_id_file_path,
+                                         config.len_vocab,
                                          config.gat_output_size,
                                          'kg',
                                          device).to(device)
@@ -64,14 +65,14 @@ class ActorCritic(nn.Module):
                 self.graph_gat = GraphNN(config.gat_emb_size,
                                          config.embedding_size,
                                          config.dropout_ratio,
-                                         config.entity_id_file_path,
+                                         config.len_vocab,
                                          config.gat_output_size,
                                          'kg',
                                          device).to(device)
                 self.fc_1 = nn.Linear(config.gat_output_size + config.state_num,
                                       config.hidden_state)
-                with open(config.entity_id_file_path_state, 'rb')as f:
-                    feature_dict = pickle.load(f)
+                # with open(config.entity_id_file_path_state, 'rb')as f:
+                #     feature_dict = pickle.load(f)
 
                 # self.state_graph = RGCNetwork(config.state_num,
                 #                               config.hidden_dim_gcn,
@@ -94,12 +95,13 @@ class ActorCritic(nn.Module):
                 self.graph_gat = GraphNN(config.gat_emb_size,
                                               config.embedding_size,
                                               config.dropout_ratio,
-                                              config.entity_id_file_path,
+                                              config.len_vocab,
                                               config.gat_output_size,
                                               'kg').to(device) #.cuda()
                 self.state_nn = StateNN(config.state_num, config.state_output_size)
                 self.adj_gen = Adj_Gen()
         else:
+            print('config.state_num', config.state_num)
             self.fc_1 = nn.Linear(config.state_num,
                                   config.hidden_state)  # config.state_num = 4; config.hidden_state) = 256
             # self.state_nn = StateNN(config.state_num, config.state_output_size)
@@ -170,6 +172,7 @@ class ActorCritic(nn.Module):
 def worker(worker_id, master_end, worker_end, gameboard=None, kg_use=True, config_file=None, seed=0, exp_dict=None):
     master_end.close()  # Forbid worker to use the master end for messaging
     env = gym.make('monopoly_simple-v1')
+    print('config_file', config_file)
     env.set_config_file(config_file)
     if worker_id > 0:
         env.set_kg(False)

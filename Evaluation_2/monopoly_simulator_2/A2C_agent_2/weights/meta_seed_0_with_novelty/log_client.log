@@ -13,3 +13,43 @@
 2020-10-30 20:12:00,998:A2C_agent_2.logging_info:INFO:3 th game stops!
 2020-10-30 20:12:01,004:A2C_agent_2.logging_info:INFO:4 th game starts!
 2020-10-30 20:12:01,025:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
+2020-10-30 20:18:23,788:A2C_agent_2.logging_info:INFO:Retrain results => {'step': [1, 2, 3, 4, 5, 6, 7], 'loss': [0.08, 0.09333333333333334, 0.09333333333333334, 0.08, 0.08, 0.08666666666666667, 0.08], 'winning_rate': [0.385, 0.375, 0.365, 0.41, 0.39, 0.405, 0.39], 'avg_score': [0.44759, 0.44037, 0.43355, 0.47947, 0.46014, 0.47554, 0.46108], 'avg_diff': [0.005, 0.005, 0.02, 0.0, 0.005, 0.005, 0.01], 'avg_score_no': [0.06259, 0.06537, 0.06855, 0.06947, 0.07014, 0.07054, 0.07108]}
+2020-10-30 20:18:23,789:A2C_agent_2.logging_info:INFO:Retrain use 6.366666666666666mins
+2020-10-30 20:18:23,789:A2C_agent_2.logging_info:INFO:The 4steps is the best, we will use /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty/4/4.pkl
+2020-10-30 20:18:24,652:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:18:27,847:A2C_agent_2.logging_info:INFO:4 th game stops!
+2020-10-30 20:18:27,854:A2C_agent_2.logging_info:INFO:5 th game starts!
+2020-10-30 20:18:29,927:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:18:33,612:A2C_agent_2.logging_info:INFO:5 th game stops!
+2020-10-30 20:18:33,619:A2C_agent_2.logging_info:INFO:6 th game starts!
+2020-10-30 20:18:37,289:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:18:41,646:A2C_agent_2.logging_info:INFO:6 th game stops!
+2020-10-30 20:18:41,652:A2C_agent_2.logging_info:INFO:7 th game starts!
+2020-10-30 20:18:46,921:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:18:51,428:A2C_agent_2.logging_info:INFO:7 th game stops!
+2020-10-30 20:18:51,437:A2C_agent_2.logging_info:INFO:8 th game starts!
+2020-10-30 20:18:54,563:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:18:58,355:A2C_agent_2.logging_info:INFO:8 th game stops!
+2020-10-30 20:18:58,363:A2C_agent_2.logging_info:INFO:9 th game starts!
+2020-10-30 20:19:03,260:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:19:07,185:A2C_agent_2.logging_info:INFO:9 th game stops!
+2020-10-30 20:19:07,189:A2C_agent_2.logging_info:INFO:10 th game starts!
+2020-10-30 20:19:09,382:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:19:12,458:A2C_agent_2.logging_info:INFO:10 th game stops!
+2020-10-30 20:19:12,463:A2C_agent_2.logging_info:INFO:11 th game starts!
+2020-10-30 20:19:19,667:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:19:25,124:A2C_agent_2.logging_info:INFO:11 th game stops!
+2020-10-30 20:19:25,131:A2C_agent_2.logging_info:INFO:12 th game starts!
+2020-10-30 20:19:26,450:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:19:29,870:A2C_agent_2.logging_info:INFO:12 th game stops!
+2020-10-30 20:19:29,876:A2C_agent_2.logging_info:INFO:13 th game starts!
+2020-10-30 20:19:32,490:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:19:36,374:A2C_agent_2.logging_info:INFO:13 th game stops!
+2020-10-30 20:19:36,380:A2C_agent_2.logging_info:INFO:14 th game starts!
+2020-10-30 20:19:38,414:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:19:41,728:A2C_agent_2.logging_info:INFO:14 th game stops!
+2020-10-30 20:19:41,732:A2C_agent_2.logging_info:INFO:15 th game starts!
+2020-10-30 20:19:45,154:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:19:48,562:A2C_agent_2.logging_info:INFO:15 th game stops!
+2020-10-30 20:19:48,568:A2C_agent_2.logging_info:INFO:16 th game starts!
+2020-10-30 20:19:51,758:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule

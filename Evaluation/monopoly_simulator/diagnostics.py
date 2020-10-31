@@ -44,4 +44,3 @@ def max_cash_balance(game_elements):
     return max
 
 
-
