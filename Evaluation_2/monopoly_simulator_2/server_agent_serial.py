@@ -251,11 +251,12 @@ class ServerAgent(Agent):
         self.listener.close()
         return super().shutdown()
 
-    def start_tournament(self, f_name):
+    def start_tournament(self, f_name, info='w/'):
         print('start_tournament')
         serial_dict_to_client = dict()
         serial_dict_to_client['function'] = "start_tournament"
         serial_dict_to_client['path'] = f_name
+        serial_dict_to_client['info'] = info
         json_serial_dict_to_client = json.dumps(serial_dict_to_client)
         self.conn.sendall(bytes(json_serial_dict_to_client, encoding="utf-8"))
         return_from_client = self.conn.recv(200000)

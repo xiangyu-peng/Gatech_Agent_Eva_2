@@ -5,7 +5,7 @@ import numpy as np
 #     print(nodes[12])
 #     print(sorted(list(nodes.values())))
 #     print(len(nodes))
-matrix = np.load('/media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/logs/kg_matrix_0_0.npy')
+matrix = np.load('/media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_1_with_novelty/matrix.npy')
 print(matrix)
 rel_list = ['is priced at', 'is price-1-house at', 'is rented-0-house at', 'is rented-1-house at', \
                                  'is rented-2-house at', 'is rented-3-house at', 'is rented-4-house at', 'is rented-1-hotel', 'color']

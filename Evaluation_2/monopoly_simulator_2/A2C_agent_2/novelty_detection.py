@@ -1520,32 +1520,33 @@ class KG_OpenIE_eva(History_Record):
                 diff = self.compare_loc_record(self.kg_rel['is located at'], self.location_record)
                 print('diff ', diff )
                 print('self.kg_change',self.kg_change)
-                if diff and self.kg_change:
+                # print('self.locations', self.kg_rel['is located at'])
+                if diff: # and self.kg_change:
                     for d in diff:
-                        exist_bool = False
-                        i = 0
-                        while i < len(self.kg_change):
-
-                            cha = self.kg_change[i]
-                            if cha[0] == d[0] and cha[1] == d[1]:
-                                self.kg_change[i][-1][-1] = d[-1][-1]
-
-                                if self.kg_change[i][-1][0] == self.kg_change[i][-1][-1]:
-                                    self.kg_change.pop(i)  # The novelty change back~ No need now
-                                else:
-                                    i += 1
-
-                                exist_bool = True
-
-                        if exist_bool == False:
-                            self.kg_change.append(d)
+                        # exist_bool = False
+                        # i = 0
+                        # while i < len(self.kg_change):
+                        #
+                        #     cha = self.kg_change[i]
+                        #     if cha[0] == d[0] and cha[1] == d[1]:
+                        #         self.kg_change[i][-1][-1] = d[-1][-1]
+                        #
+                        #         if self.kg_change[i][-1][0] == self.kg_change[i][-1][-1]:
+                        #             self.kg_change.pop(i)  # The novelty change back~ No need now
+                        #         else:
+                        #             i += 1
+                        #
+                        #         exist_bool = True
+                        #
+                        # if exist_bool == False:
+                        self.kg_change.append(d)
 
             # for loc in self.location_record:
             #     self.kg_rel['is located at'][loc] = self.location_record[loc]
 
             self.kg_rel['is located at'] = self.location_record.copy()
             self.location_record.clear()
-        if self.kg_change_bool or self.update_num == self.update_interval or self.update_num == self.update_interval in [1,2,3,4,5]:
+        if self.kg_change_bool or self.update_num == self.update_interval or self.update_num in [1,2,3,4,5]:
             self.build_matrix_dict()
             self.sparse_matrix = self.dict_to_matrix()
             self.save_matrix()
@@ -1629,6 +1630,8 @@ class KG_OpenIE_eva(History_Record):
 
         for er in entity_relations:  # er is a dict() containing sub, rel and obj
             if 'locate' in text:  # about location
+                # print('text', text)
+                # print('er', er)
                 self.add_loc_history(er)  # after some rounds, we will compare the loc history in build_file
                 return diff  # return no diff
             else:  # other rules

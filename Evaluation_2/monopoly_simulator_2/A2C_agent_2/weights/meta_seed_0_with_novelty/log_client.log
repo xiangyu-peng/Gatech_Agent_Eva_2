@@ -1,55 +1,55 @@
-2020-10-30 20:11:39,043:A2C_agent_2.logging_info:DEBUG:Define the folder path as /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
-2020-10-30 20:11:39,043:A2C_agent_2.logging_info:INFO:Tournament starts!
-2020-10-30 20:11:39,094:A2C_agent_2.logging_info:INFO:1 th game starts!
-2020-10-30 20:11:42,628:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:11:46,147:A2C_agent_2.logging_info:INFO:1 th game stops!
-2020-10-30 20:11:46,153:A2C_agent_2.logging_info:INFO:2 th game starts!
-2020-10-30 20:11:49,887:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:11:53,431:A2C_agent_2.logging_info:INFO:2 th game stops!
-2020-10-30 20:11:53,437:A2C_agent_2.logging_info:INFO:3 th game starts!
-2020-10-30 20:11:57,743:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:12:00,998:A2C_agent_2.logging_info:DEBUG:Novelty Detected as [[], [['Mediterranean-Avenue', 'is priced at', ['60', '1499']], ['Baltic-Avenue', 'is priced at', ['60', '1499']], ['Reading-Railroad', 'is priced at', ['200', '1499']], ['Oriental-Avenue', 'is priced at', ['100', '1499']], ['Vermont-Avenue', 'is priced at', ['100', '1499']], ['Connecticut-Avenue', 'is priced at', ['120', '1499']], ['St.-Charles-Place', 'is priced at', ['140', '1499']], ['Electric-Company', 'is priced at', ['150', '1499']], ['States-Avenue', 'is priced at', ['140', '1499']]]]
-2020-10-30 20:12:00,998:A2C_agent_2.logging_info:DEBUG:Retrain signal is True now, it will retrain the NN before next game!
-2020-10-30 20:12:00,998:A2C_agent_2.logging_info:INFO:3 th game stops!
-2020-10-30 20:12:01,004:A2C_agent_2.logging_info:INFO:4 th game starts!
-2020-10-30 20:12:01,025:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
-2020-10-30 20:18:23,788:A2C_agent_2.logging_info:INFO:Retrain results => {'step': [1, 2, 3, 4, 5, 6, 7], 'loss': [0.08, 0.09333333333333334, 0.09333333333333334, 0.08, 0.08, 0.08666666666666667, 0.08], 'winning_rate': [0.385, 0.375, 0.365, 0.41, 0.39, 0.405, 0.39], 'avg_score': [0.44759, 0.44037, 0.43355, 0.47947, 0.46014, 0.47554, 0.46108], 'avg_diff': [0.005, 0.005, 0.02, 0.0, 0.005, 0.005, 0.01], 'avg_score_no': [0.06259, 0.06537, 0.06855, 0.06947, 0.07014, 0.07054, 0.07108]}
-2020-10-30 20:18:23,789:A2C_agent_2.logging_info:INFO:Retrain use 6.366666666666666mins
-2020-10-30 20:18:23,789:A2C_agent_2.logging_info:INFO:The 4steps is the best, we will use /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty/4/4.pkl
-2020-10-30 20:18:24,652:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:18:27,847:A2C_agent_2.logging_info:INFO:4 th game stops!
-2020-10-30 20:18:27,854:A2C_agent_2.logging_info:INFO:5 th game starts!
-2020-10-30 20:18:29,927:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:18:33,612:A2C_agent_2.logging_info:INFO:5 th game stops!
-2020-10-30 20:18:33,619:A2C_agent_2.logging_info:INFO:6 th game starts!
-2020-10-30 20:18:37,289:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:18:41,646:A2C_agent_2.logging_info:INFO:6 th game stops!
-2020-10-30 20:18:41,652:A2C_agent_2.logging_info:INFO:7 th game starts!
-2020-10-30 20:18:46,921:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:18:51,428:A2C_agent_2.logging_info:INFO:7 th game stops!
-2020-10-30 20:18:51,437:A2C_agent_2.logging_info:INFO:8 th game starts!
-2020-10-30 20:18:54,563:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:18:58,355:A2C_agent_2.logging_info:INFO:8 th game stops!
-2020-10-30 20:18:58,363:A2C_agent_2.logging_info:INFO:9 th game starts!
-2020-10-30 20:19:03,260:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:19:07,185:A2C_agent_2.logging_info:INFO:9 th game stops!
-2020-10-30 20:19:07,189:A2C_agent_2.logging_info:INFO:10 th game starts!
-2020-10-30 20:19:09,382:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:19:12,458:A2C_agent_2.logging_info:INFO:10 th game stops!
-2020-10-30 20:19:12,463:A2C_agent_2.logging_info:INFO:11 th game starts!
-2020-10-30 20:19:19,667:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:19:25,124:A2C_agent_2.logging_info:INFO:11 th game stops!
-2020-10-30 20:19:25,131:A2C_agent_2.logging_info:INFO:12 th game starts!
-2020-10-30 20:19:26,450:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:19:29,870:A2C_agent_2.logging_info:INFO:12 th game stops!
-2020-10-30 20:19:29,876:A2C_agent_2.logging_info:INFO:13 th game starts!
-2020-10-30 20:19:32,490:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:19:36,374:A2C_agent_2.logging_info:INFO:13 th game stops!
-2020-10-30 20:19:36,380:A2C_agent_2.logging_info:INFO:14 th game starts!
-2020-10-30 20:19:38,414:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:19:41,728:A2C_agent_2.logging_info:INFO:14 th game stops!
-2020-10-30 20:19:41,732:A2C_agent_2.logging_info:INFO:15 th game starts!
-2020-10-30 20:19:45,154:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
-2020-10-30 20:19:48,562:A2C_agent_2.logging_info:INFO:15 th game stops!
-2020-10-30 20:19:48,568:A2C_agent_2.logging_info:INFO:16 th game starts!
-2020-10-30 20:19:51,758:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:29:47,585:A2C_agent_2.logging_info:DEBUG:Define the folder path as /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
+2020-10-30 23:29:47,585:A2C_agent_2.logging_info:INFO:Tournament starts!
+2020-10-30 23:29:47,625:A2C_agent_2.logging_info:INFO:1 th game starts!
+2020-10-30 23:29:48,478:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:29:52,347:A2C_agent_2.logging_info:INFO:1 th game stops!
+2020-10-30 23:29:52,357:A2C_agent_2.logging_info:INFO:2 th game starts!
+2020-10-30 23:29:53,315:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:29:57,658:A2C_agent_2.logging_info:INFO:2 th game stops!
+2020-10-30 23:29:57,667:A2C_agent_2.logging_info:INFO:3 th game starts!
+2020-10-30 23:29:58,917:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:30:02,866:A2C_agent_2.logging_info:INFO:3 th game stops!
+2020-10-30 23:30:02,877:A2C_agent_2.logging_info:INFO:4 th game starts!
+2020-10-30 23:30:02,877:A2C_agent_2.logging_info:INFO:detect the novelty as the board size change
+2020-10-30 23:30:02,888:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
+2020-10-30 23:36:09,686:A2C_agent_2.logging_info:INFO:Retrain results => {'step': [1, 2, 3, 4, 5, 6, 7], 'loss': [0.02, 0.03333333333333333, 0.02, -0.006666666666666667, 0.006666666666666667, 0.04, 0.02666666666666667], 'winning_rate': [0.515, 0.51, 0.46, 0.45, 0.425, 0.495, 0.49], 'avg_score': [0.54303, 0.53418, 0.48327, 0.4644, 0.44287, 0.52926, 0.52521], 'avg_diff': [-0.07, -0.06, -0.065, -0.06, -0.05, -0.07, -0.055], 'avg_score_no': [0.02803, 0.02418, 0.02327, 0.0144, 0.01787, 0.03426, 0.03521]}
+2020-10-30 23:36:09,686:A2C_agent_2.logging_info:INFO:Retrain use 6.1mins
+2020-10-30 23:36:09,686:A2C_agent_2.logging_info:INFO:The 1steps is the best, we will use /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty/4/1.pkl
+2020-10-30 23:36:10,378:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:36:15,955:A2C_agent_2.logging_info:DEBUG:Novelty Detected as [[], [['Community-Chest', 'is located at', [['17', '2', '33'], ['2', '23', '41']]], ['Baltic-Avenue', 'is located at', [['3'], ['3', '4', '5']]], ['Income-Tax', 'is located at', [['4'], ['6']]], ['Reading-Railroad', 'is located at', [['5'], ['7']]], ['Oriental-Avenue', 'is located at', [['6'], ['8']]], ['Chance', 'is located at', [['22', '36', '7'], ['30', '44', '9']]], ['Vermont-Avenue', 'is located at', [['8'], ['10']]], ['Connecticut-Avenue', 'is located at', [['9'], ['11']]], ['In-Jail/Just-Visiting', 'is located at', [['10'], ['12']]], ['St.-Charles-Place', 'is located at', [['11'], ['13']]], ['Electric-Company', 'is located at', [['12'], ['14']]], ['States-Avenue', 'is located at', [['13'], ['15', '16', '17', '18', '19']]], ['Virginia-Avenue', 'is located at', [['14'], ['20']]], ['Pennsylvania-Railroad', 'is located at', [['15'], ['21']]], ['St.-James-Place', 'is located at', [['16'], ['22']]], ['Tennessee-Avenue', 'is located at', [['18'], ['24', '25', '26']]], ['New-York-Avenue', 'is located at', [['19'], ['27']]], ['Free-Parking', 'is located at', [['20'], ['28']]], ['Kentucky-Avenue', 'is located at', [['21'], ['29']]], ['Indiana-Avenue', 'is located at', [['23'], ['31']]], ['Illinois-Avenue', 'is located at', [['24'], ['32']]], ['Atlantic-Avenue', 'is located at', [['26'], ['34']]], ['Ventnor-Avenue', 'is located at', [['27'], ['35']]], ['Water-Works', 'is located at', [['28'], ['36']]], ['Marvin-Gardens', 'is located at', [['29'], ['37']]], ['Go-to-Jail', 'is located at', [['30'], ['38']]], ['Pacific-Avenue', 'is located at', [['31'], ['39']]], ['North-Carolina-Avenue', 'is located at', [['32'], ['40']]], ['Pennsylvania-Avenue', 'is located at', [['34'], ['42']]], ['Short-Line', 'is located at', [['35'], ['43']]], ['Park-Place', 'is located at', [['37'], ['45', '46', '47', '48', '49', '50', '51']]], ['Luxury-Tax', 'is located at', [['38'], ['52']]], ['Boardwalk', 'is located at', [['39'], ['53']]]]]
+2020-10-30 23:36:15,956:A2C_agent_2.logging_info:DEBUG:Retrain signal is True now, it will retrain the NN before next game!
+2020-10-30 23:36:15,956:A2C_agent_2.logging_info:INFO:4 th game stops!
+2020-10-30 23:36:15,965:A2C_agent_2.logging_info:INFO:5 th game starts!
+2020-10-30 23:36:15,990:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
+2020-10-30 23:42:25,707:A2C_agent_2.logging_info:INFO:Retrain results => {'step': [1, 2, 3, 4, 5, 6], 'loss': [0.02, 0.02666666666666667, 0.02, 0.006666666666666667, 0.006666666666666667, 0.02666666666666667], 'winning_rate': [0.525, 0.485, 0.43, 0.435, 0.41, 0.415], 'avg_score': [0.55486, 0.51327, 0.44787, 0.45344, 0.43142, 0.43269], 'avg_diff': [-0.065, -0.03, -0.05, -0.045, -0.04, -0.05], 'avg_score_no': [0.02986, 0.02827, 0.01787, 0.01844, 0.02142, 0.01769]}
+2020-10-30 23:42:25,708:A2C_agent_2.logging_info:INFO:Retrain use 6.15mins
+2020-10-30 23:42:25,708:A2C_agent_2.logging_info:INFO:The 1steps is the best, we will use /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty/5/1.pkl
+2020-10-30 23:42:27,430:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:42:32,764:A2C_agent_2.logging_info:INFO:5 th game stops!
+2020-10-30 23:42:32,773:A2C_agent_2.logging_info:INFO:6 th game starts!
+2020-10-30 23:42:34,451:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:42:40,128:A2C_agent_2.logging_info:INFO:6 th game stops!
+2020-10-30 23:42:40,135:A2C_agent_2.logging_info:INFO:7 th game starts!
+2020-10-30 23:42:40,948:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:42:47,311:A2C_agent_2.logging_info:INFO:7 th game stops!
+2020-10-30 23:42:47,320:A2C_agent_2.logging_info:INFO:8 th game starts!
+2020-10-30 23:42:48,261:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:42:54,422:A2C_agent_2.logging_info:INFO:8 th game stops!
+2020-10-30 23:42:54,432:A2C_agent_2.logging_info:INFO:9 th game starts!
+2020-10-30 23:42:54,432:A2C_agent_2.logging_info:INFO:detect the novelty as the board size change
+2020-10-30 23:42:54,451:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
+2020-10-30 23:48:54,630:A2C_agent_2.logging_info:INFO:Retrain results => {'step': [1, 2, 3, 4, 5, 6], 'loss': [0.03333333333333333, 0.006666666666666667, 0.02666666666666667, -0.006666666666666667, -0.006666666666666667, 0.02666666666666667], 'winning_rate': [0.435, 0.31, 0.315, 0.295, 0.28, 0.355], 'avg_score': [0.46402, 0.31525, 0.32463, 0.30059, 0.28837, 0.36984], 'avg_diff': [-0.105, -0.055, -0.09, -0.05, -0.075, -0.095], 'avg_score_no': [0.02902, 0.00525, 0.00963, 0.00559, 0.00837, 0.01484]}
+2020-10-30 23:48:54,630:A2C_agent_2.logging_info:INFO:Retrain use 6.0mins
+2020-10-30 23:48:54,630:A2C_agent_2.logging_info:INFO:The 1steps is the best, we will use /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty/9/1.pkl
+2020-10-30 23:48:55,923:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:48:59,833:A2C_agent_2.logging_info:DEBUG:Novelty Detected as [[], [['Community-Chest', 'is located at', [['17', '2', '33'], ['2', '23', '41']]], ['Baltic-Avenue', 'is located at', [['3'], ['3', '4', '5']]], ['Income-Tax', 'is located at', [['4'], ['6']]], ['Reading-Railroad', 'is located at', [['5'], ['7']]], ['Oriental-Avenue', 'is located at', [['6'], ['8']]], ['Chance', 'is located at', [['22', '36', '7'], ['30', '44', '9']]], ['Vermont-Avenue', 'is located at', [['8'], ['10']]], ['Connecticut-Avenue', 'is located at', [['9'], ['11']]], ['In-Jail/Just-Visiting', 'is located at', [['10'], ['12']]], ['St.-Charles-Place', 'is located at', [['11'], ['13']]], ['Electric-Company', 'is located at', [['12'], ['14']]], ['States-Avenue', 'is located at', [['13'], ['15', '16', '17', '18', '19']]], ['Virginia-Avenue', 'is located at', [['14'], ['20']]], ['Pennsylvania-Railroad', 'is located at', [['15'], ['21']]], ['St.-James-Place', 'is located at', [['16'], ['22']]], ['Tennessee-Avenue', 'is located at', [['18'], ['24', '25', '26']]], ['New-York-Avenue', 'is located at', [['19'], ['27']]], ['Free-Parking', 'is located at', [['20'], ['28']]], ['Kentucky-Avenue', 'is located at', [['21'], ['29']]], ['Indiana-Avenue', 'is located at', [['23'], ['31']]], ['Illinois-Avenue', 'is located at', [['24'], ['32']]], ['Atlantic-Avenue', 'is located at', [['26'], ['34']]], ['Ventnor-Avenue', 'is located at', [['27'], ['35']]], ['Water-Works', 'is located at', [['28'], ['36']]], ['Marvin-Gardens', 'is located at', [['29'], ['37']]], ['Go-to-Jail', 'is located at', [['30'], ['38']]], ['Pacific-Avenue', 'is located at', [['31'], ['39']]], ['North-Carolina-Avenue', 'is located at', [['32'], ['40']]], ['Pennsylvania-Avenue', 'is located at', [['34'], ['42']]], ['Short-Line', 'is located at', [['35'], ['43']]], ['Park-Place', 'is located at', [['37'], ['45', '46', '47', '48', '49', '50', '51']]], ['Luxury-Tax', 'is located at', [['38'], ['52']]], ['Boardwalk', 'is located at', [['39'], ['53']]]], [['Community-Chest', 'is located at', [['17', '2', '33'], ['2', '23', '41']]], ['Baltic-Avenue', 'is located at', [['3'], ['3', '4', '5']]], ['Income-Tax', 'is located at', [['4'], ['6']]], ['Reading-Railroad', 'is located at', [['5'], ['7']]], ['Oriental-Avenue', 'is located at', [['6'], ['8']]], ['Chance', 'is located at', [['22', '36', '7'], ['30', '44', '9']]], ['Vermont-Avenue', 'is located at', [['8'], ['10']]], ['Connecticut-Avenue', 'is located at', [['9'], ['11']]], ['In-Jail/Just-Visiting', 'is located at', [['10'], ['12']]], ['St.-Charles-Place', 'is located at', [['11'], ['13']]], ['Electric-Company', 'is located at', [['12'], ['14']]], ['States-Avenue', 'is located at', [['13'], ['15', '16', '17', '18', '19']]], ['Virginia-Avenue', 'is located at', [['14'], ['20']]], ['Pennsylvania-Railroad', 'is located at', [['15'], ['21']]], ['St.-James-Place', 'is located at', [['16'], ['22']]], ['Tennessee-Avenue', 'is located at', [['18'], ['24', '25', '26']]], ['New-York-Avenue', 'is located at', [['19'], ['27']]], ['Free-Parking', 'is located at', [['20'], ['28']]], ['Kentucky-Avenue', 'is located at', [['21'], ['29']]], ['Indiana-Avenue', 'is located at', [['23'], ['31']]], ['Illinois-Avenue', 'is located at', [['24'], ['32']]], ['Atlantic-Avenue', 'is located at', [['26'], ['34']]], ['Ventnor-Avenue', 'is located at', [['27'], ['35']]], ['Water-Works', 'is located at', [['28'], ['36']]], ['Marvin-Gardens', 'is located at', [['29'], ['37']]], ['Go-to-Jail', 'is located at', [['30'], ['38']]], ['Pacific-Avenue', 'is located at', [['31'], ['39']]], ['North-Carolina-Avenue', 'is located at', [['32'], ['40']]], ['Pennsylvania-Avenue', 'is located at', [['34'], ['42']]], ['Short-Line', 'is located at', [['35'], ['43']]], ['Park-Place', 'is located at', [['37'], ['45', '46', '47', '48', '49', '50', '51']]], ['Luxury-Tax', 'is located at', [['38'], ['52']]], ['Boardwalk', 'is located at', [['39'], ['53']]], ['Community-Chest', 'is located at', [['2', '23', '41'], ['17', '2', '33']]], ['Baltic-Avenue', 'is located at', [['3', '4', '5'], ['3']]], ['Income-Tax', 'is located at', [['6'], ['4']]], ['Reading-Railroad', 'is located at', [['7'], ['5']]], ['Oriental-Avenue', 'is located at', [['8'], ['6']]], ['Chance', 'is located at', [['30', '44', '9'], ['22', '36', '7']]], ['Vermont-Avenue', 'is located at', [['10'], ['8']]], ['Connecticut-Avenue', 'is located at', [['11'], ['9']]], ['In-Jail/Just-Visiting', 'is located at', [['12'], ['10']]], ['St.-Charles-Place', 'is located at', [['13'], ['11']]], ['Electric-Company', 'is located at', [['14'], ['12']]], ['States-Avenue', 'is located at', [['15', '16', '17', '18', '19'], ['13']]], ['Virginia-Avenue', 'is located at', [['20'], ['14']]], ['Pennsylvania-Railroad', 'is located at', [['21'], ['15']]], ['St.-James-Place', 'is located at', [['22'], ['16']]], ['Tennessee-Avenue', 'is located at', [['24', '25', '26'], ['18']]], ['New-York-Avenue', 'is located at', [['27'], ['19']]], ['Free-Parking', 'is located at', [['28'], ['20']]], ['Kentucky-Avenue', 'is located at', [['29'], ['21']]], ['Indiana-Avenue', 'is located at', [['31'], ['23']]], ['Illinois-Avenue', 'is located at', [['32'], ['24']]], ['Atlantic-Avenue', 'is located at', [['34'], ['26']]], ['Ventnor-Avenue', 'is located at', [['35'], ['27']]], ['Water-Works', 'is located at', [['36'], ['28']]], ['Marvin-Gardens', 'is located at', [['37'], ['29']]], ['Go-to-Jail', 'is located at', [['38'], ['30']]], ['Pacific-Avenue', 'is located at', [['39'], ['31']]], ['North-Carolina-Avenue', 'is located at', [['40'], ['32']]], ['Pennsylvania-Avenue', 'is located at', [['42'], ['34']]], ['Short-Line', 'is located at', [['43'], ['35']]], ['Park-Place', 'is located at', [['45', '46', '47', '48', '49', '50', '51'], ['37']]], ['Luxury-Tax', 'is located at', [['52'], ['38']]], ['Boardwalk', 'is located at', [['53'], ['39']]]]]
+2020-10-30 23:48:59,834:A2C_agent_2.logging_info:DEBUG:Retrain signal is True now, it will retrain the NN before next game!
+2020-10-30 23:48:59,834:A2C_agent_2.logging_info:INFO:9 th game stops!
+2020-10-30 23:48:59,844:A2C_agent_2.logging_info:INFO:10 th game starts!
+2020-10-30 23:48:59,865:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
+2020-10-30 23:55:00,055:A2C_agent_2.logging_info:INFO:Retrain results => {'step': [1, 2, 3, 4, 5, 6], 'loss': [0.02666666666666667, 0.02, 0.03333333333333333, 0.006666666666666667, 0.02, 0.02], 'winning_rate': [0.395, 0.305, 0.37, 0.34, 0.41, 0.34], 'avg_score': [0.41484, 0.31184, 0.3824, 0.35037, 0.4344, 0.35797], 'avg_diff': [-0.09, -0.09, -0.035, -0.085, -0.095, -0.085], 'avg_score_no': [0.01984, 0.00684, 0.0124, 0.01037, 0.0244, 0.01797]}
+2020-10-30 23:55:00,060:A2C_agent_2.logging_info:INFO:Retrain use 6.0mins
+2020-10-30 23:55:00,060:A2C_agent_2.logging_info:INFO:The 5steps is the best, we will use /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty/10/5.pkl
+2020-10-30 23:55:02,202:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 23:55:07,869:A2C_agent_2.logging_info:INFO:10 th game stops!
+2020-10-30 23:55:07,869:A2C_agent_2.logging_info:INFO:Tournament Finished!

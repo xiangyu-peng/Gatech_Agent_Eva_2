@@ -355,9 +355,9 @@ class SpatialRepresentationNovelty(RepresentationNovelty):
             if loc in new_location_sequence_dict:
                 new_location_sequence[index] = new_location_sequence_dict[loc]
 
-        if len(set(new_location_sequence)) != len(new_location_sequence):
-            logger.error("Exception") # somehow we've ended up introducing duplicate names in the list.
-            raise Exception
+        # if len(set(new_location_sequence)) != len(new_location_sequence):
+        #     logger.error("Exception") # somehow we've ended up introducing duplicate names in the list.
+        #     raise Exception
 
         self.global_reordering(current_gameboard, new_location_sequence)
 
