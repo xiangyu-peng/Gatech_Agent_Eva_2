@@ -123,6 +123,7 @@ class ClientAgent(Agent):
 
         #kg
         ###set gane board###
+        self.kg_use = None
         self.num_players = 4
         self.player_decision_agents = dict()
         # Assign the beckground agents to the players
@@ -153,7 +154,8 @@ class ClientAgent(Agent):
         self.model_path = model_path
         self.model = torch.load(model_path)
         self.logger = logger
-        self.adj_path = self.upper_path_eva + '/A2C_agent_2/kg_matrix_no.npy'  # TODO, new path after novelty
+        self.adj_path_default = self.upper_path_eva + '/A2C_agent_2/kg_matrix_no.npy'  # TODO, new path after novelty
+        self.adj_path = None
         self.adj = None
         self.trainer = None
         self.converge_signal = False  # indicating the convergency of the retraining
@@ -199,9 +201,9 @@ class ClientAgent(Agent):
                     self.property_sell_percentage_list.pop(0)
                     property_sell_percentage = stats.mode(self.property_sell_percentage_list)[0][0]
                     if self.property_sell_percentage != property_sell_percentage:
-                        self.kg_change.append(('property_sell_percentage', self.property_sell_percentage, property_sell_percentage))
-                        self.property_sell_percentage = property_sell_percentage
-        print('self.property_sell_percentage_list', self.property_sell_percentage_list, self.property_sell_percentage)
+                        if self.kg_use:
+                            self.kg_change.append(('property_sell_percentage', self.property_sell_percentage, property_sell_percentage))
+                            self.property_sell_percentage = property_sell_percentage
 
     def check_mortgage_percentage(self, cash_now):
         rate = (self.take_free_mortgage_info['cash'] - cash_now - self.take_free_mortgage_info['mortage']) / self.take_free_mortgage_info['mortage']
@@ -209,11 +211,12 @@ class ClientAgent(Agent):
         # print('self.mortgage_percentage_list', self.mortgage_percentage_list)
         if len(self.mortgage_percentage_list) > 10:
             self.mortgage_percentage_list.pop(0)
-            print('self.mortgage_percentage_list', self.mortgage_percentage_list)
+            # print('self.mortgage_percentage_list', self.mortgage_percentage_list)
             mortgage_percentage = stats.mode(self.mortgage_percentage_list)[0][0]
             if self.mortgage_percentage != mortgage_percentage:
-                self.kg_change.append(('mortgage_percentage', self.mortgage_percentage, mortgage_percentage))
-                self.mortgage_percentage = mortgage_percentage
+                if self.kg_use:
+                    self.kg_change.append(('mortgage_percentage', self.mortgage_percentage, mortgage_percentage))
+                    self.mortgage_percentage = mortgage_percentage
 
 
     def kg_run(self, current_gameboard, card_board, game_num):
@@ -257,7 +260,8 @@ class ClientAgent(Agent):
         self.kg.save_matrix()
         # Visulalize the novelty change in the network
         self.kg_change_bool = False
-        if self.kg.kg_change != self.kg_change[-1]:
+
+        if self.kg_use and self.kg.kg_change != self.kg_change[-1]:
             self.kg_change_wait = 1
             self.kg_change.append(self.kg.kg_change[:])
             self.logger.debug('Novelty Detected as ' + str(self.kg_change))
@@ -282,6 +286,8 @@ class ClientAgent(Agent):
             # self.kg_change_bool = True
             # self.kg_change_wait = 0
 
+
+
     def novelty_board_detect(self, current_gameboard):
         self.die_count = (current_gameboard['die_sequence'][0])
 
@@ -292,6 +298,7 @@ class ClientAgent(Agent):
         :return:
         """
         if os.path.exists(self.adj_path):
+            print('adj_use', self.adj_path)
             self.adj = np.load(self.adj_path)
             adj_return = np.zeros((self.adj.shape[0], self.adj.shape[0]))
             for i in range(self.adj.shape[1] // self.adj.shape[0]):
@@ -299,7 +306,12 @@ class ClientAgent(Agent):
             self.adj = adj_return
 
         else:
-            self.adj = np.zeros((92,92))
+            print('adj_use', self.adj_path_default)
+            self.adj = np.load(self.adj_path_default)
+            adj_return = np.zeros((self.adj.shape[0], self.adj.shape[0]))
+            for i in range(self.adj.shape[1] // self.adj.shape[0]):
+                adj_return += self.adj[:, self.adj.shape[0] * i:self.adj.shape[0] * (i + 1)]
+            self.adj = adj_return
 
     def params_read(self, config_data, key_word):
         params = {}
@@ -314,6 +326,7 @@ class ClientAgent(Agent):
 
         self.matrix_name = self.folder_path + '/matrix.npy'
         self.entity_name = self.folder_path + '/entity.json'
+        self.adj_path = self.matrix_name
 
         if not os.path.exists(self.folder_path):
             os.makedirs(self.folder_path)
@@ -418,19 +431,12 @@ class ClientAgent(Agent):
         self.schema_path = self.folder_path + '/schema.json'
 
         game_schema = json.load(open(self.upper_path + '/Evaluation_2/monopoly_game_schema_v1-2.json', 'r'))
-        print('game_schema', game_schema.keys())
-        # print('locations', game_schema['locations']['location_states'][1])
-        # print('schema', game_schema['location_sequence'])
-        # print('gameboard', gameboard['locations']['Mediterranean Avenue'])
 
         # location
         game_schema['locations']['location_count'] = len(gameboard['location_sequence'])
         game_schema['location_sequence'] = gameboard['location_sequence']
         location_states = []
         for name in game_schema['location_sequence']:
-            if name == 'Community Chest':
-                print('game board', gameboard['locations'][name].keys())
-                print('game schema', game_schema['locations']['location_states'][33].keys())
             for key in ['is_mortgaged', 'house_rent_dict', 'railroad_dues', 'die_multiples']:
                 if key in gameboard['locations'][name].keys():
                     del gameboard['locations'][name][key]
@@ -450,12 +456,9 @@ class ClientAgent(Agent):
         # die add novelty from kg
         if self.kg_change and 'Dice' in self.kg_change[-1]:
             for change in self.kg_change[-1][-1]:
-                print('change =>', change)
                 if 'State' in change:
                     game_schema['die']['die_count'] = len(change[1])
-                    print('die_count', len(change[1]))
                     game_schema['die']['die_state'] = change[1]
-                    print('die_state', change[1])
 
         #cards
         community_chest_list = []
@@ -485,7 +488,6 @@ class ClientAgent(Agent):
                     type = change[1]
                     for idx, die in enumerate(ini_gameboard['dies']):
                         die.die_state_distribution = type[idx].lower()
-                        print('type is', type[idx])
 
         return ini_gameboard
 
@@ -637,6 +639,7 @@ class ClientAgent(Agent):
 
         result = None
         ini_sig = True  # if it is the first time to setup trainer.
+        board_size_changed_sig = False
         while True:
             # receive the info form server###########################
             data_from_server = self.conn.recv(200000)
@@ -654,6 +657,7 @@ class ClientAgent(Agent):
             # When the tournament begins, we need to define the folder
             if func_name == "start_tournament":
                 self.define_path(data_dict_from_server['path'])  # save all the file in this folder
+                self.kg_use = True if data_dict_from_server['info'] == 'w/' else False
                 self.logger.info('Tournament starts!')
                 result = 1
             # #######################################################
@@ -664,6 +668,7 @@ class ClientAgent(Agent):
                 # 1. Clear interface history and set the init for interface#########
                 self.interface.clear_history(self.folder_path+self.log_file_name)
                 self.interface.set_board(data_dict_from_server['current_gameboard'])
+                print('sequence =>', data_dict_from_server['current_gameboard']['location_sequence'])
                 s = self.interface.board_to_state(data_dict_from_server['current_gameboard'])
                 self.game_num += 1  # update number of games simulated
                 self.logger.info(str(self.game_num) + ' th game starts!')
@@ -673,12 +678,13 @@ class ClientAgent(Agent):
                 if self.game_num == 1:
                     self.gameboard_ini = data_dict_from_server['current_gameboard']
                     self.kg = KG_OpenIE_eva(self.gameboard_ini,
-                                            self.matrix_name,
-                                            self.entity_name,
-                                            config_file=self.config_file)
+                                                self.matrix_name,
+                                                self.entity_name,
+                                                config_file=self.config_file)
                 # ###################################################################
 
                 # 3. If board size changed, before the game, we need to call retrain#
+                print('self.state_num', self.state_num, len(s))
                 if self.state_num != len(s) or self.retrain_signal:
                     if self.state_num != len(s):
                         self.logger.info('detect the novelty as the board size change')
@@ -686,16 +692,17 @@ class ClientAgent(Agent):
                     if self.win_rate_after_novelty == None:  # begin to record the game winning rate
                         self.win_rate_after_novelty = []
 
-                    board_size_changed_sig = True if self.state_num != len(s) else False
+                    if self.state_num != len(s):
+                        board_size_changed_sig = True
+                    retrain_type = 'size' if board_size_changed_sig else 'novelty'
                     ini_current_gameboard = self.initialize_gameboard(data_dict_from_server['current_gameboard'])  #TODO
 
                     # 3.1 set up trainer:
-                    if ini_sig or board_size_changed_sig or self.kg_change_bool: # or (self.converge_signal and not self.kg_change_bool):  # 1st time or board size changed, we need to initialize trainer.
-                        self.trainer = self.retrain_ini(ini_current_gameboard)
-                        ini_sig = False
+                    # if ini_sig or board_size_changed_sig or self.kg_change_bool: # or (self.converge_signal and not self.kg_change_bool):  # 1st time or board size changed, we need to initialize trainer.
+                    self.trainer = self.retrain_ini(ini_current_gameboard, retrain_type)
+                        # ini_sig = False
 
                     # 3.2 begin retraining
-                    #self.converge_signal
                     adj_path = self.retrain_from_scratch(ini_current_gameboard, self.game_num)
 
                     self.state_num = len(s)  # reset the state_num size
@@ -703,7 +710,7 @@ class ClientAgent(Agent):
                     # self.kg_change_bool = True
                     self.retrain_signal = False if self.converge_signal else True  # when converge, stop retraining
                     # self.kg_change_wait = 0
-                    self.adj_path = adj_path
+                    # self.adj_path = adj_path
 
             # #############################################################################
 
