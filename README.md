@@ -1,16 +1,5 @@
-## Paper Experiements Design
-### TODO
-#### Offline 
-- 10/01 - 10/10
-- scarecrow
-- run offline exps with different novelty and different seeds
-- plot figures with mean and std
-
-#### Online
-- 10/10-10/20
-- nesssarose or scarecrow
-- run online exps with different novelty and different seeds
-- plot figures with mean and std
+# How to run the evaluation.
+All the codes are stored in Evaluation_2/
 
 ## Evaluation
 ### RL_agent
