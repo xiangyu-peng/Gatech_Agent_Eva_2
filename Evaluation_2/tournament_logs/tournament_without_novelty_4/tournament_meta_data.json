@@ -2,6 +2,6 @@
     "function": "play_tournament_without_novelty",
     "parameters": {
         "meta_seed": 10,
-        "num_game": 5
+        "num_game": 100
     }
 }

@@ -21,6 +21,7 @@ from monopoly_simulator.gameplay import set_up_board
 from monopoly_simulator import background_agent_v3
 from monopoly_simulator.agent import Agent
 import copy
+import json
 
 from stanfordnlp.server import CoreNLPClient
 
@@ -50,15 +51,15 @@ class History_Record(object):
         with open(save_path, 'wb') as f:
             pickle.dump(save_dict, f)
 
-    def read_json(self, load_dict, load_path):
+    def read_json(self, load_path):
         """
         Read kg dict file from json file
         :param level:
         :return: None
         """
         load_dict = dict()
-        with open(load_path, 'rb')as f:
-            load_dict = pickle.load(f)
+        with open(load_path, 'r')as f:
+            load_dict = json.load(f)
 
         return load_dict
 
@@ -1203,6 +1204,7 @@ class KG_OpenIE_eva(History_Record):
         # self.text_card_num = 0
         # self.card = Novelty_Detection_Card(config_file)
         self.card_board = Novelty_Detection_Card_Board()
+        self.card_board.ini_cards()
 
     def set_gameboard(self, gameboard):
         self.gameboard = gameboard
@@ -2081,6 +2083,7 @@ class Novelty_Detection_Card(History_Record):
             self.new_card[pack][card_name] += 1
 
 import networkx as nx
+import json
 class Novelty_Detection_Card_Board(History_Record):
     def __init__(self, minimum_num=6):
         self.cards = dict()
@@ -2089,6 +2092,29 @@ class Novelty_Detection_Card_Board(History_Record):
         self.card_graph_state = nx.DiGraph()
         self.minimum_num = minimum_num
         self.novelty = []
+
+    def ini_cards(self):
+        card_board = self.read_json('/media/becky/GNOME-p3/Evaluation_2/monopoly_game_schema_v1-2.json')['cards']
+        for card_pack in ["community_chest", "chance"]:
+            for card in card_board[card_pack]["card_states"]:
+                name = card["name"]
+                # update graph
+                self.card_graph_state.add_node(name)
+
+                for rel in card.keys():
+                    if rel != 'name':
+                        # update dict
+                        self.cards[card_pack][name] = card
+                        # add new nodes and edges
+                        obj = card[rel]
+                        try:
+                            obj = int(obj)
+                        except:
+                            pass
+                        self.card_graph_state.add_node(obj)
+                        self.card_graph_state.add_edge(name, obj)
+                        attrs = {(name, obj): {"attr": rel}}
+                        nx.set_edge_attributes(self.card_graph_state, attrs)
 
     def read_card_board(self, card_board, game_num):
         for card_pack in ['picked_community_chest_card_details', 'picked_chance_card_details']:
@@ -2102,25 +2128,38 @@ class Novelty_Detection_Card_Board(History_Record):
                 if name not in self.card_graph_state.nodes:
                     self.card_graph_state.add_node(name)
                     # add new nodes and edges
-                    for rel in card_board[card_pack][name]:
-                        obj = card_board[card_pack][name][rel]
-                        try:
-                            obj = int(obj)
-                        except:
-                            pass
-                        self.card_graph_state.add_node(obj)
-                        self.card_graph_state.add_edge(name, obj)
 
-                    if game_num >=self.minimum_num:
-                        self.novelty.append(['new_card', self.card_graph_state.nodes[name]])
+                    for rel in card_board[card_pack][name]:
+                        if rel != 'name':
+                            obj = card_board[card_pack][name][rel]
+                            try:
+                                obj = int(obj)
+                            except:
+                                pass
+                            self.card_graph_state.add_node(obj)
+                            self.card_graph_state.add_edge(name, obj)
+                            print('rel =>', rel)
+                            attrs = {(name, obj): {"attr": rel}}
+                            nx.set_edge_attributes(self.card_graph_state, attrs)
+
+
+                    if game_num >= self.minimum_num:
+                        print('new card node =>', name, 'game_num', game_num)
+
+                        self.novelty.append(['new_card', name, dict(self.card_graph_state[name].items())])
+                        print('card novelty', self.novelty[-1])
 
                 else:
                     for rel in card_board[card_pack][name]:
-                        obj = card_board[card_pack][name][rel]
-                        if obj not in self.card_graph_state[name]:
-                            self.novelty.append(['card_change', self.card_graph_state[name]])
-                            self.card_graph_state.add_node(obj)
-                            self.card_graph_state.add_edge(name, obj)
+                        if rel != 'name':
+                            obj = card_board[card_pack][name][rel]
+                            if obj not in self.card_graph_state[name]:
+                                self.novelty.append(['card_change', name, dict(self.card_graph_state[name].items())])
+                                print('card novelty', self.novelty[-1], 'game_num', game_num)
+                                self.card_graph_state.add_node(obj)
+                                self.card_graph_state.add_edge(name, obj)
+                                attrs = {(name, obj): {"attr": rel}}
+                                nx.set_edge_attributes(self.card_graph_state, attrs)
 
                     # update dict
                     if 'chance' in card_pack:

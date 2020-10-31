@@ -164,7 +164,7 @@ def make_pre_roll_move(serial_dict_to_client, memory):
         logger.error("Exception")
         raise Exception
 
-def make_out_of_turn_move(serial_dict_to_client, memory, mortgage_percentage):
+def make_out_of_turn_move(serial_dict_to_client, memory, mortgage_percentage, go_increment):
 
     """
     The agent is in the out-of-turn phase and must decide what to do (next). This simple dummy agent skips the turn, and
@@ -368,20 +368,21 @@ def make_out_of_turn_move(serial_dict_to_client, memory, mortgage_percentage):
         # we accept an offer under one of two conditions:
         # logger.debug('player_1'+ ': Should I accept the offer by '+player.outstanding_property_offer['from_player'].player_name+' to buy '+\
         #     player.outstanding_property_offer['asset'].name+' for '+str(player.outstanding_property_offer['price'])+'?')
-        logger.debug('('+'player_1'+' currently has cash balance of '+str(player['current_cash'])+')')
+        logger.debug('player_1'+ 'currently has cash balance of '+str(player['current_cash'])+')')
         if player['outstanding_property_offer']['asset'].is_mortgaged or player.outstanding_property_offer['price']>player.current_cash:
             pass # ignore the offer if the property is mortgaged or will result in insolvency. This pass doesn't require 'filling' in.
-        elif player.current_cash-player.outstanding_property_offer['price'] >= current_gameboard['go_increment'] and \
-            player.outstanding_property_offer['price']<=player.outstanding_property_offer['asset'].price:
+        elif player['current_cash'] -player['outstanding_property_offer']['price'] >= go_increment and \
+            player['outstanding_property_offer']['price']<=player['outstanding_property_offer']['asset']['price']:
             # 1. we can afford it, and it's at or below market rate so let's buy it
-            logger.debug('player_1'+ ': I am accepting the offer to buy '+player.outstanding_property_offer['asset']['name']+' since I can afford' \
+            logger.debug('player_1'+ ': I am accepting the offer to buy '+player['outstanding_property_offer']['asset']+' since I can afford' \
                                                     'it and it is being offered at or below market rate.')
             memory['previous_action'] = "accept_sell_property_offer"
             return ("accept_sell_property_offer", param), memory
+
         elif agent_helper_functions.will_property_complete_set(player, player.outstanding_property_offer['asset'],current_gameboard):
             # 2. less affordable, but we stand to gain by monopoly
-            if player.current_cash - player.outstanding_property_offer['price'] >= current_gameboard['go_increment']/2: # risky, but worth it
-                logger.debug('player_1'+ ': I am accepting the offer to buy '+ player.outstanding_property_offer[
+            if player.current_cash - player.outstanding_property_offer['price'] >= go_increment / 2: # risky, but worth it
+                logger.debug('player_1'+ ': I am accepting the offer to buy '+ player['outstanding_property_offer'][
                     'asset']['name']+ ' since I can afford ' \
                                    'it (albeit barely so) and it will let me complete my color set.')
                 memory['previous_action'] = "accept_sell_property_offer"
@@ -404,7 +405,7 @@ def make_out_of_turn_move(serial_dict_to_client, memory, mortgage_percentage):
             player_mortgaged_assets_list = _set_to_sorted_list_mortgaged_assets(player['mortgaged_assets'])
         for m in player_mortgaged_assets_list:
             m = current_gameboard['locations'][m]
-            if player['current_cash'] - (m['mortgage']* (1+ mortgage_percentage)) >= 200 and "free_mortgage" in allowable_moves:
+            if player['current_cash'] - (m['mortgage']* (1+ mortgage_percentage)) >= go_increment and "free_mortgage" in allowable_moves:
                 # free mortgages till we can afford it. the second condition should not be necessary but just in case.
                 param = dict()
                 param['player'] = 'player_1'
@@ -419,7 +420,7 @@ def make_out_of_turn_move(serial_dict_to_client, memory, mortgage_percentage):
          ## 1 --> low on cash, urgently in need of cash
          ## 2 --> gain monopoly
 
-        if player['current_cash'] < 200 and "make_trade_offer" in allowable_moves:
+        if player['current_cash'] < go_increment and "make_trade_offer" in allowable_moves:
             # in this case, the trade offer is a duplication of make_sell_property_offer since the player is in urgent need of cash and
             #cannot strategize a trade
             potential_offer_list = agent_helper_functions.identify_property_trade_offer_to_player(player, current_gameboard)
@@ -500,7 +501,7 @@ def make_out_of_turn_move(serial_dict_to_client, memory, mortgage_percentage):
 
 
 
-def make_post_roll_move(serial_dict_to_client, memory):
+def make_post_roll_move(serial_dict_to_client, memory, go_increment):
     """
     The agent is in the post-roll phase and must decide what to do (next). The main decision we make here is singular:
     should we buy the property we landed on, if that option is available?
@@ -571,7 +572,7 @@ def make_post_roll_move(serial_dict_to_client, memory):
         params['asset'] = current_location['name']
         params['current_gameboard'] = "current_gameboard"
 
-        if make_buy_property_decision(serial_dict_to_client):
+        if make_buy_property_decision(serial_dict_to_client, go_increment):
             logger.debug('player_1' + ': I am attempting to buy property '+current_location['name'])
             memory['previous_action'] = "buy_property"
             return ("buy_property", params), memory
@@ -603,7 +604,7 @@ def make_post_roll_move(serial_dict_to_client, memory):
         raise Exception
 
 
-def make_buy_property_decision(serial_dict_to_client):
+def make_buy_property_decision(serial_dict_to_client, go_increment):
     """
     The agent decides to buy the property if:
     (i) it can 'afford' it. Our definition of afford is that we must have at least go_increment cash balance after
@@ -626,7 +627,7 @@ def make_buy_property_decision(serial_dict_to_client):
 
 
     decision = False
-    if player['current_cash'] - asset['price'] >= 200:  # case 1: can we afford it?
+    if player['current_cash'] - asset['price'] >= go_increment:  # case 1: can we afford it?
         logger.debug('player_1' + ': I will attempt to buy ' + asset['name'] + ' from the bank.')
         decision = True
     elif asset['price'] <= player['current_cash']and \

@@ -5,8 +5,8 @@ import numpy as np
 #     print(nodes[12])
 #     print(sorted(list(nodes.values())))
 #     print(len(nodes))
-matrix = np.load('/media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/matrix/matrix.npy')
-print(matrix.shape)
+matrix = np.load('/media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/logs/kg_matrix_0_0.npy')
+print(matrix)
 rel_list = ['is priced at', 'is price-1-house at', 'is rented-0-house at', 'is rented-1-house at', \
                                  'is rented-2-house at', 'is rented-3-house at', 'is rented-4-house at', 'is rented-1-hotel', 'color']
 range_list = [(40,47), (47,52), (52,59), (59,64), (64,72), (72,80), (80,86), (86,matrix.shape[0] + 1), (0, 40)]
@@ -19,7 +19,7 @@ for i in range(6,7):
         print(rel[a:b])
 
 
-# load_path = '/media/becky/GNOME-p3/KG_rule/matrix_rule/entity_id_30_1_tryenv.json'
+# load_path = '/media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/logs/entity_id_0_0.json'
 # # load_path = '/media/becky/GNOME-p3/KG_rule/matrix_rule/entity_id_0_0_baseline_ran.json'
 # with open(load_path, 'rb') as f:
 #     load_dict = pickle.load(f)

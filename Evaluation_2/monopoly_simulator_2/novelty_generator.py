@@ -211,6 +211,9 @@ class ContingentAttributeNovelty(AttributeNovelty):
         current_gameboard['bank'].mortgage_percentage = new_percentage
         current_gameboard['bank'].total_mortgage_rule = True
 
+    def change_property_sell_percentage(self, current_gameboard, new_percentage):
+        current_gameboard['bank'].property_sell_percentage = new_percentage
+
 
 class NumberClassNovelty(ClassNovelty):
     def __init__(self):

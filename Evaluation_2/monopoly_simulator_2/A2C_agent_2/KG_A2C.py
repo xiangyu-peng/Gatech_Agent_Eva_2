@@ -62,7 +62,9 @@ class MonopolyTrainer_GAT:
                  retrain_type='baseline',
                  exp_dict=None,
                  adj_path=None,
-                 seed=0):  # unique exp name with number!
+                 seed=0,
+                 len_vocab=92):  # unique exp name with number!
+
         # set up the novelty and the file name/ matrix path
         self.exp_name = exp_name
         self.retrain_type = retrain_type
@@ -125,7 +127,6 @@ class MonopolyTrainer_GAT:
                                + exp_name + '_' + self.retrain_type
             self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/', log_suffix=hyper_config_str)])
 
-        self.start_time = datetime.datetime.now()
 
         ###set to cpu for evaluation
         self.device = torch.device(self._device_id)
@@ -157,10 +158,12 @@ class MonopolyTrainer_GAT:
                 self.config_model.embedding_size = self.params['embedding_size']
                 self.config_model.dropout_ratio = self.params['dropout_ratio']
                 self.config_model.state_output_size = self.params['state_output_size']
-                self.config_model.entity_id_file_path = '/'.join(adj_path.split('/')[:-1]) + '/entity.json'
+                self.config_model.len_vocab = len_vocab
+                print('self.config_model.len_vocab', self.config_model.len_vocab, len_vocab)
 
                 if self.gameboard:
                     self.config_model.state_num = len(self.interface.board_to_state(self.gameboard))
+
                 self.model = ActorCritic(self.config_model, device=self.device, gat_use='kg')  # A2C model
             else:
                 self.config_model = ConfigParser()
@@ -171,7 +174,9 @@ class MonopolyTrainer_GAT:
 
                 if self.gameboard:
                     self.config_model.state_num = len(self.interface.board_to_state(self.gameboard))
+                print('self.config_model.state_num', self.config_model.state_num)
                 self.model = ActorCritic(self.config_model, gat_use=False, device=self.device)  # A2C model
+        self.len_vocab = len_vocab
         self.model.to(self.device)
         self.loss = 0
         import torch.nn as nn
@@ -253,12 +258,13 @@ class MonopolyTrainer_GAT:
         if os.path.exists(self.adj_path):
             self.adj = np.load(self.adj_path)
             adj_return = np.zeros((self.adj.shape[0], self.adj.shape[0]))
+            print('adj_return', adj_return)
             for i in range(self.adj.shape[1] // self.adj.shape[0]):
                 adj_return += self.adj[:,self.adj.shape[0] * i:self.adj.shape[0] * (i+1)]
             self.adj = adj_return
 
         else:
-            self.adj = np.zeros((92,92))
+            self.adj = np.zeros((self.len_vocab, self.len_vocab))
 
     def test_v2(self, step_idx, seed, config_file=None, num_test=200):
         # Set the env for testing
@@ -266,7 +272,7 @@ class MonopolyTrainer_GAT:
         env.set_config_file(config_file)
         env.set_exp(self.exp_dict)
         env.set_kg(False)
-        env.set_board() # self.gameboard
+        env.set_board(self.gameboard) # self.gameboard
         env.seed(seed)
         score = 0.0
         done = False
@@ -326,6 +332,7 @@ class MonopolyTrainer_GAT:
         save_name = self.save_path + str(step_idx // self.PRINT_INTERVAL) + '.pkl'
         # torch.save(self.model.state_dict(), save_name)
         torch.save(self.model, save_name)
+        print('save to =>', save_name)
         return save_name
 
     def check_novelty(self):
@@ -400,12 +407,16 @@ class MonopolyTrainer_GAT:
         # env_stop_change_bool = True if len(self.exp_dict_change_position) == 0 else False  # indicates whether to reset the game env
         # exp_dict_change_position = self.exp_dict_change_position  # we will pop the used ones, so we make a copy
 
+        self.start_time = datetime.datetime.now()
+        self.spend_time = 0
+
         if 'winning_rate' in self.test_result.keys():
             print('keep training', self.test_result['winning_rate'])
         else:
             print('begin retrain!')
         step_idx = 1
         save_name = None
+        converge_signal = False
         with HiddenPrints():
             reset_array = self.envs.reset()
 
@@ -413,7 +424,7 @@ class MonopolyTrainer_GAT:
                             [reset_array[i][1][0] for i in range(len(reset_array))],\
                             [reset_array[i][1][1] for i in range(len(reset_array))]
         loss_train = torch.tensor(0, device=self.device).float()
-        while step_idx < self.max_train_steps and self.spend_time < 0.5:  # TODO change to 2.5 hr
+        while step_idx < self.max_train_steps and self.spend_time < 0.1:  # TODO change to 2.5 hr
             loss = torch.tensor(0, device=self.device).float()
             for _ in range(self.update_interval):
                 entropy = 0
@@ -556,7 +567,6 @@ class MonopolyTrainer_GAT:
             self.spend_time = (end_time - self.start_time).seconds / 60 / 60
 
             # After converge, we will stop the training TODO change the number here
-            converge_signal = False
             if self.test_required:
                 if len(self.test_result['winning_rate']) > 50:
                     if max(self.test_result['winning_rate'][:-20]) > max(self.test_result['winning_rate'][-20:]) + 0.05:
@@ -589,7 +599,7 @@ class MonopolyTrainer_GAT:
 
         self.envs.close()
         # print(self.model.fc_1.weight)
-        return self.test_result, converge_signal
+        return self.test_result, True #converge_signal
 
 def str2bool(v):
     if isinstance(v, bool):

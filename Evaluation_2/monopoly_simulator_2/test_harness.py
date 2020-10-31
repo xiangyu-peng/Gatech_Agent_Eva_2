@@ -144,14 +144,18 @@ def play_tournament_with_novelty_1(tournament_log_folder=None, meta_seed=0, num_
             handler.flush()
         count += 1
 
-    new_winners = list()
+    new_winners = []
     for t in range(novelty_index, len(tournament_seeds)):
         print('Logging gameplay with novelty for seed: ', str(t), ' ---> Game ' + str(count))
         filename = folder_name + "meta_seed_" + str(meta_seed) + '_with_novelty' + '_num_games_' + str(count) + '.log'
         logger = log_file_create(filename)
         # new_winners.append(gameplay_socket.play_game_in_tournament(tournament_seeds[t], class_novelty_1))
         #####GT - add agent to parameter#####
-        new_winners.append(gameplay_socket.play_game_in_tournament(tournament_seeds[t], class_novelty_1, agent=agent))
+        if t < 30:
+            new_winners.append(gameplay_socket.play_game_in_tournament(tournament_seeds[t], class_novelty_1, agent=agent))
+        else:
+            new_winners.append(
+                gameplay_socket.play_game_in_tournament(tournament_seeds[t], agent=agent))
         #####################################
         handlers_copy = logger.handlers[:]
         for handler in handlers_copy:
@@ -162,6 +166,13 @@ def play_tournament_with_novelty_1(tournament_log_folder=None, meta_seed=0, num_
 
     print('pre_novelty winners', winners)
     print('post_novelty_winners', new_winners)
+
+    win_rate = 0
+    for winner in new_winners:
+        if 'player_1' == winner:
+            win_rate += 1
+    print('win rate is ', float(win_rate / len(new_winners)))
+
     agent.end_tournament()
 
 
@@ -203,6 +214,19 @@ def class_novelty_1(current_gameboard):
     # die_type_vector = ['odd_only','even_only']
     # classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
 
+    # bank
+    # contingentattributenovelty = novelty_generator.ContingentAttributeNovelty()
+    # contingentattributenovelty.change_property_sell_percentage(current_gameboard, 0.4)
+
+    # gameboard
+    # granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 6)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States Avenue'],
+    #                                        20)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee Avenue'],
+    #                                        27)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
+
 #All the tournaments get logged in seperate folders inside ../tournament_logs folder
 try:
     os.makedirs("../tournament_logs/")
@@ -211,4 +235,4 @@ except:
 
 #Specify the name of the folder in which the tournament games has to be logged in the following format: "/name_of_your_folder/"
 # play_tournament_without_novelty('/tournament_without_novelty_4/', meta_seed=10, num_games=100)
-play_tournament_with_novelty_1('/tournament_with_novelty/',num_games=100, novelty_index=5, meta_seed=0)
+play_tournament_with_novelty_1('/tournament_with_novelty/',num_games=100, novelty_index=2, meta_seed=0)

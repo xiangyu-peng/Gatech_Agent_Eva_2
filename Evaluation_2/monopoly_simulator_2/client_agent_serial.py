@@ -31,6 +31,7 @@ import socket
 import json
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info.client_agent_serial')
+from scipy import stats
 
 # TODO
 # √√ 0. path check
@@ -50,11 +51,11 @@ logger = logging.getLogger('monopoly_simulator.logging_info.client_agent_serial'
 
 # 2. Detect Novelty
 #   √ 2.1 detect the bank info
-#       √ 2.1.1 mortgage_percentage
+#       √√ 2.1.1 mortgage_percentage
 #       √ 2.1.2 property_sell_percentage
 #       √ 2.1.3 go_increment
-#   2.2 add dice novelty to the game-board after novelty
-#   2.3 Card novelty:
+#   √ 2.2 add dice novelty to the game-board after novelty
+#   √ 2.3 Card novelty
 
 import os
 
@@ -140,7 +141,7 @@ class ClientAgent(Agent):
         self.matrix_name = None
         self.entity_name = None
         self.kg = None
-        self.no_retrain = True  # set to True when you do not need retrain the agent
+        self.no_retrain = False  # set to True when you do not need retrain the agent
 
         # Save path
         self.folder_path = None
@@ -159,6 +160,7 @@ class ClientAgent(Agent):
         self.best_model = dict()  # a dict recording the best model path
         self.win_rate_after_novelty = None
         self.background_agent_use = False
+        self.gat_use = True
 
         self._agent_memory = dict()
 
@@ -193,20 +195,22 @@ class ClientAgent(Agent):
                 self.property_sell_percentage_list.append(rate)
                 # print('self.property_sell_percentage_list', self.property_sell_percentage_list)
 
-                if len(self.property_sell_percentage_list) > 3:
+                if len(self.property_sell_percentage_list) > 20:
                     self.property_sell_percentage_list.pop(0)
-                    property_sell_percentage = np.median(np.array(self.property_sell_percentage_list))
+                    property_sell_percentage = stats.mode(self.property_sell_percentage_list)[0][0]
                     if self.property_sell_percentage != property_sell_percentage:
                         self.kg_change.append(('property_sell_percentage', self.property_sell_percentage, property_sell_percentage))
                         self.property_sell_percentage = property_sell_percentage
+        print('self.property_sell_percentage_list', self.property_sell_percentage_list, self.property_sell_percentage)
 
     def check_mortgage_percentage(self, cash_now):
-        rate = (self.take_free_mortgage_info['cash'] - cash_now -  self.take_free_mortgage_info['mortage']) / self.take_free_mortgage_info['mortage']
+        rate = (self.take_free_mortgage_info['cash'] - cash_now - self.take_free_mortgage_info['mortage']) / self.take_free_mortgage_info['mortage']
         self.mortgage_percentage_list.append(rate)
         # print('self.mortgage_percentage_list', self.mortgage_percentage_list)
-        if len(self.mortgage_percentage_list) > 3:
+        if len(self.mortgage_percentage_list) > 10:
             self.mortgage_percentage_list.pop(0)
-            mortgage_percentage = np.median(np.array(self.mortgage_percentage_list))
+            print('self.mortgage_percentage_list', self.mortgage_percentage_list)
+            mortgage_percentage = stats.mode(self.mortgage_percentage_list)[0][0]
             if self.mortgage_percentage != mortgage_percentage:
                 self.kg_change.append(('mortgage_percentage', self.mortgage_percentage, mortgage_percentage))
                 self.mortgage_percentage = mortgage_percentage
@@ -337,21 +341,17 @@ class ClientAgent(Agent):
                 go_increment = int(i['param']['amount'])
                 if self.go_increment != go_increment:
                     self.kg_change.append(('go increment', self.go_increment, go_increment))
-
-
-
+                print('self.go_increment', self.go_increment)
 
         # call A2C agent##########################################
         self.gameboard = copy.deepcopy(current_gameboard)
         self.interface.get_logging_info_once(current_gameboard, self.folder_path+self.log_file_name)
         s = self.interface.board_to_state(current_gameboard)
         s = s.reshape(1, -1)
-        s_ini = s.copy()
-        if self.last_act == "buy_property":
-            print('s', s[0][self.last_loc])
         s = torch.tensor(s, device=self.device).float()
-        self.load_adj()  # call kg-matrix
-        s = self.model.forward(s, self.adj)
+        if self.gat_use:
+            self.load_adj()  # call kg-matrix
+            s = self.model.forward(s, self.adj)
         prob = self.model.actor(s)
         action = Categorical(prob).sample().cpu().numpy()
         action = action[0]
@@ -379,10 +379,10 @@ class ClientAgent(Agent):
                 return_to_server_dict['param_dict'] = params
                 self.last_act = "buy_property"
                 # debug - if the buy works####
-                print('s_ini', s_ini[0][s_ini[0][40:80].tolist().index(1)])
-                if 1 in s_ini[0][40:80].tolist():
-                    self.last_loc = s_ini[0][40:80].tolist().index(1)
-                ##############################
+                # print('s_ini', s_ini[0][s_ini[0][40:80].tolist().index(1)])
+                # if 1 in s_ini[0][40:80].tolist():
+                #     self.last_loc = s_ini[0][40:80].tolist().index(1)
+                # ##############################
 
                 return return_to_server_dict
 
@@ -489,7 +489,7 @@ class ClientAgent(Agent):
 
         return ini_gameboard
 
-    def retrain_ini(self, gameboard):
+    def retrain_ini(self, gameboard, type_retrain='size'):
         """
         set the trainer here
         :param gameboard:
@@ -508,21 +508,45 @@ class ClientAgent(Agent):
         config_data = ConfigParser()
         config_data.read(self.config_file)
         params = self.params_read(config_data, 'hyper')
-        trainer = MonopolyTrainer_GAT(params,
-                                      gameboard=gameboard,
-                                      kg_use=True,
-                                      logger_use=False,
-                                      config_file='config.ini',
-                                      test_required=True,  # change to False if you do not need any test check anymore.
-                                      tf_use=False,
-                                      pretrain_model=None,
-                                      retrain_type='gat_part',
-                                      device_id='-1',
-                                      seed=0,
-                                      adj_path=self.matrix_name,
-                                      exp_dict=exp_dict)
+        len_vocab = 52 + len(gameboard['location_sequence'])
+
+        if type_retrain == 'size':
+            trainer = MonopolyTrainer_GAT(params,
+                                          gameboard=gameboard,
+                                          kg_use=False,
+                                          logger_use=False,
+                                          config_file='config.ini',
+                                          test_required=True,  # change to False if you do not need any test check anymore.
+                                          tf_use=False,
+                                          pretrain_model=None,
+                                          retrain_type='baseline',
+                                          device_id='-1',
+                                          seed=0,
+                                          adj_path=None,
+                                          exp_dict=exp_dict,
+                                          len_vocab=len_vocab)
+            self.gat_use = False
+        else:
+            trainer = MonopolyTrainer_GAT(params,
+                                          gameboard=gameboard,
+                                          kg_use=True,
+                                          logger_use=False,
+                                          config_file='config.ini',
+                                          test_required=True,
+                                          # change to False if you do not need any test check anymore.
+                                          tf_use=False,
+                                          pretrain_model=None,
+                                          retrain_type='gat_part',
+                                          device_id='-1',
+                                          seed=0,
+                                          adj_path=self.adj_path,
+                                          exp_dict=exp_dict,
+                                          len_vocab=len_vocab)
 
         self.best_model = dict()
+
+        if os.path.exists(upper_path_eva + "/A2C_agent_2/logs/kg_matrix_0_0.npy"):
+            os.remove(upper_path_eva + "/A2C_agent_2/logs/kg_matrix_0_0.npy")
 
         return trainer
 
@@ -536,6 +560,7 @@ class ClientAgent(Agent):
             self.logger.info('No retrain is needed')
             return self.adj_path
 
+        print('REtraining ......')
         start_time = datetime.datetime.now()
         self.logger.info('Retrain start!!! It will save to ' + self.folder_path)
 
@@ -548,6 +573,7 @@ class ClientAgent(Agent):
 
         self.trainer.set_gameboard(gameboard=gameboard,
                                    save_path=save_path)
+
         # #######################################################
 
         # retrain the model #####################################
@@ -598,7 +624,7 @@ class ClientAgent(Agent):
                 if sum(self.win_rate_after_novelty[-1 * self.change_to_background_wait:]) == 0:
                     self.background_agent_use = True
 
-    def play_remote_game(self, address=('localhost', 6003), authkey=b"password"):
+    def play_remote_game(self, address=('localhost', 6002), authkey=b"password"):
         """
         Connects to a ServerAgent and begins the loop of waiting for requests and responding to them.
         @param address: Tuple, the address and port number. Defaults to localhost:6000
@@ -654,6 +680,9 @@ class ClientAgent(Agent):
 
                 # 3. If board size changed, before the game, we need to call retrain#
                 if self.state_num != len(s) or self.retrain_signal:
+                    if self.state_num != len(s):
+                        self.logger.info('detect the novelty as the board size change')
+
                     if self.win_rate_after_novelty == None:  # begin to record the game winning rate
                         self.win_rate_after_novelty = []
 
@@ -669,10 +698,10 @@ class ClientAgent(Agent):
                     #self.converge_signal
                     adj_path = self.retrain_from_scratch(ini_current_gameboard, self.game_num)
 
-                    self.state_num = len(self.interface.board_to_state(data_dict_from_server['current_gameboard']))  # reset the state_num size
+                    self.state_num = len(s)  # reset the state_num size
 
                     # self.kg_change_bool = True
-                    # self.retrain_signal = False if self.converge_signal else True  # when converge, stop retraining
+                    self.retrain_signal = False if self.converge_signal else True  # when converge, stop retraining
                     # self.kg_change_wait = 0
                     self.adj_path = adj_path
 
@@ -690,7 +719,7 @@ class ClientAgent(Agent):
             elif func_name == 'make_post_roll_move':
                 serial_dict_to_client = data_dict_from_server
                 if self.background_agent_use:
-                    server_result, self._agent_memory = self.make_post_roll_move(serial_dict_to_client, self._agent_memory)
+                    server_result, self._agent_memory = self.make_post_roll_move(serial_dict_to_client, self._agent_memory, self.go_increment)
                     serial_dict_to_server = dict()
                     serial_dict_to_server['function'] = server_result[0]
                     serial_dict_to_server['param_dict'] = server_result[1]
@@ -709,7 +738,7 @@ class ClientAgent(Agent):
                 self.gameboard = serial_dict_to_client['current_gameboard']
                 if self.gameboard['history'][-1]['function'] == 'free_mortgage':
                     self.check_mortgage_percentage(self.gameboard['players']['player_1']['current_cash'])
-                server_result, self._agent_memory = self.make_out_of_turn_move(serial_dict_to_client, self._agent_memory, self.mortgage_percentage)
+                server_result, self._agent_memory = self.make_out_of_turn_move(serial_dict_to_client, self._agent_memory, self.mortgage_percentage, self.go_increment)
                 serial_dict_to_server = dict()
                 serial_dict_to_server['function'] = server_result[0]
                 serial_dict_to_server['param_dict'] = server_result[1]
@@ -728,7 +757,7 @@ class ClientAgent(Agent):
 
             elif func_name == 'make_buy_property_decision':
                 serial_dict_to_client = data_dict_from_server
-                result = self.make_buy_property_decision(serial_dict_to_client)
+                result = self.make_buy_property_decision(serial_dict_to_client, self.go_increment)
 
             elif func_name == 'handle_negative_cash_balance':
                 serial_dict_to_client = data_dict_from_server

@@ -1,0 +1,15 @@
+2020-10-30 20:11:39,043:A2C_agent_2.logging_info:DEBUG:Define the folder path as /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty
+2020-10-30 20:11:39,043:A2C_agent_2.logging_info:INFO:Tournament starts!
+2020-10-30 20:11:39,094:A2C_agent_2.logging_info:INFO:1 th game starts!
+2020-10-30 20:11:42,628:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:11:46,147:A2C_agent_2.logging_info:INFO:1 th game stops!
+2020-10-30 20:11:46,153:A2C_agent_2.logging_info:INFO:2 th game starts!
+2020-10-30 20:11:49,887:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:11:53,431:A2C_agent_2.logging_info:INFO:2 th game stops!
+2020-10-30 20:11:53,437:A2C_agent_2.logging_info:INFO:3 th game starts!
+2020-10-30 20:11:57,743:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:12:00,998:A2C_agent_2.logging_info:DEBUG:Novelty Detected as [[], [['Mediterranean-Avenue', 'is priced at', ['60', '1499']], ['Baltic-Avenue', 'is priced at', ['60', '1499']], ['Reading-Railroad', 'is priced at', ['200', '1499']], ['Oriental-Avenue', 'is priced at', ['100', '1499']], ['Vermont-Avenue', 'is priced at', ['100', '1499']], ['Connecticut-Avenue', 'is priced at', ['120', '1499']], ['St.-Charles-Place', 'is priced at', ['140', '1499']], ['Electric-Company', 'is priced at', ['150', '1499']], ['States-Avenue', 'is priced at', ['140', '1499']]]]
+2020-10-30 20:12:00,998:A2C_agent_2.logging_info:DEBUG:Retrain signal is True now, it will retrain the NN before next game!
+2020-10-30 20:12:00,998:A2C_agent_2.logging_info:INFO:3 th game stops!
+2020-10-30 20:12:01,004:A2C_agent_2.logging_info:INFO:4 th game starts!
+2020-10-30 20:12:01,025:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_0_with_novelty

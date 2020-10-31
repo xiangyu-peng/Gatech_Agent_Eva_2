@@ -1,0 +1,11 @@
+2020-10-30 20:08:32,759:A2C_agent_2.logging_info:DEBUG:Define the folder path as /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_10_with_novelty
+2020-10-30 20:08:32,759:A2C_agent_2.logging_info:INFO:Tournament starts!
+2020-10-30 20:08:32,808:A2C_agent_2.logging_info:INFO:1 th game starts!
+2020-10-30 20:08:35,090:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:08:39,080:A2C_agent_2.logging_info:INFO:1 th game stops!
+2020-10-30 20:08:39,090:A2C_agent_2.logging_info:INFO:2 th game starts!
+2020-10-30 20:08:42,950:A2C_agent_2.logging_info:DEBUG:Run the knowledge graph to learn the rule
+2020-10-30 20:08:47,213:A2C_agent_2.logging_info:INFO:2 th game stops!
+2020-10-30 20:08:47,219:A2C_agent_2.logging_info:INFO:3 th game starts!
+2020-10-30 20:08:47,220:A2C_agent_2.logging_info:INFO:detect the novelty as the board size change
+2020-10-30 20:08:47,301:A2C_agent_2.logging_info:INFO:Retrain start!!! It will save to /media/becky/GNOME-p3/Evaluation_2/monopoly_simulator_2/A2C_agent_2/weights/meta_seed_10_with_novelty
