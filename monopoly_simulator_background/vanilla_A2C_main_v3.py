@@ -2,13 +2,14 @@
 # Only consider 2 actions
 # Only take one action each time
 # log name + save name
-# python vanilla_A2C_main_v3.py --novelty_change_num 18 --novelty_change_begin 1 --novelty_introduce_begin 0 --seed 8 --gat_use False
+# python vanilla_A2C_main_v3.py --novelty_change_num 18 --novelty_change_begin 1 --novelty_introduce_begin 1000000000000000 --seed 8 --gat_use False
 
 import sys, os
 upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
 sys.path.append(upper_path + '/KG_rule')
+sys.path.append(upper_path + '/GNN')
 ####################
 from monopoly_simulator_background.vanilla_A2C import *
 from monopoly_simulator_background.interface import Interface
@@ -28,8 +29,8 @@ import datetime
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID"
 
-class Config:
-    device = torch.device('cuda:1')
+# class Config:
+#     device = torch.device('cuda:1')
 
 class HiddenPrints:
     def __enter__(self):
@@ -54,20 +55,28 @@ class HiddenPrints:
 #     return a
 class MonopolyTrainer:
     def __init__(self,
-                 params,
+                 params=None,
+                 device_id = None,
                  gameboard=None,
+                 kg_use=False,
+                 logger_use=False,
+                 config_file=None,
+                 test_required=True,
+                 pretrain_model=None,
+                 tf_use=True,
+                 tf_stop_num=0,
+                 seed=None,
                  exp_dict=None):
 
         self.exp_dict = exp_dict
-        self.gat_use = args.gat_use
-        self.seed = args.seed
+        self.seed = seed
 
         #tf use
-        self.tf_use = args.tf_use
-        self.tf_stop_num = args.tf_stop_num
+        self.tf_use = tf_use
+        self.tf_stop_num = tf_stop_num
 
-        self.config_file = args.config_file
-        self._device_id = 'cuda:' + args.device_id
+        self.config_file = config_file
+        self._device_id = 'cuda:' + device_id
         self.params = params
         self.PRINT_INTERVAL = self.params['print_interval']
         self.n_train_processes = self.params['n_train_processes']  # batch size
@@ -84,12 +93,12 @@ class MonopolyTrainer:
         self.save_path = self.params['save_path']
         self.num_test = self.params['num_test']
         self.gameboard = gameboard
-        self.kg_use = args.kg_use
-        self.logger_use = args.logger_use
+        self.kg_use = kg_use
+        self.logger_use = logger_use
         self.test_result = {'step': [], 'loss': [],
                      'winning_rate': [], 'avg_score': [], 'avg_diff': []}
         self.spend_time = 0
-        self.test_required = args.test_required
+        self.test_required = test_required
 
 
         # config logger
@@ -100,13 +109,13 @@ class MonopolyTrainer:
                                + '_as' + str(self.action_space) + '_sn' \
                                + '_ac' + str(self.actor_loss_coefficient) + '_seed' + str(self.seed) + '_novelty_' + \
                                str(exp_dict['novelty_num'][0]) + '_' + str(exp_dict['novelty_num'][1]) + '_ran'
-            self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/', log_suffix=hyper_config_str)])
+            self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/st_no_', log_suffix=hyper_config_str)])
 
         self.start_time = datetime.datetime.now()
 
         ###set to cpu for evaluation
         self.device = torch.device(self._device_id)
-        os.environ["CUDA_VISIBLE_DEVICES"] = args.device_id
+        os.environ["CUDA_VISIBLE_DEVICES"] = '0,1,2,3'
             #######################################
 
         with HiddenPrints():
@@ -117,25 +126,29 @@ class MonopolyTrainer:
         else:
             self.interface.set_board('/monopoly_simulator_background/baseline_interface.json')
 
-        if args.pretrain_model:
-            self.model = torch.load(args.pretrain_model, map_location={"cuda:2" : "cuda:1"})
+        if pretrain_model:
+            self.model = torch.load(pretrain_model, map_location={"cuda:2" : "cuda:1"})
         else:
-
             self.config_model = ConfigParser()
             self.config_model.hidden_state = self.params['hidden_state']
             self.config_model.action_space = self.params['action_space']
             self.config_model.state_num = self.params['state_num']
-            # self.config_model.state_output_size = self.params['state_output_size']
+            self.config_model.state_output_size = self.params['state_output_size']
 
             if self.gameboard:
                 self.config_model.state_num = len(self.interface.board_to_state(self.gameboard))
-            self.model = ActorCritic(self.config_model, args.gat_use)  # A2C model
+            self.model = ActorCritic(self.config_model, gat_use=False, device=self.device)  # A2C model
 
         self.model.to(self.device)
         self.loss = 0
         self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
-
         self.memory = Memory()
+
+    def reinitialize_agent(self, gameboard=None):
+        # if gameboard:
+        #     self.config_model.state_num = len(self.interface.board_to_state(gameboard))
+        self.model = ActorCritic(self.config_model, device=self.device, gat_use=False)  # A2C model
+        self.model.to(self.device)
 
     def add_vector_to_state(self, states, vector, device):
         state_return = []
@@ -174,6 +187,7 @@ class MonopolyTrainer:
                 num_game += 1
                 s = s.reshape(1, -1)
                 s = torch.tensor(s, device=self.device).float()
+                s = self.model.forward_baseline(s)
                 prob = self.model.actor(s)
                 a = Categorical(prob).sample().cpu().numpy()  # substitute
                 # print(a[0])
@@ -209,8 +223,10 @@ class MonopolyTrainer:
         return round(score/num_test, 5), round(win_num/num_test, 5), round(avg_diff/num_test, 5)
 
     def save(self, step_idx):
-        save_name = self.save_path + '/del_ran_19_1_v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
+        save_name = self.save_path + '/st_no_baseline_v3_lr_' + str(self.learning_rate) + '_#_' +  str(int(step_idx / self.PRINT_INTERVAL)) + '.pkl'
         torch.save(self.model, save_name)
+        # torch.save(self.model.state_dict(), save_name)
+        return save_name
 
         # for i, (name, param) in enumerate(self.model.named_parameters()):
         #     if i == 0:
@@ -223,36 +239,53 @@ class MonopolyTrainer:
         # self.optimizer = optim.Adam(self.model.parameters(), lr=self.learning_rate)
         # print('optimizer', self.optimizer)
 
-    def set_gameboard(self, gameboard=None,
-                      seed=None,
+    def set_gameboard(self,
+                      gameboard=None,
                       save_path=None,
-                      test_required=None,
                       print_interval=None,
                       max_train_steps=None,
-                      logger_use=None,
-                      logger_name=None):
-
-        self.gameboard = gameboard if gameboard else self.gameboard
-        self.save_path = save_path if save_path else self.save_path
+                      pretrain_model=None,
+                      exp_dict=None,
+                      seed=None):
+        
         self.seed = seed if seed else self.seed
-        self.test_required = test_required
+        if gameboard:
+            self.gameboard = gameboard
+            self.envs.close()
+            with HiddenPrints():
+                self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed,
+                                        self.exp_dict)
+        self.save_path = save_path if save_path else self.save_path
+        # self.seed = seed if seed else self.seed
+        # self.test_required = test_required
         self.PRINT_INTERVAL = print_interval if print_interval else self.PRINT_INTERVAL
         self.max_train_steps = max_train_steps if max_train_steps else self.max_train_steps
-        if logger_use == True:
-            self.logger_use = True
-            hyper_config_str = '_n' + str(self.n_train_processes) + '_lr' + str(self.learning_rate) + '_ui' + str(
-                self.update_interval) \
-                               + '_y' + str(self.gamma) + '_s' + str(self.max_train_steps) + '_hs' + str(self.hidden_state) \
-                               + '_as' + str(self.action_space) + '_sn'  \
-                               + '_ac' + str(self.actor_loss_coefficient) + '_hyp_' + logger_name
-
-            self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/', log_suffix=hyper_config_str)])
+        # if logger_use == True:
+        #     self.logger_use = True
+        #     hyper_config_str = '_n' + str(self.n_train_processes) + '_lr' + str(self.learning_rate) + '_ui' + str(
+        #         self.update_interval) \
+        #                        + '_y' + str(self.gamma) + '_s' + str(self.max_train_steps) + '_hs' + str(self.hidden_state) \
+        #                        + '_as' + str(self.action_space) + '_sn'  \
+        #                        + '_ac' + str(self.actor_loss_coefficient) + '_hyp_' + logger_name
+        #
+        #     self.TB = logger.Logger(None, [logger.make_output_format('csv', 'logs/', log_suffix=hyper_config_str)])
+        if pretrain_model:
+            # self.model = torch.load(pretrain_model, map_location={"cuda:2": "cuda:1"})
+            self.model.load_state_dict(torch.load(pretrain_model))
+        if exp_dict :
+            self.exp_dict = exp_dict
+            self.envs.close()
+            with HiddenPrints():
+                self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed,
+                                        self.exp_dict)
 
     def train(self):
+
         # with HiddenPrints():
         #     self.envs = ParallelEnv(self.n_train_processes, self.gameboard, self.kg_use, self.config_file, self.seed)
 
         step_idx = 1
+        save_name = None
         with HiddenPrints():
             reset_array = self.envs.reset()
 
@@ -268,8 +301,11 @@ class MonopolyTrainer:
                 entropy = 0
                 log_probs, masks, rewards, values = [], [], [], []
 
+
                 # s = s.reshape(n_train_processes, -1)
-                prob = self.model.actor(torch.tensor(s, device=self.device).float())  # s => tensor #output = prob for actions
+                s = torch.tensor(s, device=self.device).float()
+                s = self.model.forward_baseline(s)
+                prob = self.model.actor(s)  # s => tensor #output = prob for actions
                 # prob = model.actor(torch.from_numpy(s,device=device).float()) # s => tensor #output = prob for actions
                 # use the action from the distribution if it is in masked
                 # print(prob, s)
@@ -297,7 +333,7 @@ class MonopolyTrainer:
                 #     s_prime_cal, r, done, info = self.envs.step(a)
                 # s_prime_cal = torch.tensor(s_prime_cal, device=self.device).float()
 
-                values.append(self.model.critic(torch.tensor(s, device=self.device).float()))
+                values.append(self.model.critic(s))
 
                 log_prob = Categorical(prob).log_prob(torch.tensor(a, device=self.device))
                 entropy += Categorical(prob).entropy().mean()
@@ -332,6 +368,7 @@ class MonopolyTrainer:
 
                 ##########
                 s_prime_cal = torch.tensor(s_prime_cal, device=self.device).float()
+                s_prime_cal = self.model.forward_baseline(s_prime_cal)
 
                 # loss cal
                 log_probs = torch.cat(log_probs)
@@ -363,6 +400,7 @@ class MonopolyTrainer:
                 self.optimizer.zero_grad()
                 self.loss.backward()
                 self.optimizer.step()
+                # print(self.model.fc_actor.weight.grad)
                 # print(self.optimizer.step())
 
 
@@ -374,7 +412,7 @@ class MonopolyTrainer:
             avg_score, avg_winning, avg_diff = 0, 0, 0
             if step_idx % self.PRINT_INTERVAL == 0:
                 # save weights of A2C
-                self.save(step_idx)
+                save_name = self.save(step_idx)
 
                 # print('loss', loss_train / self.PRINT_INTERVAL, prob[0])  #, s[0].tolist()[-12-40:-12].index(1), s[0].tolist()[-12: -6].index(1)*500)
                 loss_return  = loss_train / self.PRINT_INTERVAL
@@ -421,9 +459,9 @@ class MonopolyTrainer:
             #         if (max(self.test_result['winning_rate'][-15:]) - min(self.test_result['winning_rate'][-15:])) < 0.03:
             #             break
 
-        self.envs.close()
+        # self.envs.close()
 
-        return loss_return, avg_score, avg_winning, avg_diff
+        return save_name
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -513,10 +551,20 @@ if __name__ == '__main__':
 
     param_list = dict_product(all_params)
     for params in param_list:  # run different hyper parameters in sequence
-        trainer = MonopolyTrainer(params,
+        trainer = MonopolyTrainer(params=params,
+                                  device_id=args.device_id,
                                   gameboard=None,
-                                  exp_dict=exp_dict)  # '/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
-    trainer.train()
+                                  kg_use=args.kg_use,
+                                  logger_use=args.logger_use,
+                                  config_file=args.config_file,
+                                  test_required=args.test_required,
+                                  pretrain_model=args.pretrain_model,
+                                  tf_use=args.tf_use,
+                                  tf_stop_num=args.tf_stop_num,
+                                  seed=args.seed,
+                                  exp_dict=exp_dict)# '/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
+
+        trainer.train()
 
 # if __name__ == '__main__':
 #     config_file = '/media/becky/Novelty-Generation-Space-A2C/Vanilla-A2C/config.ini'
