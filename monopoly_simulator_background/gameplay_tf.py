@@ -1,5 +1,5 @@
 import sys, os
-upper_path = os.path.abspath('..')
+upper_path = os.path.abspath('.').replace('/Evaluation_2/monopoly_simulator_2','')  #os.path.abspath('..')
 sys.path.append(upper_path + '/KG_rule')
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
@@ -821,7 +821,7 @@ def inject_novelty(current_gameboard, novelty_range=None):
     # only on the ownership of all the 4 properties in this case.
 
     inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
-
+    spatialNovelty = novelty_generator.SpatialRepresentationNovelty()
     # inanimateNovelty.map_property_set_to_color(current_gameboard, [current_gameboard['location_objects']['Park Place'], current_gameboard['location_objects']['Boardwalk']], 'Brown')
     # inanimateNovelty.map_property_to_color(current_gameboard, current_gameboard['location_objects']['Baltic-Avenue'], 'Orchid')
     # #setting new rents for Indiana Avenue
@@ -834,14 +834,15 @@ def inject_novelty(current_gameboard, novelty_range=None):
             num += 1
             if num >= novelty_range[1] and num < (novelty_range[1] + novelty_range[0]):
                 inanimateNovelty.price_novelty(current_gameboard['location_objects'][asset], 1499)
-            # rent_dict = {"rent_1_house": 2500, "rent_hotel": 4000, "rent_3_houses": 3500, "rent": 2000, "rent_4_houses": 3800, "rent_2_houses": 3000}
-            # rent_dict = {"rent_1_house": 0, "rent_hotel": 0, "rent_3_houses": 0, "rent": 0,
-            #              "rent_4_houses": 0, "rent_2_houses": 0}
-            # inanimateNovelty.rent_novelty(current_gameboard['location_objects'][asset], rent_dict)
+                # rent_dict = {"rent_1_house": 2500, "rent_hotel": 4000, "rent_3_houses": 3500, "rent": 2000, "rent_4_houses": 3800, "rent_2_houses": 3000}
+                # rent_dict = {"rent_1_house": 0, "rent_hotel": 0, "rent_3_houses": 0, "rent": 0,
+                #              "rent_4_houses": 0, "rent_2_houses": 0}
+                # inanimateNovelty.rent_novelty(current_gameboard['location_objects'][asset], rent_dict)
+
 
             # if num > 0.25 * len(asset_lists):
             #     break
-
+        # spatialNovelty.color_reordering(current_gameboard, asset_list, 'Blue')
         # inanimateNovelty.price_novelty(current_gameboard['location_objects']['Baltic Avenue'], 1400)
 
 
