@@ -99,20 +99,20 @@ class Interface(object):
 
             if loc_class == 'real_estate':
                 file.write(self.mapping(space.name) + ' is colored as ' + str(space.color) + '\n')
-                file.write(self.mapping(space.name) + ' is price-1-house at ' + str(space.price_per_house) + '\n')
-                file.write(self.mapping(space.name) + ' is rented-1-hotel at ' + str(space.rent_hotel) + '\n')
-                file.write(self.mapping(space.name) + ' is rented-0-house at ' + str(space.rent) + '\n')
-                file.write(self.mapping(space.name) + ' is rented-1-house at ' + str(space.rent_1_house) + '\n')
-                file.write(self.mapping(space.name) + ' is rented-2-house at ' + str(space.rent_2_houses) + '\n')
-                file.write(self.mapping(space.name) + ' is rented-3-house at ' + str(space.rent_3_houses) + '\n')
-                file.write(self.mapping(space.name) + ' is rented-4-house at ' + str(space.rent_4_houses) + '\n')
+                file.write(self.mapping(space.name) + ' is price-1-house at ' + str(int(space.price_per_house)) + '\n')
+                file.write(self.mapping(space.name) + ' is rented-1-hotel at ' + str(int(space.rent_hotel)) + '\n')
+                file.write(self.mapping(space.name) + ' is rented-0-house at ' + str(int(space.rent)) + '\n')
+                file.write(self.mapping(space.name) + ' is rented-1-house at ' + str(int(space.rent_1_house)) + '\n')
+                file.write(self.mapping(space.name) + ' is rented-2-house at ' + str(int(space.rent_2_houses)) + '\n')
+                file.write(self.mapping(space.name) + ' is rented-3-house at ' + str(int(space.rent_3_houses)) + '\n')
+                file.write(self.mapping(space.name) + ' is rented-4-house at ' + str(int(space.rent_4_houses)) + '\n')
 
             if loc_class in ['real_estate', 'railroad',  'utility']:
-                file.write(self.mapping(space.name) + ' is mortgaged at ' + str(space.mortgage) + '\n')
-                file.write(self.mapping(space.name) + ' is priced at ' + str(space.price) + '\n')
+                file.write(self.mapping(space.name) + ' is mortgaged at ' + str(int(space.mortgage)) + '\n')
+                file.write(self.mapping(space.name) + ' is priced at ' + str(int(space.price)) + '\n')
 
             if loc_class == 'tax':
-                file.write(self.mapping(space.name) + ' is cost at ' + str(space.amount_due) + '\n')
+                file.write(self.mapping(space.name) + ' is cost at ' + str(int(space.amount_due)) + '\n')
 
         # Add go_increment to the file
         file.write('GO is incremtent as ' + str(game_elements['go_increment']) + '\n')
@@ -176,6 +176,8 @@ class Interface(object):
             if type(current_board['location_objects'][space]) != location.DoNothingLocation and \
                     type(current_board['location_objects'][space]) != location.ActionLocation and \
                     type(current_board['location_objects'][space]) != location.TaxLocation:
+                # print(type(current_board['location_objects'][space]))
+                # print(type(current_board['location_objects'][space]) == location.DoNothingLocation)
                 if current_board['location_objects'][space].owned_by == current_board['bank']:
                     state_space_owned.append(0)
                 elif current_board['location_objects'][space].owned_by.player_name == 'player_1':
