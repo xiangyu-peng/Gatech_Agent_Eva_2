@@ -425,7 +425,7 @@ class MonopolyTrainer_GAT:
                             [reset_array[i][1][0] for i in range(len(reset_array))],\
                             [reset_array[i][1][1] for i in range(len(reset_array))]
         loss_train = torch.tensor(0, device=self.device).float()
-        while step_idx < self.max_train_steps and self.spend_time < 0.1:  # TODO change to 2.5 hr
+        while step_idx < self.max_train_steps and self.spend_time < 2.5:  # TODO change to 2.5 hr
             loss = torch.tensor(0, device=self.device).float()
             for _ in range(self.update_interval):
                 entropy = 0
