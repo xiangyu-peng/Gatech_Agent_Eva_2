@@ -72,12 +72,12 @@ class History_Record(object):
 
 class KG_OpenIE(History_Record):
     def __init__(self, gameboard,
-                 matrix_file_name,
-                 entity_file_name,
+                 matrix_file_name=None,
+                 entity_file_name=None,
                  core_nlp_version: str = '2018-10-05',
                  config_file=None):
 
-        self.upper_path = '/media/becky/GNOME-p3'
+        self.upper_path = '/home/becky/Documents/Gatech_Agent_Eva_2'
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
 
         # nlp server env
@@ -92,6 +92,7 @@ class KG_OpenIE(History_Record):
             zf.extractall(path=self.install_dir)
             zf.close()
         os.environ['CORENLP_HOME'] = str(self.install_dir / 'stanford-corenlp-full-2018-10-05')
+        print('CORENLP_HOME',os.environ['CORENLP_HOME'])
         self.client = CoreNLPClient(annotators=['openie'], memory='8G')
 
         config_data = ConfigParser()
@@ -871,7 +872,7 @@ class Novelty_Detection_Dice(History_Record):
     def __init__(self, config_file=None):
         #Novelty Detection
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        self.upper_path = '/media/becky/GNOME-p3'
+        self.upper_path = '/home/becky/Documents/Gatech_Agent_Eva_2'
         # if config_file == None:
         #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
@@ -1054,7 +1055,7 @@ class Novelty_Detection_Card(History_Record):
     def __init__(self, config_file=None):
         # Novelty Detection
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        self.upper_path = '/media/becky/GNOME-p3'
+        self.upper_path = '/home/becky/Documents/Gatech_Agent_Eva_2'
         # if config_file == None:
         #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
@@ -1085,11 +1086,14 @@ if __name__ == '__main__':
         name_num += 1
         player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
 
-    gameboard_initial = set_up_board('/media/becky/GNOME-p3/monopoly_game_schema_v1-1.json',
+    gameboard_initial = set_up_board('/home/becky/Documents/Gatech_Agent_Eva_2/monopoly_game_schema_v1-1.json',
                                      player_decision_agents, num_active_players=4)
 
-    client = KG_OpenIE(gameboard_initial, config_file='/media/becky/GNOME-p3/Hypothetical_simulator/config_online_baseline.ini')
-    client.annotate('I love U')
+    client = KG_OpenIE(gameboard_initial, config_file='/home/becky/Documents/Gatech_Agent_Eva_2/monopoly_simulator_background/config.ini',
+                       matrix_file_name='/home/becky/Documents/Gatech_Agent_Eva_2/KG_rule/matrix_rule/kg_matrix_no.npy',
+                       entity_file_name='/home/becky/Documents/Gatech_Agent_Eva_2/KG_rule/matrix_rule/entity_id_no.json')
+    print('Begin')
+    print(client.annotate('I love U'))
     # client.build_kg_file('/media/becky/GNOME-p3/KG-rule/game_log.txt', level='rel', use_hash=True)
 
     #

@@ -1,5 +1,5 @@
 import sys, os
-upper_path = os.path.abspath('.').replace('/Evaluation_2/monopoly_simulator','')
+upper_path = os.path.abspath('.').replace('/Evaluation_2/monopoly_simulator_2','')
 sys.path.append(upper_path + '/KG_rule')
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
