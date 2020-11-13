@@ -569,6 +569,7 @@ def play_game_in_tournament_socket(game_seed, agent1, agent2, agent3, agent4, no
                 return winner
     else:
         if inject_novelty_function:
+            print('!!!!!')
             if player_decision_agents['player_1'].startup(game_elements, indicator=True) == flag_config_dict['failure_code'] or \
                     player_decision_agents['player_2'].startup(game_elements, indicator=True) == flag_config_dict['failure_code'] or \
                     player_decision_agents['player_3'].startup(game_elements, indicator=True) == flag_config_dict['failure_code'] or \
@@ -598,7 +599,7 @@ def play_game_in_tournament_socket(game_seed, agent1, agent2, agent3, agent4, no
             else:
                 logger.debug("Sucessfully initialized all player agents.")
                 winner = simulate_game_instance(game_elements, history_log_file=None, np_seed=game_seed)
-                if player_decision_agents['player_1'].shutdown() == flag_config_dict['failure_code'] or \
+                if player_decision_agents['player_1'].shutdown(game_elements) == flag_config_dict['failure_code'] or \
                         player_decision_agents['player_2'].shutdown() == flag_config_dict['failure_code'] or \
                         player_decision_agents['player_3'].shutdown() == flag_config_dict['failure_code'] or \
                         player_decision_agents['player_4'].shutdown() == flag_config_dict['failure_code']:

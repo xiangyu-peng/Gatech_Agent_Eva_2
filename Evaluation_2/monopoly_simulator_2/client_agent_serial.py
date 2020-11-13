@@ -665,16 +665,19 @@ class ClientAgent(Agent):
             # Before simulating each game, we have to make sure if we need retrain the network
             elif func_name == "startup":
                 self.call_times = 1
+                print('indicator', data_dict_from_server['indicator'])
                 # 1. Clear interface history and set the init for interface#########
                 self.interface.clear_history(self.folder_path+self.log_file_name)
                 self.interface.set_board(data_dict_from_server['current_gameboard'])
-                print('sequence =>', data_dict_from_server['current_gameboard']['location_sequence'])
+                # print('sequence =>', data_dict_from_server['current_gameboard']['location_sequence'])
                 s = self.interface.board_to_state(data_dict_from_server['current_gameboard'])
                 self.game_num += 1  # update number of games simulated
                 self.logger.info(str(self.game_num) + ' th game starts!')
                 # ##################################################################
 
                 # 2. We need to set up kg before the first game#####################
+                if data_dict_from_server['indicator'] == False:
+                    self.kg_use = False
                 if self.game_num == 1:
                     self.gameboard_ini = data_dict_from_server['current_gameboard']
                     self.kg = KG_OpenIE_eva(self.gameboard_ini,
@@ -684,8 +687,7 @@ class ClientAgent(Agent):
                 # ###################################################################
 
                 # 3. If board size changed, before the game, we need to call retrain#
-                print('self.state_num', self.state_num, len(s))
-                if self.state_num != len(s) or self.retrain_signal:
+                if self.state_num != len(s) or self.retrain_signal or data_dict_from_server['indicator']:
                     if self.state_num != len(s):
                         self.logger.info('detect the novelty as the board size change')
 

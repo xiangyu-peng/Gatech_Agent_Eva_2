@@ -221,7 +221,7 @@ def play_tournament_with_novelty_2(tournament_log_folder=None, nov=None, meta_se
         #####GT#######
         agent = ServerAgent()
         f_name = "meta_seed_" + str(meta_seed) + '_with_novelty'
-        info_game = 'w/o'
+        info_game = 'w/o'  # not useful any more, just ignore it.
         agent.start_tournament(f_name, info_game)
 
 
@@ -312,13 +312,13 @@ def class_novelty_1(current_gameboard):
     # contingentattributenovelty.change_property_sell_percentage(current_gameboard, 0.4)
 
     # gameboard
-    granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 6)
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States Avenue'],
-                                           20)
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee Avenue'],
-                                           27)
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
+    # granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 6)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States Avenue'],
+    #                                        20)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee Avenue'],
+    #                                        27)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
 
     # Reorder gameboard
 
@@ -340,13 +340,13 @@ def class_novelty_1(current_gameboard):
     # spatialNovelty.color_reordering(current_gameboard, ['Boardwalk', 'Park Place'], 'Blue')
 
     # Dice
-    # numberDieNovelty = novelty_generator.NumberClassNovelty()
-    # numberDieNovelty.die_novelty(current_gameboard, 2, die_state_vector=[[1,2,3,4,5,6],[1,2,3,4,5,6]])
-    # classDieNovelty = novelty_generator.TypeClassNovelty()
-    # # die_state_distribution_vector = ['uniform','uniform','biased','biased']
-    # die_state_distribution_vector = ['biased', 'uniform']
-    # die_type_vector = ['odd_only','even_only']
-    # classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
+    numberDieNovelty = novelty_generator.NumberClassNovelty()
+    numberDieNovelty.die_novelty(current_gameboard, 2, die_state_vector=[[1,2,3,4,5,6],[1,2,3,4,5,6]])
+    classDieNovelty = novelty_generator.TypeClassNovelty()
+    # die_state_distribution_vector = ['uniform','uniform','biased','biased']
+    die_state_distribution_vector = ['biased', 'uniform']
+    die_type_vector = ['odd_only','even_only']
+    classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
 
     # Card
 
@@ -404,4 +404,4 @@ except:
 
 #Specify the name of the folder in which the tournament games has to be logged in the following format: "/name_of_your_folder/"
 # play_tournament_without_novelty('/tournament_without_novelty_4/', meta_seed=10, num_games=100)
-play_tournament_with_novelty_1('/tournament_with_novelty/',num_games=10, novelty_index=3, meta_seed=0)
+play_tournament_with_novelty_2('/tournament_with_novelty/',num_games=10, novelty_index=3, meta_seed=0, novelty_info=True)
