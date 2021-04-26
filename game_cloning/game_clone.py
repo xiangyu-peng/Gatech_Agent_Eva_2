@@ -61,7 +61,7 @@ class GameClone():
         raise NotImplementedError
 
     def gc_detect_novelty(self, gameboard_message):
-        data_dict_from_server = json.load(gameboard_message)
+        data_dict_from_server = json.loads(gameboard_message)
 
         novelty_properties = {}
 
