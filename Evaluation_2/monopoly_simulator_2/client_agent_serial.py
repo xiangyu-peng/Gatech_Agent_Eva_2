@@ -32,6 +32,7 @@ import json
 import logging
 logger = logging.getLogger('monopoly_simulator.logging_info.client_agent_serial')
 from scipy import stats
+from game_cloning.game_clone import GameClone
 
 # TODO
 # √√ 0. path check
@@ -189,6 +190,11 @@ class ClientAgent(Agent):
 
         self.go_increment = 200
 
+        # game cloning
+        self.gc = GameClone()
+        self.gc_novelty_sig = False
+        self.gc_novelty_dict = dict()
+
     def check_property_sell_percentage(self, cash_after):
         if 'call_time' in self.take_sell_property_info and self.call_times - 1 == self.take_sell_property_info['call_time']:
             if cash_after > self.take_sell_property_info['cash']:
@@ -286,7 +292,12 @@ class ClientAgent(Agent):
             # self.kg_change_bool = True
             # self.kg_change_wait = 0
 
-
+        # game cloning detects novelty
+        if self.gc_novelty_sig:
+            self.retrain_signal = True
+            self.logger.debug('Novelty Detected by Game Cloning')
+            self.logger.debug('Novelty Detected as ' + str(self.gc_novelty_dict))
+            self.logger.debug('Retrain signal is True now, it will retrain the NN before next game!')
 
     def novelty_board_detect(self, current_gameboard):
         self.die_count = (current_gameboard['die_sequence'][0])
@@ -649,6 +660,13 @@ class ClientAgent(Agent):
             func_name = data_dict_from_server['function']
             self.call_times += 1
 
+            # game cloning novelty check up
+            if func_name in ['make_buy_property_decision', 'make_bid', 'make_pre_roll_move', 'make_out_of_turn_move', 'make_post_roll_move'] and \
+                not self.gc_novelty_sig:
+                self.gc_novelty_sig, novelty_dict = self.gc.gc_detect_novelty(data_from_server)
+                if self.gc_novelty_sig:
+                    self.gc_novelty_dict.update(novelty_dict)
+
             if self.last_func_name == 'handle_negative_cash_balance' and 'current_gameboard' in data_dict_from_server:
                 self.check_property_sell_percentage(data_dict_from_server['current_gameboard']['players']['player_1']['current_cash'])
                 # print('after', data_dict_from_server['current_gameboard']['players']['player_1']['current_cash'])
@@ -732,6 +750,7 @@ class ClientAgent(Agent):
                     serial_dict_to_server['param_dict'] = server_result[1]
                     result = serial_dict_to_server
                 else:
+                    print('serial_dict_to_server', data_dict_from_server['current_gameboard']['cards']['picked_chance_card_details'])
                     result = self.make_post_roll_move_agent(serial_dict_to_client)
                     # server_result, self._agent_memory = self.make_post_roll_move(serial_dict_to_client,
                     #                                                              self._agent_memory)
