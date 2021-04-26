@@ -60,12 +60,15 @@ class GameClone():
     def update(self, samples):
         raise NotImplementedError
 
-    def gc_detect_novelty(self, gameboard_json):
-        with open(gameboard_json, 'r') as infile:
-            data_dict_from_server = json.load(infile)
+    def gc_detect_novelty(self, gameboard_message):
+        data_dict_from_server = json.load(gameboard_message)
+
+        novelty_properties = {}
 
         ## TODO balloch: dummy
         if not self.red_button and np.random.rand() > 0.99:
             self.red_button = True
+            novelty_properties['type'] = 'dummy'
+            novelty_properties['trigger'] = 'random'
 
-        return self.red_button
+        return self.red_button, novelty_properties
