@@ -109,7 +109,7 @@ class GameClone():
                     if key not in state_stats:
                         state_stats[key] = {'length': 0, 'data': [{}, {}]}
                     if state_stats[key]['length'] == len(gameboard[key]):
-                        pass
+                        pass  # do nothing
                         # print('No dice change updates')
                     else:
                         state_stats[key]['length'] += 1
@@ -143,45 +143,43 @@ class GameClone():
             print(key)
             novelty_properties['trigger'] = [key]
 
-            if (not parsed_json[key]) or (key in ('cards', 'history', 'players', 'locations', 'die_sequence')):
+            if (not parsed_json[key]) or (key in ('cards', 'history', 'players', 'locations')):
                 continue
-            elif type(parsed_json[key]) is dict:  # TODO balloch: untested
-                if key not in state_stats:
-                    novelty = True
-                    novelty_properties['trigger'] = [key]
-                    break
+            elif key not in state_stats:
+                novelty = True
+                break
+            elif type(parsed_json[key]) is dict:
                 novelty, novelty_properties = self.check_novelty(state_stats[key],
                                                                  parsed_json[key])
             elif type(parsed_json[key]) is list:
-                if type(parsed_json[key][-1]) is dict:  # history # TODO balloch: untested
-                    if key not in state_stats:
-                        novelty = True
+                if type(parsed_json[key][-1]) is dict:  # list of dicts - history # TODO balloch: untested
                     for idx, subdict in enumerate(parsed_json[key]):
-                        if idx > (len(state_stats[key]) - 1):
+                        if idx > (len(state_stats[key]) - 1):  # WARNING: EXCEPT WITH HISTORY
                             novelty = True
-                            novelty_properties['trigger'] = [key, subdict]
+                            novelty_properties['trigger'] = [key, parsed_json[key]]
+                            break
                         else:  # TODO: if subtree the same, add count, if not, insert? frankly list should become a tree/dict
                             novelty, novelty_properties = self.check_novelty(state_stats[key][idx],
                                                                              parsed_json[key][idx])
                             # novelty_properties.update(temp_novelty_properties)
-                # elif type(gameboard[key][-1]) is list:  # hardcoding this because die sequence only list of lists
-                #     if key not in state_stats:
-                #         state_stats[key] = {'length': 0, 'data': [{},{}]}
-                #     if state_stats[key]['length'] == len(gameboard[key]):
-                #         pass
-                #         # print('No dice change updates')
-                #     else:
-                #         state_stats[key]['length'] += 1
-                #         for idx, item in enumerate(gameboard[key][-1]):
-                #             if item not in state_stats[key]['data'][idx]:
-                #                 state_stats[key]['data'][idx][item] = 1
-                #             else:
-                #                 state_stats[key]['data'][idx][item] += 1
-                else:  # (str, bool int float) # TODO balloch: untested
-                    if key not in state_stats:
+                elif type(parsed_json[key][-1]) is list:  # list of lists - hardcoding this because die sequence only
+                    if state_stats[key]['length'] == len(parsed_json[key]):
+                        pass  # TODO balloch: this logic works but probably should be more rigorous
+                        # print('No dice change updates')
+                    else:
+                        for idx, item in enumerate(parsed_json[key][-1]):
+                            if item not in state_stats[key]['data'][idx]:
+                                novelty = True
+                                novelty_properties['trigger'] = [key, parsed_json[key]]
+                                break
+
+                            else:
+                                state_stats[key]['data'][idx][item] += 1
+                else:  # list of (str, bool int float)
+                    if tuple(parsed_json[key]) not in state_stats[key]:
                         novelty = True
-                    elif tuple(parsed_json[key]) not in state_stats[key]:
-                        novelty = True
+                        novelty_properties['trigger'] = [key, parsed_json[key]]
+                        break
                     else:
                         continue
                         # state_stats[key][tuple(gameboard[key])] += 1
@@ -189,7 +187,7 @@ class GameClone():
             else:  # (str, bool, int, float) # TODO balloch: untested
                 if parsed_json[key] not in state_stats[key]:
                     novelty = True
-                    novelty_properties['trigger'] = [parsed_json[key]]
+                    novelty_properties['trigger'] = [key, parsed_json[key]]
                     break
                 else:
                     continue
