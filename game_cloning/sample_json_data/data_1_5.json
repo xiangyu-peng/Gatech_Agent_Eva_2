@@ -1,0 +1,1384 @@
+{
+    "allowable_moves": [
+        "mortgage_property",
+        "concluded_actions",
+        "sell_property"
+    ],
+    "code": 1,
+    "current_gameboard": {
+        "cards": {
+            "picked_chance_card_details": {},
+            "picked_chance_cards": [],
+            "picked_community_chest_card_details": {},
+            "picked_community_chest_cards": []
+        },
+        "die_sequence": [
+            [
+                5,
+                1
+            ],
+            [
+                4,
+                1
+            ],
+            [
+                4,
+                5
+            ],
+            [
+                6,
+                6
+            ]
+        ],
+        "history": [
+            {
+                "function": "make_out_of_turn_moves",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_1"
+                },
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_move",
+                "param": {
+                    "allowable_moves": [
+                        "mortgage_property",
+                        "make_trade_offer",
+                        "sell_property",
+                        "skip_turn",
+                        "make_sell_property_offer"
+                    ],
+                    "code": [
+                        0
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_4"
+                },
+                "return": {
+                    "function": "skip_turn",
+                    "param": {}
+                }
+            },
+            {
+                "function": "skip_turn",
+                "param": {},
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_moves",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_4"
+                },
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_move",
+                "param": {
+                    "allowable_moves": [
+                        "mortgage_property",
+                        "make_trade_offer",
+                        "sell_property",
+                        "skip_turn",
+                        "make_sell_property_offer"
+                    ],
+                    "code": [
+                        0
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_2"
+                },
+                "return": {
+                    "function": "skip_turn",
+                    "param": {}
+                }
+            },
+            {
+                "function": "skip_turn",
+                "param": {},
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_moves",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_2"
+                },
+                "return": 2
+            },
+            {
+                "function": "roll_die",
+                "param": {},
+                "return": [
+                    4,
+                    5
+                ]
+            },
+            {
+                "function": "update_player_position",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "new_position": 9,
+                    "self": "player_3"
+                },
+                "return": null
+            },
+            {
+                "function": "move_player_after_die_roll",
+                "param": {
+                    "check_for_go": true,
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_3",
+                    "rel_move": 9
+                },
+                "return": null
+            },
+            {
+                "function": "process_move_consequences",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_3"
+                },
+                "return": null
+            },
+            {
+                "function": "make_post_roll_move",
+                "param": {
+                    "allowable_moves": [
+                        "concluded_actions",
+                        "buy_property"
+                    ],
+                    "code": [
+                        0
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_3"
+                },
+                "return": {
+                    "function": "buy_property",
+                    "param": {
+                        "asset": "Connecticut Avenue",
+                        "player": "player_3"
+                    }
+                }
+            },
+            {
+                "function": "charge_player",
+                "param": {
+                    "amount": 120.0,
+                    "description": "buy property",
+                    "self": "player_3"
+                },
+                "return": null
+            },
+            {
+                "function": "add_asset",
+                "param": {
+                    "asset": "Connecticut Avenue",
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_3"
+                },
+                "return": null
+            },
+            {
+                "function": "update_asset_owner",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_3",
+                    "self": "Connecticut Avenue"
+                },
+                "return": null
+            },
+            {
+                "function": "reset_option_to_buy",
+                "param": {
+                    "self": "player_3"
+                },
+                "return": null
+            },
+            {
+                "function": "buy_property",
+                "param": {
+                    "asset": "Connecticut Avenue",
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_3"
+                },
+                "return": 1
+            },
+            {
+                "function": "make_post_roll_move",
+                "param": {
+                    "allowable_moves": [
+                        "mortgage_property",
+                        "concluded_actions",
+                        "sell_property"
+                    ],
+                    "code": [
+                        1
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_3"
+                },
+                "return": {
+                    "function": "concluded_actions",
+                    "param": {}
+                }
+            },
+            {
+                "function": "reset_option_to_buy",
+                "param": {
+                    "self": "player_3"
+                },
+                "return": null
+            },
+            {
+                "function": "concluded_actions",
+                "param": {},
+                "return": 1
+            },
+            {
+                "function": "make_post_roll_moves",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_3"
+                },
+                "return": null
+            },
+            {
+                "function": "make_pre_roll_move",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_3"
+                },
+                "return": {
+                    "function": "skip_turn",
+                    "param": {}
+                }
+            },
+            {
+                "function": "skip_turn",
+                "param": {
+                    "allowable_moves": [
+                        "skip_turn",
+                        "make_trade_offer"
+                    ],
+                    "code": [
+                        0
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_1"
+                },
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_move",
+                "param": {},
+                "return": {
+                    "function": "skip_turn",
+                    "param": {}
+                }
+            },
+            {
+                "function": "skip_turn",
+                "param": {
+                    "allowable_moves": [
+                        "mortgage_property",
+                        "make_trade_offer",
+                        "sell_property",
+                        "skip_turn",
+                        "make_sell_property_offer"
+                    ],
+                    "code": [
+                        0
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_4"
+                },
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_moves",
+                "param": {},
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_move",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_4"
+                },
+                "return": {
+                    "function": "skip_turn",
+                    "param": {}
+                }
+            },
+            {
+                "function": "skip_turn",
+                "param": {
+                    "allowable_moves": [
+                        "mortgage_property",
+                        "make_trade_offer",
+                        "sell_property",
+                        "skip_turn",
+                        "make_sell_property_offer"
+                    ],
+                    "code": [
+                        0
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_2"
+                },
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_moves",
+                "param": {},
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_move",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_2"
+                },
+                "return": {
+                    "function": "skip_turn",
+                    "param": {}
+                }
+            },
+            {
+                "function": "skip_turn",
+                "param": {
+                    "allowable_moves": [
+                        "mortgage_property",
+                        "make_trade_offer",
+                        "sell_property",
+                        "skip_turn",
+                        "make_sell_property_offer"
+                    ],
+                    "code": [
+                        0
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_3"
+                },
+                "return": 2
+            },
+            {
+                "function": "make_out_of_turn_moves",
+                "param": {},
+                "return": 2
+            },
+            {
+                "function": "roll_die",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_3"
+                },
+                "return": [
+                    6,
+                    6
+                ]
+            },
+            {
+                "function": "update_player_position",
+                "param": {},
+                "return": null
+            },
+            {
+                "function": "move_player_after_die_roll",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "new_position": 12,
+                    "self": "player_1"
+                },
+                "return": null
+            },
+            {
+                "function": "process_move_consequences",
+                "param": {
+                    "check_for_go": true,
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_1",
+                    "rel_move": 12
+                },
+                "return": null
+            },
+            {
+                "function": "make_post_roll_move",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_1"
+                },
+                "return": {
+                    "function": "buy_property",
+                    "param": {
+                        "asset": "Electric Company",
+                        "player": "player_1"
+                    }
+                }
+            },
+            {
+                "function": "charge_player",
+                "param": {
+                    "allowable_moves": [
+                        "concluded_actions",
+                        "buy_property"
+                    ],
+                    "code": [
+                        0
+                    ],
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_1"
+                },
+                "return": null
+            },
+            {
+                "function": "add_asset",
+                "param": {
+                    "amount": 150.0,
+                    "description": "buy property",
+                    "self": "player_1"
+                },
+                "return": null
+            },
+            {
+                "function": "update_asset_owner",
+                "param": {
+                    "asset": "Electric Company",
+                    "current_gameboard": "current_gameboard",
+                    "self": "player_1"
+                },
+                "return": null
+            },
+            {
+                "function": "reset_option_to_buy",
+                "param": {
+                    "current_gameboard": "current_gameboard",
+                    "player": "player_1",
+                    "self": "Electric Company"
+                },
+                "return": null
+            },
+            {
+                "function": "buy_property",
+                "param": {
+                    "self": "player_1"
+                },
+                "return": 1
+            }
+        ],
+        "location_sequence": [
+            "Go",
+            "Mediterranean Avenue",
+            "Community Chest",
+            "Baltic Avenue",
+            "Income Tax",
+            "Reading Railroad",
+            "Oriental Avenue",
+            "Chance",
+            "Vermont Avenue",
+            "Connecticut Avenue",
+            "In Jail/Just Visiting",
+            "St. Charles Place",
+            "Electric Company",
+            "States Avenue",
+            "Virginia Avenue",
+            "Pennsylvania Railroad",
+            "St. James Place",
+            "Community Chest",
+            "Tennessee Avenue",
+            "New York Avenue",
+            "Free Parking",
+            "Kentucky Avenue",
+            "Chance",
+            "Indiana Avenue",
+            "Illinois Avenue",
+            "B&O Railroad",
+            "Atlantic Avenue",
+            "Ventnor Avenue",
+            "Water Works",
+            "Marvin Gardens",
+            "Go to Jail",
+            "Pacific Avenue",
+            "North Carolina Avenue",
+            "Community Chest",
+            "Pennsylvania Avenue",
+            "Short Line",
+            "Chance",
+            "Park Place",
+            "Luxury Tax",
+            "Boardwalk"
+        ],
+        "locations": {
+            "Atlantic Avenue": {
+                "color": "Yellow",
+                "end_position": 27,
+                "house_rent_dict": {
+                    "1": 110.0,
+                    "2": 330.0,
+                    "3": 800.0,
+                    "4": 975.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 130.0,
+                "name": "Atlantic Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 260.0,
+                "price_per_house": 150.0,
+                "rent": 22.0,
+                "rent_1_house": 110.0,
+                "rent_2_houses": 330.0,
+                "rent_3_houses": 800.0,
+                "rent_4_houses": 975.0,
+                "rent_hotel": 1150.0,
+                "start_position": 26
+            },
+            "B&O Railroad": {
+                "color": null,
+                "end_position": 26,
+                "is_mortgaged": false,
+                "loc_class": "railroad",
+                "mortgage": 100.0,
+                "name": "B&O Railroad",
+                "owned_by": "bank",
+                "price": 200.0,
+                "railroad_dues": {
+                    "1": 25,
+                    "2": 50,
+                    "3": 100,
+                    "4": 200
+                },
+                "start_position": 25
+            },
+            "Baltic Avenue": {
+                "color": "Brown",
+                "end_position": 4,
+                "house_rent_dict": {
+                    "1": 20.0,
+                    "2": 60.0,
+                    "3": 180.0,
+                    "4": 320.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 30.0,
+                "name": "Baltic Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 60.0,
+                "price_per_house": 50.0,
+                "rent": 4.0,
+                "rent_1_house": 20.0,
+                "rent_2_houses": 60.0,
+                "rent_3_houses": 180.0,
+                "rent_4_houses": 320.0,
+                "rent_hotel": 450.0,
+                "start_position": 3
+            },
+            "Boardwalk": {
+                "color": "Blue",
+                "end_position": 40,
+                "house_rent_dict": {
+                    "1": 200.0,
+                    "2": 600.0,
+                    "3": 1400.0,
+                    "4": 1700.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 200.0,
+                "name": "Boardwalk",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 400.0,
+                "price_per_house": 200.0,
+                "rent": 50.0,
+                "rent_1_house": 200.0,
+                "rent_2_houses": 600.0,
+                "rent_3_houses": 1400.0,
+                "rent_4_houses": 1700.0,
+                "rent_hotel": 2000.0,
+                "start_position": 39
+            },
+            "Chance": {
+                "color": null,
+                "end_position": 37,
+                "loc_class": "action",
+                "name": "Chance",
+                "perform_actiom": "pick_card_from_chance",
+                "start_position": 36
+            },
+            "Community Chest": {
+                "color": null,
+                "end_position": 34,
+                "loc_class": "action",
+                "name": "Community Chest",
+                "perform_actiom": "pick_card_from_community_chest",
+                "start_position": 33
+            },
+            "Connecticut Avenue": {
+                "color": "SkyBlue",
+                "end_position": 10,
+                "house_rent_dict": {
+                    "1": 40.0,
+                    "2": 100.0,
+                    "3": 300.0,
+                    "4": 450.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 60.0,
+                "name": "Connecticut Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "player_3",
+                "price": 120.0,
+                "price_per_house": 50.0,
+                "rent": 8.0,
+                "rent_1_house": 40.0,
+                "rent_2_houses": 100.0,
+                "rent_3_houses": 300.0,
+                "rent_4_houses": 450.0,
+                "rent_hotel": 600.0,
+                "start_position": 9
+            },
+            "Electric Company": {
+                "color": null,
+                "die_multiples": {
+                    "1": 4,
+                    "2": 10
+                },
+                "end_position": 13,
+                "is_mortgaged": false,
+                "loc_class": "utility",
+                "mortgage": 75.0,
+                "name": "Electric Company",
+                "owned_by": "player_1",
+                "price": 150.0,
+                "start_position": 12
+            },
+            "Free Parking": {
+                "color": null,
+                "end_position": 21,
+                "loc_class": "do_nothing",
+                "name": "Free Parking",
+                "start_position": 20
+            },
+            "Go": {
+                "color": null,
+                "end_position": 1,
+                "loc_class": "do_nothing",
+                "name": "Go",
+                "start_position": 0
+            },
+            "Go to Jail": {
+                "color": null,
+                "end_position": 31,
+                "loc_class": "action",
+                "name": "Go to Jail",
+                "perform_actiom": "go_to_jail",
+                "start_position": 30
+            },
+            "Illinois Avenue": {
+                "color": "Red",
+                "end_position": 25,
+                "house_rent_dict": {
+                    "1": 100.0,
+                    "2": 300.0,
+                    "3": 750.0,
+                    "4": 925.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 120.0,
+                "name": "Illinois Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 240.0,
+                "price_per_house": 150.0,
+                "rent": 20.0,
+                "rent_1_house": 100.0,
+                "rent_2_houses": 300.0,
+                "rent_3_houses": 750.0,
+                "rent_4_houses": 925.0,
+                "rent_hotel": 1100.0,
+                "start_position": 24
+            },
+            "In Jail/Just Visiting": {
+                "color": null,
+                "end_position": 11,
+                "loc_class": "do_nothing",
+                "name": "In Jail/Just Visiting",
+                "start_position": 10
+            },
+            "Income Tax": {
+                "amount_due": 200.0,
+                "color": null,
+                "end_position": 5,
+                "loc_class": "tax",
+                "name": "Income Tax",
+                "start_position": 4
+            },
+            "Indiana Avenue": {
+                "color": "Red",
+                "end_position": 24,
+                "house_rent_dict": {
+                    "1": 90.0,
+                    "2": 250.0,
+                    "3": 700.0,
+                    "4": 875.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 110.0,
+                "name": "Indiana Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 220.0,
+                "price_per_house": 150.0,
+                "rent": 18.0,
+                "rent_1_house": 90.0,
+                "rent_2_houses": 250.0,
+                "rent_3_houses": 700.0,
+                "rent_4_houses": 875.0,
+                "rent_hotel": 1050.0,
+                "start_position": 23
+            },
+            "Kentucky Avenue": {
+                "color": "Red",
+                "end_position": 22,
+                "house_rent_dict": {
+                    "1": 90.0,
+                    "2": 250.0,
+                    "3": 700.0,
+                    "4": 875.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 110.0,
+                "name": "Kentucky Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 220.0,
+                "price_per_house": 150.0,
+                "rent": 18.0,
+                "rent_1_house": 90.0,
+                "rent_2_houses": 250.0,
+                "rent_3_houses": 700.0,
+                "rent_4_houses": 875.0,
+                "rent_hotel": 1050.0,
+                "start_position": 21
+            },
+            "Luxury Tax": {
+                "amount_due": 100.0,
+                "color": null,
+                "end_position": 39,
+                "loc_class": "tax",
+                "name": "Luxury Tax",
+                "start_position": 38
+            },
+            "Marvin Gardens": {
+                "color": "Yellow",
+                "end_position": 30,
+                "house_rent_dict": {
+                    "1": 120.0,
+                    "2": 360.0,
+                    "3": 850.0,
+                    "4": 1025.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 140.0,
+                "name": "Marvin Gardens",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 280.0,
+                "price_per_house": 150.0,
+                "rent": 24.0,
+                "rent_1_house": 120.0,
+                "rent_2_houses": 360.0,
+                "rent_3_houses": 850.0,
+                "rent_4_houses": 1025.0,
+                "rent_hotel": 1200.0,
+                "start_position": 29
+            },
+            "Mediterranean Avenue": {
+                "color": "Brown",
+                "end_position": 2,
+                "house_rent_dict": {
+                    "1": 10.0,
+                    "2": 30.0,
+                    "3": 90.0,
+                    "4": 160.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 30.0,
+                "name": "Mediterranean Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 60.0,
+                "price_per_house": 50.0,
+                "rent": 2.0,
+                "rent_1_house": 10.0,
+                "rent_2_houses": 30.0,
+                "rent_3_houses": 90.0,
+                "rent_4_houses": 160.0,
+                "rent_hotel": 250.0,
+                "start_position": 1
+            },
+            "New York Avenue": {
+                "color": "Orange",
+                "end_position": 20,
+                "house_rent_dict": {
+                    "1": 80.0,
+                    "2": 220.0,
+                    "3": 600.0,
+                    "4": 800.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 100.0,
+                "name": "New York Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 200.0,
+                "price_per_house": 100.0,
+                "rent": 16.0,
+                "rent_1_house": 80.0,
+                "rent_2_houses": 220.0,
+                "rent_3_houses": 600.0,
+                "rent_4_houses": 800.0,
+                "rent_hotel": 1000.0,
+                "start_position": 19
+            },
+            "North Carolina Avenue": {
+                "color": "Green",
+                "end_position": 33,
+                "house_rent_dict": {
+                    "1": 130.0,
+                    "2": 390.0,
+                    "3": 900.0,
+                    "4": 1100.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 150.0,
+                "name": "North Carolina Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 300.0,
+                "price_per_house": 200.0,
+                "rent": 26.0,
+                "rent_1_house": 130.0,
+                "rent_2_houses": 390.0,
+                "rent_3_houses": 900.0,
+                "rent_4_houses": 1100.0,
+                "rent_hotel": 1275.0,
+                "start_position": 32
+            },
+            "Oriental Avenue": {
+                "color": "SkyBlue",
+                "end_position": 7,
+                "house_rent_dict": {
+                    "1": 30.0,
+                    "2": 90.0,
+                    "3": 270.0,
+                    "4": 400.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 50.0,
+                "name": "Oriental Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "player_4",
+                "price": 100.0,
+                "price_per_house": 50.0,
+                "rent": 6.0,
+                "rent_1_house": 30.0,
+                "rent_2_houses": 90.0,
+                "rent_3_houses": 270.0,
+                "rent_4_houses": 400.0,
+                "rent_hotel": 550.0,
+                "start_position": 6
+            },
+            "Pacific Avenue": {
+                "color": "Green",
+                "end_position": 32,
+                "house_rent_dict": {
+                    "1": 130.0,
+                    "2": 390.0,
+                    "3": 900.0,
+                    "4": 1100.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 150.0,
+                "name": "Pacific Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 300.0,
+                "price_per_house": 200.0,
+                "rent": 26.0,
+                "rent_1_house": 130.0,
+                "rent_2_houses": 390.0,
+                "rent_3_houses": 900.0,
+                "rent_4_houses": 1100.0,
+                "rent_hotel": 1275.0,
+                "start_position": 31
+            },
+            "Park Place": {
+                "color": "Blue",
+                "end_position": 38,
+                "house_rent_dict": {
+                    "1": 175.0,
+                    "2": 500.0,
+                    "3": 1100.0,
+                    "4": 1300.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 175.0,
+                "name": "Park Place",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 350.0,
+                "price_per_house": 200.0,
+                "rent": 35.0,
+                "rent_1_house": 175.0,
+                "rent_2_houses": 500.0,
+                "rent_3_houses": 1100.0,
+                "rent_4_houses": 1300.0,
+                "rent_hotel": 1500.0,
+                "start_position": 37
+            },
+            "Pennsylvania Avenue": {
+                "color": "Green",
+                "end_position": 35,
+                "house_rent_dict": {
+                    "1": 150.0,
+                    "2": 450.0,
+                    "3": 1000.0,
+                    "4": 1200.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 160.0,
+                "name": "Pennsylvania Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 320.0,
+                "price_per_house": 200.0,
+                "rent": 28.0,
+                "rent_1_house": 150.0,
+                "rent_2_houses": 450.0,
+                "rent_3_houses": 1000.0,
+                "rent_4_houses": 1200.0,
+                "rent_hotel": 1400.0,
+                "start_position": 34
+            },
+            "Pennsylvania Railroad": {
+                "color": null,
+                "end_position": 16,
+                "is_mortgaged": false,
+                "loc_class": "railroad",
+                "mortgage": 100.0,
+                "name": "Pennsylvania Railroad",
+                "owned_by": "bank",
+                "price": 200.0,
+                "railroad_dues": {
+                    "1": 25,
+                    "2": 50,
+                    "3": 100,
+                    "4": 200
+                },
+                "start_position": 15
+            },
+            "Reading Railroad": {
+                "color": null,
+                "end_position": 6,
+                "is_mortgaged": false,
+                "loc_class": "railroad",
+                "mortgage": 100.0,
+                "name": "Reading Railroad",
+                "owned_by": "player_2",
+                "price": 200.0,
+                "railroad_dues": {
+                    "1": 25,
+                    "2": 50,
+                    "3": 100,
+                    "4": 200
+                },
+                "start_position": 5
+            },
+            "Short Line": {
+                "color": null,
+                "end_position": 36,
+                "is_mortgaged": false,
+                "loc_class": "railroad",
+                "mortgage": 100.0,
+                "name": "Short Line",
+                "owned_by": "bank",
+                "price": 200.0,
+                "railroad_dues": {
+                    "1": 25,
+                    "2": 50,
+                    "3": 100,
+                    "4": 200
+                },
+                "start_position": 35
+            },
+            "St. Charles Place": {
+                "color": "Orchid",
+                "end_position": 12,
+                "house_rent_dict": {
+                    "1": 50.0,
+                    "2": 150.0,
+                    "3": 450.0,
+                    "4": 625.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 70.0,
+                "name": "St. Charles Place",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 140.0,
+                "price_per_house": 100.0,
+                "rent": 10.0,
+                "rent_1_house": 50.0,
+                "rent_2_houses": 150.0,
+                "rent_3_houses": 450.0,
+                "rent_4_houses": 625.0,
+                "rent_hotel": 750.0,
+                "start_position": 11
+            },
+            "St. James Place": {
+                "color": "Orange",
+                "end_position": 17,
+                "house_rent_dict": {
+                    "1": 70.0,
+                    "2": 200.0,
+                    "3": 550.0,
+                    "4": 750.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 90.0,
+                "name": "St. James Place",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 180.0,
+                "price_per_house": 100.0,
+                "rent": 14.0,
+                "rent_1_house": 70.0,
+                "rent_2_houses": 200.0,
+                "rent_3_houses": 550.0,
+                "rent_4_houses": 750.0,
+                "rent_hotel": 950.0,
+                "start_position": 16
+            },
+            "States Avenue": {
+                "color": "Orchid",
+                "end_position": 14,
+                "house_rent_dict": {
+                    "1": 50.0,
+                    "2": 150.0,
+                    "3": 450.0,
+                    "4": 625.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 70.0,
+                "name": "States Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 140.0,
+                "price_per_house": 100.0,
+                "rent": 10.0,
+                "rent_1_house": 50.0,
+                "rent_2_houses": 150.0,
+                "rent_3_houses": 450.0,
+                "rent_4_houses": 625.0,
+                "rent_hotel": 750.0,
+                "start_position": 13
+            },
+            "Tennessee Avenue": {
+                "color": "Orange",
+                "end_position": 19,
+                "house_rent_dict": {
+                    "1": 70.0,
+                    "2": 200.0,
+                    "3": 550.0,
+                    "4": 750.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 90.0,
+                "name": "Tennessee Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 180.0,
+                "price_per_house": 100.0,
+                "rent": 14.0,
+                "rent_1_house": 70.0,
+                "rent_2_houses": 200.0,
+                "rent_3_houses": 550.0,
+                "rent_4_houses": 750.0,
+                "rent_hotel": 950.0,
+                "start_position": 18
+            },
+            "Ventnor Avenue": {
+                "color": "Yellow",
+                "end_position": 28,
+                "house_rent_dict": {
+                    "1": 110.0,
+                    "2": 330.0,
+                    "3": 800.0,
+                    "4": 975.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 130.0,
+                "name": "Ventnor Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 260.0,
+                "price_per_house": 150.0,
+                "rent": 22.0,
+                "rent_1_house": 110.0,
+                "rent_2_houses": 330.0,
+                "rent_3_houses": 800.0,
+                "rent_4_houses": 975.0,
+                "rent_hotel": 1150.0,
+                "start_position": 27
+            },
+            "Vermont Avenue": {
+                "color": "SkyBlue",
+                "end_position": 9,
+                "house_rent_dict": {
+                    "1": 30.0,
+                    "2": 90.0,
+                    "3": 270.0,
+                    "4": 400.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 50.0,
+                "name": "Vermont Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 100.0,
+                "price_per_house": 50.0,
+                "rent": 6.0,
+                "rent_1_house": 30.0,
+                "rent_2_houses": 90.0,
+                "rent_3_houses": 270.0,
+                "rent_4_houses": 400.0,
+                "rent_hotel": 550.0,
+                "start_position": 8
+            },
+            "Virginia Avenue": {
+                "color": "Orchid",
+                "end_position": 15,
+                "house_rent_dict": {
+                    "1": 60.0,
+                    "2": 180.0,
+                    "3": 500.0,
+                    "4": 700.0
+                },
+                "is_mortgaged": false,
+                "loc_class": "real_estate",
+                "mortgage": 80.0,
+                "name": "Virginia Avenue",
+                "num_hotels": 0,
+                "num_houses": 0,
+                "owned_by": "bank",
+                "price": 160.0,
+                "price_per_house": 100.0,
+                "rent": 12.0,
+                "rent_1_house": 60.0,
+                "rent_2_houses": 180.0,
+                "rent_3_houses": 500.0,
+                "rent_4_houses": 700.0,
+                "rent_hotel": 900.0,
+                "start_position": 14
+            },
+            "Water Works": {
+                "color": null,
+                "die_multiples": {
+                    "1": 4,
+                    "2": 10
+                },
+                "end_position": 29,
+                "is_mortgaged": false,
+                "loc_class": "utility",
+                "mortgage": 75.0,
+                "name": "Water Works",
+                "owned_by": "bank",
+                "price": 150.0,
+                "start_position": 28
+            }
+        },
+        "players": {
+            "player_1": {
+                "assets": [
+                    "Electric Company"
+                ],
+                "current_cash": 1350.0,
+                "current_position": 12,
+                "currently_in_jail": false,
+                "full_color_sets_possessed": [],
+                "has_get_out_of_jail_chance_card": false,
+                "has_get_out_of_jail_community_chest_card": false,
+                "is_property_offer_outstanding": false,
+                "is_trade_offer_outstanding": false,
+                "mortgaged_assets": [],
+                "num_railroads_possessed": 0,
+                "num_total_hotels": 0,
+                "num_total_houses": 0,
+                "num_utilities_possessed": 1,
+                "option_to_buy": false,
+                "outstanding_property_offer": {
+                    "asset": null,
+                    "from_player": null,
+                    "price": -1
+                },
+                "outstanding_trade_offer": {
+                    "cash_offered": 0,
+                    "cash_wanted": 0,
+                    "from_player": null,
+                    "property_set_offered": null,
+                    "property_set_wanted": null
+                },
+                "player_name": "player_1",
+                "status": "current_move"
+            },
+            "player_2": {
+                "assets": [
+                    "Reading Railroad"
+                ],
+                "current_cash": 1300.0,
+                "current_position": 5,
+                "currently_in_jail": false,
+                "full_color_sets_possessed": [],
+                "has_get_out_of_jail_chance_card": false,
+                "has_get_out_of_jail_community_chest_card": false,
+                "is_property_offer_outstanding": false,
+                "is_trade_offer_outstanding": false,
+                "mortgaged_assets": [],
+                "num_railroads_possessed": 1,
+                "num_total_hotels": 0,
+                "num_total_houses": 0,
+                "num_utilities_possessed": 0,
+                "option_to_buy": false,
+                "outstanding_property_offer": {
+                    "asset": null,
+                    "from_player": null,
+                    "price": -1
+                },
+                "outstanding_trade_offer": {
+                    "cash_offered": 0,
+                    "cash_wanted": 0,
+                    "from_player": null,
+                    "property_set_offered": null,
+                    "property_set_wanted": null
+                },
+                "player_name": "player_2",
+                "status": "waiting_for_move"
+            },
+            "player_3": {
+                "assets": [
+                    "Connecticut Avenue"
+                ],
+                "current_cash": 1380.0,
+                "current_position": 9,
+                "currently_in_jail": false,
+                "full_color_sets_possessed": [],
+                "has_get_out_of_jail_chance_card": false,
+                "has_get_out_of_jail_community_chest_card": false,
+                "is_property_offer_outstanding": false,
+                "is_trade_offer_outstanding": false,
+                "mortgaged_assets": [],
+                "num_railroads_possessed": 0,
+                "num_total_hotels": 0,
+                "num_total_houses": 0,
+                "num_utilities_possessed": 0,
+                "option_to_buy": false,
+                "outstanding_property_offer": {
+                    "asset": null,
+                    "from_player": null,
+                    "price": -1
+                },
+                "outstanding_trade_offer": {
+                    "cash_offered": 0,
+                    "cash_wanted": 0,
+                    "from_player": null,
+                    "property_set_offered": null,
+                    "property_set_wanted": null
+                },
+                "player_name": "player_3",
+                "status": "waiting_for_move"
+            },
+            "player_4": {
+                "assets": [
+                    "Oriental Avenue"
+                ],
+                "current_cash": 1400.0,
+                "current_position": 6,
+                "currently_in_jail": false,
+                "full_color_sets_possessed": [],
+                "has_get_out_of_jail_chance_card": false,
+                "has_get_out_of_jail_community_chest_card": false,
+                "is_property_offer_outstanding": false,
+                "is_trade_offer_outstanding": false,
+                "mortgaged_assets": [],
+                "num_railroads_possessed": 0,
+                "num_total_hotels": 0,
+                "num_total_houses": 0,
+                "num_utilities_possessed": 0,
+                "option_to_buy": false,
+                "outstanding_property_offer": {
+                    "asset": null,
+                    "from_player": null,
+                    "price": -1
+                },
+                "outstanding_trade_offer": {
+                    "cash_offered": 0,
+                    "cash_wanted": 0,
+                    "from_player": null,
+                    "property_set_offered": null,
+                    "property_set_wanted": null
+                },
+                "player_name": "player_4",
+                "status": "waiting_for_move"
+            }
+        }
+    },
+    "function": "make_post_roll_move",
+    "player": "player_1"
+}
