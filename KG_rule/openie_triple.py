@@ -77,7 +77,7 @@ class KG_OpenIE(History_Record):
                  core_nlp_version: str = '2018-10-05',
                  config_file=None):
 
-        self.upper_path = '/home/becky/Documents/Gatech_Agent_Eva_2'
+        self.upper_path = '/mnt/c/Users/spenc/Documents/2021Projects/DARPA-SAILON/Gatech_Agent_Eva_2/'
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
 
         # nlp server env
