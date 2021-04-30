@@ -98,16 +98,16 @@ class GameClone():
                     fixed_key = eval(key[6:])
                     pre_dict[fixed_key] = pre_dict[key]
                     del pre_dict[key]
-            # elif type(eval(key)) is not str:
                 else:
-                    try:  # for floats and ints
-                        fixed_key = eval(key)
-                        pre_dict[fixed_key] = pre_dict[key]
-                        del pre_dict[key]
-                    except:
-                        fixed_key = key
-            else:
-                fixed_key = key
+                    fixed_key = key
+            #         try:  # for floats and ints
+            #             fixed_key = eval(key)
+            #             pre_dict[fixed_key] = pre_dict[key]
+            #             del pre_dict[key]
+            #         except:
+            #             fixed_key = key
+            # else:
+            #     fixed_key = key
 
             if type(pre_dict[fixed_key]) is dict:
                 pre_dict[fixed_key] = self._remap_unhashables(pre_dict[fixed_key])
@@ -172,32 +172,31 @@ class GameClone():
                         subtree[key]['length'] += 1
                         for idx, item in enumerate(parsed_json[key][-1]):
                             if item not in subtree[key]['data'][idx]:
-                                subtree[key]['data'][idx][item] = 1
+                                subtree[key]['data'][idx][str(item)] = 1
                             else:
-                                subtree[key]['data'][idx][item] += 1
+                                subtree[key]['data'][idx][str(item)] += 1
                 else:  # (str, bool int float)
                     if key not in subtree:
-                        subtree[key] = {tuple(parsed_json[key]): 1}
-                    elif tuple(parsed_json[key]) not in subtree[key]:
-                        subtree[key][tuple(parsed_json[key])] = 1  # TODO: I think we need this somewhere else too?
+                        subtree[key] = {str(parsed_json[key]): 1}
+                    elif str(parsed_json[key]) not in subtree[key]:
+                        subtree[key][str(parsed_json[key])] = 1  # TODO: I think we need this somewhere else too?
                     else:
-                        subtree[key][tuple(parsed_json[key])] += 1
+                        subtree[key][str(parsed_json[key])] += 1
 
             else:  # (str, bool, int, float)
                 if key not in subtree:
-                    subtree[key] = {parsed_json[key]: 1}
+                    subtree[key] = {str(parsed_json[key]): 1}
                 elif parsed_json[key] not in subtree[key]:
-                    subtree[key][parsed_json[key]] = 1  # TODO: I think we need this somewhere else too?
+                    subtree[key][str(parsed_json[key])] = 1  # TODO: I think we need this somewhere else too?
                 else:
                     try:
-                        subtree[key][parsed_json[key]] += 1
+                        subtree[key][str(parsed_json[key])] += 1
                     except TypeError:
                         print('key: ', key, ' - parsed_json[key]: ', parsed_json[key])
         return subtree
 
     def update_rules(self, samples):
         raise NotImplementedError
-
 
     def gc_detect_novelty(self, gameboard_message, message_type='str'):
         if (message_type in ('str')) or (type(gameboard_message) in (bytes, bytearray)):  # JSON string
@@ -214,6 +213,7 @@ class GameClone():
             self.red_button = True
 
         return novelty, novelty_properties
+
     def check_novelty(self, parsed_json, subtree=None):
         if subtree is None:
             subtree = self.state_stats
@@ -306,7 +306,7 @@ def main():
         with open(json_file, 'r') as infile:
             data_dict_from_server = json.load(infile)
         state_stats = game_clone.update_novelty_detector(data_dict_from_server['current_gameboard'])
-    print('orig_state stats: ',state_stats)
+    print('orig_state stats: ', state_stats)
 
     bad_json_file = os.path.join('sample_json_data', 'bad_data_' + '1' + '_' + '10' + '.json')
     with open(bad_json_file, 'r') as badfile:
