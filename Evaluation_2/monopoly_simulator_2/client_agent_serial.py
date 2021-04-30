@@ -735,8 +735,10 @@ class ClientAgent(Agent):
             # When each game ends, we run the KG, but we don not shutdown the connection
             elif func_name == 'shutdown':
                 serial_dict_to_client = data_dict_from_server
-                self.change_to_background(serial_dict_to_client['players'])
-                self.kg_run(self.gameboard, serial_dict_to_client['cards'], self.game_num)
+                if 'players' in serial_dict_to_client:
+                    self.change_to_background(serial_dict_to_client['players'])
+                if 'cards' in serial_dict_to_client:
+                    self.kg_run(self.gameboard, serial_dict_to_client['cards'], self.game_num)
                 result = shutdown(serial_dict_to_client, self)
                 self.logger.info(str(self.game_num) + ' th game stops!')
 
