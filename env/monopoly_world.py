@@ -46,7 +46,7 @@ class Monopoly_world():
         self.novelty_inject_num = 0
 
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator','')
-        self.upper_path = '/home/becky/Documents/Gatech_Agent_Eva_2'
+        self.upper_path = 'C:\\Users\\spenc\\Documents\\2021Projects\\DARPA-SAILON\\Gatech_Agent_Eva_2'
         self.config_file = self.upper_path + config_file
         config_data = ConfigParser()
         print('self.config_file', self.config_file)

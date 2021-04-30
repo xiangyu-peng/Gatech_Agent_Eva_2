@@ -1,8 +1,8 @@
 import sys, os
-upper_path = os.path.abspath('.').replace('/Evaluation_2/monopoly_simulator_2','')  #os.path.abspath('..')
-sys.path.append(upper_path + '/KG_rule')
+upper_path = os.path.abspath('.').replace('\\Evaluation_2\\monopoly_simulator_2','')  #os.path.abspath('..')
+sys.path.append(upper_path + '\\KG_rule')
 sys.path.append(upper_path)
-sys.path.append(upper_path + '/Evaluation')
+sys.path.append(upper_path + '\\Evaluation')
 ####################
 from monopoly_simulator import background_agent_v3
 from monopoly_simulator.agent import Agent

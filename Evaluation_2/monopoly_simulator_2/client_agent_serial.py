@@ -1,9 +1,9 @@
 import sys, os
-upper_path = os.path.abspath('.').replace('/Evaluation_2/monopoly_simulator_2','')
+upper_path = os.path.abspath('.').replace('\\Evaluation_2\\monopoly_simulator_2','')
 # upper_path = os.path.abspath('.').replace('/Evaluation_2','')
-upper_path_eva = upper_path + '/Evaluation_2/monopoly_simulator_2'
+upper_path_eva = upper_path + '\\Evaluation_2\\monopoly_simulator_2'
 sys.path.append(upper_path)
-sys.path.append(upper_path + '/Evaluation_2')
+sys.path.append(upper_path + '\\Evaluation_2')
 sys.path.append(upper_path_eva)
 print('upper_path', upper_path, upper_path_eva)
 #####################################
