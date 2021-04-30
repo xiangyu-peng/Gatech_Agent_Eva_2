@@ -1,6 +1,8 @@
 name: monopoly-gatech
 channels:
   - defaults
+  - conda-forge
+  - anaconda
 dependencies:
   - _ipyw_jlab_nb_ext_conf=0.1.0=py37_0
   - _libgcc_mutex=0.1=main
@@ -290,41 +292,13 @@ dependencies:
   - zipp=0.6.0=py_0
   - zlib=1.2.11=h7b6447c_3
   - zstd=1.3.7=h0b5b093_0
+  - gym
+  - spacy
+  - graphviz
+  - pytorch
+  - torchvision
+  - tensorboardx
+  - pywget
   - pip:
-    - article==0.1.1
-    - blis==0.7.4
-    - boto3==1.10.28
-    - botocore==1.13.28
-    - catalogue==2.0.3
-    - cymem==2.0.5
-    - gym==0.18.0
-    - jmespath==0.9.4
-    - monopoly-simple-v1==0.0.1
-    - murmurhash==1.0.5
-    - numpy==1.20.2
-    - packaging==20.9
-    - pathy==0.5.2
-    - preshed==3.0.5
-    - protobuf==3.11.0
-    - pydantic==1.7.3
-    - pyglet==1.5.0
-    - python-graphviz==0.16
-    - regex==2019.11.1
-    - s3transfer==0.2.1
-    - sacremoses==0.0.35
-    - sentencepiece==0.1.83
-    - smart-open==3.0.0
-    - spacy==3.0.6
-    - spacy-legacy==3.0.5
-    - srsly==2.4.1
     - stanfordnlp==0.2.0
-    - tensorboardx==1.9
-    - thinc==8.0.3
-    - torch==1.3.0
-    - torchtext==0.6.0
     - torchviz==0.0.2
-    - typer==0.3.2
-    - typing-extensions==3.7.4.3
-    - wasabi==0.8.2
-    - wget==3.2
-prefix: /home/balloch/miniconda3/envs/monopoly-gatech
