@@ -28,23 +28,18 @@ class GameClone():
             'not_monitored': ['players']
         }
 
-    def predict_next(self, state, action):
-        relevant_rules = []
-        for rule_key, rule_value in self.rules.items():
-            if state.issuperset(rule_value[0]):
-                relevant_rules.append(rule_key)
+    def load_state_stats(self, state_stats_json_file='game_clone_state_stats.json', overwrite=True):
+        if overwrite or not self.state_stats:
+            with open(state_stats_json_file, 'r') as in_file:
+                loaded_json = json.load(in_file)
+                self.state_stats = loaded_json
+                self._remap_unhashables(self.state_stats)
 
-        # Constraint search
-        for rules in relevant_rules:
-            predicted_state = None
-            ######## TODO
-        return predicted_state
+            return 'loaded'
+        else:
+            return 'NOT Loaded'
 
-    def k_forward(self, state_action_history):
-        for state, action in state_action_history:
-            self.predict_next(state, action)
-
-    def set_rules_from_json(self, rules_manual_json):
+    def load_rules(self, rules_manual_json):
         self.rules_manual_json = rules_manual_json
         self._process_manual()
 
@@ -61,21 +56,21 @@ class GameClone():
             return None
 
     def _safe_save_json(self, save_attr, output_file, overwrite=False):
-        if not overwrite and os.path.isfile(os.path.abspath(output_file)):
+        if (not overwrite) and os.path.isfile(os.path.abspath(output_file)):
             counter = 0
             output_file = output_file[:-5] + str(counter)
-            while os.path.isfile(os.path.abspath(output_file)):
-                output_file = output_file[:-len(counter - 1)] + str(counter)
+            while os.path.isfile(os.path.abspath(output_file+ '.json')):
                 counter += 1
+                output_file = output_file[:-len(str(counter - 1))] + str(counter)
             output_file = output_file + '.json'
         with open(output_file, 'w') as of:
-            json.dump(self._map_unhashables(save_attr), of)
+            json.dump(self._map_unhashables(save_attr), of, indent=4)
         return os.path.abspath(output_file)
 
     def _map_unhashables(self, pre_dict, fixed_dict={}):
         for key in pre_dict:
             if type(key) not in (str, int, float, bool, None):
-                fixed_key = str(key)
+                fixed_key = 'strmap' + str(key)
             else:
                 fixed_key = key
             if type(pre_dict[key]) is dict:
@@ -91,34 +86,60 @@ class GameClone():
                         fixed_dict[fixed_key].append(pre_dict[key][idx])
                 pass ## DO ALL
             elif type(pre_dict[key]) is tuple:
-                print = 'weve got a probelm'
+                print('weve got a probelm')
             else: # type(key) in (str, int, float, bool, None):
                 fixed_dict[fixed_key] = pre_dict[key]
         return fixed_dict
 
+    def _remap_unhashables(self, pre_dict):
+        for key in pre_dict:
+            if type(key) is str:
+                if key[:6] == 'strmap': # not in (str, int, float, bool, None):
+                    fixed_key = eval(key[6:])
+                    pre_dict[fixed_key] = pre_dict[key]
+                    del pre_dict[key]
+            # elif type(eval(key)) is not str:
+                else:
+                    try:  # for floats and ints
+                        fixed_key = eval(key)
+                        pre_dict[fixed_key] = pre_dict[key]
+                        del pre_dict[key]
+                    except:
+                        fixed_key = key
+            else:
+                fixed_key = key
+
+            if type(pre_dict[fixed_key]) is dict:
+                pre_dict[fixed_key] = self._remap_unhashables(pre_dict[fixed_key])
+            elif type(pre_dict[fixed_key]) is list:
+                for idx, elem in enumerate(pre_dict[fixed_key]):
+                    if type(elem) is dict:
+                        pre_dict[fixed_key][idx] = self._remap_unhashables(pre_dict[fixed_key][idx])
+                    elif type(elem) is list:  # TODO: untested
+                        pre_dict[fixed_key][idx] = self._remap_unhashables(pre_dict[fixed_key][idx])
+            elif type(pre_dict[fixed_key]) is tuple:
+                print('weve got a probelm')
+        return pre_dict
+
+    # def pythonify_dict(self, json_data):
+    #     correctedDict = {}
+    #
+    #     for key, value in json_data.items():
+    #         if isinstance(value, list):
+    #             value = [self.pythonify_dict(item) if isinstance(item, dict) else item for item in value]
+    #         elif isinstance(value, dict):
+    #             value = self.pythonify_dict(value)
+    #         try:
+    #             key = int(key)
+    #         except Exception as ex:
+    #             pass
+    #         correctedDict[key] = value
+    #
+    #     return correctedDict
+
     def _process_manual(self):
         with open(self.rules_manual_json, 'r') as f:
             self.rules = json.load(self.rules_manual_json)
-
-    def update(self, samples):
-        raise NotImplementedError
-
-    def gc_detect_novelty(self, gameboard_message, message_type='str'):
-        if message_type == 'str':  # JSON string
-            data_dict_from_server = json.loads(gameboard_message)
-        elif message_type == 'file':  # JSON file
-            data_dict_from_server = json.load(gameboard_message)
-        else:  # Already loaded
-            data_dict_from_server=gameboard_message
-        if self.red_button:
-            return True, {'message': 'novelty already detected!'}
-
-        novelty, novelty_properties = self.check_novelty(data_dict_from_server['current_gameboard'])
-        if novelty:
-            self.red_button = True
-
-        return novelty, novelty_properties
-
 
     def update_novelty_detector(self, parsed_json, subtree=None):
         # tree_search
@@ -174,7 +195,25 @@ class GameClone():
                         print('key: ', key, ' - parsed_json[key]: ', parsed_json[key])
         return subtree
 
+    def update_rules(self, samples):
+        raise NotImplementedError
 
+
+    def gc_detect_novelty(self, gameboard_message, message_type='str'):
+        if (message_type in ('str')) or (type(gameboard_message) in (bytes, bytearray)):  # JSON string
+            data_dict_from_server = json.loads(gameboard_message)
+        elif message_type == 'file':  # JSON file
+            data_dict_from_server = json.load(gameboard_message)
+        else:  # Already loaded
+            data_dict_from_server=gameboard_message
+        if self.red_button:
+            return True, {'message': 'novelty already detected!'}
+
+        novelty, novelty_properties = self.check_novelty(data_dict_from_server['current_gameboard'])
+        if novelty:
+            self.red_button = True
+
+        return novelty, novelty_properties
     def check_novelty(self, parsed_json, subtree=None):
         if subtree is None:
             subtree = self.state_stats
@@ -182,7 +221,6 @@ class GameClone():
         novelty = False
         novelty_properties = {}
         for key in parsed_json:
-            print(key)
             novelty_properties['trigger'] = [key]
 
             if (not parsed_json[key]) or (key in ('cards', 'history', 'players', 'locations')):
@@ -240,6 +278,23 @@ class GameClone():
                 break
         return novelty, novelty_properties
 
+    def predict_next(self, state, action):
+        relevant_rules = []
+        for rule_key, rule_value in self.rules.items():
+            if state.issuperset(rule_value[0]):
+                relevant_rules.append(rule_key)
+
+        # Constraint search
+        for rules in relevant_rules:
+            predicted_state = None
+            ######## TODO
+        return predicted_state
+
+    def k_forward(self, state_action_history):
+        for state, action in state_action_history:
+            self.predict_next(state, action)
+
+
 
 def main():
     game_clone = GameClone()
@@ -251,13 +306,19 @@ def main():
         with open(json_file, 'r') as infile:
             data_dict_from_server = json.load(infile)
         state_stats = game_clone.update_novelty_detector(data_dict_from_server['current_gameboard'])
-    print(state_stats)
+    print('orig_state stats: ',state_stats)
 
     bad_json_file = os.path.join('sample_json_data', 'bad_data_' + '1' + '_' + '10' + '.json')
     with open(bad_json_file, 'r') as badfile:
         bad_data_dict_from_server = json.load(badfile)
-    print(game_clone.gc_detect_novelty(bad_data_dict_from_server, 'loaded'))
-    print(game_clone.save_state_stats())
+    print('ID novelty: ', game_clone.gc_detect_novelty(bad_data_dict_from_server, 'loaded'))
+    gcss_file = game_clone.save_state_stats()
+    print('file: ', gcss_file)
+
+    import copy  # maybe necessary?
+    game_clone.load_state_stats(gcss_file, True)
+    print('loaded stats: ',game_clone.state_stats)
+    print(game_clone.state_stats == state_stats)
 
 
             #### ONLY FOR CURRENT GAMEBOARD
