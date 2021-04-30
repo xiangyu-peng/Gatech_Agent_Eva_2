@@ -35,7 +35,7 @@ class Interface_eva(object):
         return '-'.join(name.split(' '))
 
 
-    def clear_history(self, file_path= upper_path+'/A2C_agent/log/game_log.txt'):  #, save_path=upper_path+'/A2C_agent/log/history_loc.pickle'):
+    def clear_history(self, file_path= upper_path+'/A2C_agent_2/logs/game_log.txt'):  #, save_path=upper_path+'/A2C_agent/log/history_loc.pickle'):
         """
         Clear the history of file and loc history before running the game
         :param file_path: The file restoring logging info
@@ -50,7 +50,7 @@ class Interface_eva(object):
         self.loc_history.clear()
 
 
-    def get_logging_info_once(self, game_elements, file_path=upper_path+'/A2C_agent/log/game_log.txt'):
+    def get_logging_info_once(self, game_elements, file_path=upper_path+'/A2C_agent_2/logs/game_log.txt'):
         """
         Write Dice and Card history to logging info
         :param game_elements:
@@ -90,7 +90,7 @@ class Interface_eva(object):
         #         pickle.dump(self.loc_history, f)
 
 
-    def get_logging_info(self, game_elements, file_path=upper_path+'/A2C_agent/log/game_log.txt'):
+    def get_logging_info(self, game_elements, file_path=upper_path+'/A2C_agent_2/logs/game_log.txt'):
         """
         Write the info of spaces and properties to file
         :param game_elements:

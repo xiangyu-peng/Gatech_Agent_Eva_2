@@ -146,7 +146,7 @@ class ClientAgent(Agent):
         self.no_retrain = False  # set to True when you do not need retrain the agent
 
         # Save path
-        self.folder_path = None
+        self.folder_path = ''
 
         # A2C model parameters
         self.state_num = 104
@@ -331,12 +331,12 @@ class ClientAgent(Agent):
             params[key] = v
         return params
 
-    def define_path(self, path):
+    def define_path(self, path=''):
         # Define the folder place the saved weights
-        self.folder_path = self.upper_path_eva + '/A2C_agent_2/weights/' + path
+        self.folder_path = os.path.join(self.upper_path_eva, 'A2C_agent_2/weights', path)
 
-        self.matrix_name = self.folder_path + '/matrix.npy'
-        self.entity_name = self.folder_path + '/entity.json'
+        self.matrix_name = os.path.join(self.folder_path, 'matrix.npy')
+        self.entity_name = os.path.join(self.folder_path, 'entity.json')
         self.adj_path = self.matrix_name
 
         if not os.path.exists(self.folder_path):
@@ -346,7 +346,7 @@ class ClientAgent(Agent):
             os.makedirs(self.folder_path)
 
         # Create logging info for this file
-        self.logger = log_file_create(self.folder_path + '/log_client.log')
+        self.logger = log_file_create(os.path.join(self.folder_path, 'log_client.log'))
         self.logger.debug('Define the folder path as ' + self.folder_path)
 
         # print('self.folder_path', self.folder_path)
@@ -637,7 +637,7 @@ class ClientAgent(Agent):
                 if sum(self.win_rate_after_novelty[-1 * self.change_to_background_wait:]) == 0:
                     self.background_agent_use = True
 
-    def play_remote_game(self, address=('localhost', 6002), authkey=b"password"):
+    def play_remote_game(self, address=('localhost', 6010), authkey=b"password"):
         """
         Connects to a ServerAgent and begins the loop of waiting for requests and responding to them.
         @param address: Tuple, the address and port number. Defaults to localhost:6000
@@ -674,8 +674,8 @@ class ClientAgent(Agent):
 
             # When the tournament begins, we need to define the folder
             if func_name == "start_tournament":
-                self.define_path(data_dict_from_server['path'])  # save all the file in this folder
-                self.kg_use = True if data_dict_from_server['info'] == 'w/' else False
+                self.define_path() #data_dict_from_server['path'])  # save all the file in this folder
+                self.kg_use = True #if data_dict_from_server['info'] == 'w/' else False
                 self.logger.info('Tournament starts!')
                 result = 1
             # #######################################################
@@ -684,7 +684,7 @@ class ClientAgent(Agent):
             elif func_name == "startup":
                 self.call_times = 1
                 # 1. Clear interface history and set the init for interface#########
-                self.interface.clear_history(self.folder_path+self.log_file_name)
+                self.interface.clear_history(os.path.join(self.folder_path,self.log_file_name[1:]))
                 self.interface.set_board(data_dict_from_server['current_gameboard'])
                 print('sequence =>', data_dict_from_server['current_gameboard']['location_sequence'])
                 s = self.interface.board_to_state(data_dict_from_server['current_gameboard'])
