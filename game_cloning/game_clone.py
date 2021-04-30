@@ -100,14 +100,6 @@ class GameClone():
                     del pre_dict[key]
                 else:
                     fixed_key = key
-            #         try:  # for floats and ints
-            #             fixed_key = eval(key)
-            #             pre_dict[fixed_key] = pre_dict[key]
-            #             del pre_dict[key]
-            #         except:
-            #             fixed_key = key
-            # else:
-            #     fixed_key = key
 
             if type(pre_dict[fixed_key]) is dict:
                 pre_dict[fixed_key] = self._remap_unhashables(pre_dict[fixed_key])
