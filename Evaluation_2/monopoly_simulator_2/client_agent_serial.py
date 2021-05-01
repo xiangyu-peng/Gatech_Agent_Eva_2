@@ -113,6 +113,7 @@ class ClientAgent(Agent):
         self.seed = random.randint(0, 10000)
         self.retrain_signal = False
         self.change_to_background_wait = 10
+        self.novelty_str = ''
 
         # Read the config
         self.config_file = self.upper_path_eva + '/A2C_agent_2/config.ini'
@@ -164,6 +165,7 @@ class ClientAgent(Agent):
         self.win_rate_after_novelty = None
         self.background_agent_use = False
         self.gat_use = True
+        self.board_size_changed_sig = False
 
         self._agent_memory = dict()
 
@@ -189,6 +191,7 @@ class ClientAgent(Agent):
         self.property_sell_percentage_list = [0.5]
 
         self.go_increment = 200
+        self.card_board_copy = dict()
 
         # game cloning
         self.gc = GameClone()
@@ -225,7 +228,7 @@ class ClientAgent(Agent):
                     self.mortgage_percentage = mortgage_percentage
 
 
-    def kg_run(self, current_gameboard, card_board, game_num):
+    def kg_run(self, current_gameboard, game_num):
         """
         Run the knowledge graph and novelty detection here
         :param current_gameboard:
@@ -239,7 +242,7 @@ class ClientAgent(Agent):
         #######Add kg here######
         self.kg.set_gameboard(current_gameboard)
         self.kg.build_kg_file(self.folder_path+self.log_file_name, level='rel', use_hash=False)
-        self.kg.card_board.read_card_board(card_board, game_num)
+        self.kg.card_board.read_card_board(self.gameboard['cards'], game_num)
         self.cards = copy.deepcopy(self.kg.card_board.cards)
 
 
@@ -268,11 +271,25 @@ class ClientAgent(Agent):
         self.kg_change_bool = False
 
         if self.kg_use and self.kg.kg_change != self.kg_change[-1]:
+            # differences = [
+            #     (outer_idx, inner_idx)
+            #     for outer_idx, (a, b) in enumerate(zip(self.kg.kg_change, self.kg_change[-1]))
+            #     for inner_idx, (a_element, b_element) in enumerate(zip(a, b))
+            #     if a_element != b_element
+            # ]
+            # print('differences', differences)
+            # if differences:
             self.kg_change_wait = 1
+            print('Novelty Detected as')
+            print('!!!!', self.kg.kg_change)
+            print('!!!!', self.kg_change[-1])
+
             self.kg_change.append(self.kg.kg_change[:])
             self.logger.debug('Novelty Detected as ' + str(self.kg_change))
-            print('Novelty Detected as ', str(self.kg_change))
-            self.retrain_signal = True  # if self.kg_change_bool == False else False
+
+
+            self.novelty_str += ' =>' + str(self.kg_change)
+            self.retrain_signal = True if not self.board_size_changed_sig else False
             self.converge_signal = False  # mean we need to retrain.
             self.kg_change_bool = True
             self.best_model = dict()
@@ -293,10 +310,11 @@ class ClientAgent(Agent):
             # self.kg_change_wait = 0
 
         # game cloning detects novelty
-        if self.gc_novelty_sig:
-            self.retrain_signal = True
+        if self.kg_use and self.gc_novelty_sig:
+            self.retrain_signal = True if not self.board_size_changed_sig else False
             self.logger.debug('Novelty Detected by Game Cloning')
             self.logger.debug('Novelty Detected as ' + str(self.gc_novelty_dict))
+            self.novelty_str += ' =>' + str(self.gc_novelty_dict)
             self.logger.debug('Retrain signal is True now, it will retrain the NN before next game!')
 
     def novelty_board_detect(self, current_gameboard):
@@ -309,7 +327,7 @@ class ClientAgent(Agent):
         :return:
         """
         if os.path.exists(self.adj_path):
-            print('adj_use', self.adj_path)
+            # print('adj_use', self.adj_path)
             self.adj = np.load(self.adj_path)
             adj_return = np.zeros((self.adj.shape[0], self.adj.shape[0]))
             for i in range(self.adj.shape[1] // self.adj.shape[0]):
@@ -317,7 +335,7 @@ class ClientAgent(Agent):
             self.adj = adj_return
 
         else:
-            print('adj_use', self.adj_path_default)
+            # print('adj_use', self.adj_path_default)
             self.adj = np.load(self.adj_path_default)
             adj_return = np.zeros((self.adj.shape[0], self.adj.shape[0]))
             for i in range(self.adj.shape[1] // self.adj.shape[0]):
@@ -331,10 +349,10 @@ class ClientAgent(Agent):
             params[key] = v
         return params
 
-    def define_path(self, path):
+    def define_path(self):
         # Define the folder place the saved weights
-        self.folder_path = self.upper_path_eva + '/A2C_agent_2/weights/' + path
-
+        self.folder_path = self.upper_path_eva + '/A2C_agent_2/weights/' + str(random.randint(0,10000))
+        print(' self.folder_path',  self.folder_path)
         self.matrix_name = self.folder_path + '/matrix.npy'
         self.entity_name = self.folder_path + '/entity.json'
         self.adj_path = self.matrix_name
@@ -524,6 +542,7 @@ class ClientAgent(Agent):
         len_vocab = 52 + len(gameboard['location_sequence'])
 
         if type_retrain == 'size':
+            print('len_vocab', len_vocab)
             trainer = MonopolyTrainer_GAT(params,
                                           gameboard=gameboard,
                                           kg_use=False,
@@ -621,6 +640,7 @@ class ClientAgent(Agent):
         # #######################################################
 
         # update model ##########################################
+        print('we load', model_retrained_path)
         self.model = torch.load(model_retrained_path)
         self.kg_change_wait = 0
         # #######################################################
@@ -637,7 +657,7 @@ class ClientAgent(Agent):
                 if sum(self.win_rate_after_novelty[-1 * self.change_to_background_wait:]) == 0:
                     self.background_agent_use = True
 
-    def play_remote_game(self, address=('localhost', 6002), authkey=b"password"):
+    def play_remote_game(self, address=('localhost', 6001), authkey=b"password"):
         """
         Connects to a ServerAgent and begins the loop of waiting for requests and responding to them.
         @param address: Tuple, the address and port number. Defaults to localhost:6000
@@ -646,16 +666,15 @@ class ClientAgent(Agent):
         """
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn.connect((address[0], address[1]))
-        # self.conn = Client(address, authkey=authkey)
 
         result = None
         ini_sig = True  # if it is the first time to setup trainer.
         board_size_changed_sig = False
+
         while True:
             # receive the info form server###########################
-            data_from_server = self.conn.recv(200000)
+            data_from_server = self.conn.recv(50000)
             data_from_server = data_from_server.decode("utf-8")
-
             data_dict_from_server = json.loads(data_from_server)
             func_name = data_dict_from_server['function']
             self.call_times += 1
@@ -674,20 +693,29 @@ class ClientAgent(Agent):
 
             # When the tournament begins, we need to define the folder
             if func_name == "start_tournament":
-                self.define_path(data_dict_from_server['path'])  # save all the file in this folder
-                self.kg_use = True if data_dict_from_server['info'] == 'w/' else False
+                self.define_path()  # save all the file in this folder
                 self.logger.info('Tournament starts!')
                 result = 1
+                self.kg_use = True
             # #######################################################
 
             # Before simulating each game, we have to make sure if we need retrain the network
             elif func_name == "startup":
+                result = None
+                # if data_dict_from_server['indicator'] is None:
+                #     self.kg_use = True
+                # else:
+                #     if data_dict_from_server['indicator']:
+                #         self.kg_use = True
+                #     else:
+                #         self.kg_use = False
+
                 self.call_times = 1
                 # 1. Clear interface history and set the init for interface#########
                 self.interface.clear_history(self.folder_path+self.log_file_name)
                 self.interface.set_board(data_dict_from_server['current_gameboard'])
-                print('sequence =>', data_dict_from_server['current_gameboard']['location_sequence'])
                 s = self.interface.board_to_state(data_dict_from_server['current_gameboard'])
+
                 self.game_num += 1  # update number of games simulated
                 self.logger.info(str(self.game_num) + ' th game starts!')
                 # ##################################################################
@@ -702,17 +730,20 @@ class ClientAgent(Agent):
                 # ###################################################################
 
                 # 3. If board size changed, before the game, we need to call retrain#
-                print('self.state_num', self.state_num, len(s))
                 if self.state_num != len(s) or self.retrain_signal:
+                    print(self.state_num, len(s),  self.retrain_signal)
+
                     if self.state_num != len(s):
+                        self.novelty_str += 'board size changed to ' + str(self.state_num)
                         self.logger.info('detect the novelty as the board size change')
 
                     if self.win_rate_after_novelty == None:  # begin to record the game winning rate
                         self.win_rate_after_novelty = []
 
                     if self.state_num != len(s):
-                        board_size_changed_sig = True
-                    retrain_type = 'size' if board_size_changed_sig else 'novelty'
+                        self.board_size_changed_sig = True
+
+                    retrain_type = 'size' if self.board_size_changed_sig else 'novelty'
                     ini_current_gameboard = self.initialize_gameboard(data_dict_from_server['current_gameboard'])  #TODO
 
                     # 3.1 set up trainer:
@@ -726,18 +757,22 @@ class ClientAgent(Agent):
                     self.state_num = len(s)  # reset the state_num size
 
                     # self.kg_change_bool = True
-                    self.retrain_signal = False if self.converge_signal else True  # when converge, stop retraining
+                    # self.retrain_signal = False if self.converge_signal else True  # when converge, stop retraining
+                    self.retrain_signal = False
                     # self.kg_change_wait = 0
                     # self.adj_path = adj_path
+
 
             # #############################################################################
 
             # When each game ends, we run the KG, but we don not shutdown the connection
             elif func_name == 'shutdown':
                 serial_dict_to_client = data_dict_from_server
-                self.change_to_background(serial_dict_to_client['players'])
-                self.kg_run(self.gameboard, serial_dict_to_client['cards'], self.game_num)
-                result = shutdown(serial_dict_to_client, self)
+                # print('serial_dict_to_client', serial_dict_to_client)
+                # self.change_to_background(serial_dict_to_client['players'])
+                self.kg_run(self.gameboard, self.game_num)
+                # result = shutdown(serial_dict_to_client, self)
+                result = self.novelty_str
                 self.logger.info(str(self.game_num) + ' th game stops!')
 
             # When calling agent to make decision
@@ -750,7 +785,7 @@ class ClientAgent(Agent):
                     serial_dict_to_server['param_dict'] = server_result[1]
                     result = serial_dict_to_server
                 else:
-                    print('serial_dict_to_server', data_dict_from_server['current_gameboard']['cards']['picked_chance_card_details'])
+                    # print('serial_dict_to_server', data_dict_from_server['current_gameboard']['cards']['picked_chance_card_details'])
                     result = self.make_post_roll_move_agent(serial_dict_to_client)
                     # server_result, self._agent_memory = self.make_post_roll_move(serial_dict_to_client,
                     #                                                              self._agent_memory)
@@ -761,7 +796,7 @@ class ClientAgent(Agent):
 
             elif func_name == 'make_out_of_turn_move':
                 serial_dict_to_client = data_dict_from_server
-                self.gameboard = serial_dict_to_client['current_gameboard']
+                self.gameboard = copy.deepcopy(serial_dict_to_client['current_gameboard'])
                 if self.gameboard['history'][-1]['function'] == 'free_mortgage':
                     self.check_mortgage_percentage(self.gameboard['players']['player_1']['current_cash'])
                 server_result, self._agent_memory = self.make_out_of_turn_move(serial_dict_to_client, self._agent_memory, self.mortgage_percentage, self.go_increment)
@@ -771,6 +806,7 @@ class ClientAgent(Agent):
                 if serial_dict_to_server['function'] =='free_mortgage':
                     self.take_free_mortgage_info['mortage'] = self.gameboard['locations'][serial_dict_to_server['param_dict']['asset']]['mortgage']
                     self.take_free_mortgage_info['cash'] = self.gameboard['players']['player_1']['current_cash']
+
                 result = serial_dict_to_server
 
             elif func_name == 'make_pre_roll_move':
@@ -812,6 +848,8 @@ class ClientAgent(Agent):
                 result = getattr(self, func_name)(serial_dict_to_client)
 
             self.last_func_name = func_name
+            # print(func_name, ' -send result -', result)
+
             # Send the results back to server agent
             if isinstance(result, int):
                 self.conn.sendall(bytes(str(result), encoding="utf-8"))
@@ -822,7 +860,6 @@ class ClientAgent(Agent):
             else:  #dictionary
                 json_serial_return_to_server = json.dumps(result)
                 self.conn.sendall(bytes(json_serial_return_to_server, encoding="utf-8"))
-
 
             # Close connection after each tournament
             if func_name == "end_tournament":
