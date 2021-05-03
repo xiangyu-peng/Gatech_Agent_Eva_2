@@ -630,7 +630,7 @@ if __name__ == '__main__':
                         default=0, required=True,
                         help="Env seed")
     parser.add_argument('--upper_path', type=str,
-                        default='/media/becky/GNOME-p3', required=False,
+                        default='/media/becky/Gatech_Agent_Eva_2', required=False,
                         help="Novelty price change begin number")
     parser.add_argument('--exp_type', type=str,
                         default='kg', required=False,
@@ -645,7 +645,7 @@ if __name__ == '__main__':
                         required=False,
                         help="GPU id we use")
     parser.add_argument('--adj_path_folder',
-                        default='/media/becky/GNOME-p3/KG_rule/matrix_rule/kg_matrix',
+                        default='/media/becky/Gatech_Agent_Eva_2/KG_rule/matrix_rule/',
                         type=str,
                         required=False,
                         help="The folder has the npz matrix file for adj of game rule/ kg")
@@ -653,7 +653,7 @@ if __name__ == '__main__':
                         default=None,
                         type=str,
                         required=False,
-                        help="/media/becky/GNOME-p3/monopoly_simulator_background/weights19_1_baseline_seed_9147000.pkl")
+                        help="/media/becky/Gatech_Agent_Eva_2/monopoly_simulator_background/weights19_1_baseline_seed_9147000.pkl")
     parser.add_argument('--exp_name',
                         default='5_3',
                         type=str,
@@ -712,7 +712,7 @@ if __name__ == '__main__':
                                   retrain_type=args.retrain_type,
                                   device_id=args.device_id,
                                   seed=0,
-                                  adj_path='/media/becky/GNOME-p3/KG_rule/matrix_rule/kg_matrix_no.npy',
+                                  adj_path='/media/becky/Gatech_Agent_Eva_2/KG_rule/matrix_rule/kg_matrix_no.npy',
                                   exp_dict=exp_dict) #'/media/becky/GNOME-p3/monopoly_simulator_background/weights/no_v3_lr_0.0001_#_107.pkl'
         trainer.train()
 
