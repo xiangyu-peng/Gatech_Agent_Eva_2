@@ -17,7 +17,6 @@ sys.path.append(upper_path + '/GNN')
 ####################
 from monopoly_simulator_background.vanilla_A2C import *
 from monopoly_simulator_background.interface import Interface
-from monopoly_simulator import background_agent_v3
 from monopoly_simulator.agent import Agent
 
 from configparser import ConfigParser

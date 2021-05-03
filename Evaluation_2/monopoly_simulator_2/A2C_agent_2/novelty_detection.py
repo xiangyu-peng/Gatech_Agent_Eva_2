@@ -18,7 +18,6 @@ import random
 from scipy import stats
 import pickle
 from monopoly_simulator.gameplay import set_up_board
-from monopoly_simulator import background_agent_v3
 from monopoly_simulator.agent import Agent
 import copy
 import json

@@ -4,7 +4,7 @@ sys.path.append(upper_path + '/KG_rule')
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation')
 ####################
-from monopoly_simulator import background_agent_v3
+from monopoly_simulator_2 import background_agent_v3
 from monopoly_simulator.agent import Agent
 from monopoly_simulator import initialize_game_elements
 from monopoly_simulator.action_choices import roll_die, concluded_actions
