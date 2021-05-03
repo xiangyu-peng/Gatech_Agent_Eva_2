@@ -58,9 +58,11 @@ Install gym by going to `Gatech_Agent_Eva_2/env/simulator_env/gym_simulator_env`
         pip install .
 
 ## Absolute Paths
-Regretably, this library requires some absolute paths
-* modify absolute path in the following files. Search `becky` to find the path.
-    * `/env/monopoly_world.py` and `/envs/simple_monopoly.py`
-    * `/Evaluation_2/monopoly_simulator_2/A2C_agent_2` folder: `RL_agent_v1.py` (1) and `novelty_detection.py` (3)
-    * `/KG_rule/openie_triple.py`
-    * `/monopoly_simulator_background/interface.py`
+Regrettably, this library requires some absolute paths. To run, in the following files 
+search for the keyword 'becky' to find the absolute paths that you need to modify:
+  * `Gatech_Agent_Eva2/env/monopoly_world.py`
+  * `Gatech_Agent_Eva2/envs/simple_monopoly.py`
+  * `Gatech_Agent_Eva2/Evaluation_2/monopoly_simulator_2/A2C_agent_2/RL_agent_v1.py`
+  * `Gatech_Agent_Eva2/Evaluation_2/monopoly_simulator_2/A2C_agent_2/novelty_detection.py`
+  * `Gatech_Agent_Eva2/KG_rule/openie_triple.py`
+  * `Gatech_Agent_Eva2/monopoly_simulator_background/interface.py`
