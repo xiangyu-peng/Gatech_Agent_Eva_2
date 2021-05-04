@@ -289,7 +289,7 @@ class ClientAgent(Agent):
 
 
             self.novelty_str += ' =>' + str(self.kg_change)
-            self.retrain_signal = True if not self.board_size_changed_sig else False
+            self.retrain_signal = True if self.board_size_changed_sig else False
             self.converge_signal = False  # mean we need to retrain.
             self.kg_change_bool = True
             self.best_model = dict()
@@ -311,7 +311,7 @@ class ClientAgent(Agent):
 
         # game cloning detects novelty
         if self.kg_use and self.gc_novelty_sig:
-            self.retrain_signal = True if not self.board_size_changed_sig else False
+            self.retrain_signal = True if self.board_size_changed_sig else False
             self.logger.debug('Novelty Detected by Game Cloning')
             self.logger.debug('Novelty Detected as ' + str(self.gc_novelty_dict))
             self.novelty_str += ' =>' + str(self.gc_novelty_dict)
@@ -657,7 +657,7 @@ class ClientAgent(Agent):
                 if sum(self.win_rate_after_novelty[-1 * self.change_to_background_wait:]) == 0:
                     self.background_agent_use = True
 
-    def play_remote_game(self, address=('localhost', 6001), authkey=b"password"):
+    def play_remote_game(self, address=('localhost', 6010), authkey=b"password"):
         """
         Connects to a ServerAgent and begins the loop of waiting for requests and responding to them.
         @param address: Tuple, the address and port number. Defaults to localhost:6000

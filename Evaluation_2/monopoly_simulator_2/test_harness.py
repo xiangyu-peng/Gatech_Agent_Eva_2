@@ -272,7 +272,7 @@ def play_tournament_with_novelty_2(tournament_log_folder=None, nov=None, meta_se
 def class_novelty_1(current_gameboard):
 
 
-    #Mortgage
+    ## Mortgage
     # morNovelty = novelty_generator.InanimateAttributeNovelty()
     # mor_location = current_gameboard['location_objects']["Mediterranean Avenue"]
     # morNovelty.mortgage_novelty(mor_location, 40)
@@ -284,21 +284,21 @@ def class_novelty_1(current_gameboard):
     # novel_chance["general_repairs"] = "alternate_contingency_function_1"
     # classCardNovelty.card_novelty(current_gameboard, novel_cc, novel_chance)
 
-    # price
-    # inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
-    # asset_lists = ["Mediterranean Avenue", "Baltic Avenue", "Reading Railroad", "Oriental Avenue", "Vermont Avenue",
-    #                "Connecticut Avenue", "St. Charles Place", "Electric Company", "States Avenue",
-    #                "Virginia Avenue", "Pennsylvania Railroad", "St. James Place", "Tennessee Avenue",
-    #                "New York Avenue", "Kentucky Avenue", "Indiana Avenue", "Illinois Avenue", "B&O Railroad",
-    #                "Atlantic Avenue", "Ventnor Avenue", "Water Works", "Marvin Gardens", "Pacific Avenue",
-    #                "North Carolina Avenue", "Pennsylvania Avenue", "Short Line", "Park Place", "Boardwalk"]
-    # num = 0
-    # for asset in asset_lists:
-    #     num += 1
-    #     if num >= 0 and num < 10:
-    #         inanimateNovelty.price_novelty(current_gameboard['location_objects'][asset], 1499)
+    ## price
+    inanimateNovelty = novelty_generator.InanimateAttributeNovelty()
+    asset_lists = ["Mediterranean Avenue", "Baltic Avenue", "Reading Railroad", "Oriental Avenue", "Vermont Avenue",
+                   "Connecticut Avenue", "St. Charles Place", "Electric Company", "States Avenue",
+                   "Virginia Avenue", "Pennsylvania Railroad", "St. James Place", "Tennessee Avenue",
+                   "New York Avenue", "Kentucky Avenue", "Indiana Avenue", "Illinois Avenue", "B&O Railroad",
+                   "Atlantic Avenue", "Ventnor Avenue", "Water Works", "Marvin Gardens", "Pacific Avenue",
+                   "North Carolina Avenue", "Pennsylvania Avenue", "Short Line", "Park Place", "Boardwalk"]
+    num = 0
+    for asset in asset_lists:
+        num += 1
+        if num >= 0 and num < 10:
+            inanimateNovelty.price_novelty(current_gameboard['location_objects'][asset], 1499)
 
-    # Dice
+    ## Dice
     # numberDieNovelty = novelty_generator.NumberClassNovelty()
     # numberDieNovelty.die_novelty(current_gameboard, 2, die_state_vector=[[1,2,3,4,5,6],[1,2,3,4,5,6]])
     # classDieNovelty = novelty_generator.TypeClassNovelty()
@@ -307,22 +307,21 @@ def class_novelty_1(current_gameboard):
     # die_type_vector = ['odd_only','even_only']
     # classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
 
-    # bank
+    ## bank
     # contingentattributenovelty = novelty_generator.ContingentAttributeNovelty()
     # contingentattributenovelty.change_property_sell_percentage(current_gameboard, 0.4)
 
-    # gameboard
-    granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 6)
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States Avenue'],
-                                           20)
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee Avenue'],
-                                           27)
-    granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
+    ## Reorder gameboard
+    # granularityNovelty = novelty_generator.GranularityRepresentationNovelty()
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Baltic Avenue'], 6)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['States Avenue'],
+    #                                        20)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Tennessee Avenue'],
+    #                                        27)
+    # granularityNovelty.granularity_novelty(current_gameboard, current_gameboard['location_objects']['Park Place'], 52)
 
-    # Reorder gameboard
 
-    # Reorder the space - pass
+    ## Reorder the space - pass
     # spaceordernovelty = novelty_generator.SpatialRepresentationNovelty()
     # new_location_sequence = ["Go", "Community Chest", "Mediterranean Avenue", "Baltic Avenue", "Income Tax", "Reading Railroad",
     #                          "Oriental Avenue", "Chance", "Vermont Avenue", "Connecticut Avenue", "In Jail/Just Visiting",
@@ -335,11 +334,11 @@ def class_novelty_1(current_gameboard):
     # spaceordernovelty.global_reordering(current_gameboard, new_location_sequence)
     # print(current_gameboard['location_sequence'])
 
-    # Reorder the colors - pass
+    ## Reorder the colors - pass
     # spatialNovelty = novelty_generator.SpatialRepresentationNovelty()
     # spatialNovelty.color_reordering(current_gameboard, ['Boardwalk', 'Park Place'], 'Blue')
 
-    # Dice
+    ## Dice
     # numberDieNovelty = novelty_generator.NumberClassNovelty()
     # numberDieNovelty.die_novelty(current_gameboard, 2, die_state_vector=[[1,2,3,4,5,6],[1,2,3,4,5,6]])
     # classDieNovelty = novelty_generator.TypeClassNovelty()
@@ -348,7 +347,7 @@ def class_novelty_1(current_gameboard):
     # die_type_vector = ['odd_only','even_only']
     # classDieNovelty.die_novelty(current_gameboard, die_state_distribution_vector, die_type_vector)
 
-    # Card
+    ## Card
 
     # Card -num
     # numberCardNovelty = novelty_generator.NumberClassNovelty()
@@ -356,20 +355,20 @@ def class_novelty_1(current_gameboard):
     # chance_cards_num = {"go_to_jail":1}
     # numberCardNovelty.card_novelty(current_gameboard, community_chest_cards_num, chance_cards_num)
 
-    # Card - destination
+    ## Card - destination
     # desCardNovelty = novelty_generator.InanimateAttributeNovelty()
     # community_chest_card_destinations, chance_card_destinations = dict(), dict()
     # community_chest_card_destinations['advance_to_go'] = location.ActionLocation("action", 'Chance', 36, 37, "None", "pick_card_from_chance")
     # desCardNovelty.card_destination_novelty(current_gameboard, community_chest_card_destinations, chance_card_destinations)
 
-    # Card - Amount
+    ## Card - Amount
     # cardamountNovelty = novelty_generator.InanimateAttributeNovelty()
     # community_chest_card_amounts = dict()
     # key = "sale_of_stock"
     # community_chest_card_amounts[key] = 60
     # cardamountNovelty.card_amount_novelty(current_gameboard, community_chest_card_amounts=community_chest_card_amounts)
 
-    # Type - Card
+    ## Type - Card
     # cardtypeNovelty = novelty_generator.TypeClassNovelty()
     # community_chest_cards_contingency = dict()
     # community_chest_cards_contingency["street_repairs"] = "alternate_contingency_function_1"
@@ -377,20 +376,20 @@ def class_novelty_1(current_gameboard):
     #                              community_chest_cards_contingency=community_chest_cards_contingency,
     #                              chance_cards_contingency=dict())
 
-    # Inanimate
+    ## Inanimate
 
-    # Tax
+    ## Tax
     # taxNovelty = novelty_generator.InanimateAttributeNovelty()
     # tax_location = current_gameboard['location_objects']["Luxury Tax"]
     # # tax_location = location.TaxLocation("tax", "Luxury Tax", 38, 39, "None", 100)
     # taxNovelty.tax_novelty(tax_location, 200)
 
-    # Mortgage
+    ## Mortgage
     # morNovelty = novelty_generator.InanimateAttributeNovelty()
     # mor_location = current_gameboard['location_objects']["Mediterranean Avenue"]
     # morNovelty.mortgage_novelty(mor_location, 40)
 
-    # Contingent
+    ## Contingent
     # bank - percentage
     # conNovelty = novelty_generator.ContingentAttributeNovelty()
     # conNovelty.change_mortgage_percentage(current_gameboard, 0.2)
@@ -404,4 +403,5 @@ except:
 
 #Specify the name of the folder in which the tournament games has to be logged in the following format: "/name_of_your_folder/"
 # play_tournament_without_novelty('/tournament_without_novelty_4/', meta_seed=10, num_games=100)
-play_tournament_with_novelty_1('/tournament_with_novelty/',num_games=10, novelty_index=3, meta_seed=0)
+# play_tournament_with_novelty_1('/tournament_with_novelty/',num_games=10, novelty_index=3, meta_seed=0)
+play_tournament_with_novelty_2('/tournament_with_novelty/',num_games=10, novelty_index=3, meta_seed=0)

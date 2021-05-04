@@ -237,7 +237,7 @@ class ServerAgent(Agent):
         json_serial_dict_to_client = json.dumps(serial_dict_to_client)
         self.conn.sendall(bytes(json_serial_dict_to_client, encoding="utf-8"))
         return_from_client = self.conn.recv(200000)
-        result = bool(return_from_client.decode("utf-8"))
+        result = return_from_client.decode("utf-8")
         logger.debug("TA2 agent novelty detection = " + str(result))
         return result
 
