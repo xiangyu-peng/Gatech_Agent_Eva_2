@@ -8,7 +8,7 @@
 * add the following codes to `.../gym/envs/__init__.py`
 
         import sys
-        sys.path.append('your_path/env/simulator_env')
+        sys.path.append('/mnt/c/Users/spenc/Documents/2021Projects/DARPA-SAILON/Gatech_Agent_Eva_2/env/simulator_env')
         register(
             id='monopoly_simple-v1',
             entry_point='gym_simulator_env.envs:Sim_Monopoly'
