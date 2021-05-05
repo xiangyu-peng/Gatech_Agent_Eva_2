@@ -1,4 +1,9 @@
 #### WHAT NEED TO BE MODIFIED BEFORE USING
+
+Full list of dependencies in conda environment file environment.yml
+
+    conda env create -f environment.yml
+
 ##### GYM installation
     
 * find gym path
@@ -8,7 +13,7 @@
 * add the following codes to `.../gym/envs/__init__.py`
 
         import sys
-        sys.path.append('your_path/env/simulator_env')
+        sys.path.append('**your_path**/env/simulator_env')
         register(
             id='monopoly_simple-v1',
             entry_point='gym_simulator_env.envs:Sim_Monopoly'
@@ -16,7 +21,7 @@
 
 * install gym by going to `your_path/env/simulator_env/gym_simulator_env` then run
 
-        pip install .
+        python  -m pip install . --user
 
 ##### PATH
 * modify absolute path in the following files. Search `becky` to find the path.
