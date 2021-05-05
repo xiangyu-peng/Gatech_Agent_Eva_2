@@ -26,7 +26,6 @@ from monopoly_simulator_background import simple_decision_agent_1
 import json
 from monopoly_simulator_background import diagnostics
 from monopoly_simulator_background import novelty_generator
-from monopoly_simulator_background from agent import Agent
 import xlsxwriter
 
 
@@ -259,7 +258,7 @@ def die_roll_substitute(die_objects, hypothetical_gameboard):
     print('rolling die...')
     return [hypothetical_gameboard['randomState'].choice(d.die_state) for d in die_objects]
 
-test_gameboard('/media/becky/GNOME-p3/monopoly_game_schema_v1-1.json') # use this to set up a gameboard and test various things
+# test_gameboard('/media/becky/GNOME-p3/monopoly_game_schema_v1-1.json') # use this to set up a gameboard and test various things
 
 # die_objects = [[1,2,3,4,5,6],[1,2,3,4,5,6]]
 # count = 0
