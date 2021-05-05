@@ -32,7 +32,8 @@ Full list of dependencies in conda environment file environment.yml
     
 #### Modification in simulator
 * In server_agent_serial.py. In `shutdown` funtion, return str instead of bool. More specically, replace this [line](https://github.com/mayankkejriwal/GNOME-p3/blob/0441c17b19e02b0f9e6dc710f7914f3ac617d541/monopoly_simulator/server_agent_serial.py#L234)
-    with `result = return_from_client.decode("utf-8")`
+    with `json.loads(return_from_client.decode("utf-8"))`
+    and also return `return bool(result)`
 * In gameplay_socket.py, comment the [last line](https://github.com/mayankkejriwal/GNOME-p3/blob/0441c17b19e02b0f9e6dc710f7914f3ac617d541/monopoly_simulator/gameplay_socket.py#L638) out
 
 * Pls read the novelty in the log file which USC used for each game.

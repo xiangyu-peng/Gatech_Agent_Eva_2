@@ -5,7 +5,6 @@ upper_path_eva = upper_path + '/Evaluation_2/monopoly_simulator_2'
 sys.path.append(upper_path)
 sys.path.append(upper_path + '/Evaluation_2')
 sys.path.append(upper_path_eva)
-print('upper_path', upper_path, upper_path_eva)
 #####################################
 from monopoly_simulator_background.gameplay_tf import set_up_board
 from monopoly_simulator_2.agent import Agent
@@ -113,7 +112,7 @@ class ClientAgent(Agent):
         self.seed = random.randint(0, 10000)
         self.retrain_signal = False
         self.change_to_background_wait = 10
-        self.novelty_str = ''
+        self.novelty_str = dict()
 
         # Read the config
         self.config_file = self.upper_path_eva + '/A2C_agent_2/config.ini'
@@ -288,7 +287,7 @@ class ClientAgent(Agent):
             self.logger.debug('Novelty Detected as ' + str(self.kg_change))
 
 
-            self.novelty_str += ' =>' + str(self.kg_change)
+            self.novelty_str['kg'] = str(self.kg_change)
             self.retrain_signal = True if not self.board_size_changed_sig else False
             self.converge_signal = False  # mean we need to retrain.
             self.kg_change_bool = True
@@ -314,7 +313,7 @@ class ClientAgent(Agent):
             self.retrain_signal = True if not self.board_size_changed_sig else False
             self.logger.debug('Novelty Detected by Game Cloning')
             self.logger.debug('Novelty Detected as ' + str(self.gc_novelty_dict))
-            self.novelty_str += ' =>' + str(self.gc_novelty_dict)
+            self.novelty_str['gc'] = self.gc_novelty_dict
             self.logger.debug('Retrain signal is True now, it will retrain the NN before next game!')
 
     def novelty_board_detect(self, current_gameboard):
@@ -543,44 +542,44 @@ class ClientAgent(Agent):
 
         if type_retrain == 'size':
             print('len_vocab', len_vocab)
-            trainer = MonopolyTrainer_GAT(params,
-                                          gameboard=gameboard,
-                                          kg_use=False,
-                                          logger_use=False,
-                                          config_file='config.ini',
-                                          test_required=True,  # change to False if you do not need any test check anymore.
-                                          tf_use=False,
-                                          pretrain_model=None,
-                                          retrain_type='baseline',
-                                          device_id='-1',
-                                          seed=0,
-                                          adj_path=None,
-                                          exp_dict=exp_dict,
-                                          len_vocab=len_vocab)
+            self.trainer = MonopolyTrainer_GAT(params,
+                                              gameboard=gameboard,
+                                              kg_use=False,
+                                              logger_use=False,
+                                              config_file='config.ini',
+                                              test_required=True,  # change to False if you do not need any test check anymore.
+                                              tf_use=False,
+                                              pretrain_model=None,
+                                              retrain_type='baseline',
+                                              device_id='-1',
+                                              seed=0,
+                                              adj_path=None,
+                                              exp_dict=exp_dict,
+                                              len_vocab=len_vocab)
             self.gat_use = False
         else:
-            trainer = MonopolyTrainer_GAT(params,
-                                          gameboard=gameboard,
-                                          kg_use=True,
-                                          logger_use=False,
-                                          config_file='config.ini',
-                                          test_required=True,
-                                          # change to False if you do not need any test check anymore.
-                                          tf_use=False,
-                                          pretrain_model=None,
-                                          retrain_type='gat_part',
-                                          device_id='-1',
-                                          seed=0,
-                                          adj_path=self.adj_path,
-                                          exp_dict=exp_dict,
-                                          len_vocab=len_vocab)
+            self.trainer = MonopolyTrainer_GAT(params,
+                                              gameboard=gameboard,
+                                              kg_use=True,
+                                              logger_use=False,
+                                              config_file='config.ini',
+                                              test_required=True,
+                                              # change to False if you do not need any test check anymore.
+                                              tf_use=False,
+                                              pretrain_model=None,
+                                              retrain_type='gat_part',
+                                              device_id='-1',
+                                              seed=0,
+                                              adj_path=self.adj_path,
+                                              exp_dict=exp_dict,
+                                              len_vocab=len_vocab)
 
         self.best_model = dict()
 
         if os.path.exists(upper_path_eva + "/A2C_agent_2/logs/kg_matrix_0_0.npy"):
             os.remove(upper_path_eva + "/A2C_agent_2/logs/kg_matrix_0_0.npy")
 
-        return trainer
+        # return trainer
 
     def retrain_from_scratch(self, gameboard, game_num):
         """
@@ -734,7 +733,7 @@ class ClientAgent(Agent):
                     print(self.state_num, len(s),  self.retrain_signal)
 
                     if self.state_num != len(s):
-                        self.novelty_str += 'board size changed to ' + str(self.state_num)
+                        self.novelty_str['size'] = 'board size changed to ' + str(self.state_num)
                         self.logger.info('detect the novelty as the board size change')
 
                     if self.win_rate_after_novelty == None:  # begin to record the game winning rate
@@ -748,7 +747,7 @@ class ClientAgent(Agent):
 
                     # 3.1 set up trainer:
                     # if ini_sig or board_size_changed_sig or self.kg_change_bool: # or (self.converge_signal and not self.kg_change_bool):  # 1st time or board size changed, we need to initialize trainer.
-                    self.trainer = self.retrain_ini(ini_current_gameboard, retrain_type)
+                    self.retrain_ini(ini_current_gameboard, retrain_type)
                         # ini_sig = False
 
                     # 3.2 begin retraining
