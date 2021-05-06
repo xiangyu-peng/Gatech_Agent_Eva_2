@@ -288,7 +288,7 @@ class ClientAgent(Agent):
 
 
             self.novelty_str['kg'] = str(self.kg_change)
-            self.retrain_signal = True if not self.board_size_changed_sig else False
+            self.retrain_signal = True if self.board_size_changed_sig else False
             self.converge_signal = False  # mean we need to retrain.
             self.kg_change_bool = True
             self.best_model = dict()
@@ -310,7 +310,7 @@ class ClientAgent(Agent):
 
         # game cloning detects novelty
         if self.kg_use and self.gc_novelty_sig:
-            self.retrain_signal = True if not self.board_size_changed_sig else False
+            self.retrain_signal = True if self.board_size_changed_sig else False
             self.logger.debug('Novelty Detected by Game Cloning')
             self.logger.debug('Novelty Detected as ' + str(self.gc_novelty_dict))
             self.novelty_str['gc'] = self.gc_novelty_dict
@@ -674,15 +674,25 @@ class ClientAgent(Agent):
             # receive the info form server###########################
             data_from_server = self.conn.recv(50000)
             data_from_server = data_from_server.decode("utf-8")
+            if not data_from_server:
+                print('received None. Closing client')
+                self.logger.info('Tournament Finished!')
+                self.conn.close()
+                break
+
             data_dict_from_server = json.loads(data_from_server)
             func_name = data_dict_from_server['function']
             self.call_times += 1
 
             # game cloning novelty check up
-            if func_name in ['make_buy_property_decision', 'make_bid', 'make_pre_roll_move', 'make_out_of_turn_move', 'make_post_roll_move'] and \
-                not self.gc_novelty_sig:
+            if func_name in ['make_buy_property_decision',
+                             'make_bid',
+                             'make_pre_roll_move',
+                             'make_out_of_turn_move',
+                             'make_post_roll_move'] and not self.gc_novelty_sig:
                 self.gc_novelty_sig, novelty_dict = self.gc.gc_detect_novelty(data_from_server)
                 if self.gc_novelty_sig:
+                    print(novelty_dict)
                     self.gc_novelty_dict.update(novelty_dict)
 
             if self.last_func_name == 'handle_negative_cash_balance' and 'current_gameboard' in data_dict_from_server:
@@ -841,6 +851,9 @@ class ClientAgent(Agent):
             elif func_name == "end_tournament":
                 result = 1
                 self.logger.info('Tournament Finished!')
+                self.conn.close()
+                break
+
 
             else:
                 serial_dict_to_client = data_dict_from_server
