@@ -4,19 +4,27 @@ import numpy as np
 # import torch
 
 class GameClone():
-    def __init__(self, rules_manual_json=None):
+    def __init__(self, state_stats_json_file='game_clone_state_stats.json', rules_manual_json=None):
         """
         Sets up the game cloning rules, where the main structure
         Args:
             rules_manual: json of rules
         """
+        self.state_stats = dict()
+        if os.path.isfile(state_stats_json_file):
+            try:
+                self.load_state_stats(state_stats_json_file)
+            except:
+                print('state_stats failed to load')
+        else:
+            print('state_stats failed to load')
+
         self.rules = dict()
         self.rules_manual_json = rules_manual_json
         self.red_button = False
         if rules_manual_json:
             self._process_manual()
 
-        self.state_stats = dict()
         # a record is a sequence that grows over time
         # a sequence is a set that is ordered
         # a set is a group of like objects
@@ -26,6 +34,7 @@ class GameClone():
             'set': ['locations'],
             'not_monitored': ['players']
         }
+        self.gamestate_avoided_keys = {'history', 'players', 'picked_chance_cards', 'picked_community_chest_cards'} # 'cards'
 
     def load_state_stats(self, state_stats_json_file='game_clone_state_stats.json', overwrite=True):
         if overwrite or not self.state_stats:
@@ -137,7 +146,7 @@ class GameClone():
         if subtree is None:
             subtree = self.state_stats
         for key in parsed_json:
-            if (not parsed_json[key]) or (key in ('history', 'players')):  # 'cards'
+            if (not parsed_json[key]) or (key in self.gamestate_avoided_keys):  # 'cards'
                 continue
             elif type(parsed_json[key]) is dict:
                 if key not in subtree:
@@ -177,7 +186,7 @@ class GameClone():
             else:  # (str, bool, int, float)
                 if key not in subtree:
                     subtree[key] = {str(parsed_json[key]): 1}
-                elif parsed_json[key] not in subtree[key]:
+                elif str(parsed_json[key]) not in subtree[key]:
                     subtree[key][str(parsed_json[key])] = 1  # TODO: I think we need this somewhere else too?
                 else:
                     try:
@@ -198,8 +207,8 @@ class GameClone():
             data_dict_from_server=gameboard_message
         if self.red_button:
             return True, {'message': 'novelty already detected!'}
-
-        novelty, novelty_properties = self.check_novelty(data_dict_from_server['current_gameboard'])
+        if 'current_gameboard' in data_dict_from_server:
+            novelty, novelty_properties = self.check_novelty(data_dict_from_server['current_gameboard'])
         if novelty:
             self.red_button = True
 
@@ -212,26 +221,34 @@ class GameClone():
         novelty = False
         novelty_properties = {}
         for key in parsed_json:
-            novelty_properties['trigger'] = [key]
-
-            if (not parsed_json[key]) or (key in ('cards', 'history', 'players', 'locations')):
+            if (not parsed_json[key]) or (key in self.gamestate_avoided_keys):
                 continue
             elif key not in subtree:
                 novelty = True
+                novelty_properties['trigger'] = [key]
                 break
             elif type(parsed_json[key]) is dict:
-                novelty, novelty_properties = self.check_novelty(subtree[key],
-                                                                 parsed_json[key])
+                novelty, novelty_properties_add = self.check_novelty(parsed_json[key],
+                                                                     subtree[key])
+                if novelty_properties_add:
+                    novelty_properties = self._extend_properties(novelty_properties,
+                                                                 novelty_properties_add)
+
             elif type(parsed_json[key]) is list:
                 if type(parsed_json[key][-1]) is dict:  # list of dicts - history # TODO balloch: untested
                     for idx, subjson in enumerate(parsed_json[key]):
                         if idx > (len(subtree[key]) - 1):  # WARNING: EXCEPT WITH HISTORY
                             novelty = True
-                            novelty_properties['trigger'] = [key, parsed_json[key]]
+                            novelty_properties = self._extend_properties(novelty_properties,
+                                                                         {'trigger': [key, parsed_json[key]]})
                             break
                         else:  # TODO: if subtree the same, add count, if not, insert? frankly list should become a tree/dict
-                            novelty, novelty_properties = self.check_novelty(subtree[key][idx],
-                                                                             parsed_json[key][idx])
+                            novelty, novelty_properties_add = self.check_novelty(parsed_json[key][idx],
+                                                                                 subtree[key][idx])
+                            if novelty_properties_add:
+                                novelty_properties = self._extend_properties(novelty_properties,
+                                                                         novelty_properties_add)
+
                             # novelty_properties.update(temp_novelty_properties)
                 elif type(parsed_json[key][-1]) is list:  # list of lists - hardcoding this because die sequence only
                     if subtree[key]['length'] == len(parsed_json[key]):
@@ -239,35 +256,50 @@ class GameClone():
                         # print('No dice change updates')
                     else:
                         for idx, item in enumerate(parsed_json[key][-1]):
-                            if item not in subtree[key]['data'][idx]:
+                            if str(item) not in subtree[key]['data'][idx]:
                                 novelty = True
-                                novelty_properties['trigger'] = [key, parsed_json[key]]
+                                novelty_properties = self._extend_properties(novelty_properties,
+                                                                             {'trigger': [key, parsed_json[key]]})
                                 break
-
                             else:
-                                subtree[key]['data'][idx][item] += 1
+                                continue
+                                # subtree[key]['data'][idx][item] += 1
                 else:  # list of (str, bool int float)
-                    if tuple(parsed_json[key]) not in subtree[key]:
+                    if str(parsed_json[key]) not in subtree[key]:
                         novelty = True
-                        novelty_properties['trigger'] = [key, parsed_json[key]]
+                        novelty_properties = self._extend_properties(novelty_properties,
+                                                                     {'trigger': [key, parsed_json[key]]})
                         break
                     else:
                         continue
                         # subtree[key][tuple(parsed_json[key])] += 1
 
             else:  # (str, bool, int, float) # TODO balloch: untested
-                if parsed_json[key] not in subtree[key]:
+                if str(parsed_json[key]) not in subtree[key]:
                     novelty = True
-                    novelty_properties['trigger'] = [key, parsed_json[key]]
+                    novelty_properties = self._extend_properties(novelty_properties,
+                                                                 {'trigger': [key, parsed_json[key]]})
                     break
                 else:
                     continue
                     # subtree[key][parsed_json[key]] += 1
 
-            if novelty == True:
+            if novelty:
+                print("novelty!")
                 # novelty_properties.insert()
                 break
         return novelty, novelty_properties
+
+    def _extend_properties(self, novelty_properties, novelty_properties_add):
+        if 'trigger' in novelty_properties_add:
+            if 'trigger' in novelty_properties:
+                novelty_properties['trigger'].extend(novelty_properties_add['trigger'])
+            else:
+                novelty_properties['trigger'] = novelty_properties_add['trigger']
+        else:
+            print('weve got a problem: none-trigger content in dict')
+            return None
+        return novelty_properties
 
     def predict_next(self, state, action):
         relevant_rules = []
@@ -289,14 +321,19 @@ class GameClone():
 
 def main():
     game_clone = GameClone()
-    for i in range(100):
-        try:
-            json_file = os.path.join('sample_json_data', 'data_' + '1' + '_' + str(i) + '.json')
-        except:
-            continue
-        with open(json_file, 'r') as infile:
-            data_dict_from_server = json.load(infile)
-        state_stats = game_clone.update_novelty_detector(data_dict_from_server['current_gameboard'])
+    for game in range(1,40):
+        count = 0
+        json_file = os.path.join('/home/balloch/sample_json_data', 'data_' + str(game) + '_' + str(count) + '.json')
+
+        while os.path.isfile(json_file):
+            with open(json_file, 'r') as infile:
+                data_dict_from_server = json.load(infile)
+            if 'current_gameboard' in data_dict_from_server:
+                state_stats = game_clone.update_novelty_detector(data_dict_from_server['current_gameboard'])
+            else:
+                print('bad sample: ', data_dict_from_server)
+            count += 1
+            json_file = os.path.join('/home/balloch/sample_json_data', 'data_' + str(game) + '_' + str(count) + '.json')
     print('orig_state stats: ', state_stats)
 
     bad_json_file = os.path.join('sample_json_data', 'bad_data_' + '1' + '_' + '10' + '.json')
@@ -306,7 +343,6 @@ def main():
     gcss_file = game_clone.save_state_stats()
     print('file: ', gcss_file)
 
-    import copy  # maybe necessary?
     game_clone.load_state_stats(gcss_file, True)
     print('loaded stats: ',game_clone.state_stats)
     print(game_clone.state_stats == state_stats)
