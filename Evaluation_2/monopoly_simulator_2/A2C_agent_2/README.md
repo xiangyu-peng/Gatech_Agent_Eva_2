@@ -40,7 +40,7 @@ Full list of dependencies in conda environment file environment.yml
             entry_point='gym_simulator_env.envs:Sim_Monopoly'
         )
 
-* install gym by going to `your_path/env/simulator_env/gym_simulator_env` then run
+* install gym by going to `your_path/env/simulator_env/` then run
 
         python  -m pip install . --user
 
