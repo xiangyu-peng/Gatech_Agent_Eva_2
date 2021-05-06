@@ -656,7 +656,7 @@ class ClientAgent(Agent):
                 if sum(self.win_rate_after_novelty[-1 * self.change_to_background_wait:]) == 0:
                     self.background_agent_use = True
 
-    def play_remote_game(self, address=('localhost', 6001), authkey=b"password"):
+    def play_remote_game(self, address=('localhost', 6010), authkey=b"password"):
         """
         Connects to a ServerAgent and begins the loop of waiting for requests and responding to them.
         @param address: Tuple, the address and port number. Defaults to localhost:6000

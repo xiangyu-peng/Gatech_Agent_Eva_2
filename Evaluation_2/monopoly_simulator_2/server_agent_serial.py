@@ -188,7 +188,7 @@ class ServerAgent(Agent):
     and send the result back to the ServerAgent.
     """
 
-    def __init__(self, address=('localhost', 6002), authkey=b"password"):
+    def __init__(self, address=('localhost', 6010), authkey=b"password"):
         """
         Create a new ServerAgent on a particular port. If you are playing a game with multiple server agents, make sure
         each is operating on a different port.

@@ -1,0 +1,29 @@
+name: monopoly-gatech-reduced
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - certifi
+  - openssl
+  - pandas
+  - pillow
+  - pip
+  - python=3.7
+  - scipy
+  - seaborn
+  - setuptools
+  - sphinx
+  - wheel
+  - xlsxwriter
+  - gym
+  - spacy
+  - graphviz
+  - pytorch
+  - torchvision
+  - tensorboardx
+  - pywget
+  - numpy
+  - networkx
+  - pip:
+    - stanfordnlp==0.2.0
+    - torchviz==0.0.2

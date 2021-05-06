@@ -1,8 +1,7 @@
 import os
 import json
-import path
 import numpy as np
-import torch
+# import torch
 
 class GameClone():
     def __init__(self, rules_manual_json=None):
@@ -138,7 +137,7 @@ class GameClone():
         if subtree is None:
             subtree = self.state_stats
         for key in parsed_json:
-            if (not parsed_json[key]) or (key in ('cards', 'history', 'players')):
+            if (not parsed_json[key]) or (key in ('history', 'players')):  # 'cards'
                 continue
             elif type(parsed_json[key]) is dict:
                 if key not in subtree:

@@ -1,4 +1,72 @@
 {
+    "cards": {
+        "picked_chance_card_details": {
+            "advance_to_go": {
+                "action": {
+                    "move_player": 88
+                },
+                "card_type": {
+                    "movement": 88
+                },
+                "destination": {
+                    "Go": 88
+                },
+                "name": {
+                    "advance_to_go": 88
+                }
+            },
+            "go_to_nearest_utility": {
+                "action": {
+                    "move_to_nearest_utility__pay_or_buy__check_for_go": 33
+                },
+                "card_type": {
+                    "movement_payment": 33
+                },
+                "name": {
+                    "go_to_nearest_utility": 33
+                }
+            }
+        },
+        "picked_chance_cards": {
+            "['advance_to_go']": 55,
+            "['advance_to_go', 'go_to_nearest_utility']": 33
+        },
+        "picked_community_chest_cards": {
+            "['get_out_of_jail_free']": 41,
+            "['get_out_of_jail_free', 'holiday_fund_matures']": 11,
+            "['get_out_of_jail_free', 'holiday_fund_matures', 'street_repairs']": 24
+        },
+        "picked_community_chest_card_details": {
+            "holiday_fund_matures": {
+                "action": {
+                    "bank_cash_transaction": 35
+                },
+                "amount": {
+                    "100.0": 1
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 35
+                },
+                "name": {
+                    "holiday_fund_matures": 35
+                }
+            },
+            "street_repairs": {
+                "action": {
+                    "contingent_bank_cash_transaction": 24
+                },
+                "card_type": {
+                    "contingent_cash_from_bank": 24
+                },
+                "contingency": {
+                    "calculate_street_repair_cost": 24
+                },
+                "name": {
+                    "street_repairs": 24
+                }
+            }
+        }
+    },
     "location_sequence": {
         "['Go', 'Mediterranean Avenue', 'Community Chest', 'Baltic Avenue', 'Income Tax', 'Reading Railroad', 'Oriental Avenue', 'Chance', 'Vermont Avenue', 'Connecticut Avenue', 'In Jail/Just Visiting', 'St. Charles Place', 'Electric Company', 'States Avenue', 'Virginia Avenue', 'Pennsylvania Railroad', 'St. James Place', 'Community Chest', 'Tennessee Avenue', 'New York Avenue', 'Free Parking', 'Kentucky Avenue', 'Chance', 'Indiana Avenue', 'Illinois Avenue', 'B&O Railroad', 'Atlantic Avenue', 'Ventnor Avenue', 'Water Works', 'Marvin Gardens', 'Go to Jail', 'Pacific Avenue', 'North Carolina Avenue', 'Community Chest', 'Pennsylvania Avenue', 'Short Line', 'Chance', 'Park Place', 'Luxury Tax', 'Boardwalk']": 100
     },
