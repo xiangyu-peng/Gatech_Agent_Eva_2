@@ -284,10 +284,10 @@ class ClientAgent(Agent):
             print('!!!!', self.kg_change[-1])
 
             self.kg_change.append(self.kg.kg_change[:])
-            self.logger.debug('Novelty Detected as ' + str(self.kg_change))
+            self.logger.debug('Novelty Detected as ' + str(self.kg.kg_change))
 
 
-            self.novelty_str['kg'] = str(self.kg_change)
+            self.novelty_str['kg'] = str(self.kg.kg_change)
             self.retrain_signal = True if self.board_size_changed_sig else False
             self.converge_signal = False  # mean we need to retrain.
             self.kg_change_bool = True
