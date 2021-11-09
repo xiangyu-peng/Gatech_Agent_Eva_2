@@ -288,7 +288,7 @@ class ClientAgent(Agent):
 
 
             self.novelty_str['kg'] = str(self.kg.kg_change)
-            self.retrain_signal = True if self.board_size_changed_sig else False
+            self.retrain_signal = True if not self.board_size_changed_sig else False
             self.converge_signal = False  # mean we need to retrain.
             self.kg_change_bool = True
             self.best_model = dict()
@@ -310,7 +310,7 @@ class ClientAgent(Agent):
 
         # game cloning detects novelty
         if self.kg_use and self.gc_novelty_sig:
-            self.retrain_signal = True if self.board_size_changed_sig else False
+            self.retrain_signal = True if not self.board_size_changed_sig else False
             self.logger.debug('Novelty Detected by Game Cloning')
             self.logger.debug('Novelty Detected as ' + str(self.gc_novelty_dict))
             self.novelty_str['gc'] = self.gc_novelty_dict
@@ -666,6 +666,7 @@ class ClientAgent(Agent):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn.connect((address[0], address[1]))
 
+        game_num = 0
         result = None
         ini_sig = True  # if it is the first time to setup trainer.
         board_size_changed_sig = False
@@ -710,6 +711,8 @@ class ClientAgent(Agent):
 
             # Before simulating each game, we have to make sure if we need retrain the network
             elif func_name == "startup":
+                if game_num == 1:
+                    self.orig_gameboard = data_dict_from_server['current_gameboard']
                 result = None
                 # if data_dict_from_server['indicator'] is None:
                 #     self.kg_use = True
@@ -753,7 +756,13 @@ class ClientAgent(Agent):
                         self.board_size_changed_sig = True
 
                     retrain_type = 'size' if self.board_size_changed_sig else 'novelty'
-                    ini_current_gameboard = self.initialize_gameboard(data_dict_from_server['current_gameboard'])  #TODO
+                    # try:
+                    #     ini_current_gameboard = self.initialize_gameboard(data_dict_from_server['current_gameboard'])  #TODO: breaks for cards
+                    # except AttributeError:
+                    #     ini_current_gameboard = self.initialize_gameboard(self.orig_gameboard)
+                    #     print('New Gameboard Doesnt work!!!!!') #TODO: breaks for cards
+
+
 
                     # 3.1 set up trainer:
                     # if ini_sig or board_size_changed_sig or self.kg_change_bool: # or (self.converge_signal and not self.kg_change_bool):  # 1st time or board size changed, we need to initialize trainer.
@@ -770,6 +779,7 @@ class ClientAgent(Agent):
                     self.retrain_signal = False
                     # self.kg_change_wait = 0
                     # self.adj_path = adj_path
+                game_num += 1
 
 
             # #############################################################################

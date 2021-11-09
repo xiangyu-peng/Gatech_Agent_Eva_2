@@ -1884,7 +1884,7 @@ class Novelty_Detection_Dice(History_Record):
     def __init__(self, config_file=None):
         #Novelty Detection
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        self.upper_path = '/media/becky/GNOME-p3'
+        self.upper_path = '/datadrive/software/Gatech_Agent_Eva_2'
         # if config_file == None:
         #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
@@ -2067,7 +2067,7 @@ class Novelty_Detection_Card(History_Record):
     def __init__(self, config_file=None):
         # Novelty Detection
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        self.upper_path = '/media/becky/GNOME-p3'
+        self.upper_path = '/datadrive/software/Gatech_Agent_Eva_2/'
         # if config_file == None:
         #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
@@ -2097,7 +2097,7 @@ class Novelty_Detection_Card_Board(History_Record):
         self.novelty = []
 
     def ini_cards(self):
-        card_board = self.read_json('/media/becky/GNOME-p3/Evaluation_2/monopoly_game_schema_v1-2.json')['cards']
+        card_board = self.read_json('/datadrive/code/Gatech_Agent_Eva_2/Evaluation_2/monopoly_game_schema_v1-2.json')['cards']
         for card_pack in ["community_chest", "chance"]:
             for card in card_board[card_pack]["card_states"]:
                 name = card["name"]

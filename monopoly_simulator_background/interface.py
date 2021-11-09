@@ -32,7 +32,7 @@ class Interface(object):
         self.site_space = []
         self.loc_history = set()
         self.num_players = 0
-        self.upper_path = '/media/becky/GNOME-p3'
+        self.upper_path = '/datadrive/software/Gatech_Agent_Eva_2'
 
     def mapping(self, name):
         name = name.replace('&','-')

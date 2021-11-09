@@ -3,7 +3,7 @@ from gym import error, spaces, utils
 from gym.utils import seeding
 from gym import spaces
 import sys
-sys.path.append('/media/becky/GNOME-p3/env')
+sys.path.append('/datadrive/software/Gatech_Agent_Eva_2/env')
 from monopoly_world import Monopoly_world
 # from lm.next_state_provider import HuggingFaceNextStateProvider
 # from summary_provider.dummy_summary import DummySummaryProvider

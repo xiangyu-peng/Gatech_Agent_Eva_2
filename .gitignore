@@ -1,0 +1,5 @@
+*weights*
+*/logs/*
+*.props
+*__pycache__*
+
