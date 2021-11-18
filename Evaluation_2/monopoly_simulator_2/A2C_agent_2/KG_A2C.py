@@ -256,10 +256,10 @@ class MonopolyTrainer_GAT:
         :return:
         """
         if os.path.exists(self.adj_path):
-            print('adj_use in KG-a2c is ',self.adj_path)
+            # print('adj_use in KG-a2c is ',self.adj_path)
             self.adj = np.load(self.adj_path)
             adj_return = np.zeros((self.adj.shape[0], self.adj.shape[0]))
-            print('adj_return', adj_return)
+            # print('adj_return', adj_return)
             for i in range(self.adj.shape[1] // self.adj.shape[0]):
                 adj_return += self.adj[:,self.adj.shape[0] * i:self.adj.shape[0] * (i+1)]
             self.adj = adj_return
@@ -415,7 +415,7 @@ class MonopolyTrainer_GAT:
             print('keep training', self.test_result['winning_rate'])
         else:
             print('begin retrain!')
-        step_idx = 1
+        step_idx = 0
         save_name = None
         converge_signal = False
         with HiddenPrints():
@@ -425,7 +425,7 @@ class MonopolyTrainer_GAT:
                             [reset_array[i][1][0] for i in range(len(reset_array))],\
                             [reset_array[i][1][1] for i in range(len(reset_array))]
         loss_train = torch.tensor(0, device=self.device).float()
-        while step_idx < self.max_train_steps and self.spend_time < 0.1:  # TODO change to 2.5 hr
+        while step_idx < self.max_train_steps and self.spend_time < 0.01:  # TODO change to 2.5 hr
             loss = torch.tensor(0, device=self.device).float()
             for _ in range(self.update_interval):
                 entropy = 0
@@ -536,7 +536,7 @@ class MonopolyTrainer_GAT:
                 loss_train = torch.tensor(0, device=self.device).float()
 
                 if self.test_required:
-                    avg_score, avg_winning, avg_diff, avg_score_no = self.test_v2(step_idx, seed=0, config_file='/Evaluation_2/monopoly_simulator_2/A2C_agent_2/' + self.config_file)
+                    avg_score, avg_winning, avg_diff, avg_score_no = self.test_v2(step_idx, seed=0, config_file='/Evaluation_2/monopoly_simulator_2/A2C_agent_2/' + self.config_file, num_test=10)
                     print(avg_score, avg_winning, avg_diff, avg_score_no)
                     # Add test result to storage and then plot
                     self.test_result['step'].append(step_idx // self.PRINT_INTERVAL)

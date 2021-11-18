@@ -77,7 +77,7 @@ class KG_OpenIE(History_Record):
                  core_nlp_version: str = '2018-10-05',
                  config_file=None):
 
-        self.upper_path = '/datadrive/software/Gatech_Agent_Eva_2'
+        self.upper_path = '/datadrive/code/Gatech_Agent_Eva_2'
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
 
         # nlp server env
@@ -494,8 +494,8 @@ class KG_OpenIE(History_Record):
                 self.text_dice_num = 1 + self.detection_num
 
             if kg_change:
-                print('kg_change', kg_change)
-                print('self.kg_change:', self.kg_change)
+                # print('kg_change', kg_change)
+                # print('self.kg_change:', self.kg_change)
                 if kg_change[0] not in self.kg_change:
                     self.kg_change += copy.deepcopy(kg_change)
                     self.kg_change_bool = True
@@ -511,8 +511,8 @@ class KG_OpenIE(History_Record):
                 self.kg_rel['is located at'] = dict()
             else:
                 diff = self.compare_loc_record(self.kg_rel['is located at'], self.location_record)
-                print('diff ', diff )
-                print('self.kg_change',self.kg_change)
+                # print('diff ', diff )
+                # print('self.kg_change',self.kg_change)
                 if diff and self.kg_change:
                     for d in diff:
                         exist_bool = False
@@ -778,7 +778,7 @@ class KG_OpenIE(History_Record):
                             #         self.sparse_matrix_dict['in'][rel][location] = [int(number_sub)]
                             # else:
                             #     self.sparse_matrix_dict['in'][rel][number_obj] = [int(number_sub)]
-        print(self.sparse_matrix_dict['out'])
+        # print(self.sparse_matrix_dict['out'])
     def dict_to_matrix(self):
         self.sparse_matrix = []
         for i in range(self.node_number):  # node_id
@@ -871,7 +871,7 @@ class Novelty_Detection_Dice(History_Record):
     def __init__(self, config_file=None):
         #Novelty Detection
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        self.upper_path = '/datadrive/software/Gatech_Agent_Eva_2'
+        self.upper_path = '/datadrive/code/Gatech_Agent_Eva_2'
         # if config_file == None:
         #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
@@ -1054,7 +1054,7 @@ class Novelty_Detection_Card(History_Record):
     def __init__(self, config_file=None):
         # Novelty Detection
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        self.upper_path = '/datadrive/software/Gatech_Agent_Eva_2'
+        self.upper_path = '/datadrive/code/Gatech_Agent_Eva_2'
         # if config_file == None:
         #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
@@ -1085,10 +1085,10 @@ if __name__ == '__main__':
         name_num += 1
         player_decision_agents['player_' + str(name_num)] = Agent(**background_agent_v3.decision_agent_methods)
 
-    gameboard_initial = set_up_board('/datadrive/software/Gatech_Agent_Eva_2/monopoly_game_schema_v1-1.json',
+    gameboard_initial = set_up_board('/datadrive/code/Gatech_Agent_Eva_2/monopoly_game_schema_v1-1.json',
                                      player_decision_agents, num_active_players=4)
 
-    client = KG_OpenIE(gameboard_initial, config_file='/datadrive/software/Gatech_Agent_Eva_2/Hypothetical_simulator/config_online_baseline.ini')
+    client = KG_OpenIE(gameboard_initial, config_file='/datadrive/code/Gatech_Agent_Eva_2/Hypothetical_simulator/config_online_baseline.ini')
     client.annotate('I love U')
     # client.build_kg_file('/media/becky/GNOME-p3/KG-rule/game_log.txt', level='rel', use_hash=True)
 

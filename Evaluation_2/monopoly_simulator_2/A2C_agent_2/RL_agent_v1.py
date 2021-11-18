@@ -1,7 +1,7 @@
 import os, sys
 upper_path = '/'.join(os.getcwd().split('/')[:-1])
 sys.path.append(upper_path)
-sys.path.append('/datadrive/software/Gatech_Agent_Eva_2/Evaluation_2/monopoly_simulator_2')
+sys.path.append('/datadrive/code/Gatech_Agent_Eva_2/Evaluation_2/monopoly_simulator_2')
 from monopoly_simulator import action_choices
 import A2C_agent_2.agent_helper_functions_agent as agent_helper_functions # helper functions are internal to the agent and will not be recorded in the function log.
 from monopoly_simulator import diagnostics

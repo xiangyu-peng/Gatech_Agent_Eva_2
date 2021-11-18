@@ -195,6 +195,7 @@ class ClientAgent(Agent):
         # game cloning
         self.gc = GameClone()
         self.gc_novelty_sig = False
+        self.novelty_sig_game = []
         self.gc_novelty_dict = dict()
 
     def check_property_sell_percentage(self, cash_after):
@@ -269,7 +270,8 @@ class ClientAgent(Agent):
         # Visulalize the novelty change in the network
         self.kg_change_bool = False
 
-        if self.kg_use and self.kg.kg_change != self.kg_change[-1]:
+        '''
+        if self.kg_use and self.kg.kg_change != self.kg_change[-1]: # and 0
             # differences = [
             #     (outer_idx, inner_idx)
             #     for outer_idx, (a, b) in enumerate(zip(self.kg.kg_change, self.kg_change[-1]))
@@ -280,8 +282,8 @@ class ClientAgent(Agent):
             # if differences:
             self.kg_change_wait = 1
             print('Novelty Detected as')
-            print('!!!!', self.kg.kg_change)
-            print('!!!!', self.kg_change[-1])
+            # print('!!!!', self.kg.kg_change)
+            # print('!!!!', self.kg_change[-1])
 
             self.kg_change.append(self.kg.kg_change[:])
             self.logger.debug('Novelty Detected as ' + str(self.kg.kg_change))
@@ -307,10 +309,12 @@ class ClientAgent(Agent):
             # self.state_num = len(self.interface.board_to_state(current_gameboard))  # reset the state_num size
             # self.kg_change_bool = True
             # self.kg_change_wait = 0
+        '''
 
         # game cloning detects novelty
-        if self.kg_use and self.gc_novelty_sig:
+        if self.kg_use and self.gc_novelty_sig and self.novelty_sig_game[-1]==game_num:
             self.retrain_signal = True if not self.board_size_changed_sig else False
+            self.converge_signal = False  # mean we need to retrain.
             self.logger.debug('Novelty Detected by Game Cloning')
             self.logger.debug('Novelty Detected as ' + str(self.gc_novelty_dict))
             self.novelty_str['gc'] = self.gc_novelty_dict
@@ -527,6 +531,7 @@ class ClientAgent(Agent):
         """
         if self.no_retrain:
             return
+            print('No Adaptation')
         # set exp dict
         exp_dict = dict()
         exp_dict['novelty_num'] = (0, 0)
@@ -616,7 +621,7 @@ class ClientAgent(Agent):
 
         win_rate = test_result['winning_rate']
         win_rate.reverse()
-        opt = len(win_rate) - win_rate.index(max(win_rate))
+        opt = len(win_rate) - win_rate.index(max(win_rate)) - 1
         model_retrained_path = save_path + str(opt) + '.pkl'
 
         if 'win_rate' in self.best_model:
@@ -666,7 +671,6 @@ class ClientAgent(Agent):
         self.conn = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.conn.connect((address[0], address[1]))
 
-        game_num = 0
         result = None
         ini_sig = True  # if it is the first time to setup trainer.
         board_size_changed_sig = False
@@ -695,6 +699,7 @@ class ClientAgent(Agent):
                 if self.gc_novelty_sig:
                     print(novelty_dict)
                     self.gc_novelty_dict.update(novelty_dict)
+                    self.novelty_sig_game.append(self.game_num)
 
             if self.last_func_name == 'handle_negative_cash_balance' and 'current_gameboard' in data_dict_from_server:
                 self.check_property_sell_percentage(data_dict_from_server['current_gameboard']['players']['player_1']['current_cash'])
@@ -711,7 +716,7 @@ class ClientAgent(Agent):
 
             # Before simulating each game, we have to make sure if we need retrain the network
             elif func_name == "startup":
-                if game_num == 1:
+                if self.game_num == 1:
                     self.orig_gameboard = data_dict_from_server['current_gameboard']
                 result = None
                 # if data_dict_from_server['indicator'] is None:
@@ -756,11 +761,11 @@ class ClientAgent(Agent):
                         self.board_size_changed_sig = True
 
                     retrain_type = 'size' if self.board_size_changed_sig else 'novelty'
-                    # try:
-                    #     ini_current_gameboard = self.initialize_gameboard(data_dict_from_server['current_gameboard'])  #TODO: breaks for cards
-                    # except AttributeError:
-                    #     ini_current_gameboard = self.initialize_gameboard(self.orig_gameboard)
-                    #     print('New Gameboard Doesnt work!!!!!') #TODO: breaks for cards
+                    try:
+                        ini_current_gameboard = self.initialize_gameboard(data_dict_from_server['current_gameboard'])  #TODO: breaks for cards
+                    except AttributeError:
+                        ini_current_gameboard = self.initialize_gameboard(self.orig_gameboard)
+                        print('New Gameboard Doesnt work!!!!!') #TODO: breaks for cards
 
 
 
@@ -779,7 +784,7 @@ class ClientAgent(Agent):
                     self.retrain_signal = False
                     # self.kg_change_wait = 0
                     # self.adj_path = adj_path
-                game_num += 1
+                self.game_num += 1
 
 
             # #############################################################################

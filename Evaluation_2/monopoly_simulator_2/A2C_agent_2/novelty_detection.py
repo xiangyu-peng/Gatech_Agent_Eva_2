@@ -1884,7 +1884,7 @@ class Novelty_Detection_Dice(History_Record):
     def __init__(self, config_file=None):
         #Novelty Detection
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        self.upper_path = '/datadrive/software/Gatech_Agent_Eva_2'
+        self.upper_path = '/datadrive/code/Gatech_Agent_Eva_2'
         # if config_file == None:
         #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
@@ -2067,7 +2067,7 @@ class Novelty_Detection_Card(History_Record):
     def __init__(self, config_file=None):
         # Novelty Detection
         # self.upper_path = os.path.abspath('..').replace('/Evaluation/monopoly_simulator', '')
-        self.upper_path = '/datadrive/software/Gatech_Agent_Eva_2/'
+        self.upper_path = '/datadrive/code/Gatech_Agent_Eva_2/'
         # if config_file == None:
         #     config_file = self.upper_path + '/monopoly_simulator_background/config.ini'
 
