@@ -2,4 +2,5 @@
 */logs/*
 *.props
 *__pycache__*
-
+*.egg-info
+Evaluation_2/monopoly_simulator_2/A2C_agent_2/logs
