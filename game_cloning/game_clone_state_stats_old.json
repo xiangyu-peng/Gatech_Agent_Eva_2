@@ -1,1792 +1,2555 @@
 {
     "cards": {
         "picked_chance_card_details": {
-            "advance_to_go": {
+            "bank_dividend": {
                 "action": {
-                    "move_player": 88
+                    "bank_cash_transaction": 11425
+                },
+                "amount": {
+                    "50.0": 11425
                 },
                 "card_type": {
-                    "movement": 88
-                },
-                "destination": {
-                    "Go": 88
+                    "positive_cash_from_bank": 11425
                 },
                 "name": {
-                    "advance_to_go": 88
+                    "bank_dividend": 11425
+                }
+            },
+            "go_to_illinois_avenue": {
+                "action": {
+                    "move_player__check_for_go": 12549
+                },
+                "card_type": {
+                    "movement": 12549
+                },
+                "destination": {
+                    "Illinois Avenue": 12549
+                },
+                "name": {
+                    "go_to_illinois_avenue": 12549
+                }
+            },
+            "general_repairs": {
+                "action": {
+                    "contingent_bank_cash_transaction": 11623
+                },
+                "card_type": {
+                    "contingent_cash_from_bank": 11623
+                },
+                "contingency": {
+                    "calculate_general_repair_cost": 9655,
+                    "alternate_contingency_function_1": 1968
+                },
+                "name": {
+                    "general_repairs": 11623
+                }
+            },
+            "advance_to_go": {
+                "action": {
+                    "move_player": 12798
+                },
+                "card_type": {
+                    "movement": 12798
+                },
+                "destination": {
+                    "Go": 12798
+                },
+                "name": {
+                    "advance_to_go": 12798
                 }
             },
             "go_to_nearest_utility": {
                 "action": {
-                    "move_to_nearest_utility__pay_or_buy__check_for_go": 33
+                    "move_to_nearest_utility__pay_or_buy__check_for_go": 12582
                 },
                 "card_type": {
-                    "movement_payment": 33
+                    "movement_payment": 12582
                 },
                 "name": {
-                    "go_to_nearest_utility": 33
+                    "go_to_nearest_utility": 12582
+                }
+            },
+            "go_to_reading_railroad": {
+                "action": {
+                    "move_player__check_for_go": 11358
+                },
+                "card_type": {
+                    "movement": 11358
+                },
+                "destination": {
+                    "Reading Railroad": 11358
+                },
+                "name": {
+                    "go_to_reading_railroad": 11358
+                }
+            },
+            "elected_board_chairman": {
+                "action": {
+                    "player_cash_transaction": 12391
+                },
+                "amount_per_player": {
+                    "-50.0": 12391
+                },
+                "card_type": {
+                    "negative_cash_from_players": 12391
+                },
+                "name": {
+                    "elected_board_chairman": 12391
+                }
+            },
+            "go_to_nearest_railroad_pay_double": {
+                "action": {
+                    "move_to_nearest_railroad__pay_double_or_buy__check_for_go": 14457
+                },
+                "card_type": {
+                    "movement_payment": 14457
+                },
+                "name": {
+                    "go_to_nearest_railroad_pay_double": 14457
+                }
+            },
+            "pay_poor_tax": {
+                "action": {
+                    "bank_cash_transaction": 8833
+                },
+                "amount": {
+                    "-15.0": 8833
+                },
+                "card_type": {
+                    "negative_cash_from_bank": 8833
+                },
+                "name": {
+                    "pay_poor_tax": 8833
+                }
+            },
+            "go_back_three_spaces": {
+                "action": {
+                    "move_player_relative": 10635
+                },
+                "card_type": {
+                    "movement_relative": 10635
+                },
+                "name": {
+                    "go_back_three_spaces": 10635
+                },
+                "new_relative_position": {
+                    "-3": 10635
+                }
+            },
+            "go_to_boardwalk": {
+                "action": {
+                    "move_player__check_for_go": 12487
+                },
+                "card_type": {
+                    "movement": 12487
+                },
+                "destination": {
+                    "Boardwalk": 12487
+                },
+                "name": {
+                    "go_to_boardwalk": 12487
+                }
+            },
+            "go_to_jail": {
+                "action": {
+                    "move_player": 11415
+                },
+                "card_type": {
+                    "movement": 11415
+                },
+                "destination": {
+                    "In Jail/Just Visiting": 11415
+                },
+                "name": {
+                    "go_to_jail": 11415
+                }
+            },
+            "go_to_st_charles": {
+                "action": {
+                    "move_player__check_for_go": 10849
+                },
+                "card_type": {
+                    "movement": 10849
+                },
+                "destination": {
+                    "St. Charles Place": 10849
+                },
+                "name": {
+                    "go_to_st_charles": 10849
+                }
+            },
+            "get_out_of_jail_free": {
+                "action": {
+                    "set_get_out_of_jail_card_status": 3314
+                },
+                "card_type": {
+                    "contingent_movement": 3314
+                },
+                "name": {
+                    "get_out_of_jail_free": 3314
+                }
+            },
+            "building_loan_matures": {
+                "action": {
+                    "bank_cash_transaction": 11657
+                },
+                "amount": {
+                    "150.0": 11657
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 11657
+                },
+                "name": {
+                    "building_loan_matures": 11657
+                }
+            },
+            "win_crossword_competition": {
+                "action": {
+                    "bank_cash_transaction": 9843
+                },
+                "amount": {
+                    "100.0": 9843
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 9843
+                },
+                "name": {
+                    "win_crossword_competition": 9843
                 }
             }
         },
-        "picked_chance_cards": {
-            "['advance_to_go']": 55,
-            "['advance_to_go', 'go_to_nearest_utility']": 33
-        },
-        "picked_community_chest_cards": {
-            "['get_out_of_jail_free']": 41,
-            "['get_out_of_jail_free', 'holiday_fund_matures']": 11,
-            "['get_out_of_jail_free', 'holiday_fund_matures', 'street_repairs']": 24
-        },
         "picked_community_chest_card_details": {
-            "holiday_fund_matures": {
+            "income_tax_refund": {
                 "action": {
-                    "bank_cash_transaction": 35
+                    "bank_cash_transaction": 10122
                 },
                 "amount": {
-                    "100.0": 1
+                    "20.0": 10122
                 },
                 "card_type": {
-                    "positive_cash_from_bank": 35
+                    "positive_cash_from_bank": 10122
                 },
                 "name": {
-                    "holiday_fund_matures": 35
+                    "income_tax_refund": 10122
                 }
             },
             "street_repairs": {
                 "action": {
-                    "contingent_bank_cash_transaction": 24
+                    "contingent_bank_cash_transaction": 12890
                 },
                 "card_type": {
-                    "contingent_cash_from_bank": 24
+                    "contingent_cash_from_bank": 12890
                 },
                 "contingency": {
-                    "calculate_street_repair_cost": 24
+                    "calculate_street_repair_cost": 11008,
+                    "alternate_contingency_function_1": 1882
                 },
                 "name": {
-                    "street_repairs": 24
+                    "street_repairs": 12890
+                }
+            },
+            "get_out_of_jail_free": {
+                "action": {
+                    "set_get_out_of_jail_card_status": 2820
+                },
+                "card_type": {
+                    "contingent_movement": 2820
+                },
+                "name": {
+                    "get_out_of_jail_free": 2820
+                }
+            },
+            "birthday": {
+                "action": {
+                    "player_cash_transaction": 9059
+                },
+                "amount_per_player": {
+                    "10.0": 9059
+                },
+                "card_type": {
+                    "positive_cash_from_players": 9059
+                },
+                "name": {
+                    "birthday": 9059
+                }
+            },
+            "bank_error": {
+                "action": {
+                    "bank_cash_transaction": 12512
+                },
+                "amount": {
+                    "200.0": 12512
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 12512
+                },
+                "name": {
+                    "bank_error": 12512
+                }
+            },
+            "go_to_jail": {
+                "action": {
+                    "move_player": 10837
+                },
+                "card_type": {
+                    "movement": 10837
+                },
+                "destination": {
+                    "In Jail/Just Visiting": 10837
+                },
+                "name": {
+                    "go_to_jail": 10837
+                }
+            },
+            "holiday_fund_matures": {
+                "action": {
+                    "bank_cash_transaction": 11010
+                },
+                "amount": {
+                    "100.0": 11010
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 11010
+                },
+                "name": {
+                    "holiday_fund_matures": 11010
+                }
+            },
+            "life_insurance_matures": {
+                "action": {
+                    "bank_cash_transaction": 13024
+                },
+                "amount": {
+                    "100.0": 13024
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 13024
+                },
+                "name": {
+                    "life_insurance_matures": 13024
+                }
+            },
+            "advance_to_go": {
+                "action": {
+                    "move_player": 13016
+                },
+                "card_type": {
+                    "movement": 13016
+                },
+                "destination": {
+                    "Go": 13016
+                },
+                "name": {
+                    "advance_to_go": 13016
+                }
+            },
+            "win_beauty_contest": {
+                "action": {
+                    "bank_cash_transaction": 10425
+                },
+                "amount": {
+                    "10.0": 10425
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 10425
+                },
+                "name": {
+                    "win_beauty_contest": 10425
+                }
+            },
+            "doctor_fee": {
+                "action": {
+                    "bank_cash_transaction": 11393
+                },
+                "amount": {
+                    "-50.0": 11393
+                },
+                "card_type": {
+                    "negative_cash_from_bank": 11393
+                },
+                "name": {
+                    "doctor_fee": 11393
+                }
+            },
+            "hospital_fee": {
+                "action": {
+                    "bank_cash_transaction": 10711
+                },
+                "amount": {
+                    "-50.0": 10711
+                },
+                "card_type": {
+                    "negative_cash_from_bank": 10711
+                },
+                "name": {
+                    "hospital_fee": 10711
+                }
+            },
+            "inherit_money": {
+                "action": {
+                    "bank_cash_transaction": 10688
+                },
+                "amount": {
+                    "100.0": 10688
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 10688
+                },
+                "name": {
+                    "inherit_money": 10688
+                }
+            },
+            "consultancy_fee": {
+                "action": {
+                    "bank_cash_transaction": 10725
+                },
+                "amount": {
+                    "25.0": 10725
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 10725
+                },
+                "name": {
+                    "consultancy_fee": 10725
+                }
+            },
+            "grand_opera_night": {
+                "action": {
+                    "player_cash_transaction": 11367
+                },
+                "amount_per_player": {
+                    "50.0": 11367
+                },
+                "card_type": {
+                    "positive_cash_from_players": 11367
+                },
+                "name": {
+                    "grand_opera_night": 11367
+                }
+            },
+            "school_fee": {
+                "action": {
+                    "bank_cash_transaction": 12149
+                },
+                "amount": {
+                    "-50.0": 12149
+                },
+                "card_type": {
+                    "negative_cash_from_bank": 12149
+                },
+                "name": {
+                    "school_fee": 12149
+                }
+            },
+            "sale_of_stock": {
+                "action": {
+                    "bank_cash_transaction": 9908
+                },
+                "amount": {
+                    "50.0": 9908
+                },
+                "card_type": {
+                    "positive_cash_from_bank": 9908
+                },
+                "name": {
+                    "sale_of_stock": 9908
                 }
             }
         }
     },
     "location_sequence": {
-        "['Go', 'Mediterranean Avenue', 'Community Chest', 'Baltic Avenue', 'Income Tax', 'Reading Railroad', 'Oriental Avenue', 'Chance', 'Vermont Avenue', 'Connecticut Avenue', 'In Jail/Just Visiting', 'St. Charles Place', 'Electric Company', 'States Avenue', 'Virginia Avenue', 'Pennsylvania Railroad', 'St. James Place', 'Community Chest', 'Tennessee Avenue', 'New York Avenue', 'Free Parking', 'Kentucky Avenue', 'Chance', 'Indiana Avenue', 'Illinois Avenue', 'B&O Railroad', 'Atlantic Avenue', 'Ventnor Avenue', 'Water Works', 'Marvin Gardens', 'Go to Jail', 'Pacific Avenue', 'North Carolina Avenue', 'Community Chest', 'Pennsylvania Avenue', 'Short Line', 'Chance', 'Park Place', 'Luxury Tax', 'Boardwalk']": 100
+        "['Go', 'Mediterranean Avenue', 'Community Chest', 'Baltic Avenue', 'Income Tax', 'Reading Railroad', 'Oriental Avenue', 'Chance', 'Vermont Avenue', 'Connecticut Avenue', 'In Jail/Just Visiting', 'St. Charles Place', 'Electric Company', 'States Avenue', 'Virginia Avenue', 'Pennsylvania Railroad', 'St. James Place', 'Community Chest', 'Tennessee Avenue', 'New York Avenue', 'Free Parking', 'Kentucky Avenue', 'Chance', 'Indiana Avenue', 'Illinois Avenue', 'B&O Railroad', 'Atlantic Avenue', 'Ventnor Avenue', 'Water Works', 'Marvin Gardens', 'Go to Jail', 'Pacific Avenue', 'North Carolina Avenue', 'Community Chest', 'Pennsylvania Avenue', 'Short Line', 'Chance', 'Park Place', 'Luxury Tax', 'Boardwalk']": 20163
     },
     "locations": {
         "Atlantic Avenue": {
             "color": {
-                "Yellow": 100
+                "Yellow": 20163
             },
             "end_position": {
-                "27": 1
+                "27": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "110.0": 1
+                    "110.0": 20163
                 },
                 "2": {
-                    "330.0": 1
+                    "330.0": 20163
                 },
                 "3": {
-                    "800.0": 1
+                    "800.0": 20163
                 },
                 "4": {
-                    "975.0": 1
+                    "975.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "130.0": 1
+                "130.0": 20163
             },
             "name": {
-                "Atlantic Avenue": 100
+                "Atlantic Avenue": 20163
             },
             "owned_by": {
-                "bank": 100
+                "bank": 3100,
+                "player_1": 5463,
+                "player_3": 3663,
+                "player_2": 5922,
+                "player_4": 2015
             },
             "price": {
-                "260.0": 1
+                "260.0": 20163
             },
             "price_per_house": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent": {
-                "22.0": 1
+                "22.0": 20163
             },
             "rent_1_house": {
-                "110.0": 1
+                "110.0": 20163
             },
             "rent_2_houses": {
-                "330.0": 1
+                "330.0": 20163
             },
             "rent_3_houses": {
-                "800.0": 1
+                "800.0": 20163
             },
             "rent_4_houses": {
-                "975.0": 1
+                "975.0": 20163
             },
             "rent_hotel": {
-                "1150.0": 1
+                "1150.0": 20163
             },
             "start_position": {
-                "26": 1
+                "26": 20163
+            },
+            "num_houses": {
+                "1": 258,
+                "2": 114,
+                "3": 56,
+                "4": 12
+            },
+            "num_hotels": {
+                "1": 29
+            },
+            "is_mortgaged": {
+                "True": 136
             }
         },
         "B&O Railroad": {
             "end_position": {
-                "26": 1
+                "26": 20163
             },
             "loc_class": {
-                "railroad": 100
+                "railroad": 20163
             },
             "mortgage": {
-                "100.0": 1
+                "100.0": 20163
             },
             "name": {
-                "B&O Railroad": 100
+                "B&O Railroad": 20163
             },
             "owned_by": {
-                "bank": 92,
-                "player_4": 8
+                "bank": 2532,
+                "player_4": 7372,
+                "player_2": 5385,
+                "player_3": 2317,
+                "player_1": 2557
             },
             "price": {
-                "200.0": 1
+                "200.0": 20163
             },
             "railroad_dues": {
                 "1": {
-                    "25": 1
+                    "25": 20163
                 },
                 "2": {
-                    "50": 1
+                    "50": 20163
                 },
                 "3": {
-                    "100": 1
+                    "100": 20163
                 },
                 "4": {
-                    "200": 1
+                    "200": 20163
                 }
             },
             "start_position": {
-                "25": 1
+                "25": 20163
+            },
+            "is_mortgaged": {
+                "True": 231
             }
         },
         "Baltic Avenue": {
             "color": {
-                "Brown": 100
+                "Brown": 20163
             },
             "end_position": {
-                "4": 1
+                "4": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "20.0": 1
+                    "20.0": 20163
                 },
                 "2": {
-                    "60.0": 1
+                    "60.0": 20163
                 },
                 "3": {
-                    "180.0": 1
+                    "180.0": 20163
                 },
                 "4": {
-                    "320.0": 1
+                    "320.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "30.0": 1
+                "30.0": 20163
             },
             "name": {
-                "Baltic Avenue": 100
+                "Baltic Avenue": 20163
             },
             "owned_by": {
-                "bank": 64,
-                "player_4": 36
+                "bank": 3053,
+                "player_3": 4002,
+                "player_4": 3808,
+                "player_2": 5464,
+                "player_1": 3836
             },
             "price": {
-                "60.0": 1
+                "60.0": 20163
             },
             "price_per_house": {
-                "50.0": 1
+                "50.0": 20163
             },
             "rent": {
-                "4.0": 1
+                "4.0": 20163
             },
             "rent_1_house": {
-                "20.0": 1
+                "20.0": 20163
             },
             "rent_2_houses": {
-                "60.0": 1
+                "60.0": 20163
             },
             "rent_3_houses": {
-                "180.0": 1
+                "180.0": 20163
             },
             "rent_4_houses": {
-                "320.0": 1
+                "320.0": 20163
             },
             "rent_hotel": {
-                "450.0": 1
+                "450.0": 20163
             },
             "start_position": {
-                "3": 1
+                "3": 20163
+            },
+            "num_houses": {
+                "2": 26,
+                "3": 1,
+                "4": 12,
+                "1": 12
+            },
+            "num_hotels": {
+                "1": 3721
+            },
+            "is_mortgaged": {
+                "True": 178
             }
         },
         "Boardwalk": {
             "color": {
-                "Blue": 100
+                "Blue": 20163
             },
             "end_position": {
-                "40": 1
+                "40": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "200.0": 1
+                    "200.0": 20163
                 },
                 "2": {
-                    "600.0": 1
+                    "600.0": 20163
                 },
                 "3": {
-                    "1400.0": 1
+                    "1400.0": 20163
                 },
                 "4": {
-                    "1700.0": 1
+                    "1700.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "200.0": 1
+                "200.0": 20163
             },
             "name": {
-                "Boardwalk": 100
+                "Boardwalk": 20163
             },
             "owned_by": {
-                "bank": 55,
-                "player_4": 45
+                "bank": 2982,
+                "player_1": 4616,
+                "player_4": 3422,
+                "player_3": 5865,
+                "player_2": 3278
             },
             "price": {
-                "400.0": 1
+                "400.0": 20163
             },
             "price_per_house": {
-                "200.0": 1
+                "200.0": 20163
             },
             "rent": {
-                "50.0": 1
+                "50.0": 20163
             },
             "rent_1_house": {
-                "200.0": 1
+                "200.0": 20163
             },
             "rent_2_houses": {
-                "600.0": 1
+                "600.0": 20163
             },
             "rent_3_houses": {
-                "1400.0": 1
+                "1400.0": 20163
             },
             "rent_4_houses": {
-                "1700.0": 1
+                "1700.0": 20163
             },
             "rent_hotel": {
-                "2000.0": 1
+                "2000.0": 20163
             },
             "start_position": {
-                "39": 1
+                "39": 20163
+            },
+            "num_houses": {
+                "2": 330,
+                "3": 140,
+                "4": 306,
+                "1": 188
+            },
+            "num_hotels": {
+                "1": 721
+            },
+            "is_mortgaged": {
+                "True": 126
             }
         },
         "Chance": {
             "end_position": {
-                "37": 1
+                "37": 20163
             },
             "loc_class": {
-                "action": 100
+                "action": 20163
             },
             "name": {
-                "Chance": 100
+                "Chance": 20163
             },
             "perform_actiom": {
-                "pick_card_from_chance": 100
+                "pick_card_from_chance": 20163
             },
             "start_position": {
-                "36": 1
+                "36": 20163
             }
         },
         "Community Chest": {
             "end_position": {
-                "34": 1
+                "34": 20163
             },
             "loc_class": {
-                "action": 100
+                "action": 20163
             },
             "name": {
-                "Community Chest": 100
+                "Community Chest": 20163
             },
             "perform_actiom": {
-                "pick_card_from_community_chest": 100
+                "pick_card_from_community_chest": 20163
             },
             "start_position": {
-                "33": 1
+                "33": 20163
             }
         },
         "Connecticut Avenue": {
             "color": {
-                "SkyBlue": 100
+                "SkyBlue": 20163
             },
             "end_position": {
-                "10": 1
+                "10": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "40.0": 1
+                    "40.0": 20163
                 },
                 "2": {
-                    "100.0": 1
+                    "100.0": 20163
                 },
                 "3": {
-                    "300.0": 1
+                    "300.0": 20163
                 },
                 "4": {
-                    "450.0": 1
+                    "450.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "60.0": 1
+                "60.0": 20163
             },
             "name": {
-                "Connecticut Avenue": 100
+                "Connecticut Avenue": 20163
             },
             "owned_by": {
-                "bank": 3,
-                "player_3": 97
+                "bank": 2960,
+                "player_3": 7019,
+                "player_4": 1797,
+                "player_2": 2792,
+                "player_1": 5595
             },
             "price": {
-                "120.0": 1
+                "120.0": 20163
             },
             "price_per_house": {
-                "50.0": 1
+                "50.0": 20163
             },
             "rent": {
-                "8.0": 1
+                "8.0": 20163
             },
             "rent_1_house": {
-                "40.0": 1
+                "40.0": 20163
             },
             "rent_2_houses": {
-                "100.0": 1
+                "100.0": 20163
             },
             "rent_3_houses": {
-                "300.0": 1
+                "300.0": 20163
             },
             "rent_4_houses": {
-                "450.0": 1
+                "450.0": 20163
             },
             "rent_hotel": {
-                "600.0": 1
+                "600.0": 20163
             },
             "start_position": {
-                "9": 1
+                "9": 20163
+            },
+            "num_houses": {
+                "1": 75,
+                "3": 57,
+                "4": 28,
+                "2": 9
+            },
+            "num_hotels": {
+                "1": 1467
+            },
+            "is_mortgaged": {
+                "True": 375
             }
         },
         "Electric Company": {
             "die_multiples": {
                 "1": {
-                    "4": 1
+                    "4": 20163
                 },
                 "2": {
-                    "10": 1
+                    "10": 20163
                 }
             },
             "end_position": {
-                "13": 1
+                "13": 20163
             },
             "loc_class": {
-                "utility": 100
+                "utility": 20163
             },
             "mortgage": {
-                "75.0": 1
+                "75.0": 20163
             },
             "name": {
-                "Electric Company": 100
+                "Electric Company": 20163
             },
             "owned_by": {
-                "bank": 5,
-                "player_1": 95
+                "bank": 2284,
+                "player_4": 6122,
+                "player_1": 2538,
+                "player_2": 5134,
+                "player_3": 4085
             },
             "price": {
-                "150.0": 1
+                "150.0": 20163
             },
             "start_position": {
-                "12": 1
+                "12": 20163
+            },
+            "is_mortgaged": {
+                "True": 540
             }
         },
         "Free Parking": {
             "end_position": {
-                "21": 1
+                "21": 20163
             },
             "loc_class": {
-                "do_nothing": 100
+                "do_nothing": 20163
             },
             "name": {
-                "Free Parking": 100
+                "Free Parking": 20163
             },
             "start_position": {
-                "20": 1
+                "20": 20163
             }
         },
         "Go": {
             "end_position": {
-                "1": 1
+                "1": 20163
             },
             "loc_class": {
-                "do_nothing": 100
+                "do_nothing": 20163
             },
             "name": {
-                "Go": 100
+                "Go": 20163
             }
         },
         "Go to Jail": {
             "end_position": {
-                "31": 1
+                "31": 20163
             },
             "loc_class": {
-                "action": 100
+                "action": 20163
             },
             "name": {
-                "Go to Jail": 100
+                "Go to Jail": 20163
             },
             "perform_actiom": {
-                "go_to_jail": 100
+                "go_to_jail": 20163
             },
             "start_position": {
-                "30": 1
+                "30": 20163
             }
         },
         "Illinois Avenue": {
             "color": {
-                "Red": 100
+                "Red": 20163
             },
             "end_position": {
-                "25": 1
+                "25": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "100.0": 1
+                    "100.0": 20163
                 },
                 "2": {
-                    "300.0": 1
+                    "300.0": 20163
                 },
                 "3": {
-                    "750.0": 1
+                    "750.0": 20163
                 },
                 "4": {
-                    "925.0": 1
+                    "925.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "120.0": 1
+                "120.0": 20163
             },
             "name": {
-                "Illinois Avenue": 100
+                "Illinois Avenue": 20163
             },
             "owned_by": {
-                "bank": 29,
-                "player_4": 71
+                "bank": 2095,
+                "player_2": 4693,
+                "player_4": 1426,
+                "player_1": 7876,
+                "player_3": 4073
             },
             "price": {
-                "240.0": 1
+                "240.0": 20163
             },
             "price_per_house": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent": {
-                "20.0": 1
+                "20.0": 20163
             },
             "rent_1_house": {
-                "100.0": 1
+                "100.0": 20163
             },
             "rent_2_houses": {
-                "300.0": 1
+                "300.0": 20163
             },
             "rent_3_houses": {
-                "750.0": 1
+                "750.0": 20163
             },
             "rent_4_houses": {
-                "925.0": 1
+                "925.0": 20163
             },
             "rent_hotel": {
-                "1100.0": 1
+                "1100.0": 20163
             },
             "start_position": {
-                "24": 1
+                "24": 20163
+            },
+            "num_houses": {
+                "1": 434,
+                "2": 431,
+                "3": 13,
+                "4": 122
+            },
+            "num_hotels": {
+                "1": 257
+            },
+            "is_mortgaged": {
+                "True": 161
             }
         },
         "In Jail/Just Visiting": {
             "end_position": {
-                "11": 1
+                "11": 20163
             },
             "loc_class": {
-                "do_nothing": 100
+                "do_nothing": 20163
             },
             "name": {
-                "In Jail/Just Visiting": 100
+                "In Jail/Just Visiting": 20163
             },
             "start_position": {
-                "10": 1
+                "10": 20163
             }
         },
         "Income Tax": {
             "amount_due": {
-                "200.0": 1
+                "200.0": 20163
             },
             "end_position": {
-                "5": 1
+                "5": 20163
             },
             "loc_class": {
-                "tax": 100
+                "tax": 20163
             },
             "name": {
-                "Income Tax": 100
+                "Income Tax": 20163
             },
             "start_position": {
-                "4": 1
+                "4": 20163
             }
         },
         "Indiana Avenue": {
             "color": {
-                "Red": 100
+                "Red": 20163
             },
             "end_position": {
-                "24": 1
+                "24": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "90.0": 1
+                    "90.0": 20163
                 },
                 "2": {
-                    "250.0": 1
+                    "250.0": 20163
                 },
                 "3": {
-                    "700.0": 1
+                    "700.0": 20163
                 },
                 "4": {
-                    "875.0": 1
+                    "875.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "110.0": 1
+                "110.0": 20163
             },
             "name": {
-                "Indiana Avenue": 100
+                "Indiana Avenue": 20163
             },
             "owned_by": {
-                "bank": 19,
-                "player_2": 81
+                "bank": 2877,
+                "player_4": 3719,
+                "player_2": 2557,
+                "player_3": 5448,
+                "player_1": 5562
             },
             "price": {
-                "220.0": 1
+                "220.0": 20163
             },
             "price_per_house": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent": {
-                "18.0": 1
+                "18.0": 20163
             },
             "rent_1_house": {
-                "90.0": 1
+                "90.0": 20163
             },
             "rent_2_houses": {
-                "250.0": 1
+                "250.0": 20163
             },
             "rent_3_houses": {
-                "700.0": 1
+                "700.0": 20163
             },
             "rent_4_houses": {
-                "875.0": 1
+                "875.0": 20163
             },
             "rent_hotel": {
-                "1050.0": 1
+                "1050.0": 20163
             },
             "start_position": {
-                "23": 1
+                "23": 20163
+            },
+            "num_houses": {
+                "1": 635,
+                "2": 131,
+                "4": 127,
+                "3": 16
+            },
+            "num_hotels": {
+                "1": 259
+            },
+            "is_mortgaged": {
+                "True": 30
             }
         },
         "Kentucky Avenue": {
             "color": {
-                "Red": 100
+                "Red": 20163
             },
             "end_position": {
-                "22": 1
+                "22": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "90.0": 1
+                    "90.0": 20163
                 },
                 "2": {
-                    "250.0": 1
+                    "250.0": 20163
                 },
                 "3": {
-                    "700.0": 1
+                    "700.0": 20163
                 },
                 "4": {
-                    "875.0": 1
+                    "875.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "110.0": 1
+                "110.0": 20163
             },
             "name": {
-                "Kentucky Avenue": 100
+                "Kentucky Avenue": 20163
             },
             "owned_by": {
-                "bank": 13,
-                "player_2": 87
+                "bank": 2329,
+                "player_2": 3677,
+                "player_4": 4755,
+                "player_1": 5200,
+                "player_3": 4202
             },
             "price": {
-                "220.0": 1
+                "220.0": 20163
             },
             "price_per_house": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent": {
-                "18.0": 1
+                "18.0": 20163
             },
             "rent_1_house": {
-                "90.0": 1
+                "90.0": 20163
             },
             "rent_2_houses": {
-                "250.0": 1
+                "250.0": 20163
             },
             "rent_3_houses": {
-                "700.0": 1
+                "700.0": 20163
             },
             "rent_4_houses": {
-                "875.0": 1
+                "875.0": 20163
             },
             "rent_hotel": {
-                "1050.0": 1
+                "1050.0": 20163
             },
             "start_position": {
-                "21": 1
+                "21": 20163
+            },
+            "num_houses": {
+                "1": 633,
+                "2": 131,
+                "3": 91,
+                "4": 58
+            },
+            "num_hotels": {
+                "1": 328
+            },
+            "is_mortgaged": {
+                "True": 80
             }
         },
         "Luxury Tax": {
             "amount_due": {
-                "100.0": 1
+                "100.0": 20163
             },
             "end_position": {
-                "39": 1
+                "39": 20163
             },
             "loc_class": {
-                "tax": 100
+                "tax": 20163
             },
             "name": {
-                "Luxury Tax": 100
+                "Luxury Tax": 20163
             },
             "start_position": {
-                "38": 1
+                "38": 20163
             }
         },
         "Marvin Gardens": {
             "color": {
-                "Yellow": 100
+                "Yellow": 20163
             },
             "end_position": {
-                "30": 1
+                "30": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "120.0": 1
+                    "120.0": 20163
                 },
                 "2": {
-                    "360.0": 1
+                    "360.0": 20163
                 },
                 "3": {
-                    "850.0": 1
+                    "850.0": 20163
                 },
                 "4": {
-                    "1025.0": 1
+                    "1025.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "140.0": 1
+                "140.0": 20163
             },
             "name": {
-                "Marvin Gardens": 100
+                "Marvin Gardens": 20163
             },
             "owned_by": {
-                "bank": 25,
-                "player_2": 75
+                "bank": 2780,
+                "player_4": 2711,
+                "player_2": 3495,
+                "player_1": 8788,
+                "player_3": 2389
             },
             "price": {
-                "280.0": 1
+                "280.0": 20163
             },
             "price_per_house": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent": {
-                "24.0": 1
+                "24.0": 20163
             },
             "rent_1_house": {
-                "120.0": 1
+                "120.0": 20163
             },
             "rent_2_houses": {
-                "360.0": 1
+                "360.0": 20163
             },
             "rent_3_houses": {
-                "850.0": 1
+                "850.0": 20163
             },
             "rent_4_houses": {
-                "1025.0": 1
+                "1025.0": 20163
             },
             "rent_hotel": {
-                "1200.0": 1
+                "1200.0": 20163
             },
             "start_position": {
-                "29": 1
+                "29": 20163
+            },
+            "num_houses": {
+                "1": 59,
+                "2": 217,
+                "3": 162,
+                "4": 7
+            },
+            "num_hotels": {
+                "1": 186
+            },
+            "is_mortgaged": {
+                "True": 103
             }
         },
         "Mediterranean Avenue": {
             "color": {
-                "Brown": 100
+                "Brown": 20163
             },
             "end_position": {
-                "2": 1
+                "2": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "10.0": 1
+                    "10.0": 20163
                 },
                 "2": {
-                    "30.0": 1
+                    "30.0": 20163
                 },
                 "3": {
-                    "90.0": 1
+                    "90.0": 20163
                 },
                 "4": {
-                    "160.0": 1
+                    "160.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "30.0": 1
+                "30.0": 20163
             },
             "name": {
-                "Mediterranean Avenue": 100
+                "Mediterranean Avenue": 20163
             },
             "owned_by": {
-                "bank": 100
+                "bank": 3431,
+                "player_4": 4996,
+                "player_2": 5965,
+                "player_1": 1636,
+                "player_3": 4135
             },
             "price": {
-                "60.0": 1
+                "60.0": 20163
             },
             "price_per_house": {
-                "50.0": 1
+                "50.0": 20163
             },
             "rent": {
-                "2.0": 1
+                "2.0": 20163
             },
             "rent_1_house": {
-                "10.0": 1
+                "10.0": 20163
             },
             "rent_2_houses": {
-                "30.0": 1
+                "30.0": 20163
             },
             "rent_3_houses": {
-                "90.0": 1
+                "90.0": 20163
             },
             "rent_4_houses": {
-                "160.0": 1
+                "160.0": 20163
             },
             "rent_hotel": {
-                "250.0": 1
+                "250.0": 20163
             },
             "start_position": {
-                "1": 1
+                "1": 20163
+            },
+            "num_houses": {
+                "2": 24,
+                "3": 4,
+                "1": 14,
+                "4": 8
+            },
+            "num_hotels": {
+                "1": 3721
+            },
+            "is_mortgaged": {
+                "True": 547
             }
         },
         "New York Avenue": {
             "color": {
-                "Orange": 100
+                "Orange": 20163
             },
             "end_position": {
-                "20": 1
+                "20": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "80.0": 1
+                    "80.0": 20163
                 },
                 "2": {
-                    "220.0": 1
+                    "220.0": 20163
                 },
                 "3": {
-                    "600.0": 1
+                    "600.0": 20163
                 },
                 "4": {
-                    "800.0": 1
+                    "800.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "100.0": 1
+                "100.0": 20163
             },
             "name": {
-                "New York Avenue": 100
+                "New York Avenue": 20163
             },
             "owned_by": {
-                "bank": 9,
-                "player_3": 91
+                "bank": 1764,
+                "player_2": 4088,
+                "player_3": 3613,
+                "player_1": 5217,
+                "player_4": 5481
             },
             "price": {
-                "200.0": 1
+                "200.0": 20163
             },
             "price_per_house": {
-                "100.0": 1
+                "100.0": 20163
             },
             "rent": {
-                "16.0": 1
+                "16.0": 20163
             },
             "rent_1_house": {
-                "80.0": 1
+                "80.0": 20163
             },
             "rent_2_houses": {
-                "220.0": 1
+                "220.0": 20163
             },
             "rent_3_houses": {
-                "600.0": 1
+                "600.0": 20163
             },
             "rent_4_houses": {
-                "800.0": 1
+                "800.0": 20163
             },
             "rent_hotel": {
-                "1000.0": 1
+                "1000.0": 20163
             },
             "start_position": {
-                "19": 1
+                "19": 20163
+            },
+            "is_mortgaged": {
+                "True": 144
+            },
+            "num_houses": {
+                "1": 86,
+                "2": 237,
+                "3": 175,
+                "4": 75
+            },
+            "num_hotels": {
+                "1": 650
             }
         },
         "North Carolina Avenue": {
             "color": {
-                "Green": 100
+                "Green": 20163
             },
             "end_position": {
-                "33": 1
+                "33": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "130.0": 1
+                    "130.0": 20163
                 },
                 "2": {
-                    "390.0": 1
+                    "390.0": 20163
                 },
                 "3": {
-                    "900.0": 1
+                    "900.0": 20163
                 },
                 "4": {
-                    "1100.0": 1
+                    "1100.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "150.0": 1
+                "150.0": 20163
             },
             "name": {
-                "North Carolina Avenue": 100
+                "North Carolina Avenue": 20163
             },
             "owned_by": {
-                "bank": 16,
-                "player_1": 84
+                "bank": 3157,
+                "player_2": 4979,
+                "player_1": 4441,
+                "player_3": 2926,
+                "player_4": 4660
             },
             "price": {
-                "300.0": 1
+                "300.0": 20163
             },
             "price_per_house": {
-                "200.0": 1
+                "200.0": 20163
             },
             "rent": {
-                "26.0": 1
+                "26.0": 20163
             },
             "rent_1_house": {
-                "130.0": 1
+                "130.0": 20163
             },
             "rent_2_houses": {
-                "390.0": 1
+                "390.0": 20163
             },
             "rent_3_houses": {
-                "900.0": 1
+                "900.0": 20163
             },
             "rent_4_houses": {
-                "1100.0": 1
+                "1100.0": 20163
             },
             "rent_hotel": {
-                "1275.0": 1
+                "1275.0": 20163
             },
             "start_position": {
-                "32": 1
+                "32": 20163
+            },
+            "is_mortgaged": {
+                "True": 277
+            },
+            "num_houses": {
+                "1": 212,
+                "2": 241,
+                "3": 40,
+                "4": 68
+            },
+            "num_hotels": {
+                "1": 931
             }
         },
         "Oriental Avenue": {
             "color": {
-                "SkyBlue": 100
+                "SkyBlue": 20163
             },
             "end_position": {
-                "7": 1
+                "7": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "30.0": 1
+                    "30.0": 20163
                 },
                 "2": {
-                    "90.0": 1
+                    "90.0": 20163
                 },
                 "3": {
-                    "270.0": 1
+                    "270.0": 20163
                 },
                 "4": {
-                    "400.0": 1
+                    "400.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "50.0": 1
+                "50.0": 20163
             },
             "name": {
-                "Oriental Avenue": 100
+                "Oriental Avenue": 20163
             },
             "owned_by": {
-                "bank": 1,
-                "player_4": 99
+                "bank": 2246,
+                "player_2": 4179,
+                "player_3": 3159,
+                "player_4": 4526,
+                "player_1": 6053
             },
             "price": {
-                "100.0": 1
+                "100.0": 20163
             },
             "price_per_house": {
-                "50.0": 1
+                "50.0": 20163
             },
             "rent": {
-                "6.0": 1
+                "6.0": 20163
             },
             "rent_1_house": {
-                "30.0": 1
+                "30.0": 20163
             },
             "rent_2_houses": {
-                "90.0": 1
+                "90.0": 20163
             },
             "rent_3_houses": {
-                "270.0": 1
+                "270.0": 20163
             },
             "rent_4_houses": {
-                "400.0": 1
+                "400.0": 20163
             },
             "rent_hotel": {
-                "550.0": 1
+                "550.0": 20163
             },
             "start_position": {
-                "6": 1
+                "6": 20163
+            },
+            "num_houses": {
+                "1": 31,
+                "2": 83,
+                "3": 36,
+                "4": 15
+            },
+            "num_hotels": {
+                "1": 1471
+            },
+            "is_mortgaged": {
+                "True": 518
             }
         },
         "Pacific Avenue": {
             "color": {
-                "Green": 100
+                "Green": 20163
             },
             "end_position": {
-                "32": 1
+                "32": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "130.0": 1
+                    "130.0": 20163
                 },
                 "2": {
-                    "390.0": 1
+                    "390.0": 20163
                 },
                 "3": {
-                    "900.0": 1
+                    "900.0": 20163
                 },
                 "4": {
-                    "1100.0": 1
+                    "1100.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "150.0": 1
+                "150.0": 20163
             },
             "name": {
-                "Pacific Avenue": 100
+                "Pacific Avenue": 20163
             },
             "owned_by": {
-                "bank": 31,
-                "player_3": 69
+                "bank": 2827,
+                "player_2": 1763,
+                "player_3": 4290,
+                "player_4": 4680,
+                "player_1": 6603
             },
             "price": {
-                "300.0": 1
+                "300.0": 20163
             },
             "price_per_house": {
-                "200.0": 1
+                "200.0": 20163
             },
             "rent": {
-                "26.0": 1
+                "26.0": 20163
             },
             "rent_1_house": {
-                "130.0": 1
+                "130.0": 20163
             },
             "rent_2_houses": {
-                "390.0": 1
+                "390.0": 20163
             },
             "rent_3_houses": {
-                "900.0": 1
+                "900.0": 20163
             },
             "rent_4_houses": {
-                "1100.0": 1
+                "1100.0": 20163
             },
             "rent_hotel": {
-                "1275.0": 1
+                "1275.0": 20163
             },
             "start_position": {
-                "31": 1
+                "31": 20163
+            },
+            "is_mortgaged": {
+                "True": 123
+            },
+            "num_houses": {
+                "1": 233,
+                "2": 304,
+                "4": 66,
+                "3": 54
+            },
+            "num_hotels": {
+                "1": 944
             }
         },
         "Park Place": {
             "color": {
-                "Blue": 100
+                "Blue": 20163
             },
             "end_position": {
-                "38": 1
+                "38": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "175.0": 1
+                    "175.0": 20163
                 },
                 "2": {
-                    "500.0": 1
+                    "500.0": 20163
                 },
                 "3": {
-                    "1100.0": 1
+                    "1100.0": 20163
                 },
                 "4": {
-                    "1300.0": 1
+                    "1300.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "175.0": 1
+                "175.0": 20163
             },
             "name": {
-                "Park Place": 100
+                "Park Place": 20163
             },
             "owned_by": {
-                "bank": 22,
-                "player_1": 78
+                "bank": 3737,
+                "player_4": 3086,
+                "player_1": 7804,
+                "player_3": 2448,
+                "player_2": 3088
             },
             "price": {
-                "350.0": 1
+                "350.0": 20163
             },
             "price_per_house": {
-                "200.0": 1
+                "200.0": 20163
             },
             "rent": {
-                "35.0": 1
+                "35.0": 20163
             },
             "rent_1_house": {
-                "175.0": 1
+                "175.0": 20163
             },
             "rent_2_houses": {
-                "500.0": 1
+                "500.0": 20163
             },
             "rent_3_houses": {
-                "1100.0": 1
+                "1100.0": 20163
             },
             "rent_4_houses": {
-                "1300.0": 1
+                "1300.0": 20163
             },
             "rent_hotel": {
-                "1500.0": 1
+                "1500.0": 20163
             },
             "start_position": {
-                "37": 1
+                "37": 20163
+            },
+            "num_houses": {
+                "1": 502,
+                "2": 99,
+                "4": 227,
+                "3": 348
+            },
+            "num_hotels": {
+                "1": 619
+            },
+            "is_mortgaged": {
+                "True": 132
             }
         },
         "Pennsylvania Avenue": {
             "color": {
-                "Green": 100
+                "Green": 20163
             },
             "end_position": {
-                "35": 1
+                "35": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "150.0": 1
+                    "150.0": 20163
                 },
                 "2": {
-                    "450.0": 1
+                    "450.0": 20163
                 },
                 "3": {
-                    "1000.0": 1
+                    "1000.0": 20163
                 },
                 "4": {
-                    "1200.0": 1
+                    "1200.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "160.0": 1
+                "160.0": 20163
             },
             "name": {
-                "Pennsylvania Avenue": 100
+                "Pennsylvania Avenue": 20163
             },
             "owned_by": {
-                "bank": 100
+                "bank": 3236,
+                "player_1": 6671,
+                "player_3": 3956,
+                "player_2": 2067,
+                "player_4": 4233
             },
             "price": {
-                "320.0": 1
+                "320.0": 20163
             },
             "price_per_house": {
-                "200.0": 1
+                "200.0": 20163
             },
             "rent": {
-                "28.0": 1
+                "28.0": 20163
             },
             "rent_1_house": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent_2_houses": {
-                "450.0": 1
+                "450.0": 20163
             },
             "rent_3_houses": {
-                "1000.0": 1
+                "1000.0": 20163
             },
             "rent_4_houses": {
-                "1200.0": 1
+                "1200.0": 20163
             },
             "rent_hotel": {
-                "1400.0": 1
+                "1400.0": 20163
             },
             "start_position": {
-                "34": 1
+                "34": 20163
+            },
+            "num_houses": {
+                "1": 263,
+                "2": 272,
+                "3": 158,
+                "4": 54
+            },
+            "num_hotels": {
+                "1": 958
+            },
+            "is_mortgaged": {
+                "True": 78
             }
         },
         "Pennsylvania Railroad": {
             "end_position": {
-                "16": 1
+                "16": 20163
             },
             "loc_class": {
-                "railroad": 100
+                "railroad": 20163
             },
             "mortgage": {
-                "100.0": 1
+                "100.0": 20163
             },
             "name": {
-                "Pennsylvania Railroad": 100
+                "Pennsylvania Railroad": 20163
             },
             "owned_by": {
-                "bank": 72,
-                "player_3": 28
+                "bank": 2135,
+                "player_3": 5133,
+                "player_2": 3302,
+                "player_1": 2953,
+                "player_4": 6640
             },
             "price": {
-                "200.0": 1
+                "200.0": 20163
             },
             "railroad_dues": {
                 "1": {
-                    "25": 1
+                    "25": 20163
                 },
                 "2": {
-                    "50": 1
+                    "50": 20163
                 },
                 "3": {
-                    "100": 1
+                    "100": 20163
                 },
                 "4": {
-                    "200": 1
+                    "200": 20163
                 }
             },
             "start_position": {
-                "15": 1
+                "15": 20163
+            },
+            "is_mortgaged": {
+                "True": 305
             }
         },
         "Reading Railroad": {
             "end_position": {
-                "6": 1
+                "6": 20163
             },
             "loc_class": {
-                "railroad": 100
+                "railroad": 20163
             },
             "mortgage": {
-                "100.0": 1
+                "100.0": 20163
             },
             "name": {
-                "Reading Railroad": 100
+                "Reading Railroad": 20163
             },
             "owned_by": {
-                "bank": 2,
-                "player_2": 98
+                "bank": 1878,
+                "player_2": 3402,
+                "player_3": 3445,
+                "player_4": 6718,
+                "player_1": 4720
             },
             "price": {
-                "200.0": 1
+                "200.0": 20163
             },
             "railroad_dues": {
                 "1": {
-                    "25": 1
+                    "25": 20163
                 },
                 "2": {
-                    "50": 1
+                    "50": 20163
                 },
                 "3": {
-                    "100": 1
+                    "100": 20163
                 },
                 "4": {
-                    "200": 1
+                    "200": 20163
                 }
             },
             "start_position": {
-                "5": 1
+                "5": 20163
+            },
+            "is_mortgaged": {
+                "True": 292
             }
         },
         "Short Line": {
             "end_position": {
-                "36": 1
+                "36": 20163
             },
             "loc_class": {
-                "railroad": 100
+                "railroad": 20163
             },
             "mortgage": {
-                "100.0": 1
+                "100.0": 20163
             },
             "name": {
-                "Short Line": 100
+                "Short Line": 20163
             },
             "owned_by": {
-                "bank": 100
+                "bank": 2370,
+                "player_4": 4144,
+                "player_3": 3213,
+                "player_1": 6864,
+                "player_2": 3572
             },
             "price": {
-                "200.0": 1
+                "200.0": 20163
             },
             "railroad_dues": {
                 "1": {
-                    "25": 1
+                    "25": 20163
                 },
                 "2": {
-                    "50": 1
+                    "50": 20163
                 },
                 "3": {
-                    "100": 1
+                    "100": 20163
                 },
                 "4": {
-                    "200": 1
+                    "200": 20163
                 }
             },
             "start_position": {
-                "35": 1
+                "35": 20163
+            },
+            "is_mortgaged": {
+                "True": 203
             }
         },
         "St. Charles Place": {
             "color": {
-                "Orchid": 100
+                "Orchid": 20163
             },
             "end_position": {
-                "12": 1
+                "12": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "50.0": 1
+                    "50.0": 20163
                 },
                 "2": {
-                    "150.0": 1
+                    "150.0": 20163
                 },
                 "3": {
-                    "450.0": 1
+                    "450.0": 20163
                 },
                 "4": {
-                    "625.0": 1
+                    "625.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "70.0": 1
+                "70.0": 20163
             },
             "name": {
-                "St. Charles Place": 100
+                "St. Charles Place": 20163
             },
             "owned_by": {
-                "bank": 33,
-                "player_1": 67
+                "bank": 1948,
+                "player_3": 3451,
+                "player_2": 5054,
+                "player_1": 4447,
+                "player_4": 5263
             },
             "price": {
-                "140.0": 1
+                "140.0": 20163
             },
             "price_per_house": {
-                "100.0": 1
+                "100.0": 20163
             },
             "rent": {
-                "10.0": 1
+                "10.0": 20163
             },
             "rent_1_house": {
-                "50.0": 1
+                "50.0": 20163
             },
             "rent_2_houses": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent_3_houses": {
-                "450.0": 1
+                "450.0": 20163
             },
             "rent_4_houses": {
-                "625.0": 1
+                "625.0": 20163
             },
             "rent_hotel": {
-                "750.0": 1
+                "750.0": 20163
             },
             "start_position": {
-                "11": 1
+                "11": 20163
+            },
+            "num_houses": {
+                "1": 287,
+                "2": 140,
+                "3": 67,
+                "4": 109
+            },
+            "is_mortgaged": {
+                "True": 697
+            },
+            "num_hotels": {
+                "1": 608
             }
         },
         "St. James Place": {
             "color": {
-                "Orange": 100
+                "Orange": 20163
             },
             "end_position": {
-                "17": 1
+                "17": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "70.0": 1
+                    "70.0": 20163
                 },
                 "2": {
-                    "200.0": 1
+                    "200.0": 20163
                 },
                 "3": {
-                    "550.0": 1
+                    "550.0": 20163
                 },
                 "4": {
-                    "750.0": 1
+                    "750.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "90.0": 1
+                "90.0": 20163
             },
             "name": {
-                "St. James Place": 100
+                "St. James Place": 20163
             },
             "owned_by": {
-                "bank": 8,
-                "player_2": 92
+                "bank": 2170,
+                "player_4": 7403,
+                "player_2": 4414,
+                "player_1": 2716,
+                "player_3": 3460
             },
             "price": {
-                "180.0": 1
+                "180.0": 20163
             },
             "price_per_house": {
-                "100.0": 1
+                "100.0": 20163
             },
             "rent": {
-                "14.0": 1
+                "14.0": 20163
             },
             "rent_1_house": {
-                "70.0": 1
+                "70.0": 20163
             },
             "rent_2_houses": {
-                "200.0": 1
+                "200.0": 20163
             },
             "rent_3_houses": {
-                "550.0": 1
+                "550.0": 20163
             },
             "rent_4_houses": {
-                "750.0": 1
+                "750.0": 20163
             },
             "rent_hotel": {
-                "950.0": 1
+                "950.0": 20163
             },
             "start_position": {
-                "16": 1
+                "16": 20163
+            },
+            "is_mortgaged": {
+                "True": 324
+            },
+            "num_houses": {
+                "1": 221,
+                "2": 127,
+                "4": 67,
+                "3": 127
+            },
+            "num_hotels": {
+                "1": 862
             }
         },
         "States Avenue": {
             "color": {
-                "Orchid": 100
+                "Orchid": 20163
             },
             "end_position": {
-                "14": 1
+                "14": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "50.0": 1
+                    "50.0": 20163
                 },
                 "2": {
-                    "150.0": 1
+                    "150.0": 20163
                 },
                 "3": {
-                    "450.0": 1
+                    "450.0": 20163
                 },
                 "4": {
-                    "625.0": 1
+                    "625.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "70.0": 1
+                "70.0": 20163
             },
             "name": {
-                "States Avenue": 100
+                "States Avenue": 20163
             },
             "owned_by": {
-                "bank": 100
+                "bank": 2188,
+                "player_2": 4572,
+                "player_3": 5203,
+                "player_4": 4147,
+                "player_1": 4053
             },
             "price": {
-                "140.0": 1
+                "140.0": 20163
             },
             "price_per_house": {
-                "100.0": 1
+                "100.0": 20163
             },
             "rent": {
-                "10.0": 1
+                "10.0": 20163
             },
             "rent_1_house": {
-                "50.0": 1
+                "50.0": 20163
             },
             "rent_2_houses": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent_3_houses": {
-                "450.0": 1
+                "450.0": 20163
             },
             "rent_4_houses": {
-                "625.0": 1
+                "625.0": 20163
             },
             "rent_hotel": {
-                "750.0": 1
+                "750.0": 20163
             },
             "start_position": {
-                "13": 1
+                "13": 20163
+            },
+            "num_houses": {
+                "1": 169,
+                "2": 246,
+                "3": 94,
+                "4": 84
+            },
+            "is_mortgaged": {
+                "True": 576
+            },
+            "num_hotels": {
+                "1": 638
             }
         },
         "Tennessee Avenue": {
             "color": {
-                "Orange": 100
+                "Orange": 20163
             },
             "end_position": {
-                "19": 1
+                "19": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "70.0": 1
+                    "70.0": 20163
                 },
                 "2": {
-                    "200.0": 1
+                    "200.0": 20163
                 },
                 "3": {
-                    "550.0": 1
+                    "550.0": 20163
                 },
                 "4": {
-                    "750.0": 1
+                    "750.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "90.0": 1
+                "90.0": 20163
             },
             "name": {
-                "Tennessee Avenue": 100
+                "Tennessee Avenue": 20163
             },
             "owned_by": {
-                "bank": 100
+                "bank": 2690,
+                "player_1": 7401,
+                "player_4": 5677,
+                "player_2": 2713,
+                "player_3": 1682
             },
             "price": {
-                "180.0": 1
+                "180.0": 20163
             },
             "price_per_house": {
-                "100.0": 1
+                "100.0": 20163
             },
             "rent": {
-                "14.0": 1
+                "14.0": 20163
             },
             "rent_1_house": {
-                "70.0": 1
+                "70.0": 20163
             },
             "rent_2_houses": {
-                "200.0": 1
+                "200.0": 20163
             },
             "rent_3_houses": {
-                "550.0": 1
+                "550.0": 20163
             },
             "rent_4_houses": {
-                "750.0": 1
+                "750.0": 20163
             },
             "rent_hotel": {
-                "950.0": 1
+                "950.0": 20163
             },
             "start_position": {
-                "18": 1
+                "18": 20163
+            },
+            "num_houses": {
+                "1": 105,
+                "2": 216,
+                "3": 149,
+                "4": 64
+            },
+            "num_hotels": {
+                "1": 886
+            },
+            "is_mortgaged": {
+                "True": 265
             }
         },
         "Ventnor Avenue": {
             "color": {
-                "Yellow": 100
+                "Yellow": 20163
             },
             "end_position": {
-                "28": 1
+                "28": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "110.0": 1
+                    "110.0": 20163
                 },
                 "2": {
-                    "330.0": 1
+                    "330.0": 20163
                 },
                 "3": {
-                    "800.0": 1
+                    "800.0": 20163
                 },
                 "4": {
-                    "975.0": 1
+                    "975.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "130.0": 1
+                "130.0": 20163
             },
             "name": {
-                "Ventnor Avenue": 100
+                "Ventnor Avenue": 20163
             },
             "owned_by": {
-                "bank": 26,
-                "player_3": 74
+                "bank": 2872,
+                "player_3": 5677,
+                "player_1": 3320,
+                "player_4": 5308,
+                "player_2": 2986
             },
             "price": {
-                "260.0": 1
+                "260.0": 20163
             },
             "price_per_house": {
-                "150.0": 1
+                "150.0": 20163
             },
             "rent": {
-                "22.0": 1
+                "22.0": 20163
             },
             "rent_1_house": {
-                "110.0": 1
+                "110.0": 20163
             },
             "rent_2_houses": {
-                "330.0": 1
+                "330.0": 20163
             },
             "rent_3_houses": {
-                "800.0": 1
+                "800.0": 20163
             },
             "rent_4_houses": {
-                "975.0": 1
+                "975.0": 20163
             },
             "rent_hotel": {
-                "1150.0": 1
+                "1150.0": 20163
             },
             "start_position": {
-                "27": 1
+                "27": 20163
+            },
+            "num_houses": {
+                "1": 176,
+                "2": 108,
+                "3": 144,
+                "4": 1
+            },
+            "num_hotels": {
+                "1": 192
+            },
+            "is_mortgaged": {
+                "True": 225
             }
         },
         "Vermont Avenue": {
             "color": {
-                "SkyBlue": 100
+                "SkyBlue": 20163
             },
             "end_position": {
-                "9": 1
+                "9": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "30.0": 1
+                    "30.0": 20163
                 },
                 "2": {
-                    "90.0": 1
+                    "90.0": 20163
                 },
                 "3": {
-                    "270.0": 1
+                    "270.0": 20163
                 },
                 "4": {
-                    "400.0": 1
+                    "400.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "50.0": 1
+                "50.0": 20163
             },
             "name": {
-                "Vermont Avenue": 100
+                "Vermont Avenue": 20163
             },
             "owned_by": {
-                "bank": 60,
-                "player_2": 40
+                "bank": 2109,
+                "player_3": 9498,
+                "player_2": 1695,
+                "player_1": 1977,
+                "player_4": 4884
             },
             "price": {
-                "100.0": 1
+                "100.0": 20163
             },
             "price_per_house": {
-                "50.0": 1
+                "50.0": 20163
             },
             "rent": {
-                "6.0": 1
+                "6.0": 20163
             },
             "rent_1_house": {
-                "30.0": 1
+                "30.0": 20163
             },
             "rent_2_houses": {
-                "90.0": 1
+                "90.0": 20163
             },
             "rent_3_houses": {
-                "270.0": 1
+                "270.0": 20163
             },
             "rent_4_houses": {
-                "400.0": 1
+                "400.0": 20163
             },
             "rent_hotel": {
-                "550.0": 1
+                "550.0": 20163
             },
             "start_position": {
-                "8": 1
+                "8": 20163
+            },
+            "num_houses": {
+                "1": 6,
+                "2": 87,
+                "4": 22,
+                "3": 50
+            },
+            "num_hotels": {
+                "1": 1567
+            },
+            "is_mortgaged": {
+                "True": 904
             }
         },
         "Virginia Avenue": {
             "color": {
-                "Orchid": 100
+                "Orchid": 20163
             },
             "end_position": {
-                "15": 1
+                "15": 20163
             },
             "house_rent_dict": {
                 "1": {
-                    "60.0": 1
+                    "60.0": 20163
                 },
                 "2": {
-                    "180.0": 1
+                    "180.0": 20163
                 },
                 "3": {
-                    "500.0": 1
+                    "500.0": 20163
                 },
                 "4": {
-                    "700.0": 1
+                    "700.0": 20163
                 }
             },
             "loc_class": {
-                "real_estate": 100
+                "real_estate": 20163
             },
             "mortgage": {
-                "80.0": 1
+                "80.0": 20163
             },
             "name": {
-                "Virginia Avenue": 100
+                "Virginia Avenue": 20163
             },
             "owned_by": {
-                "bank": 100
+                "bank": 2662,
+                "player_2": 1966,
+                "player_1": 5015,
+                "player_3": 6561,
+                "player_4": 3959
             },
             "price": {
-                "160.0": 1
+                "160.0": 20163
             },
             "price_per_house": {
-                "100.0": 1
+                "100.0": 20163
             },
             "rent": {
-                "12.0": 1
+                "12.0": 20163
             },
             "rent_1_house": {
-                "60.0": 1
+                "60.0": 20163
             },
             "rent_2_houses": {
-                "180.0": 1
+                "180.0": 20163
             },
             "rent_3_houses": {
-                "500.0": 1
+                "500.0": 20163
             },
             "rent_4_houses": {
-                "700.0": 1
+                "700.0": 20163
             },
             "rent_hotel": {
-                "900.0": 1
+                "900.0": 20163
             },
             "start_position": {
-                "14": 1
+                "14": 20163
+            },
+            "num_houses": {
+                "2": 216,
+                "3": 180,
+                "4": 38,
+                "1": 100
+            },
+            "is_mortgaged": {
+                "True": 300
+            },
+            "num_hotels": {
+                "1": 705
             }
         },
         "Water Works": {
             "die_multiples": {
                 "1": {
-                    "4": 1
+                    "4": 20163
                 },
                 "2": {
-                    "10": 1
+                    "10": 20163
                 }
             },
             "end_position": {
-                "29": 1
+                "29": 20163
             },
             "loc_class": {
-                "utility": 100
+                "utility": 20163
             },
             "mortgage": {
-                "75.0": 1
+                "75.0": 20163
             },
             "name": {
-                "Water Works": 100
+                "Water Works": 20163
             },
             "owned_by": {
-                "bank": 68,
-                "player_1": 32
+                "bank": 2469,
+                "player_1": 6604,
+                "player_4": 2669,
+                "player_3": 5503,
+                "player_2": 2918
             },
             "price": {
-                "150.0": 1
+                "150.0": 20163
             },
             "start_position": {
-                "28": 1
+                "28": 20163
+            },
+            "is_mortgaged": {
+                "True": 589
             }
         }
     },
     "die_sequence": {
-        "length": 47,
+        "length": 20028,
         "data": [
             {
-                "5": 1,
-                "4": 1,
-                "6": 1,
                 "2": 1,
+                "3": 1,
                 "1": 1,
-                "3": 1
+                "6": 1,
+                "5": 1,
+                "4": 1
             },
             {
-                "1": 1,
-                "5": 1,
                 "6": 1,
+                "5": 1,
+                "3": 1,
+                "1": 1,
                 "4": 1,
-                "2": 1,
-                "3": 1
+                "2": 1
             }
         ]
     }

@@ -224,9 +224,12 @@ class GameClone():
             if (not parsed_json[key]) or (key in self.gamestate_avoided_keys):
                 continue
             elif key not in subtree:
-                novelty = True
-                novelty_properties['trigger'] = [key]
-                break
+                if key == 'perform_action':
+                    continue
+                else:
+                    novelty = True
+                    novelty_properties['trigger'] = [key]
+                    break
             elif type(parsed_json[key]) is dict:
                 novelty, novelty_properties_add = self.check_novelty(parsed_json[key],
                                                                      subtree[key])
@@ -321,9 +324,9 @@ class GameClone():
 
 def main():
     game_clone = GameClone()
-    for game in range(1,40):
+    for game in range(1,98): #first game is junk
         count = 0
-        json_file = os.path.join('/home/balloch/sample_json_data', 'data_' + str(game) + '_' + str(count) + '.json')
+        json_file = os.path.join(os.environ['HOME'], 'sample_json_data', 'data_' + str(game) + '_' + str(count) + '.json')
 
         while os.path.isfile(json_file):
             with open(json_file, 'r') as infile:
@@ -333,19 +336,19 @@ def main():
             else:
                 print('bad sample: ', data_dict_from_server)
             count += 1
-            json_file = os.path.join('/home/balloch/sample_json_data', 'data_' + str(game) + '_' + str(count) + '.json')
-    print('orig_state stats: ', state_stats)
+            json_file = os.path.join(os.environ['HOME'], 'sample_json_data', 'data_' + str(game) + '_' + str(count) + '.json')
+    # print('orig_state stats: ', state_stats)
 
     bad_json_file = os.path.join('sample_json_data', 'bad_data_' + '1' + '_' + '10' + '.json')
     with open(bad_json_file, 'r') as badfile:
         bad_data_dict_from_server = json.load(badfile)
-    print('ID novelty: ', game_clone.gc_detect_novelty(bad_data_dict_from_server, 'loaded'))
+    # print('ID novelty: ', game_clone.gc_detect_novelty(bad_data_dict_from_server, 'loaded'))
     gcss_file = game_clone.save_state_stats()
-    print('file: ', gcss_file)
+    # print('file: ', gcss_file)
 
     game_clone.load_state_stats(gcss_file, True)
-    print('loaded stats: ',game_clone.state_stats)
-    print(game_clone.state_stats == state_stats)
+    # print('loaded stats: ',game_clone.state_stats)
+    print('Novelty? ', game_clone.state_stats == state_stats)
 
 
             #### ONLY FOR CURRENT GAMEBOARD
